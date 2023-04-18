@@ -1,0 +1,650 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22C9712C0BA9BAC900ADA848 /* 3DRotate.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */; };
+		4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353EEF729EE665600ECAEE1 /* MieleAPI.framework */; };
+		43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F86FDA29EE7A09003F0102 /* DCM.framework */; };
+		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
+		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
+		B909F0840D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */; };
+		B909F0850D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B909F0830D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m */; };
+		B917308F0D9908C7005A0FF9 /* CMIV_AutoSeeding.h in Headers */ = {isa = PBXBuildFile; fileRef = B917308B0D9908C6005A0FF9 /* CMIV_AutoSeeding.h */; };
+		B91730910D9908C7005A0FF9 /* CMIVAutoSeedingCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B917308D0D9908C7005A0FF9 /* CMIVAutoSeedingCore.h */; };
+		B930E81E0B0B490400434C33 /* CMIVSegmentCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B930E81C0B0B490400434C33 /* CMIVSegmentCore.h */; };
+		B95EA4360C54F418005A35CB /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B95EA4350C54F418005A35CB /* logo.jpg */; };
+		B969E7B00D111DC700868834 /* CMIVWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = B969E7AE0D111DC700868834 /* CMIVWindow.h */; };
+		B969E7B10D111DC700868834 /* CMIVWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = B969E7AF0D111DC700868834 /* CMIVWindow.m */; };
+		B96B0F210B10B1B60044D904 /* CMIVVRcontroller.h in Headers */ = {isa = PBXBuildFile; fileRef = B96B0F1F0B10B1B60044D904 /* CMIVVRcontroller.h */; };
+		B98C764F0D312EF2004CBA19 /* CMIVCLUTOpacityView.h in Headers */ = {isa = PBXBuildFile; fileRef = B98C764E0D312EF2004CBA19 /* CMIVCLUTOpacityView.h */; };
+		B9960E830C5A7F01004A4E89 /* CMIVSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = B9960E810C5A7F01004A4E89 /* CMIVSlider.h */; };
+		B9960E840C5A7F01004A4E89 /* CMIVSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B9960E820C5A7F01004A4E89 /* CMIVSlider.m */; };
+		B99792060D3E391B004D8613 /* AboutDlg.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99791FE0D3E391B004D8613 /* AboutDlg.xib */; };
+		B99792070D3E391B004D8613 /* Chopper_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99791FF0D3E391B004D8613 /* Chopper_Panel.xib */; };
+		B99792080D3E391B004D8613 /* Contrast_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792000D3E391B004D8613 /* Contrast_Panel.xib */; };
+		B99792090D3E391B004D8613 /* Save_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792010D3E391B004D8613 /* Save_Panel.xib */; };
+		B997920A0D3E391B004D8613 /* Scissors_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792020D3E391B004D8613 /* Scissors_Panel.xib */; };
+		B997920B0D3E391B004D8613 /* SegPreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792030D3E391B004D8613 /* SegPreview.xib */; };
+		B997920D0D3E391B004D8613 /* VR_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792050D3E391B004D8613 /* VR_Panel.xib */; };
+		B9A4171F0B4BAF4D009AEE95 /* CMIV3DPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = B9A4171D0B4BAF4D009AEE95 /* CMIV3DPoint.h */; };
+		B9A417200B4BAF4D009AEE95 /* CMIV3DPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A4171E0B4BAF4D009AEE95 /* CMIV3DPoint.m */; };
+		B9ADCE070B3B31CD008B5B9C /* CMIVSaveResult.h in Headers */ = {isa = PBXBuildFile; fileRef = B9ADCE050B3B31CD008B5B9C /* CMIVSaveResult.h */; };
+		B9B07E9A0B67A703008879EF /* CMIVContrastPreview.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B07E980B67A703008879EF /* CMIVContrastPreview.h */; };
+		B9B295F10B0862A100505F84 /* Opened Polygon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295EB0B0862A100505F84 /* Opened Polygon.tiff */; };
+		B9B295F20B0862A100505F84 /* Oval.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295EC0B0862A100505F84 /* Oval.tiff */; };
+		B9B295F30B0862A100505F84 /* Pencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295ED0B0862A100505F84 /* Pencil.tiff */; };
+		B9B295F40B0862A100505F84 /* Point.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295EE0B0862A100505F84 /* Point.tiff */; };
+		B9B295F50B0862A100505F84 /* WLWW.tif in Resources */ = {isa = PBXBuildFile; fileRef = B9B295EF0B0862A100505F84 /* WLWW.tif */; };
+		B9B295F60B0862A100505F84 /* Zoom.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295F00B0862A100505F84 /* Zoom.tiff */; };
+		B9B29B060B145C1F00DE2C1F /* Cross.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B29B030B145C1F00DE2C1F /* Cross.tiff */; };
+		B9B29B070B145C1F00DE2C1F /* Move.tif in Resources */ = {isa = PBXBuildFile; fileRef = B9B29B040B145C1F00DE2C1F /* Move.tif */; };
+		B9B29B080B145C1F00DE2C1F /* Rotate.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B29B050B145C1F00DE2C1F /* Rotate.tiff */; };
+		B9B29B910B147D2600DE2C1F /* CMIVScissorsController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B29B8F0B147D2600DE2C1F /* CMIVScissorsController.h */; };
+		B9B4195D0B36C8FC00AD244F /* CMIVExport.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B4195B0B36C8FC00AD244F /* CMIVExport.h */; };
+		B9B4F79A0B245953002E9350 /* Rectangle.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B4F7990B245953002E9350 /* Rectangle.tiff */; };
+		B9B702040CA5460D00CF333E /* Length.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B702030CA5460D00CF333E /* Length.tiff */; };
+		B9C3BAB00F5D9B89001D6931 /* CMIVVesselPlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C3BAAC0F5D9B89001D6931 /* CMIVVesselPlotView.h */; };
+		B9C3BAB10F5D9B89001D6931 /* CMIVVesselPlotView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAD0F5D9B89001D6931 /* CMIVVesselPlotView.mm */; };
+		B9C3BAB60F5D9BC0001D6931 /* camera.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB20F5D9BC0001D6931 /* camera.tiff */; };
+		B9C3BAB70F5D9BC0001D6931 /* CTAICON.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB30F5D9BC0001D6931 /* CTAICON.tiff */; };
+		B9C3BAB80F5D9BC0001D6931 /* Repulsor.tif in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB40F5D9BC0001D6931 /* Repulsor.tif */; };
+		B9C3BAB90F5D9BC0001D6931 /* trash.icns in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB50F5D9BC0001D6931 /* trash.icns */; };
+		B9C596A10D127F810082FCAF /* CMIVDCMView.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C5969D0D127F810082FCAF /* CMIVDCMView.h */; };
+		B9E39DE90B03648700387A56 /* CMIV_CTA_TOOLS.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E39DE70B03648700387A56 /* CMIV_CTA_TOOLS.h */; };
+		B9E39DEA0B03648700387A56 /* CMIV_CTA_TOOLS.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E39DE80B03648700387A56 /* CMIV_CTA_TOOLS.mm */; };
+		B9E3A0450B048ED300387A56 /* CMIVChopperController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E3A0430B048ED300387A56 /* CMIVChopperController.h */; };
+		B9FB33550B0A1FD000A5A87A /* CMIVContrastController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9FB33530B0A1FD000A5A87A /* CMIVContrastController.h */; };
+		CE7E504915020CDA00B6222F /* spline.C in Sources */ = {isa = PBXBuildFile; fileRef = CE7E504715020CDA00B6222F /* spline.C */; };
+		CE7E504A15020CDA00B6222F /* spline.H in Headers */ = {isa = PBXBuildFile; fileRef = CE7E504815020CDA00B6222F /* spline.H */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = 3DRotate.tiff; sourceTree = "<group>"; };
+		4353EEF729EE665600ECAEE1 /* MieleAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MieleAPI.framework; path = Binaries/MieleAPI.framework; sourceTree = "<group>"; };
+		4353EEF929EE66C000ECAEE1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43F86FDA29EE7A09003F0102 /* DCM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DCM.framework; path = Binaries/DCM.framework; sourceTree = "<group>"; };
+		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVBuketPirortyQueue.h; sourceTree = "<group>"; };
+		B909F0830D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMIVBuketPirortyQueue.m; sourceTree = "<group>"; };
+		B917308B0D9908C6005A0FF9 /* CMIV_AutoSeeding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIV_AutoSeeding.h; sourceTree = "<group>"; };
+		B917308C0D9908C6005A0FF9 /* CMIV_AutoSeeding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIV_AutoSeeding.mm; sourceTree = "<group>"; };
+		B917308D0D9908C7005A0FF9 /* CMIVAutoSeedingCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVAutoSeedingCore.h; sourceTree = "<group>"; };
+		B930E81C0B0B490400434C33 /* CMIVSegmentCore.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVSegmentCore.h; sourceTree = "<group>"; };
+		B95EA4350C54F418005A35CB /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
+		B969E7AE0D111DC700868834 /* CMIVWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVWindow.h; sourceTree = "<group>"; };
+		B969E7AF0D111DC700868834 /* CMIVWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMIVWindow.m; sourceTree = "<group>"; };
+		B96B0F1F0B10B1B60044D904 /* CMIVVRcontroller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVVRcontroller.h; sourceTree = "<group>"; };
+		B96B0F200B10B1B60044D904 /* CMIVVRcontroller.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVVRcontroller.mm; sourceTree = "<group>"; };
+		B98C764E0D312EF2004CBA19 /* CMIVCLUTOpacityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVCLUTOpacityView.h; sourceTree = "<group>"; };
+		B98C76530D313003004CBA19 /* CMIVCLUTOpacityView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVCLUTOpacityView.mm; sourceTree = "<group>"; };
+		B9960E810C5A7F01004A4E89 /* CMIVSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVSlider.h; sourceTree = "<group>"; };
+		B9960E820C5A7F01004A4E89 /* CMIVSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMIVSlider.m; sourceTree = "<group>"; };
+		B99791FE0D3E391B004D8613 /* AboutDlg.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutDlg.xib; sourceTree = "<group>"; };
+		B99791FF0D3E391B004D8613 /* Chopper_Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Chopper_Panel.xib; sourceTree = "<group>"; };
+		B99792000D3E391B004D8613 /* Contrast_Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Contrast_Panel.xib; sourceTree = "<group>"; };
+		B99792010D3E391B004D8613 /* Save_Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Save_Panel.xib; sourceTree = "<group>"; };
+		B99792020D3E391B004D8613 /* Scissors_Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Scissors_Panel.xib; sourceTree = "<group>"; };
+		B99792030D3E391B004D8613 /* SegPreview.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegPreview.xib; sourceTree = "<group>"; };
+		B99792050D3E391B004D8613 /* VR_Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VR_Panel.xib; sourceTree = "<group>"; };
+		B9A4171D0B4BAF4D009AEE95 /* CMIV3DPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIV3DPoint.h; sourceTree = "<group>"; };
+		B9A4171E0B4BAF4D009AEE95 /* CMIV3DPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CMIV3DPoint.m; sourceTree = "<group>"; };
+		B9ADCE050B3B31CD008B5B9C /* CMIVSaveResult.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVSaveResult.h; sourceTree = "<group>"; };
+		B9ADCE060B3B31CD008B5B9C /* CMIVSaveResult.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVSaveResult.mm; sourceTree = "<group>"; };
+		B9B07E980B67A703008879EF /* CMIVContrastPreview.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVContrastPreview.h; sourceTree = "<group>"; };
+		B9B07E990B67A703008879EF /* CMIVContrastPreview.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVContrastPreview.mm; sourceTree = "<group>"; };
+		B9B295EB0B0862A100505F84 /* Opened Polygon.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Opened Polygon.tiff"; sourceTree = "<group>"; };
+		B9B295EC0B0862A100505F84 /* Oval.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Oval.tiff; sourceTree = "<group>"; };
+		B9B295ED0B0862A100505F84 /* Pencil.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pencil.tiff; sourceTree = "<group>"; };
+		B9B295EE0B0862A100505F84 /* Point.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Point.tiff; sourceTree = "<group>"; };
+		B9B295EF0B0862A100505F84 /* WLWW.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = WLWW.tif; sourceTree = "<group>"; };
+		B9B295F00B0862A100505F84 /* Zoom.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Zoom.tiff; sourceTree = "<group>"; };
+		B9B29B030B145C1F00DE2C1F /* Cross.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Cross.tiff; sourceTree = "<group>"; };
+		B9B29B040B145C1F00DE2C1F /* Move.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Move.tif; sourceTree = "<group>"; };
+		B9B29B050B145C1F00DE2C1F /* Rotate.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Rotate.tiff; sourceTree = "<group>"; };
+		B9B29B8F0B147D2600DE2C1F /* CMIVScissorsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVScissorsController.h; sourceTree = "<group>"; };
+		B9B29B900B147D2600DE2C1F /* CMIVScissorsController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVScissorsController.mm; sourceTree = "<group>"; };
+		B9B4195B0B36C8FC00AD244F /* CMIVExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVExport.h; sourceTree = "<group>"; };
+		B9B4195C0B36C8FC00AD244F /* CMIVExport.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVExport.mm; sourceTree = "<group>"; };
+		B9B4F7990B245953002E9350 /* Rectangle.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Rectangle.tiff; sourceTree = "<group>"; };
+		B9B702030CA5460D00CF333E /* Length.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Length.tiff; sourceTree = "<group>"; };
+		B9C3BAAA0F5D9B89001D6931 /* CMIVAutoSeedingCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVAutoSeedingCore.mm; sourceTree = "<group>"; };
+		B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVSegmentCore.mm; sourceTree = "<group>"; };
+		B9C3BAAC0F5D9B89001D6931 /* CMIVVesselPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVVesselPlotView.h; sourceTree = "<group>"; };
+		B9C3BAAD0F5D9B89001D6931 /* CMIVVesselPlotView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVVesselPlotView.mm; sourceTree = "<group>"; };
+		B9C3BAB20F5D9BC0001D6931 /* camera.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = camera.tiff; sourceTree = "<group>"; };
+		B9C3BAB30F5D9BC0001D6931 /* CTAICON.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = CTAICON.tiff; sourceTree = "<group>"; };
+		B9C3BAB40F5D9BC0001D6931 /* Repulsor.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Repulsor.tif; sourceTree = "<group>"; };
+		B9C3BAB50F5D9BC0001D6931 /* trash.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = trash.icns; sourceTree = "<group>"; };
+		B9C5969D0D127F810082FCAF /* CMIVDCMView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVDCMView.h; sourceTree = "<group>"; };
+		B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVDCMView.mm; sourceTree = "<group>"; };
+		B9E39DE70B03648700387A56 /* CMIV_CTA_TOOLS.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIV_CTA_TOOLS.h; sourceTree = "<group>"; };
+		B9E39DE80B03648700387A56 /* CMIV_CTA_TOOLS.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIV_CTA_TOOLS.mm; sourceTree = "<group>"; };
+		B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CMIV_CTA_TOOLS.mieleplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9E3A0430B048ED300387A56 /* CMIVChopperController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVChopperController.h; sourceTree = "<group>"; };
+		B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVChopperController.mm; sourceTree = "<group>"; };
+		B9FB33530B0A1FD000A5A87A /* CMIVContrastController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVContrastController.h; sourceTree = "<group>"; };
+		B9FB33540B0A1FD000A5A87A /* CMIVContrastController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVContrastController.mm; sourceTree = "<group>"; };
+		CE7E504715020CDA00B6222F /* spline.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = spline.C; sourceTree = "<group>"; };
+		CE7E504815020CDA00B6222F /* spline.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = spline.H; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D5B49B3048680CD000E48DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */,
+				4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */,
+				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* Duplicate */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AFFE84173DC02AAC07 /* Classes */,
+				089C167CFE841241C02AAC07 /* Resources */,
+				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
+				19C28FB8FE9D52D311CA2CBB /* Products */,
+			);
+			name = Duplicate;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 /* Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				43F86FDA29EE7A09003F0102 /* DCM.framework */,
+				4353EEF729EE665600ECAEE1 /* MieleAPI.framework */,
+				1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */,
+				1058C7AEFEA557BF11CA2CBB /* Other Frameworks */,
+			);
+			name = "Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C167CFE841241C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B9C3BAB20F5D9BC0001D6931 /* camera.tiff */,
+				B9C3BAB30F5D9BC0001D6931 /* CTAICON.tiff */,
+				B9C3BAB40F5D9BC0001D6931 /* Repulsor.tif */,
+				B9C3BAB50F5D9BC0001D6931 /* trash.icns */,
+				B99791FE0D3E391B004D8613 /* AboutDlg.xib */,
+				B99791FF0D3E391B004D8613 /* Chopper_Panel.xib */,
+				B99792000D3E391B004D8613 /* Contrast_Panel.xib */,
+				B99792010D3E391B004D8613 /* Save_Panel.xib */,
+				B99792020D3E391B004D8613 /* Scissors_Panel.xib */,
+				B99792030D3E391B004D8613 /* SegPreview.xib */,
+				B99792050D3E391B004D8613 /* VR_Panel.xib */,
+				B9B295EA0B085E9B00505F84 /* ICON */,
+				8D5B49B7048680CD000E48DA /* Info.plist */,
+				089C167DFE841241C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AFFE84173DC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B98D355B0C4CE6AC00DA7EA2 /* Spline C */,
+				AB2C26750677B0C400A08910 /* CMIV_CTA_TOOLS */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7AEFEA557BF11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				089C1672FE841209C02AAC07 /* Foundation.framework */,
+				089C167FFE841241C02AAC07 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FB8FE9D52D311CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AB2C26750677B0C400A08910 /* CMIV_CTA_TOOLS */ = {
+			isa = PBXGroup;
+			children = (
+				B9C3BAAC0F5D9B89001D6931 /* CMIVVesselPlotView.h */,
+				B9C3BAAD0F5D9B89001D6931 /* CMIVVesselPlotView.mm */,
+				B917308B0D9908C6005A0FF9 /* CMIV_AutoSeeding.h */,
+				B917308C0D9908C6005A0FF9 /* CMIV_AutoSeeding.mm */,
+				B917308D0D9908C7005A0FF9 /* CMIVAutoSeedingCore.h */,
+				B9C3BAAA0F5D9B89001D6931 /* CMIVAutoSeedingCore.mm */,
+				B9E39DE70B03648700387A56 /* CMIV_CTA_TOOLS.h */,
+				B9E39DE80B03648700387A56 /* CMIV_CTA_TOOLS.mm */,
+				B9ADCE050B3B31CD008B5B9C /* CMIVSaveResult.h */,
+				B9ADCE060B3B31CD008B5B9C /* CMIVSaveResult.mm */,
+				B930E81C0B0B490400434C33 /* CMIVSegmentCore.h */,
+				B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */,
+				B9E3A0430B048ED300387A56 /* CMIVChopperController.h */,
+				B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */,
+				B9FB33530B0A1FD000A5A87A /* CMIVContrastController.h */,
+				B9FB33540B0A1FD000A5A87A /* CMIVContrastController.mm */,
+				B9B07E980B67A703008879EF /* CMIVContrastPreview.h */,
+				B9B07E990B67A703008879EF /* CMIVContrastPreview.mm */,
+				B96B0F1F0B10B1B60044D904 /* CMIVVRcontroller.h */,
+				B96B0F200B10B1B60044D904 /* CMIVVRcontroller.mm */,
+				B98C764E0D312EF2004CBA19 /* CMIVCLUTOpacityView.h */,
+				B98C76530D313003004CBA19 /* CMIVCLUTOpacityView.mm */,
+				B9B29B8F0B147D2600DE2C1F /* CMIVScissorsController.h */,
+				B9B29B900B147D2600DE2C1F /* CMIVScissorsController.mm */,
+				B9C5969D0D127F810082FCAF /* CMIVDCMView.h */,
+				B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */,
+				B9B4195B0B36C8FC00AD244F /* CMIVExport.h */,
+				B9B4195C0B36C8FC00AD244F /* CMIVExport.mm */,
+				B9A4171D0B4BAF4D009AEE95 /* CMIV3DPoint.h */,
+				B9A4171E0B4BAF4D009AEE95 /* CMIV3DPoint.m */,
+				B9960E810C5A7F01004A4E89 /* CMIVSlider.h */,
+				B9960E820C5A7F01004A4E89 /* CMIVSlider.m */,
+				B969E7AE0D111DC700868834 /* CMIVWindow.h */,
+				B969E7AF0D111DC700868834 /* CMIVWindow.m */,
+				B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */,
+				B909F0830D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m */,
+			);
+			name = CMIV_CTA_TOOLS;
+			sourceTree = "<group>";
+		};
+		B98D355B0C4CE6AC00DA7EA2 /* Spline C */ = {
+			isa = PBXGroup;
+			children = (
+				CE7E504715020CDA00B6222F /* spline.C */,
+				CE7E504815020CDA00B6222F /* spline.H */,
+			);
+			name = "Spline C";
+			sourceTree = "<group>";
+		};
+		B9B295EA0B085E9B00505F84 /* ICON */ = {
+			isa = PBXGroup;
+			children = (
+				B9B702030CA5460D00CF333E /* Length.tiff */,
+				B95EA4350C54F418005A35CB /* logo.jpg */,
+				22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */,
+				B9B4F7990B245953002E9350 /* Rectangle.tiff */,
+				B9B29B030B145C1F00DE2C1F /* Cross.tiff */,
+				B9B29B040B145C1F00DE2C1F /* Move.tif */,
+				B9B29B050B145C1F00DE2C1F /* Rotate.tiff */,
+				B9B295EB0B0862A100505F84 /* Opened Polygon.tiff */,
+				B9B295EC0B0862A100505F84 /* Oval.tiff */,
+				B9B295ED0B0862A100505F84 /* Pencil.tiff */,
+				B9B295EE0B0862A100505F84 /* Point.tiff */,
+				B9B295EF0B0862A100505F84 /* WLWW.tif */,
+				B9B295F00B0862A100505F84 /* Zoom.tiff */,
+			);
+			name = ICON;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8D5B49AD048680CD000E48DA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9E39DE90B03648700387A56 /* CMIV_CTA_TOOLS.h in Headers */,
+				B9E3A0450B048ED300387A56 /* CMIVChopperController.h in Headers */,
+				B9FB33550B0A1FD000A5A87A /* CMIVContrastController.h in Headers */,
+				B930E81E0B0B490400434C33 /* CMIVSegmentCore.h in Headers */,
+				B96B0F210B10B1B60044D904 /* CMIVVRcontroller.h in Headers */,
+				B9B29B910B147D2600DE2C1F /* CMIVScissorsController.h in Headers */,
+				B9B4195D0B36C8FC00AD244F /* CMIVExport.h in Headers */,
+				B9ADCE070B3B31CD008B5B9C /* CMIVSaveResult.h in Headers */,
+				B9A4171F0B4BAF4D009AEE95 /* CMIV3DPoint.h in Headers */,
+				B9B07E9A0B67A703008879EF /* CMIVContrastPreview.h in Headers */,
+				B9960E830C5A7F01004A4E89 /* CMIVSlider.h in Headers */,
+				B969E7B00D111DC700868834 /* CMIVWindow.h in Headers */,
+				B9C596A10D127F810082FCAF /* CMIVDCMView.h in Headers */,
+				B98C764F0D312EF2004CBA19 /* CMIVCLUTOpacityView.h in Headers */,
+				B917308F0D9908C7005A0FF9 /* CMIV_AutoSeeding.h in Headers */,
+				B91730910D9908C7005A0FF9 /* CMIVAutoSeedingCore.h in Headers */,
+				B909F0840D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h in Headers */,
+				B9C3BAB00F5D9B89001D6931 /* CMIVVesselPlotView.h in Headers */,
+				CE7E504A15020CDA00B6222F /* spline.H in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8D5B49AC048680CD000E48DA /* CMIV_CTA_TOOLS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "CMIV_CTA_TOOLS" */;
+			buildPhases = (
+				8D5B49AD048680CD000E48DA /* Headers */,
+				8D5B49AF048680CD000E48DA /* Resources */,
+				8D5B49B1048680CD000E48DA /* Sources */,
+				8D5B49B3048680CD000E48DA /* Frameworks */,
+				8D5B49B5048680CD000E48DA /* Rez */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CMIV_CTA_TOOLS;
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = Invert;
+			productReference = B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1420;
+			};
+			buildConfigurationList = CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "CMIV_CTA" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				de,
+				ja,
+				Base,
+				en,
+				fr,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* Duplicate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D5B49AC048680CD000E48DA /* CMIV_CTA_TOOLS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D5B49AF048680CD000E48DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
+				B9B295F10B0862A100505F84 /* Opened Polygon.tiff in Resources */,
+				B9B295F20B0862A100505F84 /* Oval.tiff in Resources */,
+				B9B295F30B0862A100505F84 /* Pencil.tiff in Resources */,
+				B9B295F40B0862A100505F84 /* Point.tiff in Resources */,
+				B9B295F50B0862A100505F84 /* WLWW.tif in Resources */,
+				B9B295F60B0862A100505F84 /* Zoom.tiff in Resources */,
+				B9B29B060B145C1F00DE2C1F /* Cross.tiff in Resources */,
+				B9B29B070B145C1F00DE2C1F /* Move.tif in Resources */,
+				B9B29B080B145C1F00DE2C1F /* Rotate.tiff in Resources */,
+				B9B4F79A0B245953002E9350 /* Rectangle.tiff in Resources */,
+				22C9712C0BA9BAC900ADA848 /* 3DRotate.tiff in Resources */,
+				B95EA4360C54F418005A35CB /* logo.jpg in Resources */,
+				B9B702040CA5460D00CF333E /* Length.tiff in Resources */,
+				B99792060D3E391B004D8613 /* AboutDlg.xib in Resources */,
+				B99792070D3E391B004D8613 /* Chopper_Panel.xib in Resources */,
+				B99792080D3E391B004D8613 /* Contrast_Panel.xib in Resources */,
+				B99792090D3E391B004D8613 /* Save_Panel.xib in Resources */,
+				B997920A0D3E391B004D8613 /* Scissors_Panel.xib in Resources */,
+				B997920B0D3E391B004D8613 /* SegPreview.xib in Resources */,
+				B997920D0D3E391B004D8613 /* VR_Panel.xib in Resources */,
+				B9C3BAB60F5D9BC0001D6931 /* camera.tiff in Resources */,
+				B9C3BAB70F5D9BC0001D6931 /* CTAICON.tiff in Resources */,
+				B9C3BAB80F5D9BC0001D6931 /* Repulsor.tif in Resources */,
+				B9C3BAB90F5D9BC0001D6931 /* trash.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		8D5B49B5048680CD000E48DA /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D5B49B1048680CD000E48DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9A417200B4BAF4D009AEE95 /* CMIV3DPoint.m in Sources */,
+				B9960E840C5A7F01004A4E89 /* CMIVSlider.m in Sources */,
+				B969E7B10D111DC700868834 /* CMIVWindow.m in Sources */,
+				B9E39DEA0B03648700387A56 /* CMIV_CTA_TOOLS.mm in Sources */,
+				B909F0850D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m in Sources */,
+				B9C3BAB10F5D9B89001D6931 /* CMIVVesselPlotView.mm in Sources */,
+				CE7E504915020CDA00B6222F /* spline.C in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C167DFE841241C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4353EEF929EE66C000ECAEE1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CE6A9A9108AC841300D0C1EE /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 57BXF7EQEM;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Binaries";
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_OBJC_CALL_CXX_CDTORS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Binaries/GLM/include",
+					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.2",
+					"$(SRCROOT)/Binaries/DCMTK/include",
+					"$(SRCROOT)/Binaries",
+				);
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				INSTALL_PATH = "@executable_path/../Plug-ins";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS)",
+					"$(SRCROOT)",
+					"$(SRCROOT)/../../osirix/Binaries/VTKLibs",
+					"$(SRCROOT)/../../osirix/osirix/ITK180/bin",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../osirix/osirix/ITK180/lib\"";
+				MACH_O_TYPE = mh_bundle;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 2.2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+					"$(SRCROOT)/Binaries/VTK/lib/libVTK.a",
+					"$(SRCROOT)/Binaries/ITK/lib/libITK.a",
+					"-lm",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";
+				PRODUCT_NAME = CMIV_CTA_TOOLS;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = mieleplugin;
+			};
+			name = Development;
+		};
+		CE6A9A9208AC841300D0C1EE /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 57BXF7EQEM;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Binaries";
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_FAST_MATH = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Binaries/GLM/include",
+					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.2",
+					"$(SRCROOT)/Binaries/DCMTK/include",
+					"$(SRCROOT)/Binaries",
+				);
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS)",
+					"$(SRCROOT)",
+					"$(SRCROOT)/../../osirix/Binaries/VTKLibs",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../osirix/osirix/ITK180/lib\"";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 2.2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+					"$(SRCROOT)/Binaries/VTK/lib/libVTK.a",
+					"$(SRCROOT)/Binaries/ITK/lib/libITK.a",
+					"-lm",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";
+				PRODUCT_NAME = CMIV_CTA_TOOLS;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SECTORDER_FLAGS = "";
+				USER_HEADER_SEARCH_PATHS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = mieleplugin;
+			};
+			name = Deployment;
+		};
+		CE6A9A9508AC841300D0C1EE /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CURRENT_PROJECT_VERSION = 20230418;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 57BXF7EQEM;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = GL_SILENCE_DEPRECATION;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Development;
+		};
+		CE6A9A9608AC841300D0C1EE /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CURRENT_PROJECT_VERSION = 20230418;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 57BXF7EQEM;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = GL_SILENCE_DEPRECATION;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Deployment;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "CMIV_CTA_TOOLS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE6A9A9108AC841300D0C1EE /* Development */,
+				CE6A9A9208AC841300D0C1EE /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
+		CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "CMIV_CTA" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE6A9A9508AC841300D0C1EE /* Development */,
+				CE6A9A9608AC841300D0C1EE /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Deployment;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

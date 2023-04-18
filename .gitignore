@@ -1,0 +1,6 @@
+CMIV_CTA.xcodeproj/xcuserdata/
+CMIV_CTA.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace
+*.DS_Store
+Binaries/
+Build/
