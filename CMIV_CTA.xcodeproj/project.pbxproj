@@ -10,6 +10,7 @@
 		22C9712C0BA9BAC900ADA848 /* 3DRotate.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */; };
 		4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353EEF729EE665600ECAEE1 /* MieleAPI.framework */; };
 		43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F86FDA29EE7A09003F0102 /* DCM.framework */; };
+		43F86FDC29EEA606003F0102 /* CMIVChopperController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		B909F0840D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */; };
@@ -433,6 +434,7 @@
 				B9960E840C5A7F01004A4E89 /* CMIVSlider.m in Sources */,
 				B969E7B10D111DC700868834 /* CMIVWindow.m in Sources */,
 				B9E39DEA0B03648700387A56 /* CMIV_CTA_TOOLS.mm in Sources */,
+				43F86FDC29EEA606003F0102 /* CMIVChopperController.mm in Sources */,
 				B909F0850D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m in Sources */,
 				B9C3BAB10F5D9B89001D6931 /* CMIVVesselPlotView.mm in Sources */,
 				CE7E504915020CDA00B6222F /* spline.C in Sources */,
@@ -457,6 +459,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -469,6 +472,10 @@
 				GCC_OBJC_CALL_CXX_CDTORS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GL_SILENCE_DEPRECATION,
+					VERBOSEMODE,
+				);
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -524,6 +531,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

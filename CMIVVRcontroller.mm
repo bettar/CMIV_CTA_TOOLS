@@ -126,11 +126,10 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 }
 - (int) prepareImageFor4DQTVR
 {
-	QTTime			curTime;
-	QTMovie			*mMovie = 0L;
+	QTTime curTime;
+	QTMovie *mMovie = 0L;
 	
-	
-	NSString		*fileName = [[self osirixDocumentPath] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
+	NSString *fileName = [[self osirixDocumentPath2] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
 	NSDictionary *myDict = [NSDictionary dictionaryWithObjectsAndKeys: @"jpeg", QTAddImageCodecType, [NSNumber numberWithInt: codecHighQuality], QTAddImageCodecQuality, nil];	//qdrw , tiff, jpeg
 	[[QTMovie movie] writeToFile: fileName withAttributes: 0L];
 	
@@ -324,7 +323,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		
 		[imagesFor4DQTVR removeAllObjects];
 		[imagesFor4DQTVR release];
-		NSString		*fileName = [[self osirixDocumentPath] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
+		NSString *fileName = [[self hostAppDocumentPath2] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
 		[[NSFileManager defaultManager] removeFileAtPath:fileName handler:nil];
 	}
 	else
@@ -846,8 +845,8 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	err = [vrViewer setPixSource:pixList :originalVolumeData ];
 	//clutViewPoints=[colorViewer getPoints];
 	//clutViewColors=[colorViewer getColors];
-	NSString* path=[parent osirixDocumentPath];
-	NSString	*str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
+	NSString* path=[parent hostAppDocumentPath2];
+	NSString *str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
 //	if(dict)
@@ -1061,8 +1060,8 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	imageHeight = [curPix pheight];
 	imageAmount = [pixList count];
 	
-	NSString* path=[parent osirixDocumentPath];
-	NSString	*str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
+	NSString* path = [parent hostAppDocumentPath2];
+	NSString *str = [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
 //	if(dict)
@@ -1681,21 +1680,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		normal[i]=-normal[i];
 	clipPlane1->SetNormal(normal);
 }
--(NSString*)osirixDocumentPath
+
+-(NSString*)hostAppDocumentPath2
 {
-	char	s[1024];
-	
-	FSRef	ref;
-	
+	char s[1024];
+	FSRef ref;
 	
 	if( FSFindFolder (kOnAppropriateDisk, kDocumentsFolderType, kCreateFolder, &ref) == noErr )
 	{
-		NSString	*path;
-		BOOL		isDir = YES;
+		NSString *path;
+		BOOL isDir = YES;
 		
 		FSRefMakePath(&ref, (UInt8 *)s, sizeof(s));
 		
-		path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:@"/OsiriX Data"];
+		path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:OUR_DATA_LOCATION];
 		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
 		
@@ -1758,7 +1756,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)saveDirection:(id)sender
 {
-	NSString* path=[parent osirixDocumentPath];
+	NSString* path=[parent hostAppDocumentPath2];
 	
 	NSMutableDictionary *dict = [vrViewer get3DStateDictionary];
 

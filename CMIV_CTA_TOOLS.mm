@@ -28,8 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 =========================================================================*/
 
 #import "CMIV_CTA_TOOLS.h"
-#if 0 // @@@
 #import "CMIVChopperController.h"
+#if 0 // @@@
 //#import "CMIVSpoonController.h"
 #import "CMIVContrastController.h"
 #import "CMIVVRcontroller.h"
@@ -262,28 +262,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	if (currentController)
 		[currentController release];
 
-    currentController=nil;
+    currentController = nil;
 	
     int err=0;
-	if( [menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)] == YES)
+	if ([menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)] == YES)
 		err = [self checkIntermediatDataForWizardMode:0];
-	else if( [menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)] == YES)
+
+    else if( [menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)] == YES)
 		[self showAutoSeedingDlg];
-	else if( [menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)] == YES)
+	
+    else if( [menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)] == YES)
 		err = [self startChopper:viewerController];
-	//else if ( [menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)] == YES)
+	
+    //else if ( [menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)] == YES)
 	//	err = [self startSpoon:viewerController];
-	else if ( [menuName isEqualToString:NSLocalizedString(@"2D Views", nil)] == YES)
+	
+    else if ( [menuName isEqualToString:NSLocalizedString(@"2D Views", nil)] == YES)
 		err = [self startScissors:viewerController];	
-	else if ( [menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
+	
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
 		err = [self startContrast:viewerController];	
-	else if ( [menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES)
+	
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES)
 		err = [self startVR:viewerController];
-	else if ( [menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES)
+	
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES)
 		err = [self saveResult:viewerController];
-	else if ( [menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES)
+	
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES)
 		err = [self startPolygonMeasure:viewerController];
-	else if ( [menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
+	
+    else if ( [menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
 	{
 		//float* volumeData=[viewerController volumePtr:0];
 		//err = [self loadVesselnessMap:volumeData];
@@ -310,32 +319,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	return err;
 }
 
-- (int)  startAutomaticSeeding:(ViewerController *) vc
+- (int) startAutomaticSeeding:(ViewerController *) vc
 {
 	int err=0;
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	NSString* file;
 	file= [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
 	NSMutableDictionary* savedData=[[NSMutableDictionary alloc] initWithContentsOfFile:file];
 	if(savedData)
 	{
 		[savedData release];
-		int nrespond=NSRunAlertPanel(NSLocalizedString  (@"Found Previous Results", nil), NSLocalizedString(@"Auto seeding processing will delete all seeds and centerlines info created before.  Do you want to continue?", nil), NSLocalizedString(@"Continue", nil), NSLocalizedString(@"Cancel", nil), nil);
+		int nrespond = NSRunAlertPanel(NSLocalizedString(@"Found Previous Results", nil),
+                                       NSLocalizedString(@"Auto seeding processing will delete all seeds and centerlines info created before.  Do you want to continue?", nil), NSLocalizedString(@"Continue", nil),
+                                       NSLocalizedString(@"Cancel", nil), nil);
 		
-		
-		if(nrespond==1)
+		if (nrespond==1)
 		{
-			
-			
 			[[NSFileManager defaultManager] removeFileAtPath:file handler:nil];
-			
-			
 		}
 		else if(nrespond==0)
 		{
-			
 			return 0;
 		}
 	}
@@ -344,14 +349,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
 	err=[autoSeedingController runAutoSeeding:vc:self:[vc pixList]:[vc volumePtr]:performRibCageRemoval:performCenterlineTracking:performVesselEnhance];
 	[autoSeedingController release];
+#endif // @@@
 	if(!err)
 	{
-		if(performCenterlineTracking!=1)
+		if (performCenterlineTracking!=1)
 			[self checkIntermediatDataForWizardMode:1]; 
 		else
 			[self checkIntermediatDataForFreeMode:1]; 
 	}
-#endif // @@@
 
 	return err;
 	
@@ -428,16 +433,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (void) gotoStepNo:(int)stage
 {
-	if(currentController)
+    NSLog(@"%s %d, stage:%d", __FUNCTION__, __LINE__, stage);
+	if (currentController)
 		[currentController release];
 	currentController=nil;
 
-#if 0 // @@@
 	if (stage==1)// VOI cutter
 	{
 		NSLog( @"step 1");
 		[[CMIVChopperController alloc] showPanelAsWizard:viewerController:self];
 	}
+#if 0 // @@@
 	else if (stage==2)// 2D viewer
 	{
 		NSLog( @"step 2");
@@ -516,11 +522,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			ViewerController* vc=[temparray objectAtIndex: 0];
 			NSString* sname=[tempnamearray objectAtIndex: 0];
 #if 0 // @@@
-			if(autosaver==nil)
-				autosaver=[[CMIVSaveResult alloc] init];
+			if (autosaver == nil)
+				autosaver = [[CMIVSaveResult alloc] init];
 #endif
-			if(autoSaveSeriesNumber==0)
-				autoSaveSeriesNumber=6700 + [[NSCalendarDate date] minuteOfHour] + [[NSCalendarDate date] secondOfMinute];
+			if (autoSaveSeriesNumber == 0)
+				autoSaveSeriesNumber = 6700 + [[NSCalendarDate date] minuteOfHour] + [[NSCalendarDate date] secondOfMinute];
 			else
 				autoSaveSeriesNumber++;
 
@@ -703,34 +709,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	return err;
 }
 
--(NSString*)osirixDocumentPath
+#define OUR_DATA_LOCATION       @"Miele-LXIV Data"  // TODO: use CFBundleName
+-(NSString*)hostAppDocumentPath
 {
-	char	s[1024];
+	char s[1024];
+	FSRef ref;
 	
-	FSRef	ref;
-	
-	
-	if( [[NSUserDefaults standardUserDefaults] integerForKey: @"DATABASELOCATION"]==1)
+	if ( [[NSUserDefaults standardUserDefaults] integerForKey: @"DATABASELOCATION"]==1)
 	{
 		NSString *path;
 		BOOL isDir = YES;
 		NSString* url=[[NSUserDefaults standardUserDefaults] stringForKey: @"DATABASELOCATIONURL"];
-		path = [url stringByAppendingPathComponent:@"/OsiriX Data"];
+		path = [url stringByAppendingPathComponent:OUR_DATA_LOCATION];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
-			return path;	
+			return path;
+
 #ifdef VERBOSEMODE
 		NSLog( @"incoming folder is url type");
 #endif
 	}
 	
-	if( FSFindFolder (kOnAppropriateDisk, kDocumentsFolderType, kCreateFolder, &ref) == noErr )
+	if ( FSFindFolder (kOnAppropriateDisk, kDocumentsFolderType, kCreateFolder, &ref) == noErr )
 	{
-		NSString	*path;
-		BOOL		isDir = YES;
-		
+		BOOL isDir = YES;
 		FSRefMakePath(&ref, (UInt8 *)s, sizeof(s));
 		
-		path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:@"/OsiriX Data"];
+        NSString *path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:OUR_DATA_LOCATION];
 		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
 #ifdef VERBOSEMODE
@@ -738,19 +742,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 		return path;// not sure if s is in UTF8 encoding:  What's opposite of -[NSString fileSystemRepresentation]?
 	}
-	
-	else
-		return nil;
-	
+
+    return nil;
 }
-- (int)  prepareDataForAutoSegmentation:(NSString*)seriesUid
+
+- (int) prepareDataForAutoSegmentation:(NSString*)seriesUid
 {
-	if(dataOfWizard==nil)
+	if (dataOfWizard==nil)
 		return 1;
-	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
+
+    NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
 	
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	NSString* file1=[path stringByAppendingFormat:@"/CTACrashChach/%@CMIV.tmp",seriesUid];
 	NSString* file2=[path stringByAppendingFormat:@"/CTACrashChach/%@maskmap.tmp",seriesUid];
 	NSString* file3=[path stringByAppendingFormat:@"/CTACrashChach/%@vesselness.tmp",seriesUid];
@@ -833,7 +837,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (int)  saveIntermediateData:(NSString*)seriesUid
 {
 	int err=0;
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	path=[path stringByAppendingString:@"/CMIVCTACache"];
 	BOOL			isDir = YES;
 	if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
@@ -930,12 +934,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	
 }
-- (int)  checkIntermediatDataForFreeMode:(int)userRespond
+
+- (int) checkIntermediatDataForFreeMode:(int)userRespond
 {
 	int err=0;
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	NSString* file;
 	file= [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
 	NSMutableDictionary* savedData=[[NSMutableDictionary alloc] initWithContentsOfFile:file];
@@ -944,7 +949,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	dataOfWizard=[self dataOfWizard];
 	int nrespond;
 	
-	NSMutableArray		*pixList = [viewerController pixList];
+	NSMutableArray *pixList = [viewerController pixList];
 	DCMPix* curPix = [pixList objectAtIndex: 0];
 	int imageWidth = [curPix pwidth];
 	int imageHeight = [curPix pheight];
@@ -990,41 +995,49 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 	return err;
 }
-- (int)  checkIntermediatDataForWizardMode:(int)userRespond
+
+- (int) checkIntermediatDataForWizardMode:(int)userRespond
 {
-	
+    NSLog(@"%s %d, %d", __FUNCTION__, __LINE__, userRespond);
 	int err=0;
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
-	NSString* path=[self osirixDocumentPath];
-	NSString* file;
-	file= [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
-	NSMutableDictionary* savedData=[[NSMutableDictionary alloc] initWithContentsOfFile:file];
+	NSString* path=[self hostAppDocumentPath];
+	NSString* file = [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
+    NSLog(@"%s %d, file:%@", __FUNCTION__, __LINE__, file);
+
+    NSMutableDictionary* savedData = [[NSMutableDictionary alloc] initWithContentsOfFile:file];
 	if (!savedData) {
-		[self gotoStepNo:1 ];
+		[self gotoStepNo:1];
 		return err;
 	}
 	
 	int nrespond;
 	
-	if([savedData objectForKey:@"SubvolumesDimension"]||[savedData objectForKey:@"SeedsDataCompressedArray"])
-	
+	if ([savedData objectForKey:@"SubvolumesDimension"] ||
+        [savedData objectForKey:@"SeedsDataCompressedArray"])
 	{	
-		if(userRespond)
+		if (userRespond)
 			nrespond=userRespond;
 		else
-			nrespond=NSRunAlertPanel(NSLocalizedString  (@"Load Previous Results", nil), NSLocalizedString(@"Found results from Previous Processing. Do you want to load them", nil), NSLocalizedString(@"Load", nil), NSLocalizedString(@"Cancel", nil), NSLocalizedString(@"Discard them and Start Over", nil));
+			nrespond = NSRunAlertPanel(NSLocalizedString(@"Load Previous Results", nil),
+                                       NSLocalizedString(@"Found results from Previous Processing. Do you want to load them", nil),
+                                       NSLocalizedString(@"Load", nil),
+                                       NSLocalizedString(@"Cancel", nil),
+                                       NSLocalizedString(@"Discard them and Start Over", nil));
 		
-		if(nrespond==1)
+		if (nrespond==1)
 		{
 			[self cleanDataOfWizard];
 			dataOfWizard=[self dataOfWizard];
 			int step1=0,step2=0;
 			err = [self loadIntermediateDataForVolumeCropping:savedData];
-			if(!err)
+			if (!err)
 				step1=1;
-			err = [self loadIntermediateDataForSeedPlanting:savedData];
-			if(!err)
+
+            err = [self loadIntermediateDataForSeedPlanting:savedData];
+			
+            if(!err)
 				step2=1;
 
             if(step2)
@@ -1190,7 +1203,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	NSString* file1=[path stringByAppendingFormat:@"/CTACrashChach/%@CMIV.tmp",seriesUid];
 
 	if(dataOfWizard)
@@ -1220,7 +1233,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 -(void)cleanUpCachFolder
 {
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	path=[path stringByAppendingString:@"/CMIVCTACache/"];
 	NSArray* files=[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error: nil]; 
 	unsigned int i;
@@ -1243,7 +1256,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
-	NSString* path=[self osirixDocumentPath];
+	NSString* path=[self hostAppDocumentPath];
 	NSString* file;
 	file= [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
 	NSMutableDictionary* savedData=[[NSMutableDictionary alloc] initWithContentsOfFile:file];

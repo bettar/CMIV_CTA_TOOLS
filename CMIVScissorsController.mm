@@ -1094,7 +1094,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	{
 		[centerLock setState:NSOnState];
 		NSString* path=[parent osirixDocumentPath];
-		NSString	*str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
+		NSString *str = [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
 		NSArray* matrixarray=[dict objectForKey:@"MPRTranformMatrix"];
@@ -1994,7 +1994,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 				double tempdouble=aMatrix->GetElement(i, j);
 				[matrixArray addObject:[NSNumber numberWithDouble:tempdouble]];
 			}
-		NSString* path=[parent osirixDocumentPath];
+		NSString* path=[parent hostAppDocumentPath];
 		NSString	*str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 		
 		NSMutableDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];

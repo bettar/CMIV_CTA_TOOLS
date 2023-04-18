@@ -108,7 +108,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) cleanSharedData;
 
 - (int) startAutomaticSeeding:(ViewerController *) vc;
-- (NSString*)osirixDocumentPath;
+- (NSString*)hostAppDocumentPath;
 
 - (void)cleanUpCachFolder;
 - (void)notifyExportFinished;

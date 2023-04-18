@@ -164,7 +164,7 @@ PURPOSE.
 	{
 		BOOL isDir = YES;
 		long index = 0;
-		NSString *OUTpath = [[self osirixDocumentPath] stringByAppendingPathComponent:@"/INCOMING.noindex"] ;
+		NSString *OUTpath = [[self hostAppDocumentPath3] stringByAppendingPathComponent:@"/INCOMING.noindex"] ;
 
 		if (![[NSFileManager defaultManager] fileExistsAtPath:OUTpath isDirectory:&isDir] && isDir)
             [[NSFileManager defaultManager] createDirectoryAtPath:OUTpath attributes:nil];
@@ -405,9 +405,9 @@ PURPOSE.
 
 	tempuint= (unsigned int*) data;
 	
-	NSString *temppath = [[self osirixDocumentPath] stringByAppendingPathComponent:@"/TEMP"] ;
-	NSString *OUTpath = [[self osirixDocumentPath] stringByAppendingPathComponent:@"/INCOMING.noindex"] ;
-	NSString *roifolderpath = [[self osirixDocumentPath] stringByAppendingPathComponent:@"/ROIs"] ;
+	NSString *temppath = [[self hostAppDocumentPath3] stringByAppendingPathComponent:@"/TEMP"] ;
+	NSString *OUTpath = [[self hostAppDocumentPath3] stringByAppendingPathComponent:@"/INCOMING.noindex"] ;
+	NSString *roifolderpath = [[self hostAppDocumentPath3] stringByAppendingPathComponent:@"/ROIs"] ;
 	BOOL isDir = YES;
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:temppath isDirectory:&isDir] && isDir)
@@ -538,7 +538,7 @@ PURPOSE.
 	}
 }
 
--(NSString*)osirixDocumentPath
+-(NSString*)hostAppDocumentPath3
 {
 	char s[1024];
 	FSRef ref;
@@ -548,7 +548,7 @@ PURPOSE.
 		NSString *path;
 		BOOL isDir = YES;
 		NSString* url=[[NSUserDefaults standardUserDefaults] stringForKey: @"DATABASELOCATIONURL"];
-		path = [url stringByAppendingPathComponent:@"/OsiriX Data"];
+		path = [url stringByAppendingPathComponent:OUR_DATA_LOCATION];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
 			return path;	
 #ifdef VERBOSEMODE
@@ -563,7 +563,7 @@ PURPOSE.
 		
 		FSRefMakePath(&ref, (UInt8 *)s, sizeof(s));
 
-		path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:@"/OsiriX Data"];
+		path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:OUR_DATA_LOCATION];
 		
 		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
 #ifdef VERBOSEMODE

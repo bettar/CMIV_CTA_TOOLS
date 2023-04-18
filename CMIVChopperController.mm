@@ -27,12 +27,11 @@
  
  =========================================================================*/
 
-#import "CMIVChopperController.h"
-
 #define id Id
 #include <vtkImageData.h>
 #undef id
 
+#import "CMIVChopperController.h"
 
 @implementation CMIVChopperController
 
@@ -345,7 +344,9 @@
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"Chopper_Panel"];
+#if 0 // @@@
 	[[self window] setDelegate:self];
+#endif
 	int err=0;
 	originalViewController=vc;
 	parent = owner;
@@ -363,13 +364,12 @@
 	
 	if( [curPix isRGB])
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil), NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil),
+                        NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		
 		return 0;
-	}	
-	
-	
-	
+	}
 	
 	imageWidth = [curPix pwidth];
 	imageHeight = [curPix pheight];
@@ -408,7 +408,6 @@
 		[roiListAxial addObject:[NSMutableArray arrayWithCapacity:0]];
 		[[roiListAxial objectAtIndex:i] addObject:curAxialROI];
 	}
-	
 	
 	[originalView setDCM:pixList :fileList :roiListAxial :0 :'i' :YES];
 	[originalView setStringID: roiName];
@@ -452,6 +451,7 @@
 	return self;
 	
 }
+
 - (void) updateAllTextField
 {
 	[leftTopX setIntValue: (int)(roiRect.origin.x)];
@@ -463,17 +463,19 @@
 	isSelectAll=NO;
 	
 }
+
 - (void) updateImageFromToSliders
 {
 	[imageFromSlider setIntValue: iImageFrom];
 	[imageToSlider  setIntValue: iImageTo];
 }
+
 -(void) defaultToolModified: (NSNotification*) note
 {
 	id sender = [note object];
 	int tag;
 	
-	if( sender)
+	if ( sender)
 	{
 		if ([sender isKindOfClass:[NSMatrix class]])
 		{
@@ -485,19 +487,22 @@
 			tag = [sender tag];
 		}
 	}
-	else tag = [[[note userInfo] valueForKey:@"toolIndex"] intValue];
+	else
+        tag = [[[note userInfo] valueForKey:@"toolIndex"] intValue];
 	
-	if( tag >= 0 ) 
+	if ( tag >= 0 )
 	{
 		if( tag > 4)
 			tag = 6;
+#if 0 // @@@
 		[originalView setCurrentTool: tag];
 		[reformView setCurrentTool: tag];
+#endif
 	}
 }
+
 -(void) roiChanged: (NSNotification*) note
 {
-	
 	id sender = [note object];
 	
 	if( sender)
@@ -550,9 +555,6 @@
 					[curReformROI setROIRect:coronalROIRect];
 				[reformView setIndex: 0];
 				
-				
-				
-				
 				[self updateAllTextField];
 			}	
 			else if ([curReformROI isEqual:sender]==YES)
@@ -587,7 +589,6 @@
 					if(rightbottomx>=imageHeight)
 						rightbottomx=imageHeight-1;
 					
-					
 					sagittalROIRect.origin.x = lefttopx;
 					sagittalROIRect.origin.y = lefttopy;
 					sagittalROIRect.size.width = rightbottomx - lefttopx;
@@ -600,8 +601,6 @@
 					
 					coronalROIRect.origin.y = (iImageFrom-1) / ratioYtoThick ;
 					coronalROIRect.size.height = (iImageTo-iImageFrom-1)/ ratioYtoThick;
-					
-					
 				}
 				else
 				{
@@ -619,18 +618,14 @@
 					iImageFrom = (int)(coronalROIRect.origin.y * ratioYtoThick+1);
 					iImageTo = (int)(coronalROIRect.size.height * ratioYtoThick + coronalROIRect.origin.y * ratioYtoThick+1);
 					
-					
 					roiRect.origin.x = coronalROIRect.origin.x ;
-					
 					roiRect.size.width = coronalROIRect.size.width ;
-					
 					
 					sagittalROIRect.origin.y = (iImageFrom-1)/ ratioYtoThick ;
 					sagittalROIRect.size.height = (iImageTo-iImageFrom-1)/ ratioYtoThick ;
-					
-					
 				}
-				if(iImageFrom<1)
+
+                if(iImageFrom<1)
 					iImageFrom = 1 ;
 				if(iImageTo > imageAmount)
 					iImageTo = imageAmount;
@@ -642,16 +637,13 @@
 			}
 		}
 	}
-	
-	
-	return;
 }
-- (int)  initReformView
+
+- (int) initReformView
 {
+	long size;
 	
-	long                size;
-	
-	NSArray				*pixList = [originalViewController pixList];
+	NSArray *pixList = [originalViewController pixList];
 	size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	outputVolumeData=[originalViewController volumePtr:0];
 	
@@ -693,13 +685,12 @@
 	rotate = vtkImageReslice::New();
 	rotate->SetAutoCropOutput( true);
 	rotate->SetInformationInput( reader->GetOutput());
+#if 0 // @@@
 	rotate->SetInput( reader->GetOutput());
+#endif
 	rotate->SetOptimization( true);
 	rotate->SetResliceTransform( sliceTransform);
 	rotate->SetResliceAxesOrigin( 0, 0, 0);
-	
-	
-	
 	
 	//	rotate->SetTransformInputSampling( false);
 	rotate->SetInterpolationModeToNearestNeighbor();	//SetInterpolationModeToLinear(); //SetInterpolationModeToCubic();	//SetInterpolationModeToCubic();
@@ -707,17 +698,19 @@
 	//	rotate->SetOutputOrigin( 0,0,0);
 	rotate->SetBackgroundLevel( -1024);
 	
-	vtkImageData	*tempIm;
-	int				imExtent[ 6];
-	double		space[ 3], origin[ 3];
+	vtkImageData *tempIm;
+	int imExtent[ 6];
+	double space[ 3], origin[ 3];
 	tempIm = rotate->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	reformPixList = [[NSMutableArray alloc] initWithCapacity:0];
@@ -725,8 +718,7 @@
 	
 	reformFileList = [originalViewController fileList ];
 	
-	//initlize roi 
-	
+	//initlize roi
 	
 	coronalROIRect.origin.x = roiRect.origin.x;
 	coronalROIRect.origin.y = (iImageFrom-1) / ratioYtoThick ;
@@ -780,19 +772,17 @@
 		[curReformROI setROIRect:coronalROIRect];
 	[reformView setIndex: 0];
 	isSelectAll=NO;
-	
 }
+
 - (IBAction)setReformViewIndex:(id)sender
 {
-	int i;
-	i=[sender intValue];
+	int i = [sender intValue];
 	sliceTransform->Identity();
-	if([reformViewState selectedSegment])
+	if ([reformViewState selectedSegment])
 	{
 		sliceTransform->RotateY( -90);
 		sliceTransform->RotateZ( 90);
 		sliceTransform->Translate( 0, 0 ,-( vtkOriginalX + [curPix pixelSpacingX]*i));
-		
 	}
 	else
 	{
@@ -800,60 +790,52 @@
 		sliceTransform->Translate( 0, 0 , vtkOriginalY + [curPix pixelSpacingY]*i);
 	}
 	
-	
 	rotate->SetResliceAxesOrigin( 0, 0, 0);
-	vtkImageData	*tempIm;
-	int				imExtent[ 6];
-	double		space[ 3], origin[ 3];
+	vtkImageData *tempIm;
+	int imExtent[ 6];
+	double space[ 3], origin[ 3];
 	tempIm = rotate->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	//	finalPixList = [[NSMutableArray alloc] initWithCapacity:0];
 	[reformPixList removeAllObjects];
 	[reformPixList addObject: mypix];
 	[mypix release];
-	[reformView setIndex: 0 ];
-	
-	
-	
-	
+	[reformView setIndex: 0];
 }
+
 - (void) changeWLWW: (NSNotification*) note
 {
 	id sender = [note object] ;
 	if ([sender isKindOfClass:[DCMPix class]])
 	{
-		DCMPix	*otherPix = sender;
-		float iwl, iww;
+		DCMPix *otherPix = sender;
 		
-		iww = [otherPix ww];
-		iwl = [otherPix wl];
+		float iww = [otherPix ww];
+		float iwl = [otherPix wl];
 		
-		
-		if( [reformPixList containsObject: otherPix])
+		if ( [reformPixList containsObject: otherPix])
 		{
-			
-			if( iww != [originalView curWW] || iwl != [originalView curWL])
+			if ( iww != [originalView curWW] || iwl != [originalView curWL])
 				[originalView setWLWW:iwl :iww];
-			
 		}
 		else
 		{
-			
-			if( iww != [reformView curWW] || iwl != [reformView curWL])
+			if ( iww != [reformView curWW] || iwl != [reformView curWL])
 				[reformView setWLWW:iwl :iww];
-			
 		}
 	}
-	
 }
+
 - (IBAction)selectAll:(id)sender
 {
 	roiRect.origin.x = 0;
@@ -878,7 +860,8 @@
 		[curReformROI setROIRect:sagittalROIRect];
 	else
 		[curReformROI setROIRect:coronalROIRect];
-	[reformView setIndex: 0];
+
+    [reformView setIndex: 0];
 	[self updateImageFromToSliders];
 	[self updateAllTextField];
 	isSelectAll=YES;

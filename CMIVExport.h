@@ -85,6 +85,6 @@ enum DCM_CompressionQuality {DCMLosslessQuality, DCMHighQuality, DCMMediumQualit
 - (void) setPosition: (float*) p;
 - (void) setSlicePosition: (float) p;
 - (void) exportCurrentSeries: (ViewerController *)originalViewController;
-- (NSString*)osirixDocumentPath;
+- (NSString*)hostAppDocumentPath3;
 - (NSString*)exportSeriesUID;
 @end

@@ -162,7 +162,7 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
 -(NSImage*) imageForVR:(NSNumber*) cur maxFrame:(NSNumber*) max;
 - (int) prepareImageFor4DQTVR;
 - (void)resetClipPlane;
--(NSString*)osirixDocumentPath;
+-(NSString*)hostAppDocumentPath2;
 - (void) SetMusclarCLUT;
 - (void)setAdvancedCLUT:(NSMutableDictionary*)clut lowResolution:(BOOL)lowRes;
 - (void)initTaggedColorList;
