@@ -269,7 +269,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	int                  isChangingWWWLBySelf;
 	long		annotations	;
 	
-	int      currentTool;
+    ToolMode currentTool;
 	int      currentPathMode;
 	NSRect   cPRROIRect;
 	NSRect   axCircleRect;
@@ -315,7 +315,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	int axViewROIMode;
 	int cViewMPRorCPRMode;
 	float maxWidthofCPR;
-	int currentViewMode;
+	int currentViewMode; // 0: MPR, else CPR
 	
 	NSMutableArray   *vesselAnalysisMeanHu;
 	NSMutableArray   *vesselAnalysisMaxHu;
@@ -330,7 +330,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	float levelsetCurvatureScaling;
 
 	NSMutableArray   *reference3Dpoints;
-	ROI               *referenceCurvedMPR2DPath;
+	ROI *referenceCurvedMPR2DPath;
 	
 	float lastLevelsetDiameter;//not useful at all but further test should be done
 	NSRect axViewLevelsetRect;
@@ -339,14 +339,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	BOOL axViewMeasureNeedToUpdate;
 	id activeView;
 	BOOL needSaveCenterlines;
-
 	
 	NSTimer* autoSegmentTimer;
 	int timeCountDown;
 	BOOL needSaveSeeds;
 }
-
-
 
 - (IBAction)addSeed:(id)sender;
 - (IBAction)changeSeedingTool:(id)sender;
@@ -453,10 +450,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) creatCPRROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width:(int)height:(float *)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY;
 - (void) creatAxROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width:(int)height:(float *)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY;
 - (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY:(float)originZ;
-- (void) changeCurrentTool:(int) tag;
+- (void) changeCurrentTool:(ToolMode) tag;
 - (void) fixHolesInBarrier:(int)minx :(int)maxx :(int)miny :(int)maxy :(int)minz :(int)maxz :(short unsigned int) marker;
 - (NSMutableArray *) create3DPathFromROIs:(NSString*) roiName;
-- (void) resample3DPath:(float)step:(NSMutableArray*)apath;
+- (void) resample3DPath:(float)step :(NSMutableArray*)apath;
 - (void)changAmongMPRCPRAndAnalysis:(int)modeindex;
 	//for tableview
 - (int)numberOfRowsInTableView:(NSTableView *)tableView;
@@ -472,7 +469,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (float*) caculateStraightCPRImage :(int*)pwidth :(int*)pheight ;
 - (void) checkRootSeeds:(NSArray*)roiList;
 - (void) runSegmentation;
-- (int) plantSeeds:(float*)inData:(float*)outData:(unsigned char *)directData;
+- (int) plantSeeds:(float*)inData :(float*)outData :(unsigned char *)directData;
 - (void) showPreviewResult:(float*)inData:(float*)outData:(unsigned char *)directData :(unsigned char *)colorData;
 - (void) goSubStep:(int)step:(bool)needResetViews;
 - (void) setCurrentCPRPathWithPath:(NSArray*)path:(float)resampelrate;
@@ -504,23 +501,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-(void)plantExtraSeedsForLeftCoronaryArtery;
 - (void)saveCurrentSeeds;
 - (void)loadSavedSeeds;
-- (DCMPix*)getCurPixFromOView:(float*)imgdata:(int)imgwidth:(int)imgheight:(NSMutableArray*)imgROIs;
-- (DCMPix*)getCurPixFromCView:(float*)imgdata:(int)imgwidth:(int)imgheight:(NSMutableArray*)imgROIs;
-- (DCMPix*)getCurPixFromAxView:(float*)imgdata:(int)imgwidth:(int)imgheight:(NSMutableArray*)imgROIs;
+- (DCMPix*)getCurPixFromOView:(float*)imgdata :(int)imgwidth :(int)imgheight :(NSMutableArray*)imgROIs;
+- (DCMPix*)getCurPixFromCView:(float*)imgdata :(int)imgwidth :(int)imgheight :(NSMutableArray*)imgROIs;
+- (DCMPix*)getCurPixFromAxView:(float*)imgdata :(int)imgwidth :(int)imgheight :(NSMutableArray*)imgROIs;
 - (void) createEven3DPathForCPR:(int*)pwidth :(int*)pheight;
 - (void)showMPRExportDialog;
 - (void)syncWithPlot;
 - (void)initCenterList;
 - (void)initVesselAnalysis;
-- (float) measureDiameterOfLongitudePolygon:(ROI*)aroi:(float)step:(float)length:(float)xspace :(NSMutableArray*)diameterarray:(NSMutableArray*)centerptarray;
+- (float) measureDiameterOfLongitudePolygon:(ROI*)aroi :(float)step :(float)length :(float)xspace :(NSMutableArray*)diameterarray :(NSMutableArray*)centerptarray;
 -(void) recaculateAllCenterlinesLength;
 -(double)caculateLengthOfAPath:(NSArray*)apath;
 - (void)loadVesselnessMap;
--(void)mergeVesselnessAndIntensityMap:(float*)img:(float*)vesselimg:(int)size;
+-(void)mergeVesselnessAndIntensityMap:(float*)img :(float*)vesselimg :(int)size;
 //- (IBAction)loadSegmentationResult:(id)sender;
 -(void)loadDirectionData:(unsigned char*)outData;
 - (void) saveDirectionMap:(unsigned char*)outData;
--(void)creatPolygonROIsMeasurementROIsForAImage:(NSMutableArray*)imgroilist:(DCMPix*) curImage:(BOOL)addMin:(BOOL)addMax:(BOOL)addMean;
+-(void)creatPolygonROIsMeasurementROIsForAImage:(NSMutableArray*)imgroilist :(DCMPix*) curImage :(BOOL)addMin :(BOOL)addMax :(BOOL)addMean;
 -(void)performLongitudeSectionAnalysis;
 - (IBAction)refineCenterlineWithLongitudeSection:(id)sender;
 - (IBAction)refineCenterline:(id)sender;

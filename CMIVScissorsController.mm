@@ -29,7 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import "CMIVScissorsController.h"
 #import "CMIV3DPoint.h"
 #import "CMIVSegmentCore.h"
+#if 0 // @@@
 #import "QuicktimeExport.h"
+#endif
 
 #define id Id
 //#include "itkConnectedThresholdImageFilter.h"
@@ -322,9 +324,11 @@ static		float						deg2rad = 3.14159265358979/180.0;
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"Scissors_Panel"];
+#if 0 // @@@
 	[[self window] setDelegate:self];
-	
-	//prepare images 
+#endif
+
+    //prepare images
 	
 	int err=0;
 	originalViewController=vc;	
@@ -338,9 +342,11 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	curPix = [[originalViewController pixList] objectAtIndex: [[originalViewController imageView] curImage]];
 	
-	if( [curPix isRGB])
+	if ([curPix isRGB])
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil), NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil),
+                        NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		
 		return 0;
 	}	
@@ -364,7 +370,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey: @"ROITEXTNAMEONLY"];
 	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ROITEXTIFSELECTED"];
 	interpolationMode=1;
-	NSArray				*pixList = [originalViewController pixList];
+	NSArray *pixList = [originalViewController pixList];
 	imageWidth = [curPix pwidth];
 	imageHeight = [curPix pheight];
 	imageAmount = [pixList count];	
@@ -372,9 +378,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	fileList =[originalViewController fileList ];
 	
 	minValueInSeries = [curPix minValueOfSeries]; 
-	
-
-	
 	
 	//initilize original view CPRView and Axial View;
 	err = [self initViews];
@@ -385,21 +388,22 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	err = [self initSeedsList];
 	if(err)
 		return nil;
+#if 0 // @@@
 	[seedsList setDataSource:self];	
-	
-	currentTool=0;
+#endif
+
+    currentTool=tWL;
 	currentPathMode=ROI_sleep;
 	cViewMPRorCPRMode=0;
 	[self initCenterList];
+#if 0 // @@@
 	[centerlinesList setDataSource:self];
-	
+#endif
 	[self initVesselAnalysis];
 
+	// register the notification center
 	
-	//registe the notificationcenter
-	
-	NSNotificationCenter *nc;
-	nc = [NSNotificationCenter defaultCenter];
+	NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 	[nc addObserver: self selector: @selector(defaultToolModified:) name:@"defaultToolModified" object:nil];
 	[nc addObserver: self selector: @selector(roiChanged:) name:@"roiChange" object:nil];
 	[nc addObserver: self selector: @selector(roiAdded:) name:@"addROI" object:nil];
@@ -408,10 +412,11 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	[nc	addObserver: self selector: @selector(crossMove:) name: @"crossMove" object: nil];	
 	[nc	addObserver: self selector: @selector(dcmViewMouseDown:) name: @"cmivCTAViewMouseDown" object: nil];
 	[nc	addObserver: self selector: @selector(dcmViewMouseUp:) name: @"cmivCTAViewMouseUp" object: nil];
-	
+#if 0 // @@@
 	[seedToolTipsTabView setDelegate:self];
-	
-	if(isInWizardMode)
+#endif
+
+    if (isInWizardMode)
 	{
 		[seedToolTipsTabView selectTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:2]];
 		[plotView removeFromSuperviewWithoutNeedingDisplay];
@@ -497,7 +502,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	if(!isInWizardMode)
 	{
-		[self changeCurrentTool:0];
+		[self changeCurrentTool:tWL];
 		//NSRect arect=[exportView visibleRect];
 		//arect.size.height=[exportView frame].size.height;
 		//[exportView addTrackingRect:arect owner:self userData:[NSNumber numberWithInt:1] assumeInside:NO];
@@ -533,6 +538,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	NSPoint apoint;
 	apoint.x=1;
 	apoint.y=1;
+#if 0 // @@@
 	NSEvent* virtualMouseDownEvent=[NSEvent mouseEventWithType:NSRightMouseDown location:apoint
 										modifierFlags:nil timestamp:GetCurrentEventTime() windowNumber: 0 context:context eventNumber: nil clickCount:1 pressure:nil];
 	NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType:NSRightMouseUp location:apoint
@@ -544,11 +550,13 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	[crossAxiasView mouseDown:virtualMouseDownEvent];
 	[crossAxiasView mouseUp:virtualMouseUpEvent];
 	//mistery bug above
+#endif
 	
 	return self;
-	
 }
-- (id)showPanelAsWizard:(ViewerController *) vc:(	CMIV_CTA_TOOLS*) owner
+
+- (id)showPanelAsWizard:(ViewerController *) vc
+                       :(CMIV_CTA_TOOLS*) owner
 {
 	isInWizardMode=1;
 	[self showScissorsPanel: vc:owner];
@@ -676,7 +684,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 //	return self;
 //	
 //}
-- (id)showPanelAsCPROnly:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner
+- (id)showPanelAsCPROnly:(ViewerController *) vc
+                        :(CMIV_CTA_TOOLS*) owner
 {
 	isInitialWithCPRMode=YES;
 	needSaveCenterlines=YES;
@@ -690,7 +699,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	{
 		[parentFuzzyConectednessData retain];
 		fuzzyConectednessMap=(float *)[parentFuzzyConectednessData bytes];
-
 	}
 	
 	if(cpr3DPaths&&centerlinesNameArrays)
@@ -700,9 +708,10 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 	else
 		return nil;
-	[parent cleanSharedData];
+
+    [parent cleanSharedData];
 	
-	[self showScissorsPanel: vc:owner];
+	[self showScissorsPanel: vc :owner];
 	[axViewAreaSlider setFloatValue:10];
 	[self changAxViewROIArea:axViewAreaSlider];
 	[resampleRatioSlider setFloatValue:2.5];
@@ -717,11 +726,10 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	//[cYRotateSlider setEnabled: NO];
 
 	return self;
-	
-	
 }
 
-- (id) showPanelAfterROIChecking:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner
+- (id) showPanelAfterROIChecking:(ViewerController *) vc
+                                :(CMIV_CTA_TOOLS*) owner
 {
 	//int err=0;
 	originalViewController=vc;	
@@ -961,7 +969,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			}
 			
 			[self changAxViewROIArea:axViewAreathText];
-			[self changeCurrentTool:0];
+			[self changeCurrentTool:tWL];
 			[self updateOView];
 			[self updatePageSliders];
 			return;
@@ -970,8 +978,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			[self vesselAnalysisSetNewSource:self];
 		
 	}
-	lastOViewZAngle=0,lastCViewZAngle=0,lastAxViewZAngle=0;
-	[self changeCurrentTool:0];
+
+    lastOViewZAngle=0, lastCViewZAngle=0, lastAxViewZAngle=0;
+	[self changeCurrentTool:tWL];
 	[self updateOView];
 	[self cAndAxViewReset];
 	[self updatePageSliders];
@@ -979,17 +988,13 @@ static		float						deg2rad = 3.14159265358979/180.0;
 
 - (int) initViews
 {
-	
-	
-	//long                size;
-	NSArray				*pixList = [originalViewController pixList];
+	//long size;
+	NSArray *pixList = [originalViewController pixList];
 	
 	volumeData=[originalViewController volumePtr:0];
-
 	
 	//size = sizeof(short unsigned int) * imageWidth * imageHeight * imageAmount;
 	//contrastVolumeData = (unsigned short int*) malloc( size);
-
 	
 	curPix = [pixList objectAtIndex: 0];
 	
@@ -999,7 +1004,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	vtkOriginalY = ([curPix originX] ) * vectors[3] + ([curPix originY]) * vectors[4] + ([curPix originZ] )*vectors[5];
 	vtkOriginalZ = ([curPix originX] ) * vectors[6] + ([curPix originY]) * vectors[7] + ([curPix originZ] )*vectors[8];
 	sliceThickness = [curPix sliceInterval];   
-	if( sliceThickness == 0)
+	if ( sliceThickness == 0)
 	{
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
@@ -1012,14 +1017,15 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	ySpacing=[curPix pixelSpacingY];
 	zSpacing=sliceThickness;
 	minSpacing=xSpacing;
-	if(minSpacing>ySpacing)minSpacing=ySpacing;
-	if(minSpacing>zSpacing)minSpacing=zSpacing;
-	minSpacing/=2;
+
+    if (minSpacing>ySpacing) minSpacing=ySpacing;
+	if (minSpacing>zSpacing) minSpacing=zSpacing;
+	
+    minSpacing/=2;
 	
 	oViewRotateAngleX=0;
 	oViewRotateAngleY=0;
 	cViewRotateAngleY=0;
-
 	
 	reader = vtkImageImport::New();
 	reader->SetWholeExtent(0, imageWidth-1, 0, imageHeight-1, 0, imageAmount-1);
@@ -1037,9 +1043,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	roiReader->SetDataScalarTypeToUnsignedShort();
 	roiReader->SetImportVoidPointer(contrastVolumeData);
 
-	if( fuzzyConectednessMap )
+	if ( fuzzyConectednessMap )
 	{
-		
 		axROIReader= vtkImageImport::New();
 		axROIReader->SetWholeExtent(0, imageWidth-1, 0, imageHeight-1, 0, imageAmount-1);
 		axROIReader->SetDataSpacing(xSpacing,ySpacing,zSpacing);
@@ -1047,10 +1052,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		axROIReader->SetDataExtentToWholeExtent();
 		axROIReader->SetDataScalarTypeToFloat();
 		axROIReader->SetImportVoidPointer(fuzzyConectednessMap);
-		
-		
 	}
-	axViewCostMapWidth=100/xSpacing;
+
+    axViewCostMapWidth=100/xSpacing;
 	axViewCostMapHeight=100/ySpacing;
 	axViewConnectednessCostMapMaxSize=4*imageWidth*imageHeight*sizeof(float);
 	axViewConnectednessCostMap=(float*)malloc(axViewConnectednessCostMapMaxSize);//maximum
@@ -1067,18 +1071,23 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	axROIOutlineFilter = vtkContourFilter::New();
 	axROIOutlineFilter->SetValue(0, 0);
+#if 0 // @@@
 	axROIOutlineFilter->SetInput (axLevelSetMapReader->GetOutput());
+#endif
 	
 	axViewPolygonfilter = vtkPolyDataConnectivityFilter::New();
 	axViewPolygonfilter->SetColorRegions( 1);
 	axViewPolygonfilter->SetExtractionModeToLargestRegion();
+#if 0 // @@@
 	axViewPolygonfilter->SetInput( axROIOutlineFilter->GetOutput());
+#endif
 	
 	axViewPolygonfilter2 = vtkPolyDataConnectivityFilter::New();
 	axViewPolygonfilter2->SetColorRegions( 1);
 	axViewPolygonfilter2->SetExtractionModeToLargestRegion();
+#if 0 // @@@
 	axViewPolygonfilter2->SetInput( axViewPolygonfilter->GetOutput());
-	
+#endif
 	
 	oViewBasicTransform = vtkTransform::New();
 	oViewBasicTransform->Translate( vtkOriginalX+xSpacing*imageWidth/2, vtkOriginalY+ySpacing*imageHeight/2, vtkOriginalZ + sliceThickness*imageAmount/2 );
@@ -1129,7 +1138,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	oViewSlice = vtkImageReslice::New();
 	oViewSlice->SetAutoCropOutput( true);
 	oViewSlice->SetInformationInput( reader->GetOutput());
+#if 0 // @@@
 	oViewSlice->SetInput( reader->GetOutput());
+#endif
 	oViewSlice->SetOptimization( true);
 	oViewSlice->SetResliceTransform( oViewUserTransform);
 	oViewSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -1140,7 +1151,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	oViewROISlice= vtkImageReslice::New();
 	oViewROISlice->SetAutoCropOutput( true);
 	oViewROISlice->SetInformationInput( roiReader->GetOutput());
+#if 0 // @@@
 	oViewROISlice->SetInput( roiReader->GetOutput());
+#endif
 	oViewROISlice->SetOptimization( true);
 	oViewROISlice->SetResliceTransform(oViewUserTransform );
 	oViewROISlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -1149,19 +1162,21 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	oViewROISlice->SetBackgroundLevel( -1024);	
 
 
-	vtkImageData	*tempIm;
-	int				imExtent[ 6];
-	double		space[ 3], origin[ 3];
+	vtkImageData *tempIm;
+	int imExtent[ 6];
+	double space[ 3], origin[ 3];
 	tempIm = oViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( oViewSpace);
 	tempIm->GetOrigin( oViewOrigin);
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	float iwl, iww;
 	iww = [[originalViewController imageView] curWW] ;
@@ -1205,7 +1220,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	cViewSlice = vtkImageReslice::New();
 	cViewSlice->SetAutoCropOutput( true);
 	cViewSlice->SetInformationInput( reader->GetOutput());
+#if 0 // @@@
 	cViewSlice->SetInput( reader->GetOutput());
+#endif
 	cViewSlice->SetOptimization( true);
 	cViewSlice->SetResliceTransform( cViewTransform);
 	cViewSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -1216,8 +1233,10 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	maxWidthofCPR=40;//used by straighten CPR
 	
 	tempIm = cViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
 	tempIm->GetSpacing( cViewSpace);
@@ -1255,17 +1274,20 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		crossX=0;
 	else if(crossX>imExtent[ 1]-imExtent[ 0])
 		crossX=imExtent[ 1]-imExtent[ 0];
-	if(crossY>0)
+
+    if(crossY>0)
 		crossY=0;
 	else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
 		crossY=-(imExtent[ 3]-imExtent[ 2] );
-	[cPRView setCrossCoordinates:crossX:crossY :YES];
-
+	
+    [cPRView setCrossCoordinates:crossX:crossY :YES];
 	
 	axViewSlice = vtkImageReslice::New();
 	axViewSlice->SetAutoCropOutput( true);
 	axViewSlice->SetInformationInput( reader->GetOutput());
+#if 0 // @@@
 	axViewSlice->SetInput( reader->GetOutput());
+#endif
 	axViewSlice->SetOptimization( true);
 	axViewSlice->SetResliceTransform( axViewTransform);
 	axViewSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -1274,30 +1296,31 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	//axViewSlice->SetOutputSpacing(1,1,0);
 	axViewSlice->SetBackgroundLevel( -1024);
 	
-	
 	tempIm = axViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( axViewSpace);
 	tempIm->GetOrigin( axViewOrigin);
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
 	
-	if( fuzzyConectednessMap )
+	if ( fuzzyConectednessMap )
 	{
 		axViewROISlice= vtkImageReslice::New();
 		axViewROISlice->SetAutoCropOutput( true);
 		axViewROISlice->SetInformationInput( axROIReader->GetOutput());
+#if 0 // @@@
 		axViewROISlice->SetInput( axROIReader->GetOutput());
+#endif
 		axViewROISlice->SetOptimization( true);
 		axViewROISlice->SetResliceTransform( axViewTransform);
 		axViewROISlice->SetResliceAxesOrigin( 0, 0, 0);
 		axViewROISlice->SetInterpolationModeToCubic();
 		axViewROISlice->SetOutputDimensionality( 2);
-		axViewROISlice->SetBackgroundLevel( -3000);	
-		
+		axViewROISlice->SetBackgroundLevel( -3000);
 	}
-	
 	
 	im = (float*) tempIm->GetScalarPointer();
 	mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
@@ -1327,60 +1350,65 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	crossX=-origin[0]/space[0];
 	crossY=origin[1]/space[1];
 	
-	if(crossX<0)
+	if (crossX<0)
 		crossX=0;
 	else if(crossX>imExtent[ 1]-imExtent[ 0])
 		crossX=imExtent[ 1]-imExtent[ 0];
-	if(crossY>0)
+	
+    if (crossY>0)
 		crossY=0;
 	else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
 		crossY=-(imExtent[ 3]-imExtent[ 2] );
-	[crossAxiasView setCrossCoordinates:crossX:crossY :YES];
+
+    [crossAxiasView setCrossCoordinates:crossX :crossY :YES];
 
 	{
 	
 		int showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
-		if(showcross==0)
+		if (showcross==0)
 		{
 			showcross=1;
 			[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
 		}
-		if(showcross!=1)
+
+        if (showcross!=1)
 		{
 			[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
 			[crossAxiasView hideCrossHair];
 			[axViewCrossShowButton setState:NSOffState];
 		}
-		showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
-		if(showcross==0)
+
+        showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
+		
+        if (showcross==0)
 		{
 			showcross=1;
 			[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowCViewCrossHair"];
 		}
-		if(showcross!=1)
+
+        if (showcross!=1)
 		{
 			[cPRView setCrossCoordinates:-9999 :-9999 :YES];
 			[cPRView hideCrossHair];
 			[cViewCrossShowButton setState:NSOffState];
 		}
-		showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowOViewCrossHair"];
-		if(showcross==0)
+
+        showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowOViewCrossHair"];
+		if (showcross==0)
 		{
 			showcross=1;
 			[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowOViewCrossHair"];
 		}
-		if(showcross!=1)
+
+        if (showcross!=1)
 		{
 			[originalView setCrossCoordinates:-9999 :-9999 :YES];
 			[originalView hideCrossHair];
 			[oViewCrossShowButton setState:NSOffState];
 		}
 	}
-
 	
 	return 0;
-	
-	
 }
 
 - (void) updateOView
@@ -1396,21 +1424,22 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	else
 		oViewSlice->SetInterpolationModeToNearestNeighbor();
 	tempIm = oViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( oViewSpace);
 	tempIm->GetOrigin( oViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :oViewSpace[0] :oViewSpace[1] :oViewOrigin[0] :oViewOrigin[1] :oViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :oViewSpace[0] :oViewSpace[1] :oViewOrigin[0] :oViewOrigin[1] :oViewOrigin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	isRemoveROIBySelf=1;
 	//to avoid ROIs release seeds when autoreleased
 
-	unsigned i;
-	NSString* emptystr=@"";
-	for(i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
+	NSString* emptystr = @"";
+	for(unsigned int i=0; i<[[oViewROIList objectAtIndex: 0] count]; i++)
 		[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] setComments:emptystr];
 
 	[[oViewROIList objectAtIndex: 0] removeAllObjects];
@@ -1422,13 +1451,15 @@ static		float						deg2rad = 3.14159265358979/180.0;
 //	}
 	isRemoveROIBySelf=0;
 	//creat roi list
-	if(currentViewMode==0)//if MPR mode
+	if (currentViewMode==0)//if MPR mode
 	{
-		if(contrastVolumeData)
+		if (contrastVolumeData)
 		{
 			tempROIIm = oViewROISlice->GetOutput();
+#if 0 // @@@
 			tempROIIm->Update();
 			tempROIIm->GetWholeExtent( imExtent);
+#endif
 			tempROIIm->GetSpacing( oViewSpace);
 			tempROIIm->GetOrigin( oViewOrigin);	
 			short unsigned int *imROI = (short unsigned int*) tempROIIm->GetScalarPointer();
@@ -1437,7 +1468,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 	else // else is CPR mode
 	{
-		if(curvedMPR2DPath)
+		if (curvedMPR2DPath)
 			[self reCaculateCPRPath:[oViewROIList objectAtIndex: 0] :imExtent[ 1]-imExtent[ 0]+1  :imExtent[ 3]-imExtent[ 2]+1 :oViewSpace[0]:oViewSpace[1]:oViewSpace[2]:oViewOrigin[0]:oViewOrigin[1]:oViewOrigin[3]];
 	}
 	
@@ -1448,35 +1479,43 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	[originalView setIndex: 0 ];
 	
-	if([oViewCrossShowButton state]== NSOnState)
+	if ([oViewCrossShowButton state]== NSOnState)
 	{
 		float crossX,crossY;
 		crossX=-oViewOrigin[0]/oViewSpace[0];
 		crossY=oViewOrigin[1]/oViewSpace[1];
-		if(crossX<0)
+		if (crossX<0)
 			crossX=0;
 		else if(crossX>imExtent[ 1]-imExtent[ 0])
 			crossX=imExtent[ 1]-imExtent[ 0];
-		if(crossY>0)
+
+        if (crossY>0)
 			crossY=0;
 		else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
-		[originalView setCrossCoordinates:crossX:crossY :YES];
+
+        [originalView setCrossCoordinates:crossX:crossY :YES];
 	}
 	else
 	{
 		[originalView setCrossCoordinates:-9999 :-9999 :YES];
 	}
-	if(curvedMPR2DPath)
+
+#if 0 // @@@
+    if (curvedMPR2DPath)
 		[curvedMPR2DPath setROIMode:currentPathMode];
-	if(referenceCurvedMPR2DPath)
+	
+    if (referenceCurvedMPR2DPath)
 		[referenceCurvedMPR2DPath setROIMode:currentPathMode];
-	tempIm->GetSpacing( oViewSpace);
+#endif
+	
+    tempIm->GetSpacing( oViewSpace);
 	tempIm->GetOrigin( oViewOrigin);	
 #ifdef VERBOSEMODE
 	NSLog( @"Oview Updated");
 #endif
 }
+
 - (void) updatePageSliders
 {
 	float point[8][3];
@@ -1601,27 +1640,31 @@ static		float						deg2rad = 3.14159265358979/180.0;
 #ifdef VERBOSEMODE
 	NSLog( @"updating Axview");
 #endif
-	if(cViewMPRorCPRMode)
+	if (cViewMPRorCPRMode)
 	{
-		if(!isStraightenedCPR)
+		if (!isStraightenedCPR)
 			[self recaculateAxViewForCPR];
 		else
 			[self recaculateAxViewForStraightenedCPR];
 	}
-	vtkImageData	*tempIm,*tempROIIm;
-	int				imExtent[ 6];
+
+    vtkImageData *tempIm, *tempROIIm;
+	int imExtent[ 6];
 	if(interpolationMode)
 		axViewSlice->SetInterpolationModeToCubic();
 	else
 		axViewSlice->SetInterpolationModeToNearestNeighbor();
-	tempIm = axViewSlice->GetOutput();
+
+    tempIm = axViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( axViewSpace);
 	tempIm->GetOrigin( axViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :axViewSpace[0] :axViewSpace[1] :axViewOrigin[0] :axViewOrigin[1] :axViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :axViewSpace[0] :axViewSpace[1] :axViewOrigin[0] :axViewOrigin[1] :axViewOrigin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	[axViewPixList removeAllObjects];
@@ -1634,12 +1677,11 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	[crossAxiasView setOrigin: newOrigin];
 	
-	if([[axViewROIList objectAtIndex: 0] count])
+	if ([[axViewROIList objectAtIndex: 0] count])
 	{
-		
 		ROI* roi=[[axViewROIList objectAtIndex: 0] objectAtIndex:0];
 		
-		if([roi type]==tOval)
+		if ([roi type]==tOval)
 		{
 			float crossX,crossY;
 			crossX=-axViewOrigin[0]/axViewSpace[0];
@@ -1660,19 +1702,21 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		else
 			[[axViewROIList objectAtIndex: 0] removeAllObjects];
 	}
-	
 
-	if(axViewROIMode==2) //use fuzzy connectedness segment results
+	if (axViewROIMode==2) //use fuzzy connectedness segment results
 	{
 		if(interpolationMode)
 			axViewROISlice->SetInterpolationModeToCubic();
 		else
 			axViewROISlice->SetInterpolationModeToNearestNeighbor();
-		int				axROIExtent[ 6];
+		
+        int axROIExtent[ 6];
 		double axROISpacing[3],axROIOrigin[3];
 		tempROIIm = axViewROISlice->GetOutput();
+#if 0 // @@@
 		tempROIIm->Update();
 		tempROIIm->GetWholeExtent( axROIExtent);
+#endif
 		tempROIIm->GetSpacing( axROISpacing);
 		tempROIIm->GetOrigin( axROIOrigin);	
 		float *imAxROI = (float*) tempROIIm->GetScalarPointer();
@@ -1682,21 +1726,24 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	{
 		[self creatAxROIListFromFuzzyConnectedness:[axViewROIList objectAtIndex: 0] :imExtent[ 1]-imExtent[ 0]+1  :imExtent[ 3]-imExtent[ 2]+1 :im : axViewSpace[0]:axViewSpace[1]:axViewOrigin[0]:axViewOrigin[1]];
 	}
-	[axViewMeasurePolygon setROIMode:ROI_sleep];
-	if([axViewCrossShowButton state]== NSOnState&&currentViewMode==0)
+
+    [axViewMeasurePolygon setROIMode:ROI_sleep];
+	if ([axViewCrossShowButton state] == NSOnState&&currentViewMode==0)
 	{
 		float crossX,crossY;
 		crossX=-axViewOrigin[0]/axViewSpace[0];
 		crossY=axViewOrigin[1]/axViewSpace[1];
-		if(crossX<0)
+		if (crossX<0)
 			crossX=0;
 		else if(crossX>imExtent[ 1]-imExtent[ 0])
 			crossX=imExtent[ 1]-imExtent[ 0];
-		if(crossY>0)
+        
+		if (crossY>0)
 			crossY=0;
 		else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
-		[crossAxiasView setCrossCoordinates:crossX:crossY :YES];
+
+        [crossAxiasView setCrossCoordinates:crossX:crossY :YES];
 	}
 	else
 	{
@@ -1709,6 +1756,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 #endif
 	
 }
+
 - (void) resetSliders
 {
 	[oXRotateSlider setIntValue:0];
@@ -1725,7 +1773,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	[self updatePageSliders];		
 }
-- (void) changeCurrentTool:(int) tag
+- (void) changeCurrentTool:(ToolMode) tag
 {
 	if(currentTool==4)
 	{
@@ -1735,27 +1783,28 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 		{
 			ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-			if([temproi type] == tMesure)
+			if ([temproi type] == tMeasure)
 			{
-				
-					[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
-					i--;
+                [[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
+                i--;
 			}
 		}
-		for ( i=0;i<[[cViewROIList objectAtIndex: 0] count];i++)
+
+        for ( i=0;i<[[cViewROIList objectAtIndex: 0] count];i++)
 		{
 			ROI* temproi=[[cViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-			if([temproi type] == tMesure)
+			if ([temproi type] == tMeasure)
 			{
 				
 				[[cViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 				i--;
 			}
 		}
-		for ( i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
+
+        for ( i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 		{
 			ROI* temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-			if([temproi type] == tMesure)
+			if ([temproi type] == tMeasure)
 			{
 				
 				[[axViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
@@ -1763,9 +1812,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			}
 		}		
 	}
-	else if (currentTool>=6&&currentTool<=8)
+	else if (currentTool>=6 && currentTool<=8)
 	{
-		if(!isInWizardMode)
+		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
 			if(tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
@@ -1777,7 +1826,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			}
 		}
 
-        if(!contrastVolumeData)
+        if (!contrastVolumeData)
 		{
 			int size = sizeof(short unsigned int) * imageWidth * imageHeight * imageAmount;
 			contrastVolumeData = (unsigned short int*) malloc( size);
@@ -1785,7 +1834,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		}
 	}
 
-	if(tag>=6&&tag<=8)
+	if (tag>=tROI && tag<=tCross)
 	{
 		if([axViewCrossShowButton state]==NSOnState)
 		{
@@ -1810,27 +1859,25 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			[crossAxiasView showCrossHair];
 			[self updateAxView];
 		}
-
 	}
-	if(tag>=0&&tag<4)
+
+    if (tag>=0 && tag<4)
 	{
 		[originalView setCurrentTool: tag];
 		[cPRView setCurrentTool: tag];
 		[crossAxiasView setCurrentTool:tag];
-		
-		
 	}
-	else if(tag==4)
+	else if (tag==4)
 	{
-		[originalView setCurrentTool: tMesure];
-		[cPRView setCurrentTool: tMesure];
-		[crossAxiasView setCurrentTool:tMesure];
+		[originalView setCurrentTool: tMeasure];
+		[cPRView setCurrentTool: tMeasure];
+		[crossAxiasView setCurrentTool:tMeasure];
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey: @"ROITEXTNAMEONLY"];
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ROITEXTIFSELECTED"];
 	}
-	else if(tag==5)
+	else if (tag==tMeasure)
 	{
-		[originalView setCurrentTool: tOPolygon];
+		[originalView setCurrentTool: tOpenPolygon];
 		[cPRView setCurrentTool: tTranslate];
 		[crossAxiasView setCurrentTool: tWL];
 		currentTool=tag;
@@ -1838,28 +1885,30 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		[self cAndAxViewReset];
 		[self updatePageSliders];
 	}
-	else if(tag==6)
+	else if (tag==tROI)
 	{
-		[originalView setCurrentTool: tMesure];
+		[originalView setCurrentTool: tMeasure];
 		[cPRView setCurrentTool: tROI];
 		[crossAxiasView setCurrentTool: tWL];
-		if(!isInWizardMode)
+		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
-			if(tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
+			if (tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
 			{
 				[convertToSeedButton setHidden:NO];
 				[brushStatSegment setHidden:YES];
 				[brushWidthSlider setHidden:YES];
 				[brushWidthText setHidden:YES];
 			}
-			unsigned int row = currentStep;
-			if(row>=0&&row<[contrastList count])
+
+            unsigned int row = currentStep;
+			if (row>=0&&row<[contrastList count])
 			{
 				[[contrastList objectAtIndex: row] setObject: [NSNumber numberWithInt:6] forKey:@"CurrentTool"];
 			}		
 		}
-		if(currentTool==7||currentTool==5)
+
+        if (currentTool==t3DRotate || currentTool==tMeasure)
 		{
 			currentTool=tag;
 			[self updateOView];
@@ -1867,15 +1916,15 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			[self updatePageSliders];
 		}
 	}
-	else if(tag==7)
+	else if (tag==7)
 	{
 		[originalView setCurrentTool: tArrow];
 		[cPRView setCurrentTool: tArrow];
 		[crossAxiasView setCurrentTool: tOval];	
-		if(!isInWizardMode)
+		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
-			if(tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
+			if (tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
 			{
 				[convertToSeedButton setHidden:NO];
 				[brushStatSegment setHidden:YES];
@@ -1884,74 +1933,67 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			}
 			
 			unsigned int row = currentStep;
-			if(row>=0&&row<[contrastList count])
+			if (row>=0 && row<[contrastList count])
 			{
 				[[contrastList objectAtIndex: row] setObject: [NSNumber numberWithInt:7] forKey:@"CurrentTool"];
 			}
 		}
-			if(currentTool==6||currentTool==5)
+
+        if (currentTool==6||currentTool==5)
 		{	
 			currentTool=tag;
 			[self updateOView];
 			[self cAndAxViewReset];
 			[self updatePageSliders];
-			
-		}		
-		
+		}
 	}
-	else if(tag==8)
+	else if (tag==8)
 	{
-
-		
 		[originalView setCurrentTool: tPlain];
 		[originalView setEraserFlag:0];
-		if(!isInWizardMode)
+		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
-			if(tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
+			if (tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
 			{
 				[convertToSeedButton setHidden:YES];
 				[brushStatSegment setHidden:NO];
 				[brushWidthSlider setHidden:NO];
 				[brushWidthText setHidden:NO];
 			}
-			[brushStatSegment setSelectedSegment: 0];
+
+            [brushStatSegment setSelectedSegment: 0];
 			unsigned int row = currentStep;
-			if(row>=0&&row<[contrastList count])
+			if (row>=0&&row<[contrastList count])
 			{
 				[[contrastList objectAtIndex: row] setObject: [NSNumber numberWithInt:8] forKey:@"CurrentTool"];
 			}
-			[[NSUserDefaults standardUserDefaults] setFloat:[brushWidthSlider floatValue] forKey:@"ROIRegionThickness"];
+
+            [[NSUserDefaults standardUserDefaults] setFloat:[brushWidthSlider floatValue] forKey:@"ROIRegionThickness"];
 		}
-			
-		
-			
+
 		[cPRView setCurrentTool: tWL];
 		[crossAxiasView setCurrentTool: tWL];
-		if(currentTool==6||currentTool==7||currentTool==5)
+		if (currentTool==6||currentTool==7||currentTool==5)
 		{	
 			currentTool=tag;
 			[self updateOView];
 			[self cAndAxViewReset];
 			[self updatePageSliders];
-			
 		}
-		
 	}
-	else if(tag==9)
+	else if (tag==9)
 	{
 		[originalView setCurrentTool: tWL];
 		[cPRView setCurrentTool: tRepulsor];
 		[crossAxiasView setCurrentTool: tRepulsor];	
-		
-		
 	}
 	else
 		return;
 	
-	if(isInWizardMode)
+	if (isInWizardMode)
 	{
-		if(tag!=6&&tag!=7&&tag!=8)
+		if (tag!=6 && tag!=7 && tag!=8)
 		{
 			[currentTips setStringValue: howToContinueTip];
 			[continuePlantingButton setHidden:NO];
@@ -1963,13 +2005,14 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 		
 	currentTool=tag;
-	
 }
+
 - (IBAction)changeDefaultTool:(id)sender
 {
-	int tag=[sender tag];
+    ToolMode tag = (ToolMode)[sender tag];
 	[self changeCurrentTool:tag];
 }
+
 - (IBAction)resetOriginalView:(id)sender
 {
 	oViewBasicTransform->Identity();
@@ -1994,23 +2037,21 @@ static		float						deg2rad = 3.14159265358979/180.0;
 				double tempdouble=aMatrix->GetElement(i, j);
 				[matrixArray addObject:[NSNumber numberWithDouble:tempdouble]];
 			}
-		NSString* path=[parent hostAppDocumentPath];
-		NSString	*str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
+
+        NSString* path=[parent hostAppDocumentPath];
+		NSString *str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 		
 		NSMutableDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
 		
 		if(!dict)
 			dict=[NSMutableDictionary dictionary];
-		[dict setObject:matrixArray forKey:@"MPRTranformMatrix"];
-		
-		
+
+        [dict setObject:matrixArray forKey:@"MPRTranformMatrix"];
 		
 		[dict writeToFile:str atomically:YES];
 		centerIsLocked=1;
 
 		[[NSUserDefaults standardUserDefaults] setInteger:centerIsLocked forKey:@"CMIVLockMPRCenter"];
-	
-		
 	}
 	else
 	{
@@ -2018,7 +2059,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		
 		[[NSUserDefaults standardUserDefaults] setInteger:centerIsLocked forKey:@"CMIVLockMPRCenter"];
 		[self resetOriginalView:self];
-		
 	}
 	
 	[self updateOView];
@@ -2364,27 +2404,29 @@ static		float						deg2rad = 3.14159265358979/180.0;
 - (void) defaultToolModified: (NSNotification*) note
 {
 	id sender = [note object];
-	int tag;
+    ToolMode tag;
 	
-	if( sender)
+	if ( sender)
 	{
 		if ([sender isKindOfClass:[NSMatrix class]])
 		{
 			NSButtonCell *theCell = [sender selectedCell];
-			tag = [theCell tag];
+			tag = (ToolMode)[theCell tag];
 		}
 		else
 		{
-			tag = [sender tag];
+			tag = (ToolMode)[sender tag];
 		}
 	}
-	else tag = [[[note userInfo] valueForKey:@"toolIndex"] intValue];
+	else
+        tag = (ToolMode)[[[note userInfo] valueForKey:@"toolIndex"] intValue];
 	
-	if( tag >= 0 ) 
+	if ( tag >= tWL )
 	{
-//		if( tag > 5)
-//			tag = 20;
-		if(tag<=5)
+//		if (tag > tMeasure)
+//			tag = tPlain;
+
+        if (tag <= tMeasure)
 			[self changeCurrentTool:tag];
 		else
 		{
@@ -2393,8 +2435,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			[crossAxiasView setCurrentTool:tag];
 		}
 	}
-	
-	
 }
 
 - (void) changeWLWW: (NSNotification*) note
@@ -2410,69 +2450,69 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		if([oViewPixList containsObject: otherPix]||[cViewPixList containsObject: otherPix]||[axViewPixList containsObject: otherPix])
 		{
 			isChangingWWWLBySelf=1;
-			if( [oViewPixList containsObject: otherPix])
+			if ([oViewPixList containsObject: otherPix])
 			{
-				//if( iww != [originalView curWW] || iwl != [originalView curWL])
+				//if (iww != [originalView curWW] || iwl != [originalView curWL])
 				[originalView setIndex: 0 ];
-				if( iww != [cPRView curWW] || iwl != [cPRView curWL])
+				if (iww != [cPRView curWW] || iwl != [cPRView curWL])
 					[cPRView setWLWW:iwl :iww];					
-				if( iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
+				if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
 					[crossAxiasView setWLWW:iwl :iww];
-				
 			}
-			else if( [cViewPixList containsObject: otherPix])
+			else if ([cViewPixList containsObject: otherPix])
 			{
-				if( iww != [originalView curWW] || iwl != [originalView curWL])
+				if (iww != [originalView curWW] || iwl != [originalView curWL])
 					[originalView setWLWW:iwl :iww];				
-				if( iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
+				if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
 					[crossAxiasView setWLWW:iwl :iww];	
 			}
-			else if( [axViewPixList containsObject: otherPix])
+			else if ([axViewPixList containsObject: otherPix])
 			{
-				if( iww != [originalView curWW] || iwl != [originalView curWL])
+				if (iww != [originalView curWW] || iwl != [originalView curWL])
 					[originalView setWLWW:iwl :iww];				
-				if( iww != [cPRView curWW] || iwl != [cPRView curWL])
+				if (iww != [cPRView curWW] || iwl != [cPRView curWL])
 					[cPRView setWLWW:iwl :iww];		
 			}
 			isChangingWWWLBySelf=0;
 		}
 	}
-	
-	
 }
+
 - (void) crossMove:(NSNotification*) note
 {
-	if(activeView==originalView)
+	if (activeView==originalView)
 	{
 		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"] == YES)
 		{
 			interpolationMode=0;
-			if([originalView angle]==0)
+			if ([originalView angle]==0)
 			{
 				
-				if(interpolationMode)
+				if (interpolationMode)
 					oViewSlice->SetInterpolationModeToCubic();
 				else
 					oViewSlice->SetInterpolationModeToNearestNeighbor();
 				
 				float oX,oY;
-				vtkImageData	*tempIm;
-				int				imExtent[ 6];
-				double		space[ 3], origin[ 3];
+				vtkImageData *tempIm;
+				int imExtent[ 6];
+				double space[ 3], origin[ 3];
 				tempIm = oViewSlice->GetOutput();
+#if 0 // @@@
 				tempIm->Update();
 				tempIm->GetWholeExtent( imExtent);
+#endif
 				tempIm->GetSpacing( space);
 				tempIm->GetOrigin( origin);	
 				
 				[originalView getCrossCoordinates: &oX  :&oY];
-				oY=-oY;
-				oX=oX*space[0]+origin[0];
-				oY=oY*space[1]+origin[1];
-				if(!(oX==0&&oY==0))
+				oY = -oY;
+				oX = oX*space[0]+origin[0];
+				oY = oY*space[1]+origin[1];
+				if (!(oX==0 && oY==0))
 				{
 					oViewUserTransform->Translate(oX,oY,0);
-					if(currentViewMode==0)
+					if (currentViewMode==0)
 					{
 						[self updateCView];
 						[self updateAxView];
@@ -2527,23 +2567,25 @@ static		float						deg2rad = 3.14159265358979/180.0;
 					cViewSlice->SetInterpolationModeToNearestNeighbor();
 				
 				float oZ,oY;
-				vtkImageData	*tempIm;
-				int				imExtent[ 6];
-				double		space[ 3], origin[ 3];
+				vtkImageData *tempIm;
+				int imExtent[ 6];
+				double space[ 3], origin[ 3];
 				tempIm = cViewSlice->GetOutput();
+#if 0 // @@@
 				tempIm->Update();
 				tempIm->GetWholeExtent( imExtent);
+#endif
 				tempIm->GetSpacing( space);
 				tempIm->GetOrigin( origin);	
 				
 				[cPRView getCrossCoordinates: &oZ  :&oY];
-				oY=-oY;
-				oZ=oZ*space[0]+origin[0];
-				oY=oY*space[1]+origin[1];
-				if(!(oZ==0&&oY==0))
+				oY = -oY;
+				oZ = oZ*space[0]+origin[0];
+				oY = oY*space[1]+origin[1];
+				if (!(oZ==0 && oY==0))
 				{
 					oViewUserTransform->Translate(0,oY,oZ);
-					if(currentViewMode==0)
+					if (currentViewMode==0)
 					{
 						[self updateOView];
 						[self updateAxView];
@@ -2553,7 +2595,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
 						
 						[oImageSlider setMaxValue: ([oImageSlider maxValue]-oZ)];
 						[oImageSlider setMinValue: ([oImageSlider minValue]-oZ)];
-						
 					}
 				}
 			}
@@ -2566,7 +2607,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 				lastCViewZAngle=[cPRView angle];
 			}
 		}
-		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"] == YES)
+
+        if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 		{	
 //			float angle= [cPRView angle];
 //			
@@ -2584,9 +2626,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			activeView=nil;
 		}
 	}
-	else if(activeView==crossAxiasView)
+	else if (activeView==crossAxiasView)
 	{
-		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"] == YES)
+		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
 			if([crossAxiasView angle]==0)
@@ -2597,23 +2639,25 @@ static		float						deg2rad = 3.14159265358979/180.0;
 					axViewSlice->SetInterpolationModeToNearestNeighbor();
 				
 				float oX,oZ;
-				vtkImageData	*tempIm;
-				int				imExtent[ 6];
-				double		space[ 3], origin[ 3];
+				vtkImageData *tempIm;
+				int imExtent[ 6];
+				double space[ 3], origin[ 3];
 				tempIm = axViewSlice->GetOutput();
+#if 0 // @@@
 				tempIm->Update();
 				tempIm->GetWholeExtent( imExtent);
+#endif
 				tempIm->GetSpacing( space);
 				tempIm->GetOrigin( origin);	
 				
 				[crossAxiasView getCrossCoordinates: &oX  :&oZ];
-				oZ=-oZ;
-				oX=oX*space[0]+origin[0];
-				oZ=oZ*space[1]+origin[1];
-				if(!(oX==0&&oZ==0))
+				oZ = -oZ;
+				oX = oX*space[0]+origin[0];
+				oZ = oZ*space[1]+origin[1];
+				if (!(oX==0 && oZ==0))
 				{
 					oViewUserTransform->Translate(oX,0,oZ);
-					if(currentViewMode==0)
+					if (currentViewMode==0)
 					{
 						[self updateOView];
 						[self updateCView];
@@ -2623,7 +2667,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
 						
 						[cImageSlider setMaxValue: ([cImageSlider maxValue]+oX)];
 						[cImageSlider setMinValue: ([cImageSlider minValue]+oX)];
-						
 					}
 				}
 			}
@@ -2636,7 +2679,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 				lastAxViewZAngle=[crossAxiasView angle];
 			}
 		}
-		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"] == YES)
+
+        if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 		{	
 //			float angle= [crossAxiasView angle];
 //			
@@ -2654,11 +2698,11 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			activeView=nil;
 		}
 	}
-	
 }
+
 - (IBAction)showAnnotations:(id)sender
 {
-	if([sender state]==NSOnState)
+	if ([sender state]==NSOnState)
 	{
 		[[NSUserDefaults standardUserDefaults] setInteger: 1 forKey: @"CMIV2DViewANNOTATIONS"];
 		[[NSUserDefaults standardUserDefaults] setInteger: 2 forKey: @"ANNOTATIONS"];
@@ -2755,31 +2799,31 @@ static		float						deg2rad = 3.14159265358979/180.0;
 }
 - (int)numberOfRowsInTableView:(NSTableView *)tableView
 {
-	if( [seedsList isEqual:tableView])
+	if ([seedsList isEqual:tableView])
 	{
 		return [contrastList count];
 	}
-	else if( [centerlinesList isEqual: tableView ])
+	else if ([centerlinesList isEqual: tableView ])
 	{
 		return [cpr3DPaths count];
 	}
+    
 	return 0;
-	
 }
 
 - (id)tableView:(NSTableView *)tableView
 objectValueForTableColumn:(NSTableColumn *)tableColumn
             row:(int)row
 {
-	if( originalViewController == 0L) return 0L;
-	if( [seedsList isEqual:tableView])
+	if (originalViewController == 0L) return 0L;
+	if ([seedsList isEqual:tableView])
 	{
 		
-		if( [[tableColumn identifier] isEqualToString:@"Index"])
+		if ([[tableColumn identifier] isEqualToString:@"Index"])
 		{
 			return [NSString stringWithFormat:@"%d", row+1];
 		} 
-		if( [[tableColumn identifier] isEqualToString:@"Name"])
+		if ([[tableColumn identifier] isEqualToString:@"Name"])
 		{
 			return [[contrastList objectAtIndex:row] objectForKey:@"Name"];
 		}
@@ -2787,7 +2831,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else if([centerlinesList isEqual:tableView])
 	{
 		
-		if( [[tableColumn identifier] isEqualToString:@"Length"])
+		if ([[tableColumn identifier] isEqualToString:@"Length"])
 		{
 			if(!centerlinesLengthArrays)
 				centerlinesLengthArrays=[[NSMutableArray alloc] initWithCapacity:0];
@@ -2795,25 +2839,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				[self recaculateAllCenterlinesLength];
 			return [NSString stringWithFormat:@"%d", [[centerlinesLengthArrays objectAtIndex: row] intValue]];
 		} 
-		if( [[tableColumn identifier] isEqualToString:@"Name"])
+		if ([[tableColumn identifier] isEqualToString:@"Name"])
 		{
 			return [centerlinesNameArrays objectAtIndex:row];
 		}
 	}
 	
-	
 	return 0L;
 }
+
 - (void)tableView:(NSTableView *)aTableView
    setObjectValue:(id)anObject
    forTableColumn:(NSTableColumn *)aTableColumn
 			  row:(int)rowIndex
 {
-	if( originalViewController == 0L) return;
-	if( [seedsList isEqual:aTableView])
+	if (originalViewController == 0L) return;
+	if ([seedsList isEqual:aTableView])
 	{
 		
-		if( [[aTableColumn identifier] isEqualToString:@"Name"])
+		if ([[aTableColumn identifier] isEqualToString:@"Name"])
 		{
 			if([anObject length]>0)
 			{
@@ -2833,9 +2877,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}		
 		
 	}
-	else if( [centerlinesList isEqual:aTableView])
+	else if ([centerlinesList isEqual:aTableView])
 	{
-		if( [[aTableColumn identifier] isEqualToString:@"Name"])
+		if ([[aTableColumn identifier] isEqualToString:@"Name"])
 		{
 			if([anObject length]>0)
 			{
@@ -2876,14 +2920,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	 *     NO range checking is done in this function.
 	 */
 	
-	int             x, y, z;
-	register int    i, j, k;
-	float           dx, dy, dz;
-	register float *pv;
-	float           u[4], v[4], w[4];
-	float           r[4], q[4];
-	float           vox = 0;
-	int             xyDim;
+	int x, y, z;
+    int i, j, k;
+	float dx, dy, dz;
+    float *pv;
+	float u[4], v[4], w[4];
+	float r[4], q[4];
+	float vox = 0;
+	int xyDim;
 	
 	xyDim = xDim * yDim;
 	
@@ -2944,7 +2988,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 #pragma mark-
 #pragma mark 2.2 control CPR views 
 
-- (int) generateSlidingNormals:(int)npts:(double*)pointsxyz:(double*)ptnormals
+- (int) generateSlidingNormals:(int)npts :(double*)pointsxyz :(double*)ptnormals
 {
 	double sPrev[3], sNext[3], q[3], w[3], normal[3], theta;
 	double p[3], pNext[3];
@@ -3127,7 +3171,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	return 1;
 }
-- (int) generateUnitRobbin:(int)npts:(double*)inputpointsxyz:(double*)ptnormals:(double*)outputpointsxyz:(double)angle:(double)width
+- (int) generateUnitRobbin:(int)npts :(double*)inputpointsxyz :(double*)ptnormals :(double*)outputpointsxyz :(double)angle :(double)width
 {
 	/*
 	 if ( !this->GeneratePoints(offset,npts,pts,inPts,newPts,pd,outPD,
@@ -3637,42 +3681,45 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else
 		cViewSlice->SetInterpolationModeToNearestNeighbor();
 	tempIm = cViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( cViewSpace);
 	tempIm->GetOrigin( cViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :cViewSpace[0] :cViewSpace[1] :cViewOrigin[0] :cViewOrigin[1] :cViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :cViewSpace[0] :cViewSpace[1] :cViewOrigin[0] :cViewOrigin[1] :cViewOrigin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	[cViewPixList removeAllObjects];
 	[cViewPixList addObject: mypix];
 	[mypix release];
 	
-	if([[cViewROIList objectAtIndex: 0] count])
+	if ([[cViewROIList objectAtIndex: 0] count])
 	{
-		
 		ROI* roi=[[cViewROIList objectAtIndex: 0] objectAtIndex:0];
 		
 		float crossX,crossY;
 		crossX=-cViewOrigin[0]/cViewSpace[0];
 		crossY=-cViewOrigin[1]/cViewSpace[1];
-		if(crossX<0)
+		if (crossX<0)
 			crossX=0;
 		else if(crossX<-(imExtent[ 1]-imExtent[ 0]))
 			crossX=-(imExtent[ 1]-imExtent[ 0]);
-		if(crossY<0)
+        
+		if (crossY<0)
 			crossY=0;
 		else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
-		if([roi type]==tROI)
+		
+        if ([roi type]==tROI)
 		{
 			cPRROIRect.origin.x = crossX-cPRROIRect.size.width/2;
 			cPRROIRect.origin.y = crossY;
 			[roi setROIRect: cPRROIRect];
 		}
-		else if([roi type]==tArrow)
+		else if ([roi type]==tArrow)
 		{
 			NSArray* points=[roi points];
 			NSPoint start,end;
@@ -3686,40 +3733,43 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[[points objectAtIndex:0] setPoint: end];
 			cViewArrowStartPoint=start;
 			drawingArrawTool=YES;
-			
 		}
-		else if([roi type]==tMesure)
+		else if([roi type]==tMeasure)
 		{
 			isRemoveROIBySelf=1;
 			[[cViewROIList objectAtIndex: 0] removeAllObjects];
 			isRemoveROIBySelf=0;
 		}
-		
 	}
-	if([cViewCrossShowButton state]== NSOnState&&!drawingArrawTool)
+
+    if ([cViewCrossShowButton state]== NSOnState&&!drawingArrawTool)
 	{
 		float crossX,crossY;
 		crossX=-cViewOrigin[0]/cViewSpace[0];
 		crossY=cViewOrigin[1]/cViewSpace[1];
-		if(crossX<0)
+		if (crossX<0)
 			crossX=0;
-		else if(crossX>imExtent[ 1]-imExtent[ 0])
+		else if (crossX>imExtent[ 1]-imExtent[ 0])
 			crossX=imExtent[ 1]-imExtent[ 0];
-		if(crossY>0)
+
+        if (crossY>0)
 			crossY=0;
-		else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
+		else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
-		[cPRView setCrossCoordinates:crossX:crossY :YES];
+		
+        [cPRView setCrossCoordinates:crossX:crossY :YES];
 	}
 	else
 	{
 		[cPRView setCrossCoordinates:-9999 :-9999 :YES];
 	}
-	[cPRView setIndex: 0 ];
+
+    [cPRView setIndex: 0 ];
 }
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY:(float)originZ
+
+- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ
 {
-	if(curvedMPR2DPath)
+	if (curvedMPR2DPath)
 	{
 	
 		NSArray* points2D=[curvedMPR2DPath points];
@@ -3923,11 +3973,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			tempPt.x*=oViewSpace[0];
 			tempPt.y*=oViewSpace[1];
 			
-			if(tempPt.y == 0)
+			if (tempPt.y == 0)
 			{
-				if(tempPt.x > 0)
+				if (tempPt.x > 0)
 					angle=90;
-				else if(tempPt.x < 0)
+				else if (tempPt.x < 0)
 					angle=-90;
 				else 
 					angle=0;
@@ -3935,18 +3985,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 			else
 			{
-				if( tempPt.y < 0)
+				if (tempPt.y < 0)
 					angle = 180 + atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
 				else 
 					angle = atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
 			}
-			
-			
+						
 			curPoint.x = curPoint.x*oViewSpace[0]+oViewOrigin[0];
 			curPoint.y = curPoint.y*oViewSpace[1]+oViewOrigin[1];				
 			
 			axViewTransform->Identity();	
-			//		axViewTransform->Translate(curPoint.x,curPoint.y,0 );
+    //		axViewTransform->Translate(curPoint.x,curPoint.y,0 );
 			
 			if(isNeedShowReferenceLine)
 			{
@@ -3955,7 +4004,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				oViewUserTransform->Translate(curPoint.x,curPoint.y,z1);
 				[self updateOView];
 				
-				if(curvedMPRReferenceLineOfAxis)
+				if (curvedMPRReferenceLineOfAxis)
 				{
 					
 					NSArray* points=[curvedMPRReferenceLineOfAxis points];
@@ -3965,7 +4014,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					start.y= end.y = [axImageSlider floatValue]/cViewSpace[1];
 					[[points objectAtIndex:1] setPoint: start];
 					[[points objectAtIndex:0] setPoint: end];
-					if(![[cViewROIList objectAtIndex: 0] containsObject:curvedMPRReferenceLineOfAxis])
+					if (![[cViewROIList objectAtIndex: 0] containsObject:curvedMPRReferenceLineOfAxis])
 					{
 						[[cViewROIList objectAtIndex: 0] addObject: curvedMPRReferenceLineOfAxis];
 					}
@@ -3981,7 +4030,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				axViewTransform->Translate(curPoint.x,curPoint.y,z1 );
 			}
 			
-			if(angle!=0)
+			if (angle!=0)
 				axViewTransform->RotateZ(-angle);
 			axViewTransform->RotateX(90);	
 			i=pointNum;
@@ -3994,14 +4043,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)switchStraightenedCPR:(id)sender
 {
-	if(isStraightenedCPR)
+	if (isStraightenedCPR)
 	{
 		isStraightenedCPR = NO;
 		//[cPRView setTranlateSlider:nil];
 		[straightenedCPRSwitchMenu setTitle:@"Straightened CPR"];
 		//[cYRotateSlider setEnabled: NO];
 		axViewSlice->SetResliceTransform( axViewTransform);
-		if(fuzzyConectednessMap)
+		if (fuzzyConectednessMap)
 			axViewROISlice->SetResliceTransform( axViewTransform);
 		[straightenedCPRButton setState:NSOffState];
 		[self relocateAxViewSlider];
@@ -4013,7 +4062,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[straightenedCPRSwitchMenu setTitle:@"Curved MPR"];
 		//[cYRotateSlider setEnabled: YES];
 		axViewSlice->SetResliceTransform( axViewTransformForStraightenCPR);
-		if(fuzzyConectednessMap)
+		if (fuzzyConectednessMap)
 			axViewROISlice->SetResliceTransform( axViewTransformForStraightenCPR);
 
 		[straightenedCPRButton setState:NSOnState];	
@@ -4030,14 +4079,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (void)relocateAxViewSlider
 {
-	if([curvedMPR3DPath count]!=[curvedMPRProjectedPaths count])
+	if ([curvedMPR3DPath count]!=[curvedMPRProjectedPaths count])
 		[self updateOView];
 	NSArray* points2D=[curvedMPR2DPath points];
 	int pointNum = [points2D count];
-	if(pointNum<2)
+	if (pointNum<2)
 		return;
 	
-	if(isStraightenedCPR)
+	if (isStraightenedCPR)
 	{
 		
 		float path2DLength=0;
@@ -4050,7 +4099,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			steplength = [curvedMPR2DPath Length:[[points2D objectAtIndex:i] point] :[[points2D objectAtIndex:i+1] point]];
 			
-			if(path2DLength+steplength >= curLocation)
+			if (path2DLength+steplength >= curLocation)
 				break;
 			path2DLength+=steplength;
 			
@@ -4109,7 +4158,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			y2=[a3DPoint y];
 			z2=[a3DPoint z];
 			steplength = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)+(z2-z1)*(z2-z1));
-			if(path3DLength+steplength >= curLocation)
+			if (path3DLength+steplength >= curLocation)
 				break;
 			
 			path3DLength += steplength;
@@ -4139,7 +4188,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 /* - (void)mouseEntered:(NSEvent *)theEvent
 {
 	NSNumber* tagnum=(NSNumber*)[theEvent userData];
-	if([tagnum intValue]==1&&exportViewIsClosed)
+	if ([tagnum intValue]==1&&exportViewIsClosed)
 	{
 		//NSRect exportviewrect;
 		NSRect exportviewrect=[seedToolTipsTabView frame];
@@ -4154,7 +4203,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (void)mouseExited:(NSEvent *)theEvent
 {
 	NSNumber* tagnum=(NSNumber*)[theEvent userData];
-	if([tagnum intValue]==2&&!exportViewIsClosed)
+	if ([tagnum intValue]==2&&!exportViewIsClosed)
 	{
 		
 		NSRect exportviewrect=[exportView frame];
@@ -4167,41 +4216,42 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
  */
 - (IBAction)batchExport:(id)sender
 {
-	if(currentViewMode==0)
+	if (currentViewMode==0)
 	{
 		[self showMPRExportDialog];
 	}
-	else if(currentViewMode==1)
+	else if (currentViewMode==1)
 	{
 		[self showCPRImageDialog:sender];
 	}
-	else if(currentViewMode==2)
+	else if (currentViewMode==2)
 	{
 		[self showCPRImageDialog:sender];
 	}
 }
+
 - (IBAction)quicktimeExport:(id)sender
 {
-	
-	//FSRef				fsref;
-	//FSSpec				spec, newspec;
+	//FSRef fsref;
+	//FSSpec spec, newspec;
 	//	[vrViewer renderImageWithBestQuality: YES waitDialog: NO];
 	{
+#if 0 // @@@
 		QuicktimeExport *mov = [[QuicktimeExport alloc] initWithSelector: self : @selector(imageForQuickTime: maxFrame:) :20];
 		
 		NSString* path;
 		
 		path=[mov createMovieQTKit:YES :NO :[[[originalViewController fileList] objectAtIndex:0] valueForKeyPath:@"series.study.name"]];
 		
-		[mov release];		
+		[mov release];
+#endif
 	}
 	//	[vrViewer endRenderImageWithBestQuality];
-	
-	
 }
--(NSImage*) imageForQuickTime:(NSNumber*) cur maxFrame:(NSNumber*) max
+
+-(NSImage*) imageForQuickTime:(NSNumber*) cur
+                     maxFrame:(NSNumber*) max
 {
-	
 	[oYRotateSlider setFloatValue:([cur intValue]*18-180)];
 	[self rotateYOView:oYRotateSlider];
 	NSImage* tempImage=[originalView nsimage];
@@ -4211,28 +4261,29 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)showCPRImageDialog:(id)sender
 {
-	if(cViewMPRorCPRMode)
+	if (cViewMPRorCPRMode)
 	{
 		[NSApp beginSheet: exportCPRWindow modalForWindow:[self window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 		[self changAxViewCPRStep:exportAxViewCPRStepSlider];
 	}
 	else
-		NSRunAlertPanel(NSLocalizedString(@"no CPR image", nil), NSLocalizedString(@"Please choose CPR tools again.", nil), NSLocalizedString(@"OK", nil), nil, nil);
-	
-	
+		NSRunAlertPanel(NSLocalizedString(@"no CPR image", nil),
+                        NSLocalizedString(@"Please choose CPR tools again.", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 }
+
 - (IBAction)endCPRImageDialog:(id)sender
 {
 	int tag =[sender tag];
 	[exportCPRWindow orderOut:sender];
     [NSApp endSheet:exportCPRWindow returnCode:tag];
 	
-	if(tag)
+	if (tag)
 	{
 		int pathindex,startindex,endindex;
 		startindex=0;
 		id waitWindow = [originalViewController startWaitWindow:@"processing"];	
-		if(tag==6)
+		if (tag==6)
 		{
 			
 			endindex=[cpr3DPaths count];
@@ -4241,9 +4292,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			endindex=1;
 		}
-		for(pathindex=startindex;pathindex<endindex;pathindex++)
+
+        for (pathindex=startindex;pathindex<endindex;pathindex++)
 		{
-			if(tag==6)
+			if (tag==6)
 			{
 				[centerlinesList selectRow:pathindex byExtendingSelection: YES];
 				[self selectANewCenterline:centerlinesList];
@@ -4252,10 +4304,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			ViewerController *new2DViewer;
 			
-			if([ifExportCrossSectionButton state]== NSOnState)
+			if ([ifExportCrossSectionButton state]== NSOnState)
 			{
 				int imagenumber=[exportAxViewCPRAmountText intValue];
-				if(imagenumber<=0)
+				if (imagenumber<=0)
 					imagenumber=1;
 				float step;
 				
@@ -4263,7 +4315,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				
 				new2DViewer=[self exportCrossSectionImages:[axImageSlider minValue]:step:imagenumber];
 				
-				if(parent&&new2DViewer)
+				if (parent&&new2DViewer)
 				{
 					NSString* tempstr=@"Cross Section ";
 					unsigned int row;
@@ -4273,14 +4325,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[[new2DViewer window] setTitle:tempstr];
 					
 					NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey:@"VCList"];
-					if(!temparray)
+					if (!temparray)
 					{
 						temparray=[NSMutableArray arrayWithCapacity:0];
 						[[parent dataOfWizard] setObject:temparray forKey:@"VCList"];
 					}
 					[temparray addObject:new2DViewer];
 					temparray=[[parent dataOfWizard] objectForKey: @"VCTitleList"];
-					if(!temparray)
+					if (!temparray)
 					{
 						temparray=[NSMutableArray arrayWithCapacity:0];
 						[[parent dataOfWizard] setObject:temparray forKey:@"VCTitleList"];
@@ -4292,7 +4344,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 			
 			int imageNumber=[howManyImageToExport intValue] ;
-			if(imageNumber>0)
+			if (imageNumber>0)
 			{
 				NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
 				NSMutableArray	*tempPixList = [NSMutableArray arrayWithCapacity: 0];
@@ -4302,27 +4354,27 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				DCMPix * temppix;
 				int maxwidth=0,maxheight=0;
 				
-				
-				if([howManyAngleToExport selectedColumn]==0)
+				if ([howManyAngleToExport selectedColumn]==0)
 					angleofstep=180/imageNumber;
 				else
 					angleofstep=360/imageNumber;
-				int i;
+
+                int i;
 				for( i = 0 ; i < imageNumber; i ++)
 				{
 					temppix=[cViewPixList objectAtIndex: 0];
 					[tempPixList addObject:temppix];
-					if(maxwidth<[temppix pwidth])
+					if (maxwidth<[temppix pwidth])
 						maxwidth=[temppix pwidth];
-					if(maxheight<[temppix pheight ])
+					if (maxheight<[temppix pheight ])
 						maxheight=[temppix pheight];
 					
 					
-					if(isStraightenedCPR)
+					if (isStraightenedCPR)
 					{
 						currentangle=[cYRotateSlider floatValue];
 						currentangle+=angleofstep;
-						if(currentangle>180)
+						if (currentangle>180)
 							currentangle-=360;
 						[cYRotateSlider setFloatValue: currentangle ];
 						lastCViewYAngle=currentangle;
@@ -4332,7 +4384,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					{
 						currentangle=[oYRotateSlider floatValue];
 						currentangle+=angleofstep;
-						if(currentangle>180)
+						if (currentangle>180)
 							currentangle-=360;
 						[oYRotateSlider setFloatValue: currentangle ];
 						[self rotateYOView:oYRotateSlider];
@@ -4342,7 +4394,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				float* newVolumeData=nil;
 				long size= sizeof(float)*maxwidth*maxheight*imageNumber;
 				newVolumeData=(float*) malloc(size);
-				if(!newVolumeData)
+				if (!newVolumeData)
 				{
 					NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 					[tempPixList removeAllObjects];
@@ -4366,7 +4418,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for(y=0;y<maxheight;y++)
 						for(x=0;x<maxwidth;x++)
 						{
-							if(x>=offsetx&&x<(width+offsetx)&&y>=0&&y<height)
+							if (x>=offsetx&&x<(width+offsetx)&&y>=0&&y<height)
 								*(newVolumeData+i*maxwidth*maxheight+y*maxwidth+x)=*(tempfloat+y*width+x-offsetx);
 							else
 								*(newVolumeData+i*maxwidth*maxheight+y*maxwidth+x) = minValueInSeries;
@@ -4384,7 +4436,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 							   :newData]; 
 				[tempPixList removeAllObjects];
 				
-				if(parent)
+				if (parent)
 				{
 					NSString* tempstr=@"CPR of ";
 					unsigned int row;
@@ -4394,14 +4446,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[[new2DViewer window] setTitle:tempstr];
 					
 					NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey:@"VCList"];
-					if(!temparray)
+					if (!temparray)
 					{
 						temparray=[NSMutableArray arrayWithCapacity:0];
 						[[parent dataOfWizard] setObject:temparray forKey:@"VCList"];
 					}
 					[temparray addObject:new2DViewer];
 					temparray=[[parent dataOfWizard] objectForKey: @"VCTitleList"];
-					if(!temparray)
+					if (!temparray)
 					{
 						temparray=[NSMutableArray arrayWithCapacity:0];
 						[[parent dataOfWizard] setObject:temparray forKey:@"VCTitleList"];
@@ -4409,15 +4461,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[temparray addObject:tempstr];
 				}
 			}
-			
-			
 		}
 		
 		[originalViewController endWaitWindow: waitWindow];
-		if([autoSaveButton state]==NSOnState)
+		if ([autoSaveButton state]==NSOnState)
 			[parent notifyExportFinished];
-		
-		
 	}
 	
 	//[[self window] setFrame:screenrect display:YES ];
@@ -4431,7 +4479,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int tag=[sender tag];
 	[exportMPRWindow orderOut:sender];
     [NSApp endSheet:exportMPRWindow returnCode:tag];
-	if(tag)
+	if (tag)
 	{
 		
 		id waitWindow = [originalViewController startWaitWindow:@"processing"];
@@ -4439,21 +4487,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		float start;
 		
 		start=[exportAxViewFromText floatValue];
-		if(start>[exportAxViewToText floatValue])
+		if (start>[exportAxViewToText floatValue])
 			start=[exportAxViewToText floatValue];	
 		newviewer=[self exportCrossSectionImages:start:[exportStepText floatValue]:[exportAxViewAmountText intValue]];
 		
 		start=[exportCViewFromText floatValue];
-		if(start>[exportCViewToText floatValue])
+		if (start>[exportCViewToText floatValue])
 			start=[exportCViewToText floatValue];	
-		if(newviewer)
+		if (newviewer)
 			newviewer=[self exportCViewImages:start:[exportStepText floatValue]:[exportCViewAmountText intValue]];
 		
 		start=[exportOViewFromText floatValue];
-		if(start>[exportOViewToText floatValue])
+		if (start>[exportOViewToText floatValue])
 			start=[exportOViewToText floatValue];		
 		
-		if(newviewer)
+		if (newviewer)
 			newviewer=[self exportOViewImages:start:[exportStepText floatValue]:[exportOViewAmountText intValue]];
 		
 		[originalViewController endWaitWindow: waitWindow];	
@@ -4484,7 +4532,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float* newVolumeData=nil;
 	long size= sizeof(float)*maxwidth*maxheight*imageNumber;
 	newVolumeData=(float*) malloc(size);
-	if(!newVolumeData)
+	if (!newVolumeData)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		
@@ -4501,7 +4549,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		newPix=[self getCurPixFromAxView:(newVolumeData+i*maxwidth*maxheight):maxwidth:maxheight:imgRoiList];
 		
 
-		if(newPix)
+		if (newPix)
 		{
 			[newPix setTot:imageNumber ];
 			[newPix setFrameNo: 0];
@@ -4570,7 +4618,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float* newVolumeData=nil;
 	long size= sizeof(float)*maxwidth*maxheight*imageNumber;
 	newVolumeData=(float*) malloc(size);
-	if(!newVolumeData)
+	if (!newVolumeData)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		
@@ -4588,7 +4636,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		newPix=[self getCurPixFromCView:(newVolumeData+i*maxwidth*maxheight):maxwidth:maxheight:imgRoiList];
 		
 		
-		if(newPix)
+		if (newPix)
 		{
 			[newPix setTot:imageNumber ];
 			[newPix setFrameNo: 0];
@@ -4661,7 +4709,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float* newVolumeData=nil;
 	long size= sizeof(float)*maxwidth*maxheight*imageNumber;
 	newVolumeData=(float*) malloc(size);
-	if(!newVolumeData)
+	if (!newVolumeData)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		
@@ -4679,7 +4727,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		newPix=[self getCurPixFromOView:(newVolumeData+i*maxwidth*maxheight):maxwidth:maxheight:imgRoiList];
 		
 		
-		if(newPix)
+		if (newPix)
 		{
 			[newPix setTot:imageNumber ];
 			[newPix setFrameNo: 0];
@@ -4764,7 +4812,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[exportAxViewFromText setFloatValue:[exportAxViewFromSlider floatValue]];
 	[exportAxViewToText setFloatValue:[exportAxViewToSlider floatValue]];
 	[exportAxViewAmountText setIntValue:1];
-	if(currentViewMode==0)
+	if (currentViewMode==0)
 		[NSApp beginSheet: exportMPRWindow modalForWindow:[self window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 	else
 		NSRunAlertPanel(NSLocalizedString(@"Can not export MPR image", nil), NSLocalizedString(@"Please Exit CPR Mode.", nil), NSLocalizedString(@"OK", nil), nil, nil);
@@ -4867,7 +4915,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			imgwidth=viewsize.size.width/[originalView scaleValue];
 			imgheight=viewsize.size.height/[originalView scaleValue];
 			imgdata=(float*)malloc(imgwidth*imgheight*sizeof(float));
-			if(imgdata)
+			if (imgdata)
 			{
 				newPix=[self getCurPixFromOView:imgdata:imgwidth:imgheight:imgRoiList];
 				newCellICONForBasket=[originalView nsimage];
@@ -4879,7 +4927,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			imgwidth=viewsize.size.width/[cPRView scaleValue];
 			imgheight=viewsize.size.height/[cPRView scaleValue];
 			imgdata=(float*)malloc(imgwidth*imgheight*sizeof(float));
-			if(imgdata)
+			if (imgdata)
 			{
 				newPix=[self getCurPixFromCView:imgdata:imgwidth:imgheight:imgRoiList];
 				newCellICONForBasket=[cPRView nsimage];
@@ -4890,14 +4938,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			imgwidth=viewsize.size.width/[crossAxiasView scaleValue];
 			imgheight=viewsize.size.height/[crossAxiasView scaleValue];
 			imgdata=(float*)malloc(imgwidth*imgheight*sizeof(float));
-			if(imgdata)
+			if (imgdata)
 			{
 				newPix=[self getCurPixFromAxView:imgdata:imgwidth:imgheight:imgRoiList];
 				newCellICONForBasket=[crossAxiasView nsimage];
 			}			
 			break;
 	}
-	if(newPix)
+
+    if (newPix)
 	{
 		
 		[basketScrollView setPostsBoundsChangedNotifications:YES];
@@ -5097,9 +5146,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		ROI *temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: j];
 		
-		if([temproi type] == tMesure && [temproi valid])
+		if([temproi type] == tMeasure && [temproi valid])
 		{
-			ROI* anewroi=[[ROI alloc] initWithType: tMesure :oViewSpace[0]  :oViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
+			ROI* anewroi=[[ROI alloc] initWithType: tMeasure :oViewSpace[0]  :oViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
 			
 			NSArray* oldPoints=[temproi points];
 			unsigned int k;
@@ -5321,14 +5370,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		ROI *temproi=[[cViewROIList objectAtIndex: 0] objectAtIndex: j];
 		
-		if(([temproi type] == tMesure||[temproi type] == tCPolygon) && [temproi valid])
+		if (([temproi type] == tMeasure || [temproi type] == tClosedPolygon) && [temproi valid])
 		{
-			ROI* anewroi=[[ROI alloc] initWithType: tMesure :cViewSpace[0]  :cViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
+			ROI* anewroi=[[ROI alloc] initWithType: tMeasure :cViewSpace[0]  :cViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
 			
 			NSArray* oldPoints=[temproi points];
 			unsigned int k;
 			NSPoint tempPt;
-			for(k=0;k<[oldPoints count];k++)
+			for (k=0;k<[oldPoints count];k++)
 			{
 				tempPt=[[oldPoints objectAtIndex: k] point];
 				tempPt.x-=offsetx;
@@ -5344,17 +5393,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			color= [temproi rgbcolor];		
 			[anewroi setColor:color];
 			[imgROIs addObject:anewroi];
-						
 		}
-		
 	}
-		return newPix;
+
+    return newPix;
 }
-- (DCMPix*)getCurPixFromAxView:(float*)imgdata:(int)imgwidth:(int)imgheight:(NSMutableArray*)imgROIs
+
+- (DCMPix*)getCurPixFromAxView:(float*)imgdata :(int)imgwidth :(int)imgheight :(NSMutableArray*)imgROIs
 {
 	//crop the origin Image to fit current view size
 	NSPoint point[4];
-	NSArray				*pixList = [originalViewController pixList];
+	NSArray *pixList = [originalViewController pixList];
 	DCMPix	*firstPix=[pixList objectAtIndex: 0];
 	DCMPix  *temppix;	
 	int x,y;
@@ -5366,13 +5415,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//double doublevector[3];
 	vtkTransform* currentTransform;
 
-	if(isStraightenedCPR)
+	if (isStraightenedCPR)
 		currentTransform=axViewTransformForStraightenCPR;
 	else
 		currentTransform=axViewTransform;
 	
 	temppix=[axViewPixList objectAtIndex: 0];
-	
 	
 	width = [temppix pwidth];
 	height = [temppix pheight];
@@ -5406,7 +5454,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			maxx=point[j].x;
 		if(point[j].y>maxy)
 			maxy=point[j].y;
-		
 	}
 	
 	offsetx=minx;
@@ -5443,7 +5490,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	originpat[1]= origin[0] * inversedvector[3] + origin[1] * inversedvector[4] + origin[2]*inversedvector[5];
 	originpat[2]= origin[0] * inversedvector[6] + origin[1] * inversedvector[7] + origin[2]*inversedvector[8];
 	
-	
 	unitvector[0]=1;
 	unitvector[1]=0;
 	unitvector[2]=0;
@@ -5454,7 +5500,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	vector[0]=unitvectorpat[0]-originpat[0];
 	vector[1]=unitvectorpat[1]-originpat[1];
 	vector[2]=unitvectorpat[2]-originpat[2];
-	
 	
 	unitvector[0]=0;
 	unitvector[1]=1;
@@ -5477,7 +5522,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	vector[6]=unitvectorpat[0]-originpat[0];
 	vector[7]=unitvectorpat[1]-originpat[1];
 	vector[8]=unitvectorpat[2]-originpat[2];
-	
 	
 	origin[0]=axViewOrigin[0]+offsetx*axViewSpace[0];
 	origin[1]=axViewOrigin[1]+offsety*axViewSpace[1];
@@ -5557,7 +5601,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		ROI *temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex: j];
 		
-		if([temproi type] == tPlain)
+		if ([temproi type] == tPlain)
 		{
 			ROI *anewroi=[[ROI alloc] initWithTexture:[temproi textureBuffer] textWidth:[temproi textureWidth] textHeight:[temproi textureHeight] textName:[axImageSlider stringValue] positionX:[temproi textureUpLeftCornerX]-offsetx positionY:[temproi textureUpLeftCornerY]-offsety spacingX:axViewSpace[0] spacingY:axViewSpace[1] imageOrigin:NSMakePoint( origin[0],  origin[1])];
 			RGBColor color;
@@ -5566,14 +5610,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[imgROIs addObject:anewroi];
 			[anewroi release];
 		}
-		else if([temproi type] == tCPolygon && [temproi valid] )
+		else if([temproi type] == tClosedPolygon && [temproi valid] )
 		{
-			ROI* anewroi=[[ROI alloc] initWithType: tCPolygon :axViewSpace[0]  :axViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
+			ROI* anewroi=[[ROI alloc] initWithType: tClosedPolygon :axViewSpace[0]  :axViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
 			
 			NSArray* oldPoints=[temproi points];
 			unsigned int k;
 			NSPoint tempPt;
-			for(k=0;k<[oldPoints count];k++)
+			for (k=0;k<[oldPoints count];k++)
 			{
 				tempPt=[[oldPoints objectAtIndex: k] point];
 				tempPt.x-=offsetx;
@@ -5582,9 +5626,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				MyPoint* lastPoint=[[MyPoint alloc] initWithPoint:tempPt];
 				[[anewroi points] addObject: lastPoint];
 				[lastPoint release];
-				
 			}
-			[anewroi setName:[temproi name]];
+
+            [anewroi setName:[temproi name]];
 			[anewroi setComments:[temproi comments]];
 			RGBColor color;
 			color= [temproi rgbcolor];		
@@ -5593,9 +5637,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			ifpolygonfound=1;
 			
 		}
-		else if([temproi type] == tMesure && [temproi valid])
+		else if([temproi type] == tMeasure && [temproi valid])
 		{
-			ROI* anewroi=[[ROI alloc] initWithType: tMesure :axViewSpace[0]  :axViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
+			ROI* anewroi=[[ROI alloc] initWithType: tMeasure :axViewSpace[0]  :axViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
 			
 			NSArray* oldPoints=[temproi points];
 			unsigned int k;
@@ -5767,7 +5811,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 #pragma mark 3. Seeding&ROI functions
 - (IBAction)changeSeedingTool:(id)sender
 {
-	int seedingtoolindex=2-[seedingToolMatrix selectedColumn]+6;
+    ToolMode seedingtoolindex = (ToolMode)(2-[seedingToolMatrix selectedColumn] + 6);
 	[self changeCurrentTool:seedingtoolindex];
 }
 - (IBAction)addSeed:(id)sender
@@ -5783,50 +5827,49 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[seedsList reloadData];
 	[seedsList selectRow:[contrastList count]-1 byExtendingSelection:NO];
 	[self selectAContrast: seedsList];
-	
 }
+
 - (IBAction)removeSeed:(id)sender
 {
-
 	unsigned int i;
 	int row=[seedsList selectedRow];
 	NSString *name;
 	name =[[contrastList objectAtIndex: row]objectForKey:@"Name"];
 	
-	for(i=0;i<[totalROIList count];i++)
-		if([[[totalROIList objectAtIndex: i] name] isEqualToString:name])
+	for (i=0;i<[totalROIList count];i++)
+		if ([[[totalROIList objectAtIndex: i] name] isEqualToString:name])
 		{
 			[[NSNotificationCenter defaultCenter] postNotificationName: @"removeROI" object:[totalROIList objectAtIndex: i] userInfo: 0L];
 			i--;
 		}
 
-	
-
 	[contrastList removeObjectAtIndex:row];
 
 	[seedsList reloadData];
-	if(row>=(int)([contrastList count]))
+	if (row>=(int)([contrastList count]))
 		row=(int)([contrastList count])-1;
 	[seedsList selectRow:row byExtendingSelection:NO];
 	[self selectAContrast: seedsList];	
 
 	[self updateOView];
 	[self cAndAxViewReset];
-	[self updatePageSliders];		
-
+	[self updatePageSliders];
 }
+
 - (IBAction)changeSeedColor:(id)sender
 {
 }
+
 - (IBAction)changeSeedName:(id)sender
 {
 }
+
 - (int) initSeedsList
 {
 	//initilize contrast list
 	contrastList= [[NSMutableArray alloc] initWithCapacity: 0];
 	NSMutableDictionary *contrast;
-	if(!isInWizardMode)
+	if (!isInWizardMode)
 	{
 		contrast = [NSMutableDictionary dictionary];
 		[contrast setObject:@"Artery" forKey:@"Name"];
@@ -5869,7 +5912,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrastList addObject: contrast];
 		
 		contrast = [NSMutableDictionary dictionary];
-		[contrast setObject:@"other"]  forKey:@"Name"];
+		[contrast setObject:@"other" forKey:@"Name"];
 		[contrast setObject: [NSColor yellowColor] forKey:@"Color"];
 		[contrast setObject: [NSNumber numberWithFloat:3.0] forKey:@"BrushWidth"];
 		[contrast setObject: [NSNumber numberWithInt:8] forKey:@"CurrentTool"];
@@ -5883,10 +5926,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrast setObject: [NSNumber numberWithInt:6] forKey:@"CurrentTool"];
 		[contrast setObject:@"Sepcial seed to stop propagation."  forKey:@"Tips"];
 		[contrastList addObject: contrast];
-		
-		
 	}	
-	else if(isInWizardMode==1)
+	else if (isInWizardMode==1)
 	{
 		contrast = [NSMutableDictionary dictionary];
 		[contrast setObject:@"LCA" forKey:@"Name"];
@@ -6075,7 +6116,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		ROI* roi=(ROI*)sender;
 		int roitype =[roi type];
-		if(roitype!=tMesure)
+		if(roitype!=tMeasure)
 		{
 			[roi setROIMode:ROI_sleep];
 		}
@@ -6216,7 +6257,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				else
 				{
-					if( tempPt.y < 0)
+					if (tempPt.y < 0)
 						angle = 180 + atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
 					else 
 						angle = atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
@@ -6313,7 +6354,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				else
 				{
-					if( tempPt.y < 0)
+					if (tempPt.y < 0)
 						angle = 180 + atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
 					else 
 						angle = atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
@@ -6408,7 +6449,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				else
 				{
-					if( tempPt.y < 0)
+					if (tempPt.y < 0)
 						angle = 180 + atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
 					else 
 						angle = atan( (float) tempPt.x / (float) tempPt.y) / deg2rad;
@@ -6422,22 +6463,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				axViewTransform->RotateX(90+cViewToAxViewZAngle);
 				
 				[self updateAxView];
-				
 			}
-			
-			
-			
 		}
 	}
 	else if(currentTool==9)
 	{
 		ROI* roi=(ROI*)sender;
 		
-		if(roi==cViewMeasurePolygon&&[cPRView mouseDragging])
+		if (roi==cViewMeasurePolygon && [cPRView mouseDragging])
 		{
 			cViewMeasureNeedToUpdate=YES;
 		}
-		else if(roi==axViewMeasurePolygon&&[crossAxiasView mouseDragging])
+		else if (roi==axViewMeasurePolygon && [crossAxiasView mouseDragging])
 		{
 			axViewMeasureNeedToUpdate=YES;
 		}
@@ -6447,14 +6484,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		ROI* roi=(ROI*)sender;
 		int roitype =[roi type];
 		
-		if(roitype==tOPolygon &&currentPathMode==ROI_drawing)
+		if (roitype==tOpenPolygon && currentPathMode==ROI_drawing)
 		{
-			if([[curvedMPR2DPath points] count]>[curvedMPR3DPath count])//add new end
+			if ([[curvedMPR2DPath points] count] > [curvedMPR3DPath count])//add new end
 			{
 				float curXSpacing,curYSpacing;
 				float curOriginX,curOriginY;
 				double position[3];
-				NSMutableArray  *path2DPoints=[curvedMPR2DPath points] ;
+				NSMutableArray *path2DPoints=[curvedMPR2DPath points] ;
 				DCMPix* tempix=[oViewPixList objectAtIndex:0];
 				
 				curXSpacing = [tempix pixelSpacingX];
@@ -6481,33 +6518,34 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 			else 
 			{
-				if([curvedMPR2DPath ROImode]!=currentPathMode)
+#if 0 // @@@
+				if ([curvedMPR2DPath ROImode] != currentPathMode)
 					[curvedMPR2DPath setROIMode:currentPathMode];
-				return;
+#endif
+                return;
 			}
-			
 		}
 		else
 		{
-			if([[curvedMPR2DPath points] count]>[curvedMPR3DPath count])//user add new end
+			if ([[curvedMPR2DPath points] count]>[curvedMPR3DPath count])//user add new end
 			{
 				[[curvedMPR2DPath points] removeLastObject];
 			}
-			if([curvedMPR2DPath ROImode] == ROI_drawing)
+#if 0 // @@@
+            if ([curvedMPR2DPath ROImode] == ROI_drawing)
 				[curvedMPR2DPath setROIMode:currentPathMode];
+#endif
 		}
 		
 		[self updateCView];
 	}
 }
+
 - (void) roiAdded: (NSNotification*) note
 {
-	
-	
 	id sender =[note object];
 	
-	
-	if( sender&&(currentTool!=4))
+	if ( sender && (currentTool!=4))
 	{
 		if ([sender isEqual:originalView])
 		{
@@ -6517,7 +6555,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			{
 				int roitype =[roi type];
 				RGBColor c;
-				if(roitype!=tOPolygon)
+				if(roitype!=tOpenPolygon)
 				{
 					
 					[roi setName: currentSeedName];
@@ -6548,7 +6586,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[roi setColor:c];
 				}
 				
-				if(cViewMPRorCPRMode&&roitype==tOPolygon)
+				if(cViewMPRorCPRMode&&roitype==tOpenPolygon)
 				{
 					if(curvedMPR2DPath)
 					{
@@ -6581,7 +6619,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tOPolygon)
+						if([temproi type] == tOpenPolygon)
 						{
 							if([temproi isEqual:roi]==NO)
 							{
@@ -6621,7 +6659,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tMesure)
+						if([temproi type] == tMeasure)
 						{
 							if([temproi isEqual:roi]==NO)
 							{
@@ -6792,7 +6830,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					
 				}
 			}
-			else if ([roi type]==tMesure)
+			else if ([roi type]==tMeasure)
 			{
 				if([originalView isEqual:[roi curView]])
 				{
@@ -6858,7 +6896,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tMesure)
+						if([temproi type] == tMeasure)
 						{
 							[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 							i--;
@@ -6869,7 +6907,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				
 			}		
-			else if (!isRemoveROIBySelf&&[roi type]==tOPolygon)
+			else if (!isRemoveROIBySelf&&[roi type]==tOpenPolygon)
 			{
 				
 				if([originalView isEqual:[roi curView]])
@@ -6955,10 +6993,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		//chang current tool
 		number=[[contrastList objectAtIndex: row] objectForKey:@"CurrentTool"] ;
 		[seedingToolMatrix selectCellAtRow:0 column: 8-[number intValue]];
-		[self changeCurrentTool:[number intValue]];
-		
+		[self changeCurrentTool: (ToolMode)[number intValue]];
 	}	
 }
+
 - (IBAction)setBrushWidth:(id)sender
 {
 	[brushWidthText setIntValue: [sender intValue]];
@@ -6966,29 +7004,32 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[[NSUserDefaults standardUserDefaults] setFloat:[sender floatValue] forKey:@"ROIRegionThickness"];
 	unsigned int row = [seedsList selectedRow];
 	
-	if(row>=0&&row<[contrastList count])
+	if(row>=0 && row<[contrastList count])
 	{
 		[[contrastList objectAtIndex: row] setObject: [NSNumber numberWithFloat:[sender floatValue]] forKey:@"BrushWidth"];
 	}
-	[self changeCurrentTool:8];
-	
+
+    [self changeCurrentTool:tCross];
 }
+
 - (IBAction)setBrushMode:(id)sender
 {
 	[originalView setEraserFlag: [sender selectedSegment]];
 }
+
 - (IBAction)covertRegoinToSeeds:(id)sender
 {
 #ifdef VERBOSEMODE
 	NSLog( @"converting ROI to seeds");
 #endif
-	if(!contrastVolumeData)
+	if (!contrastVolumeData)
 	{
 		int size = sizeof(short unsigned int) * imageWidth * imageHeight * imageAmount;
 		contrastVolumeData = (unsigned short int*) malloc( size);
 		roiReader->SetImportVoidPointer(contrastVolumeData);
 	}
-	if(currentTool==6)
+
+    if (currentTool==tROI)
 	{
 		ROI* roi=[[cViewROIList objectAtIndex: 0] objectAtIndex: 0];
 		if(roi&&[roi type]== tROI)
@@ -7290,7 +7331,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
 							
 							
-							else if( (x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) == marker))
+							else if ((x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) == marker))
 								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
 						}
 						
@@ -7301,7 +7342,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 							
-							else if( (x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x+1) == marker))
+							else if ((x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x+1) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 						}		
 						
@@ -7312,7 +7353,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 							
-							else if( (y+1)<=maxy && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
+							else if ((y+1)<=maxy && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 						}	
 						//x,y,z direction
@@ -7322,13 +7363,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 							
-							else if( (y+1)<=maxy && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x-1) == marker))
+							else if ((y+1)<=maxy && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x-1) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							else if((y-1)>=miny && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x+1) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 							
-							else if( (y+1)<=maxy && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x+1) == marker))
+							else if ((y+1)<=maxy && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x+1) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 						}	
@@ -7500,7 +7541,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	
 	DCMPix * curImage= [cViewPixList objectAtIndex:0];
-	curvedMPRReferenceLineOfAxis=[[ROI alloc] initWithType: tMesure :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+	curvedMPRReferenceLineOfAxis=[[ROI alloc] initWithType: tMeasure :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 	[curvedMPRReferenceLineOfAxis setThickness:1.0];
 	[[NSUserDefaults standardUserDefaults] setFloat:defaultROIThickness forKey:@"ROIThickness"];
 	RGBColor color;
@@ -7548,13 +7589,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		if(curvedMPR3DPath)
 			[curvedMPR3DPath removeAllObjects];
 		
-		[self changeCurrentTool:5];
+		[self changeCurrentTool:tMeasure];
 		[self updateOView];
 		[self cAndAxViewReset];
 		[self updatePageSliders];
-
-		
-		
 	}
 	else
 	{
@@ -7569,12 +7607,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[exportCPRButton setEnabled:YES];
 		[centerlineTapTips setStringValue:@"Choose centerline from the list on the left. Use sliders of the Left Window to control CPR images in the Right Window."];
 		currentPathMode=ROI_sleep;
-		[self changeCurrentTool:0];
-		if(!cpr3DPaths)
+		[self changeCurrentTool:tWL];
+		if (!cpr3DPaths)
 			cpr3DPaths=[[NSMutableArray alloc] initWithCapacity:0];
-		if(!centerlinesNameArrays)
+		if (!centerlinesNameArrays)
 			centerlinesNameArrays=[[NSMutableArray alloc] initWithCapacity:0];
-		if(!centerlinesLengthArrays)
+		if (!centerlinesLengthArrays)
 			centerlinesLengthArrays=[[NSMutableArray alloc] initWithCapacity:0];
 
 		NSMutableArray* reversedcenterline=[NSMutableArray arrayWithCapacity:0];
@@ -7883,7 +7921,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if(!curvedMPR2DPath)
 	{
 		DCMPix * curImage= [oViewPixList objectAtIndex:0];
-		curvedMPR2DPath=[[ROI alloc] initWithType: tOPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+		curvedMPR2DPath=[[ROI alloc] initWithType: tOpenPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 		NSString *roiName = @"Centerline";
 		RGBColor color;
 		color.red = 65535;
@@ -7913,7 +7951,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[self createEven3DPathForCPR:&width :&height ];
 	
 	//currentPathMode=ROI_selectedModify;
-	//[self changeCurrentTool:5];
+	//[self changeCurrentTool:tMeasure];
 	
 	[self updateOView];
 	[self updatePageSliders];
@@ -8322,7 +8360,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			if(!referenceCurvedMPR2DPath)
 			{
 				DCMPix * curImage= [oViewPixList objectAtIndex:0];
-				referenceCurvedMPR2DPath=[[ROI alloc] initWithType: tOPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+				referenceCurvedMPR2DPath=[[ROI alloc] initWithType: tOpenPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 				NSString *roiName = @"Centerline";
 				RGBColor color;
 				color.red = 65535;
@@ -8408,7 +8446,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[panel setRequiredFileType:@"txt"];
 	NSString* filename=@"result";
 	
-	if( [panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
+	if ([panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
 	{
 		NSString* exportinfo=@"";
 		unsigned int i;
@@ -8439,7 +8477,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//axview Polygon
 	RGBColor color;
 	DCMPix * curImage= [axViewPixList objectAtIndex:0];
-	axViewMeasurePolygon=[[ROI alloc] initWithType: tCPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+	axViewMeasurePolygon=[[ROI alloc] initWithType: tClosedPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 	[axViewMeasurePolygon setComments: @"updating"];
 	[axViewMeasurePolygon setThickness:0.7];
 	[[NSUserDefaults standardUserDefaults] setFloat:defaultROIThickness forKey:@"ROIThickness"];
@@ -8468,7 +8506,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[lastPoint release];
 	
 	curImage= [cViewPixList objectAtIndex:0];
-	cViewMeasurePolygon= [[ROI alloc] initWithType: tCPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+	cViewMeasurePolygon= [[ROI alloc] initWithType: tClosedPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 	[cViewMeasurePolygon setThickness:0.7];
 	[[NSUserDefaults standardUserDefaults] setFloat:defaultROIThickness forKey:@"ROIThickness"];
 	
@@ -8699,10 +8737,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 		{
 			temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-			if([temproi type]==tCPolygon)
+			if([temproi type]==tClosedPolygon)
 				break;
 		}
-		if(temproi&&[temproi type]==tCPolygon)
+		if(temproi&&[temproi type]==tClosedPolygon)
 		{
 			float x1,y1,x2,y2;
 			[endPoints removeAllObjects];
@@ -8764,33 +8802,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)vesselAnalysisStart:(id)sender
 {
-	if([@"Longitudinal Section Width(mm) isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
+	if ([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
 	{
 		[self performLongitudeSectionAnalysis];
 		[plotView setViewControllor:self];
 		[self vesselAnalysisSetNewSource:self];
-
 	}
 	else
 	{
 		[self performCrossSectionAnalysis];
 		[plotView setViewControllor:self];
 		[self vesselAnalysisSetNewSource:self];
-	
 	}
-	
-	
-	
-	
-	
-
 	//[seedsList reloadData];
-	
 }
 
 - (IBAction)vesselAnalysisShowAllPara:(id)sender
 {
-	if([vesselAnalysisShowAllParaButton state]!=NSOnState)
+	if ([vesselAnalysisShowAllParaButton state]!=NSOnState)
 	{
 		NSRect plotframe= [plotView frame];
 		NSRect paraframe=[vesselAnalysisPanel frame];
@@ -9125,15 +9154,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	axLevelSetMapReader->SetDataExtentToWholeExtent();
 	axLevelSetMapReader->SetDataScalarTypeToFloat();
 	vtkPolyData *output = axViewPolygonfilter2->GetOutput();//axROIOutlineFilter->GetOutput();
+#if 0 // @@@
 	output->Update();
+#endif
 	int pointnumber;
 	pointnumber=output->GetNumberOfPoints();
 	if(pointnumber<3)
 		return 1;
 	[[outroi points] removeAllObjects];
 
-
-	for( ii = 0; ii < output->GetNumberOfLines(); ii+=2)
+	for ( ii = 0; ii < output->GetNumberOfLines(); ii+=2)
 	{
 		double p[ 3];
 		output->GetPoint(ii, p);
@@ -9141,11 +9171,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		//MyPoint* lastPoint=[[MyPoint alloc] initWithPoint:NSMakePoint(offsetx+p[0], offsety+p[1])];
 		[[outroi points] addObject: lastPoint];
 		[lastPoint release];
-		
 	}
-	ii--;
-	if(ii>= output->GetNumberOfLines()) ii-=2;
-	for( ; ii >= 0; ii-=2)
+
+    ii--;
+	if (ii>= output->GetNumberOfLines())
+        ii-=2;
+	
+    for( ; ii >= 0; ii-=2)
 	{
 		double p[ 3];
 		output->GetPoint(ii, p);
@@ -9590,7 +9622,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	for(ii=0;ii<[imgroilist count];ii++)
 	{
 		temproi=[imgroilist objectAtIndex:ii];
-		if([temproi type]==tCPolygon)
+		if([temproi type]==tClosedPolygon)
 		{
 			float x1,y1,x2,y2;
 			
@@ -9606,7 +9638,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			y2=[apoint y];
 			
 			float mindiameter=sqrt((x1-x2)*(x1-x2)*[curImage pixelSpacingX]*[curImage pixelSpacingX]+(y1-y2)*(y1-y2)*[curImage pixelSpacingY]*[curImage pixelSpacingY]);
-			ROI* minDiameterROI=[[ROI alloc] initWithType: tMesure :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+			ROI* minDiameterROI=[[ROI alloc] initWithType: tMeasure :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 			lastLevelsetDiameter=mindiameter;
 			[minDiameterROI setName:[NSString stringWithFormat: @"min:%.1fmm",mindiameter] ];
 			[minDiameterROI setROIMode:ROI_sleep];
@@ -9630,7 +9662,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			x2=[apoint x];
 			y2=[apoint y];
 			
-			ROI* maxDiameterROI=[[ROI alloc] initWithType: tMesure :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+			ROI* maxDiameterROI=[[ROI alloc] initWithType: tMeasure :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 			[maxDiameterROI setName:[NSString stringWithFormat: @"max:%.1fmm",sqrt((x1-x2)*(x1-x2)*[curImage pixelSpacingX]*[curImage pixelSpacingX]+(y1-y2)*(y1-y2)*[curImage pixelSpacingY]*[curImage pixelSpacingY])] ];
 			[maxDiameterROI setROIMode:ROI_sleep];
 			lastPoint=[[MyPoint alloc] initWithPoint:NSMakePoint(x1,y1)];
@@ -10045,7 +10077,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	filename=[filename stringByAppendingString:[[originalViewController window] title]];
 	filename=[filename stringByAppendingString:@"measurement"];
 	
-	if( [panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
+	if ([panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
 	{
 		NSArray      *roiList= [originalViewController roiList];
 		NSArray      *pixList=[originalViewController pixList];
@@ -10063,7 +10095,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			for(j=0;j<[[roiList objectAtIndex:i] count];j++)
 			{
 				temproi=[[roiList objectAtIndex:i] objectAtIndex:j];
-				if([temproi type]==tCPolygon)
+				if([temproi type]==tClosedPolygon)
 					polygonroi=temproi;
 				else if([temproi type]==t2DPoint&&[[temproi name] isEqualToString:@"no segment result"])
 					pointroi=temproi;
@@ -10198,7 +10230,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	inputData = volumeData;
 	NSLog( @"start step 3");
 	outputData = (float*) malloc( size);
-	if( !outputData)
+	if (!outputData)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		
@@ -10206,14 +10238,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	size = sizeof(char) * imageWidth * imageHeight * imageAmount;
 	colorData = (unsigned char*) malloc( size);
-	if( !colorData)
+	if (!colorData)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		return ;	
 	}	
 	directionData= (unsigned char*) malloc( size);
-	if( !directionData)
+	if (!directionData)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
@@ -10294,7 +10326,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	inputData = volumeData;
 //	NSLog( @"loading step 3");
 //	outputData = (float*) malloc( size);
-//	if( !outputData)
+//	if (!outputData)
 //	{
 //		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		
@@ -10302,14 +10334,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	}
 //	size = sizeof(char) * imageWidth * imageHeight * imageAmount;
 //	colorData = (unsigned char*) malloc( size);
-//	if( !colorData)
+//	if (!colorData)
 //	{
 //		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		free(outputData);
 //		return ;	
 //	}	
 //	directionData= (unsigned char*) malloc( size);
-//	if( !directionData)
+//	if (!directionData)
 //	{
 //		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		free(outputData);
@@ -10530,8 +10562,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)goNextStep:(id)sender
 {
-	
-	if(currentTool == 7)
+	if (currentTool == 7)
 	{
 		if([[axViewROIList objectAtIndex:0] count])
 		{
@@ -10539,11 +10570,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 		else
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no seeds found", nil), NSLocalizedString(@"No seeds found for this step, please follow the instruction in the tips bos and do it again", nil), NSLocalizedString(@"OK", nil), nil, nil);
+			NSRunAlertPanel(NSLocalizedString(@"no seeds found", nil),
+                            NSLocalizedString(@"No seeds found for this step, please follow the instruction in the tips bos and do it again", nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 			return;
 		}
 	}
-	if(currentStep>=(totalSteps-1))
+	if (currentStep >= (totalSteps-1))
 	{
 		[self runSegmentation];
 		return;
@@ -10554,11 +10587,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[self goSubStep:currentStep+1:YES];
 		if(currentStep>=(totalSteps-1))
 			[nextButton setTitle:@"Run Segmentation"];
-		if(currentStep>0)
-			[previousButton setEnabled: YES];
 
+        if(currentStep>0)
+			[previousButton setEnabled: YES];
 	}
 }
+
 - (IBAction)goPreviousStep:(id)sender
 {
 	[self updateOView];
@@ -10596,15 +10630,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		//chang current tool
 		number=[[contrastList objectAtIndex: step] objectForKey:@"CurrentTool"] ;
-		[self changeCurrentTool:[number intValue]];
+		[self changeCurrentTool: (ToolMode)[number intValue]];
 		//load tips
 		tempstr = [[contrastList objectAtIndex: step] objectForKey:@"Tips"] ;
 		[currentTips setStringValue:tempstr];
-		
 	}	
-	if(needResetViews)
+
+    if (needResetViews)
 		[self resetOriginalView:nil];
 }
+
 - (IBAction)continuePlanting:(id)sender
 {
 	[nextButton setEnabled: YES];
@@ -10613,13 +10648,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[self goSubStep:currentStep:NO];
 	[continuePlantingButton setHidden: YES];
 }
--(void)mergeVesselnessAndIntensityMap:(float*)img:(float*)vesselimg:(int)size
+
+-(void)mergeVesselnessAndIntensityMap:(float*)img
+                                     :(float*)vesselimg
+                                     :(int)size
 {
-	int i;
-	for(i=0;i<size;i++)
+	for(int i=0;i<size;i++)
 			*(img+i)=*(img+i)+3*(*(vesselimg+i));
 	parent.ifVesselEnhanced=YES;
 }
+
 - (void)loadVesselnessMap
 {
 	if(!vesselnessMap)
@@ -11011,7 +11049,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//[self updateOView];
 	//[self cAndAxViewReset];
 	currentPathMode=ROI_selectedModify;
-	//[self changeCurrentTool:5];
+	//[self changeCurrentTool:tMeasure];
 	
 	if(lastroi)
 		[lastroi release];
@@ -11088,10 +11126,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 //	{
 //		temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-//		if([temproi type]==tCPolygon)
+//		if([temproi type]==tClosedPolygon)
 //			break;
 //	}
-//	if(temproi&&[temproi type]==tCPolygon)
+//	if(temproi&&[temproi type]==tClosedPolygon)
 //	{
 //		float centerx,centery;
 //		centerx=-(axViewOrigin[0]/axViewSpace[0]);
@@ -11199,10 +11237,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 //	{
 //		temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-//		if([temproi type]==tCPolygon)
+//		if([temproi type]==tClosedPolygon)
 //			break;
 //	}
-//	if(temproi&&[temproi type]==tCPolygon)
+//	if(temproi&&[temproi type]==tClosedPolygon)
 //	{
 //
 //		NSArray* splinepoints=[temproi splinePoints];

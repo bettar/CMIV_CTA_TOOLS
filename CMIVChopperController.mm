@@ -317,7 +317,7 @@
 		[dic setObject:subvolumedimensionarray forKey:@"SubvolumesDimension"];
 		[parent saveCurrentStep];
 		
-		if(![self reduceTheVolume:subvolumedimensionarray:originalViewController]&&[sender tag])
+		if (![self reduceTheVolume:subvolumedimensionarray:originalViewController]&&[sender tag])
 		{
 			[originalViewController checkEverythingLoaded];
 			[[originalViewController window] setTitle:@"VOI"];
@@ -325,22 +325,24 @@
 	
 	}
     
-	if([sender tag]==2)
+	if ([sender tag]==2)
 		[parent gotoStepNo:2];
 	else
 		[parent cleanSharedData];
-	[[self window] performClose:sender];
-	
 
+    [[self window] performClose:sender];
 }
-- (id)showPanelAsWizard:(ViewerController *) vc:(	CMIV_CTA_TOOLS*) owner
+
+- (id)showPanelAsWizard:(ViewerController *) vc
+                       :(CMIV_CTA_TOOLS*) owner
 {
 	isInWizardMode=YES;
-	
-	return [self showChopperPanel: vc:owner];
+	return [self showChopperPanel: vc
+                                 : owner];
 	
 }
-- (id) showChopperPanel:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner
+- (id) showChopperPanel:(ViewerController *) vc
+                       :(CMIV_CTA_TOOLS*) owner
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"Chopper_Panel"];
@@ -359,10 +361,12 @@
 	
 	isSelectAll=NO;
 	curPix = [[originalViewController pixList] objectAtIndex: [[originalViewController imageView] curImage]];;
-	NSMutableArray		*pixList = [originalViewController pixList];
-	NSArray             *fileList =[originalViewController fileList ];
+	NSMutableArray *pixList = [originalViewController pixList];
+	NSArray *fileList =[originalViewController fileList ];
 	
-	if( [curPix isRGB])
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+    
+	if ([curPix isRGB])
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil),
                         NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil),
@@ -414,15 +418,14 @@
 	[originalView setIndexWithReset: [pixList count]/2 :YES];
 	[originalView setOrigin: NSMakePoint(0,0)];
 	[originalView setCurrentTool:tROI];
-	[originalView  scaleToFit];	
+	[originalView scaleToFit];	
 	[curAxialROI setROIMode:ROI_selected]; 
 	
 	err = [self initReformView];
 	[curReformROI setROIMode:ROI_selected];
-	if(!err)
+	if (!err)
 	{
-		
-		[self  updateImageFromToSliders];
+		[self updateImageFromToSliders];
 		[self updateAllTextField];
 		
 		[reformView setTranlateSlider:reformViewSlider];
@@ -435,21 +438,20 @@
 		[nc	addObserver: self selector: @selector(changeWLWW:) name: @"changeWLWW" object: nil];
 
 		// show the window
-		screenrect=[[[originalViewController window] screen] visibleFrame];
+		screenrect = [[[originalViewController window] screen] visibleFrame];
 		[[self window]setFrame:screenrect display:NO animate:NO];
 		[super showWindow:parent];
 		[[self window] makeKeyAndOrderFront:parent];
 		[[self window] display];
 		
-		if(!isInWizardMode)
+		if (!isInWizardMode)
 		{
 			[nextStep setHidden:YES];
-			[wizardTips  setHidden:YES];
+			[wizardTips setHidden:YES];
 		}
 	}
 	
 	return self;
-	
 }
 
 - (void) updateAllTextField

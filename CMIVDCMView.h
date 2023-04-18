@@ -19,10 +19,10 @@
 	int mouseOperation;
 	float crossAngle;
 	float mouseToCrossXAngle;
-	int displayCrossLines;
+	BOOL displayCrossLines;
 	int ifLeftButtonDown;
-	
 }
+
 -(void)showCrossHair;
 -(void)hideCrossHair;
 -(void)setTranlateSlider:(NSSlider*) aSlider;

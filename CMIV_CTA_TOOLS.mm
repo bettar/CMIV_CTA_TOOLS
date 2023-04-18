@@ -209,7 +209,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	isAutoSeeding=YES;
 #if 0 // @@@
-	while([seriesNeedToAutomaticProcess count])
+	while ([seriesNeedToAutomaticProcess count])
 	{
 		sleep(60);
 		NSManagedObject	 *series=[seriesNeedToAutomaticProcess objectAtIndex:0];
@@ -241,8 +241,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				[pixList release];
 				
 				[seriesNeedToAutomaticProcess removeObject:series];
-				[autoSeedingController release];
-				
+				[autoSeedingController release];				
 			}
 		}
 		else
@@ -259,40 +258,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (long) filterImage:(NSString*) menuName
 {
     NSLog(@"%s %d, %@", __FUNCTION__, __LINE__, menuName);
-	if (currentController)
+
+    if (currentController)
 		[currentController release];
 
     currentController = nil;
 	
     int err=0;
-	if ([menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)] == YES)
+	if ([menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)])
 		err = [self checkIntermediatDataForWizardMode:0];
 
-    else if( [menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)] == YES)
 		[self showAutoSeedingDlg];
 	
-    else if( [menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)] == YES)
 		err = [self startChopper:viewerController];
 	
-    //else if ( [menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)] == YES)
+    //else if ([menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)] == YES)
 	//	err = [self startSpoon:viewerController];
 	
-    else if ( [menuName isEqualToString:NSLocalizedString(@"2D Views", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"2D Views", nil)] == YES)
 		err = [self startScissors:viewerController];	
 	
-    else if ( [menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
 		err = [self startContrast:viewerController];	
 	
-    else if ( [menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES)
 		err = [self startVR:viewerController];
 	
-    else if ( [menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES)
 		err = [self saveResult:viewerController];
 	
-    else if ( [menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES)
 		err = [self startPolygonMeasure:viewerController];
 	
-    else if ( [menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
 	{
 		//float* volumeData=[viewerController volumePtr:0];
 		//err = [self loadVesselnessMap:volumeData];
@@ -441,23 +441,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	if (stage==1)// VOI cutter
 	{
 		NSLog( @"step 1");
-		[[CMIVChopperController alloc] showPanelAsWizard:viewerController:self];
+		[[CMIVChopperController alloc] showPanelAsWizard:viewerController
+                                                        :self];
 	}
 #if 0 // @@@
 	else if (stage==2)// 2D viewer
 	{
 		NSLog( @"step 2");
-		[[CMIVScissorsController alloc]  showPanelAsWizard:viewerController:self];
+		[[CMIVScissorsController alloc]  showPanelAsWizard:viewerController :self];
 	}
 	else if (stage==3) //result preview
 	{
 		NSLog( @"finish step 3");
-		[[CMIVContrastPreview alloc] showPanelAsWizard:viewerController:self];
+		[[CMIVContrastPreview alloc] showPanelAsWizard:viewerController :self];
 	}
 	else if (stage==4) //2D viewer CPR only
 	{
 		NSLog( @"finish step 4");
-		[[CMIVScissorsController alloc] showPanelAsCPROnly:viewerController:self];
+		[[CMIVScissorsController alloc] showPanelAsCPROnly:viewerController :self];
 	}
 #endif
 }
@@ -504,15 +505,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[dataOfWizard release];
 		dataOfWizard=nil;
 	}
-	if(currentController)
+
+    if(currentController)
 		[currentController release];
-	currentController=nil;
+	
+    currentController=nil;
 }
+
 - (void)notifyExportFinished
 {
-	if(!dataOfWizard)
+	if (!dataOfWizard)
 		return;
-	NSMutableArray* temparray,*tempnamearray;
+
+    NSMutableArray* temparray,*tempnamearray;
 	temparray=[dataOfWizard objectForKey:@"VCList"];
 	tempnamearray=[dataOfWizard objectForKey:@"VCTitleList"];
 	if(temparray&&tempnamearray)
@@ -1029,21 +1034,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		if (nrespond==1)
 		{
 			[self cleanDataOfWizard];
-			dataOfWizard=[self dataOfWizard];
-			int step1=0,step2=0;
+			dataOfWizard = [self dataOfWizard];
+			int step1=0, step2=0;
 			err = [self loadIntermediateDataForVolumeCropping:savedData];
 			if (!err)
 				step1=1;
 
             err = [self loadIntermediateDataForSeedPlanting:savedData];
 			
-            if(!err)
+            if (!err)
 				step2=1;
 
-            if(step2)
+            if (step2)
 			{
 #if 0 // @@@
-				[[CMIVScissorsController alloc]  showPanelAsAutomaticWizard:viewerController:self];
+				[[CMIVScissorsController alloc] showPanelAsAutomaticWizard:viewerController:self];
 #endif
 			}
 			else if(step1)
@@ -1058,7 +1063,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		else
 		{
 			[[NSFileManager defaultManager] removeFileAtPath:file handler:nil];
-			[self gotoStepNo:1 ];
+			[self gotoStepNo:1];
 			return 0;
 		}
 	}
@@ -1066,7 +1071,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	{
 		[self gotoStepNo:1];
 	}
-	return 0;
+
+    return 0;
 }
 - (int)  loadIntermediateDataForVolumeCropping:(NSMutableDictionary*)savedData
 {
