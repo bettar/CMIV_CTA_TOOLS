@@ -27,6 +27,8 @@
  
  =========================================================================*/
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
 
 #import "CMIVAutoSeedingCore.h"
 #import "CMIVBuketPirortyQueue.h"
@@ -59,7 +61,26 @@
 #include "spline.h"
 #undef id
 
-static float deg2rad = 3.14159265358979/180.0;
+static float deg2rad = M_PI/180.0;
+
+void setNumberOfThreads()
+{
+#if 1 // @@@
+    int numCPU;
+    int mib[2] = {CTL_HW, HW_NCPU};
+    size_t dataLen = sizeof(int); // 'num' is an 'int'
+    int result = sysctl(mib, 2, &numCPU, &dataLen, NULL, 0);
+    if (result != 0 || (numCPU < 1))
+        numCPU = 1;
+    
+    if (numCPU > 8)
+        numCPU = 8;
+
+    itk::MultiThreaderBase::SetGlobalDefaultNumberOfThreads( numCPU);
+#else // original
+    itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
+#endif
+}
 
 @implementation CMIVAutoSeedingCore
 
@@ -1832,17 +1853,16 @@ else
 
 	const bool importImageFilterWillOwnTheBuffer = false;
 	typedef float AccumulatorPixelType;
-#if 0 // @@@
-	typedef itk::HoughTransform2DCirclesImageFilter<InputPixelType, AccumulatorPixelType> HoughTransformFilterType;
+    typedef float RadiusPixelType; // @@@
+    
+	typedef itk::HoughTransform2DCirclesImageFilter<InputPixelType, AccumulatorPixelType, RadiusPixelType> HoughTransformFilterType;
 	HoughTransformFilterType::Pointer houghFilter = HoughTransformFilterType::New();
 	houghFilter->SetInput( smoothing->GetOutput() );
-#endif
 
 	for (int i=(imageAmount-1); i >= (imageAmount-nslices); i--)
 	{
 		importFilter->SetImportPointer( (inputData+imageSize*i), itksize[0] * itksize[1], importImageFilterWillOwnTheBuffer);
 		
-#if 0 // @@@
 		houghFilter->SetNumberOfCircles( 3 );
 		houghFilter->SetMinimumRadius(   7/xSpacing );
 		houghFilter->SetMaximumRadius(  25/xSpacing );
@@ -1856,7 +1876,11 @@ else
 		houghFilter->Update();
 		
 		HoughTransformFilterType::CirclesListType circles;
-		circles = houghFilter->GetCircles( 4 );
+#if 1 // @@@
+        circles = houghFilter->GetCircles();
+#else // original
+        circles = houghFilter->GetCircles( 4 );
+#endif
 		typedef HoughTransformFilterType::CirclesListType CirclesListType;
 		CirclesListType::const_iterator itCircles = circles.begin();
 		
@@ -1864,8 +1888,12 @@ else
 		{
 			float centerx,centery,radius;
 			centerx=(*itCircles)->GetObjectToParentTransform()->GetOffset()[0];
-			centery=(*itCircles)->GetObjectToParentTransform()->GetOffset()[1] ;
+			centery=(*itCircles)->GetObjectToParentTransform()->GetOffset()[1];
+#if 1 // @@@
+            radius=(*itCircles)->GetRadiusInObjectSpace()[0];
+#else // original
 			radius=(*itCircles)->GetRadius()[0];
+#endif
 			CMIV3DPoint* aNewCircle=[[CMIV3DPoint alloc] init];
 			aNewCircle.x=centerx;
 			aNewCircle.y=centery;
@@ -1875,7 +1903,6 @@ else
 			[aNewCircle release];
 			itCircles++;
 		}
-#endif
 	}
 
 	return 0;
@@ -2200,9 +2227,7 @@ else
 	typedef itk::ImportImageFilter< InputPixelType, Dimension > ImportFilterType;
 	
 	ImportFilterType::Pointer importFilter;
-#if 0 // @@@
-	itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
-#endif
+    setNumberOfThreads();
 	importFilter = ImportFilterType::New();
 	
 	ImportFilterType::SizeType itksize;
@@ -2364,7 +2389,7 @@ else
 	
 	ImportFilterType::Pointer importFilter;
 	
-	//itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
+	//setNumberOfThreads();
 	
 	importFilter = ImportFilterType::New();
 	
@@ -2912,7 +2937,7 @@ else
 	
 	ImportFilterType::Pointer importFilter;
 	
-	//itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
+	//setNumberOfThreads();
 	
 	importFilter = ImportFilterType::New();
 	
@@ -3212,9 +3237,7 @@ else
 	typedef itk::ImportImageFilter< InputPixelType, Dimension > ImportFilterType;
 	
 	ImportFilterType::Pointer importFilter;
-#if 0 // @@@
-	itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
-#endif
+    setNumberOfThreads();
 	importFilter = ImportFilterType::New();
 	
 	ImportFilterType::SizeType itksize;

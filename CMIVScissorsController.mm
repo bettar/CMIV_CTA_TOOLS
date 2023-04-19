@@ -54,7 +54,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "url.h" // for MALLOC_ERROR_MESSAGE
 
-static float deg2rad = 3.14159265358979/180.0; 
+extern void setNumberOfThreads();
+
+static float deg2rad = M_PI/180.0; 
 
 @implementation CMIVScissorsController
 
@@ -9016,7 +9018,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	ImportFilterType::Pointer importFilter;
 	
-	//itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
+	//setNumberOfThreads();
 	
 	importFilter = ImportFilterType::New();
 	
@@ -9494,7 +9496,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	ImportFilterType::Pointer importFilter;
 	
-	//itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
+	//setNumberOfThreads();
 	
 	importFilter = ImportFilterType::New();
 	

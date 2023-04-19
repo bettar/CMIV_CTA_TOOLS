@@ -781,8 +781,10 @@
 	mprViewSlice = vtkImageReslice::New();
 	mprViewSlice->SetAutoCropOutput( true);
 	mprViewSlice->SetInformationInput( reader->GetOutput());
-#if 0 // @@@
-	mprViewSlice->SetInput( reader->GetOutput());
+#if 1 // @@@
+    mprViewSlice->SetInputConnection( reader->GetOutputPort());
+#else
+    mprViewSlice->SetInput( reader->GetOutput());
 #endif
 	mprViewSlice->SetOptimization( true);
 	mprViewSlice->SetResliceTransform( mprViewUserTransform);
@@ -794,8 +796,10 @@
 	mprViewROISlice= vtkImageReslice::New();
 	mprViewROISlice->SetAutoCropOutput( true);
 	mprViewROISlice->SetInformationInput( roiReader->GetOutput());
-#if 0 // @@@
-	mprViewROISlice->SetInput( roiReader->GetOutput());
+#if 1 // @@@
+    mprViewROISlice->SetInputConnection( roiReader->GetOutputPort());
+#else
+    mprViewROISlice->SetInput( roiReader->GetOutput());
 #endif
 	mprViewROISlice->SetOptimization( true);
 	mprViewROISlice->SetResliceTransform( mprViewUserTransform);

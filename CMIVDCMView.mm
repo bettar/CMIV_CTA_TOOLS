@@ -8,38 +8,43 @@
 
 #import "CMIVDCMView.h"
 
-static		float						deg2rad = 3.14159265358979/180.0; 
+static float deg2rad = M_PI/180.0;
+
 @implementation CMIVDCMView
 
 - (id) windowController
 {
     return dcmViewWindowController;
 }
+
 - (BOOL) is2DViewer
 {
-    
     //	[super is2DViewer];
     return NO;
 }
+
 -(void)setDcmViewWindowController:(id)vc
 {
     dcmViewWindowController=vc;
 }
+
 -(void)setTranlateSlider:(NSSlider*) aSlider
 {
     tranlateSlider=aSlider;
 }
+
 -(void)setHorizontalSlider:(NSSlider*) aSlider
 {
     horizontalSlider=aSlider;
 }
+
 - (void)scrollWheel:(NSEvent *)theEvent
 {
     [super scrollWheel:theEvent];
     CGFloat x,y;
     float loc;
     float acceleratefactor=0.1;
-    if(tranlateSlider!=nil)
+    if (tranlateSlider!=nil)
     {
         if([theEvent modifierFlags] & NSCommandKeyMask )
             y=[theEvent deltaX];
@@ -60,16 +65,16 @@ static		float						deg2rad = 3.14159265358979/180.0;
             [tranlateSlider setFloatValue:loc];
             [tranlateSlider performClick:self];
         }
-        
-        
     }
-    if(horizontalSlider!=nil)
+
+    if (horizontalSlider!=nil)
     {
-        if([theEvent modifierFlags] & NSCommandKeyMask )
+        if ([theEvent modifierFlags] & NSCommandKeyMask )
             x=[theEvent deltaY];
         else
             x=[theEvent deltaX];
-        if(x!=0)
+
+        if (x!=0)
         {
             if(x>0)
                 x=(x-0.1)*acceleratefactor+0.1;
@@ -87,12 +92,13 @@ static		float						deg2rad = 3.14159265358979/180.0;
         }
         
     }
-    if(tranlateSlider==nil&&horizontalSlider==nil)
+
+    if (tranlateSlider==nil&&horizontalSlider==nil)
         [[self nextResponder] scrollWheel:theEvent];
 }
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
-    
     [[NSNotificationCenter defaultCenter] postNotificationName: @"cmivCTAViewMouseDown" object:self userInfo: [NSDictionary dictionaryWithObject:@"mouseDown" forKey:@"action"]];
     
     if (displayCrossLines &&
@@ -101,14 +107,14 @@ static		float						deg2rad = 3.14159265358979/180.0;
         
         NSPoint mouseLocation = [self ConvertFromNSView2GL: [self convertPoint:[theEvent locationInWindow] fromView:nil]];
         int mouseOnLines=[self checkMouseOnCrossLines:mouseLocation];
-        if( mouseOnLines==2)
+        if ( mouseOnLines==2)
         {
             ifLeftButtonDown=1;
             mouseOperation=2;
             [NSCursor hide];
             
         }
-        else if( mouseOnLines==1)
+        else if ( mouseOnLines==1)
         {
             ifLeftButtonDown=1;
             mouseOperation=1;
@@ -229,21 +235,22 @@ static		float						deg2rad = 3.14159265358979/180.0;
     float x,y,angle;
     x=pt.x-crossPoint.x;
     y=pt.y-crossPoint.y;
-    if((int)(x*10000)==0)
+    if ((int)(x*10000)==0)
         angle=90;
     else
     {
         angle=atan(y/x) / deg2rad;
     }
-    if(x<0)
+    if (x<0)
         angle+=180;
+
     return angle;
 }
 
 - (void)keyDown:(NSEvent *)event
 {
     unsigned short i=[event keyCode];
-    if((i>=123&&i<=126)||i==121||i==116)//arrows and pageup&down
+    if((i>=123 && i<=126)||i==121||i==116)//arrows and pageup&down
     {
         float x=0,y=0;
         float loc;

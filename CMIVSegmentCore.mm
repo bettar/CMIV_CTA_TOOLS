@@ -38,6 +38,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkHessian3DToVesselnessMeasureImageFilter.h"
 #undef id
 
+extern void setNumberOfThreads();
+
 @implementation CMIVSegmentCore
 
 - (void) setImageWidth:(long) width
@@ -2711,23 +2713,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	// edge preserving smooth filter part
 	
 	// Input image
-	const     unsigned int        Dimension       = 3;
-	typedef   float               InputPixelType;
-	typedef   float               OutputPixelType;
+	const unsigned int Dimension = 3;
+	typedef float InputPixelType;
+	typedef float OutputPixelType;
 	
-	typedef   itk::Image< InputPixelType, Dimension >   InputImageType;
-	typedef   itk::Image< OutputPixelType, Dimension >  OutputImageType;
-	
-	typedef   itk::HessianRecursiveGaussianImageFilter<InputImageType >  HessianFilterType;
-	
-	typedef   itk::Hessian3DToVesselnessMeasureImageFilter<OutputPixelType > VesselnessMeasureFilterType;
-	
+	typedef itk::Image< InputPixelType, Dimension >   InputImageType;
+	typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
+
+	typedef itk::HessianRecursiveGaussianImageFilter<InputImageType >  HessianFilterType;
+	typedef itk::Hessian3DToVesselnessMeasureImageFilter<OutputPixelType > VesselnessMeasureFilterType;
 	typedef itk::ImportImageFilter< InputPixelType, Dimension > ImportFilterType;
 	
 	ImportFilterType::Pointer importFilter;
-#if 0 // @@@
-	itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
-#endif
+    setNumberOfThreads();
 	importFilter = ImportFilterType::New();
 	
 	ImportFilterType::SizeType itksize;

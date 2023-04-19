@@ -47,7 +47,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface CMIVSegmentCore : NSObject {
 long imageWidth,imageHeight,imageAmount,imageSize;
 float *inputData;
@@ -59,6 +58,7 @@ float weightThreshold,weightWholeValue;
 unsigned short* distanceMap;
 float xSpacing,ySpacing,zSpacing;
 }
+
 - (void) setImageWidth:(long) width Height:(long) height Amount: (long) amount Spacing:(float*)spacing;  
 - (void) startShortestPathSearchAsFloat:(float *) pIn Out:(float *) pOut :(unsigned char*) pMarker Direction: (unsigned char*) pPointers;
 - (void) startShortestPathSearchAsFloatWith6Neighborhood:(float *) pIn Out:(float *) pOut Direction: (unsigned char*) pPointers;

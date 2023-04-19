@@ -690,7 +690,9 @@
 	rotate = vtkImageReslice::New();
 	rotate->SetAutoCropOutput( true);
 	rotate->SetInformationInput( reader->GetOutput());
-#if 0 // @@@
+#if 1 // @@@
+    rotate->SetInputConnection( reader->GetOutputPort());
+#else
 	rotate->SetInput( reader->GetOutput());
 #endif
 	rotate->SetOptimization( true);
