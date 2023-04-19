@@ -112,35 +112,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	//export result and release memory
 	if(inputData&&outputData&&colorData&&directionData)
 	{
-		if([exportCenterlineChechBox state]!= NSOnState)
+		if ([exportCenterlineChechBox state] != NSControlStateValueOn)
 			free(directionData);
-		if([exportConnectednessChechBox state]== NSOnState)
+
+        if ([exportConnectednessChechBox state] == NSControlStateValueOn)
 		{
 			err=[self exportToTempFolder:inputData :outputData:colorData];
 			outputData=nil;
 			
 		}
-		if([exportIntoOneChechBox state]== NSOnState)
+
+        if ([exportIntoOneChechBox state] == NSControlStateValueOn)
 		{
 			err=[self exportToImages:inputData :outputData:colorData];
 			outputData=nil;
 		}
-		if([exportIntoSeparateChechBox state]== NSOnState)
+		
+        if ([exportIntoSeparateChechBox state] == NSControlStateValueOn)
 		{
 			err=[self exportToSeries:inputData :outputData:colorData];
 			outputData=nil;
 		}
-		if([exportIntoMaskChechBox state]== NSOnState)
+		
+        if ([exportIntoMaskChechBox state] == NSControlStateValueOn)
 		{
 			err=[self exportToROIs:inputData :outputData:colorData];
 			outputData=nil;
-
 		}
-	
 		
-		if([exportCenterlineChechBox state]== NSOnState)
-		{
-			
+		if ([exportCenterlineChechBox state] == NSControlStateValueOn)
+		{			
 			err=[self exportToCenterLines:inputData :outputData:directionData:colorData];
 			outputData=nil;
 			free(directionData);
@@ -238,15 +239,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	imageSize=imageWidth * imageHeight;
 	
-	//if([exportConnectednessChechBox state]== NSOnState)
+	//if([exportConnectednessChechBox state]== NSControlStateValueOn)
 	//	ifUseSmoothFilter=1;
-	// get memory first
+
+    // get memory first
 	if(ifUseSmoothFilter)
 	{
 		inputData = [originalViewController volumePtr:0];
 		if( !inputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+			NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
+                            NSLocalizedString(@"no enough RAM", nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 			
 			return ;	
 		}
@@ -254,17 +258,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		//err=[self smoothInputData:inputData];
 		//err=[self enhanceInputData:inputData];
 		//err=[self CannyEdgeDetection:inputData];
-		if(err)
+		if (err)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough to smooth input data", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+			NSRunAlertPanel(NSLocalizedString(@"no enough to smooth input data", nil),
+                            NSLocalizedString(@"no enough RAM", nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 			free(inputData);
 			inputData=0L;
 			outputData=0L;
 			colorData=0L;
 			return ;	
 		}	
-		return;
-		
+
+        return;
 	}
 	else
 		inputData=[originalViewController volumePtr:0];

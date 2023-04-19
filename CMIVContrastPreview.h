@@ -35,10 +35,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 =========================================================================*/
 #import <Cocoa/Cocoa.h>
 #import <MieleAPI/PluginFilter.h>
+#if 0 // @@@
 #import "VRView.h"
+#endif
 #import "CMIV_CTA_TOOLS.h"
 #import "CMIVWindow.h"
 #import "CMIVDCMView.h"
+
 #define id Id
 #include <vtkColorTransferFunction.h>
 #include <vtkRenderer.h>
@@ -84,7 +87,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	IBOutlet NSSlider *brushWidthSlider;
 	IBOutlet NSTabView *tab2D3DView;
-	IBOutlet VRView   *vrView;
+#if 0 // @@@
+	IBOutlet VRView *vrView;
+#endif
 	
 	IBOutlet NSButton *saveBeforeSkeletonization;
 	IBOutlet NSTextField *oViewRotateXText;

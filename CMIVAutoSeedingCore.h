@@ -53,23 +53,23 @@
 	float xOrigin,yOrigin,zOrigin;
 
 }
--(int)autoCroppingBasedOnLungSegment:(float*)inData :(unsigned char*)outData:(float)threshold:(float)diameter: (long*)origin:(long*)dimension:(float*)spacing:(float)zoomfactor;
--(void)lungSegmentation:(float*)inData :(unsigned char*)outData:(float)diameter;
+-(int)autoCroppingBasedOnLungSegment:(float*)inData :(unsigned char*)outData :(float)threshold :(float)diameter : (long*)origin :(long*)dimension :(float*)spacing :(float)zoomfactor;
+-(void)lungSegmentation:(float*)inData :(unsigned char*)outData :(float)diameter;
 -(void)closingVesselHoles:(unsigned char*)img2d8bit :(float)diameter;
--(int)findingHeart:(float*)inData:(unsigned char*)outData:(long*)origin:(long*)dimension;
--(int)createParameterFunctionWithCenter:(long)x:(long)y:(float)diameter:(unsigned char*)img2d8bit:(float*)curve:(float*)precurve;
--(int)convertParameterFunctionIntoCircle:(long)x:(long)y:(float*)curve:(float*)precurve:(unsigned char*)img2d8bit:(float*)image;
--(void)fillAreaInsideCircle:(long*)pcenterx:(long*)pcentery:(unsigned char*)img2d8bit:(float*)curve:(float*)precurve;
+-(int)findingHeart:(float*)inData :(unsigned char*)outData :(long*)origin :(long*)dimension;
+-(int)createParameterFunctionWithCenter:(long)x :(long)y :(float)diameter :(unsigned char*)img2d8bit :(float*)curve :(float*)precurve;
+-(int)convertParameterFunctionIntoCircle:(long)x :(long)y :(float*)curve :(float*)precurve :(unsigned char*)img2d8bit :(float*)image;
+-(void)fillAreaInsideCircle:(long*)pcenterx :(long*)pcentery :(unsigned char*)img2d8bit :(float*)curve :(float*)precurve;
 //-(int)relabelConnectedArea2D:(unsigned char)binaryimg;
--(int)finding2DMinimiumCostPath:(long)centerx:(long)centery:(float*)curve:(float*)precurve:(unsigned char*)img2d8bit:(float*)image:(long)startangle:(long)endangle;
--(long)dijkstraAlgorithm:(long)width:(long)height:(long)costrange:(long*)weightmap:(unsigned char*)directormap;//return the bridge point between two seeds
--(void)intensityRelatedWeightMap:(long)width:(long)height:(long*)weightmap;
--(void)distanceReleatedWeightMap:(long)startangle:(long)minradius:(long)width:(long)height:(float*)precurve:(float*)weightmap;
--(int)connectedComponetsLabeling2D:(unsigned char*)img2d8bit:(unsigned char*)preSlice:(long*)buffer;
+-(int)finding2DMinimiumCostPath:(long)centerx :(long)centery :(float*)curve :(float*)precurve :(unsigned char*)img2d8bit :(float*)image :(long)startangle :(long)endangle;
+-(long)dijkstraAlgorithm:(long)width :(long)height :(long)costrange :(long*)weightmap :(unsigned char*)directormap;//return the bridge point between two seeds
+-(void)intensityRelatedWeightMap:(long)width :(long)height :(long*)weightmap;
+-(void)distanceReleatedWeightMap:(long)startangle :(long)minradius :(long)width :(long)height :(float*)precurve :(float*)weightmap;
+-(int)connectedComponetsLabeling2D:(unsigned char*)img2d8bit :(unsigned char*)preSlice :(long*)buffer;
 -(void)smoothOutput:(unsigned char*)outData;
--(float)findAorta:(float*)inData:(long*)origin:(long*)dimension:(float*)spacing;
+-(float)findAorta:(float*)inData :(long*)origin :(long*)dimension :(float*)spacing;
 -(int)removeUnrelatedCircles:(NSMutableArray*)circles;
--(int)detectCircles:(NSMutableArray*) circlesArray:(int)nslices;
+-(int)detectCircles:(NSMutableArray*) circlesArray :(int)nslices;
 -(void)exportCircles:(NSArray*)circles;
 -(int)findFirstCenter:(unsigned char*)firstSlice;
 //-(void)noiseRemoveUsingOpeningAtHighResolution:(unsigned char*)inputData:(int)width:(int)height:(int)amount:(int)kenelsize;

@@ -320,7 +320,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	 */
 }
 
-- (id) showScissorsPanel:(ViewerController *) vc : (CMIV_CTA_TOOLS*) owner
+- (id) showScissorsPanel:(ViewerController *) vc
+                        :(CMIV_CTA_TOOLS*) owner
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"Scissors_Panel"];
@@ -347,23 +348,24 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil),
                         NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
-		
 		return 0;
-	}	
-	//store annotation state
+	}
+
+    // Store annotation state
 	annotations	= [[NSUserDefaults standardUserDefaults] integerForKey: @"ANNOTATIONS"];
-	if([[NSUserDefaults standardUserDefaults] integerForKey: @"CMIV2DViewANNOTATIONS"]!=-1)
+	if ([[NSUserDefaults standardUserDefaults] integerForKey: @"CMIV2DViewANNOTATIONS"]!=-1)
 	{
 		[[NSUserDefaults standardUserDefaults] setInteger: 2 forKey: @"ANNOTATIONS"];
 		[[NSUserDefaults standardUserDefaults] setInteger: 1 forKey: @"CMIV2DViewANNOTATIONS"];
-		[showAnnotationButton setState:NSOnState];
+		[showAnnotationButton setState: NSControlStateValueOn];
 	}
 	else
 	{
 		[[NSUserDefaults standardUserDefaults] setInteger: 1 forKey: @"ANNOTATIONS"];
-		[showAnnotationButton setState:NSOffState];
+		[showAnnotationButton setState: NSControlStateValueOff];
 	}
-	defaultROIThickness=[[NSUserDefaults standardUserDefaults] floatForKey:@"ROIThickness"];
+
+    defaultROIThickness=[[NSUserDefaults standardUserDefaults] floatForKey:@"ROIThickness"];
 	[[NSUserDefaults standardUserDefaults] setFloat:defaultROIThickness forKey:@"ROIThickness"];
 	roiShowTextOnlyWhenSeleted=[[NSUserDefaults standardUserDefaults] boolForKey:@"ROITEXTIFSELECTED"];
 	roiShowNameOnly=[[NSUserDefaults standardUserDefaults] boolForKey: @"ROITEXTNAMEONLY"];
@@ -381,13 +383,15 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	//initilize original view CPRView and Axial View;
 	err = [self initViews];
-	if(err)
+	if (err)
 		return nil;
-	[self resetSliders];
-	needSaveSeeds=NO;
+
+    [self resetSliders];
+	needSaveSeeds = NO;
 	err = [self initSeedsList];
-	if(err)
+	if (err)
 		return nil;
+
 #if 0 // @@@
 	[seedsList setDataSource:self];	
 #endif
@@ -887,66 +891,64 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		[cPRView setHorizontalSlider:cYRotateSlider];
 		[cPRView setTranlateSlider:cImageSlider];
 		[repulsorButton setEnabled:NO];
-		int showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
-		if(showcross==1)
+		int showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
+		if (showcross==1)
 		{
-			[axViewCrossShowButton setState:NSOnState];
+			[axViewCrossShowButton setState:NSControlStateValueOn];
 			[crossAxiasView showCrossHair];
 			[self updateAxView];
 		}
-		showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
-		if(showcross==1)
+
+        showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
+		if (showcross==1)
 		{
-			[cViewCrossShowButton setState:NSOnState];
+			[cViewCrossShowButton setState: NSControlStateValueOn];
 			[cPRView showCrossHair];
 			[self updateCView];
 		}
+        
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ROITEXTIFSELECTED"];
-		
-		
-		
 	}
-	else if(modeindex==1)
+	else if (modeindex==1)
 	{
 		axViewROIMode=0;
 		cViewMPRorCPRMode=1;
 		[cPRView setCrossCoordinates:-9999 :-9999 :YES];
 		[cPRView hideCrossHair];
-		[cViewCrossShowButton setState:NSOffState];
+		[cViewCrossShowButton setState: NSControlStateValueOff];
 		[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
 		[crossAxiasView hideCrossHair];
-		[axViewCrossShowButton setState:NSOffState];
+		[axViewCrossShowButton setState: NSControlStateValueOff];
 
 		[repulsorButton setEnabled:NO];
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ROITEXTIFSELECTED"];
-		if([curvedMPR3DPath count]==0&&[cpr3DPaths count]>0)
+		if ([curvedMPR3DPath count]==0&&[cpr3DPaths count]>0)
 		{
 			[centerlinesList selectRow:0 byExtendingSelection: YES];
 			[self selectANewCenterline:[cpr3DPaths objectAtIndex:0]];
 		}
-		
 	}
-	else if(modeindex==2)
+	else if (modeindex==2)
 	{
 		cViewMPRorCPRMode=1;
-		if(fuzzyConectednessMap)
-		{
+		if (fuzzyConectednessMap)
 			axViewROIMode=2;
-		}
 		else
 			axViewROIMode=1;
-		if(!isStraightenedCPR)
+
+        if (!isStraightenedCPR)
 		{
 			[vesselAnalysisLongDiameter removeAllObjects];
 			[self switchStraightenedCPR:self];
 		}
-		[repulsorButton setEnabled:YES];
+
+        [repulsorButton setEnabled:YES];
 		[cPRView setCrossCoordinates:-9999 :-9999 :YES];
 		[cPRView hideCrossHair];
-		[cViewCrossShowButton setState:NSOffState];
+		[cViewCrossShowButton setState: NSControlStateValueOff];
 		[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
 		[crossAxiasView hideCrossHair];
-		[axViewCrossShowButton setState:NSOffState];
+		[axViewCrossShowButton setState: NSControlStateValueOff];
 		
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ROITEXTIFSELECTED"];
 		if([vesselAnalysisLongDiameter count]==0)
@@ -1098,29 +1100,27 @@ static		float						deg2rad = 3.14159265358979/180.0;
 
 	oViewUserTransform->RotateX(-90);
 	
-	centerIsLocked=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVLockMPRCenter"];
-	if(centerIsLocked)
+	centerIsLocked = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVLockMPRCenter"];
+	if (centerIsLocked)
 	{
-		[centerLock setState:NSOnState];
-		NSString* path=[parent osirixDocumentPath];
+		[centerLock setState: NSControlStateValueOn];
+		NSString* path=[parent hostAppDocumentPath];
 		NSString *str = [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 		
 		NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
-		NSArray* matrixarray=[dict objectForKey:@"MPRTranformMatrix"];
-		if(matrixarray&&[matrixarray count]==16)
+		NSArray* matrixarray = [dict objectForKey:@"MPRTranformMatrix"];
+		if (matrixarray && [matrixarray count]==16)
 		{
 			double matrix[16];
-			int i;
-			for(i=0;i<16;i++)
+			for (int i=0;i<16;i++)
 				matrix[i]=[[matrixarray objectAtIndex:i] doubleValue];
-			oViewBasicTransform->Identity();
+
+            oViewBasicTransform->Identity();
 			oViewUserTransform->SetMatrix(matrix);
 		}
 		else
-			[centerLock setState:NSOffState];
-		
+			[centerLock setState: NSControlStateValueOff];
 	}
-	
 	
 	inverseTransform = (vtkTransform*)oViewUserTransform->GetLinearInverse();
 	
@@ -1363,7 +1363,6 @@ static		float						deg2rad = 3.14159265358979/180.0;
     [crossAxiasView setCrossCoordinates:crossX :crossY :YES];
 
 	{
-	
 		int showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
 		if (showcross==0)
 		{
@@ -1375,7 +1374,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		{
 			[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
 			[crossAxiasView hideCrossHair];
-			[axViewCrossShowButton setState:NSOffState];
+			[axViewCrossShowButton setState: NSControlStateValueOff];
 		}
 
         showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
@@ -1390,7 +1389,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		{
 			[cPRView setCrossCoordinates:-9999 :-9999 :YES];
 			[cPRView hideCrossHair];
-			[cViewCrossShowButton setState:NSOffState];
+			[cViewCrossShowButton setState: NSControlStateValueOff];
 		}
 
         showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowOViewCrossHair"];
@@ -1404,7 +1403,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		{
 			[originalView setCrossCoordinates:-9999 :-9999 :YES];
 			[originalView hideCrossHair];
-			[oViewCrossShowButton setState:NSOffState];
+			[oViewCrossShowButton setState: NSControlStateValueOff];
 		}
 	}
 	
@@ -1477,9 +1476,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	[mypix release];
 	//to cheat DCMView not reset current roi;
 	
-	[originalView setIndex: 0 ];
+	[originalView setIndex: 0];
 	
-	if ([oViewCrossShowButton state]== NSOnState)
+	if ([oViewCrossShowButton state] == NSControlStateValueOn)
 	{
 		float crossX,crossY;
 		crossX=-oViewOrigin[0]/oViewSpace[0];
@@ -1728,7 +1727,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 
     [axViewMeasurePolygon setROIMode:ROI_sleep];
-	if ([axViewCrossShowButton state] == NSOnState&&currentViewMode==0)
+	if ([axViewCrossShowButton state] == NSControlStateValueOn&&currentViewMode==0)
 	{
 		float crossX,crossY;
 		crossX=-axViewOrigin[0]/axViewSpace[0];
@@ -1836,9 +1835,9 @@ static		float						deg2rad = 3.14159265358979/180.0;
 
 	if (tag>=tROI && tag<=tCross)
 	{
-		if([axViewCrossShowButton state]==NSOnState)
+		if([axViewCrossShowButton state]==NSControlStateValueOn)
 		{
-			[axViewCrossShowButton setState:NSOffState];
+			[axViewCrossShowButton setState:NSControlStateValueOff];
 			[crossAxiasView hideCrossHair];
 			[self updateAxView];
 		}
@@ -1855,7 +1854,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		int showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
 		if(showcross==1)
 		{
-			[axViewCrossShowButton setState:NSOnState];
+			[axViewCrossShowButton setState:NSControlStateValueOn];
 			[crossAxiasView showCrossHair];
 			[self updateAxView];
 		}
@@ -2026,7 +2025,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 - (IBAction)lockCenter:(id)sender
 {
 	
-	if([centerLock state]== NSOnState)
+	if([centerLock state]== NSControlStateValueOn)
 	{
 		NSMutableArray* matrixArray=[NSMutableArray arrayWithCapacity:16];
 		vtkMatrix4x4 * aMatrix = oViewUserTransform->GetMatrix();
@@ -2702,7 +2701,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 
 - (IBAction)showAnnotations:(id)sender
 {
-	if ([sender state]==NSOnState)
+	if ([sender state]==NSControlStateValueOn)
 	{
 		[[NSUserDefaults standardUserDefaults] setInteger: 1 forKey: @"CMIV2DViewANNOTATIONS"];
 		[[NSUserDefaults standardUserDefaults] setInteger: 2 forKey: @"ANNOTATIONS"];
@@ -2723,7 +2722,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	int showcross;
 	if(sender==axViewCrossShowButton)
 	{
-		if([sender state]==NSOnState)
+		if([sender state]==NSControlStateValueOn)
 		{
 			showcross=1;
 			[crossAxiasView showCrossHair];
@@ -2737,7 +2736,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 	if(sender==cViewCrossShowButton)
 	{
-		if([sender state]==NSOnState)
+		if([sender state]==NSControlStateValueOn)
 		{
 			showcross=1;
 			[cPRView showCrossHair];
@@ -2751,7 +2750,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 	if(sender==oViewCrossShowButton)
 	{
-		if([sender state]==NSOnState)
+		if([sender state]==NSControlStateValueOn)
 		{
 			showcross=1;
 			[originalView showCrossHair];
@@ -3742,7 +3741,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 	}
 
-    if ([cViewCrossShowButton state]== NSOnState&&!drawingArrawTool)
+    if ([cViewCrossShowButton state]== NSControlStateValueOn&&!drawingArrawTool)
 	{
 		float crossX,crossY;
 		crossX=-cViewOrigin[0]/cViewSpace[0];
@@ -4052,7 +4051,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		axViewSlice->SetResliceTransform( axViewTransform);
 		if (fuzzyConectednessMap)
 			axViewROISlice->SetResliceTransform( axViewTransform);
-		[straightenedCPRButton setState:NSOffState];
+		[straightenedCPRButton setState:NSControlStateValueOff];
 		[self relocateAxViewSlider];
 	}
 	else
@@ -4065,7 +4064,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		if (fuzzyConectednessMap)
 			axViewROISlice->SetResliceTransform( axViewTransformForStraightenCPR);
 
-		[straightenedCPRButton setState:NSOnState];	
+		[straightenedCPRButton setState:NSControlStateValueOn];
 		[self relocateAxViewSlider];
 		//[cPRView setTranlateSlider:cYRotateSlider];
 		
@@ -4304,7 +4303,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			ViewerController *new2DViewer;
 			
-			if ([ifExportCrossSectionButton state]== NSOnState)
+			if ([ifExportCrossSectionButton state]== NSControlStateValueOn)
 			{
 				int imagenumber=[exportAxViewCPRAmountText intValue];
 				if (imagenumber<=0)
@@ -4464,7 +4463,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 		
 		[originalViewController endWaitWindow: waitWindow];
-		if ([autoSaveButton state]==NSOnState)
+		if ([autoSaveButton state]==NSControlStateValueOn)
 			[parent notifyExportFinished];
 	}
 	
@@ -4833,75 +4832,67 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)setExportDialogStepSlider:(id)sender
 {
-	
 	[exportStepText setFloatValue:2*minSpacing*[exportStepSlider floatValue]];
 	[self setExportDialogFromToSlider:sender];
 }
+
 - (IBAction)setExportDialogFromToButton:(id)sender
 {
 	int tag=[sender tag];
 	switch(tag)
 	{
 		case 1:
-			
 			[exportOViewFromSlider setFloatValue:[oImageSlider floatValue]];
-			
 			[exportOViewToSlider setFloatValue:[oImageSlider floatValue]];
-			
 			break;
-		case 2:
-			
-			[exportOViewFromSlider setFloatValue:[exportOViewFromSlider minValue]];
-			
+
+        case 2:
+			[exportOViewFromSlider setFloatValue:[exportOViewFromSlider minValue]];			
 			[exportOViewToSlider setFloatValue:[exportOViewToSlider maxValue]];
-			
 			break;
-		case 3:
-			
-			[exportCViewFromSlider setFloatValue:[cImageSlider floatValue]];
-			
+
+        case 3:
+            [exportCViewFromSlider setFloatValue:[cImageSlider floatValue]];
 			[exportCViewToSlider setFloatValue:[cImageSlider floatValue]];
-			
 			break;
-		case 4:
+
+        case 4:
 			[exportCViewFromSlider setFloatValue:[exportCViewFromSlider minValue]];
-			
 			[exportCViewToSlider setFloatValue:[exportCViewToSlider maxValue]];
-			
 			break;
-		case 5:
-			
+
+        case 5:
 			[exportAxViewFromSlider setFloatValue:[axImageSlider floatValue]];
-			
 			[exportAxViewToSlider setFloatValue:[axImageSlider floatValue]];
-			
 			break;
+            
 		case 6:
-			
 			[exportAxViewFromSlider setFloatValue:[exportAxViewFromSlider minValue]];
-			
 			[exportAxViewToSlider setFloatValue:[exportAxViewToSlider maxValue]];
-			
 			break;
 	}
-	[self setExportDialogFromToSlider:sender];
-	
-	
+
+    [self setExportDialogFromToSlider:sender];
 }
+
 - (IBAction)whyNoThickness:(id)sender
 {
-	NSRunAlertPanel(NSLocalizedString(@"Thickness", nil), NSLocalizedString(@"The reslice algorithm is trying to resample the volume with a plane which has no thickness. However you can choose the interval between slices by giving a step length.", nil), NSLocalizedString(@"OK", nil), nil, nil);
+	NSRunAlertPanel(NSLocalizedString(@"Thickness", nil),
+                    NSLocalizedString(@"The reslice algorithm is trying to resample the volume with a plane which has no thickness. However you can choose the interval between slices by giving a step length.", nil),
+                    NSLocalizedString(@"OK", nil), nil, nil);
 }
+
 - (IBAction)changAxViewCPRStep:(id)sender
 {
 	[exportAxViewCPRStepText setFloatValue:[sender floatValue]];
 	[exportAxViewCPRAmountText setIntValue:([axImageSlider maxValue]-[axImageSlider minValue])/[exportAxViewCPRStepText floatValue]];
 	
 }
+
 - (IBAction)exportSingleImageToBasket:(id)sender
 {
 	int tag=[sender tag];
-	DCMPix	*newPix=nil;
+	DCMPix *newPix=nil;
 	NSImage* newCellICONForBasket=nil;
 	NSMutableArray	*imgRoiList=[NSMutableArray arrayWithCapacity: 0];
 	float* imgdata;
@@ -4922,7 +4913,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 			
 			break;
-		case 2:
+
+        case 2:
 			viewsize = [cPRView frame];
 			imgwidth=viewsize.size.width/[cPRView scaleValue];
 			imgheight=viewsize.size.height/[cPRView scaleValue];
@@ -4933,7 +4925,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				newCellICONForBasket=[cPRView nsimage];
 			}			
 			break;
-		case 3:
+
+        case 3:
 			viewsize = [crossAxiasView frame];
 			imgwidth=viewsize.size.width/[crossAxiasView scaleValue];
 			imgheight=viewsize.size.height/[crossAxiasView scaleValue];
@@ -4948,7 +4941,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     if (newPix)
 	{
-		
 		[basketScrollView setPostsBoundsChangedNotifications:YES];
 		[basketImageArray addObject:newPix];
 		[basketImageROIArray addObject:imgRoiList];
@@ -5130,7 +5122,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//////////////////
 	//creat new rois using the new origin
 		
-	if(cViewMPRorCPRMode&&[oViewCrossShowButton state]== NSOnState)
+	if(cViewMPRorCPRMode&&[oViewCrossShowButton state]== NSControlStateValueOn)
 	{
 		NSRect roiRect;
 		roiRect.origin.x=-oViewOrigin[0]/oViewSpace[0]-offsetx;
@@ -8566,9 +8558,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[[NSUserDefaults standardUserDefaults] setInteger:showShortAxisInAx forKey:@"CMIVShowShortAxisInAxView"];
 	}
 	if(showShortAxisInAx==-1)
-		[vesselAnalysisParaShowShortAxisOption setState:NSOffState];
+		[vesselAnalysisParaShowShortAxisOption setState:NSControlStateValueOff];
 	else
-		[vesselAnalysisParaShowShortAxisOption setState:NSOnState];
+		[vesselAnalysisParaShowShortAxisOption setState:NSControlStateValueOn];
 	int showLongAxisInAx=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVShowLongAxisInAxView"];
 	if(showLongAxisInAx==0)
 	{
@@ -8576,9 +8568,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[[NSUserDefaults standardUserDefaults] setInteger:showLongAxisInAx forKey:@"CMIVShowLongAxisInAxView"];
 	}
 	if(showLongAxisInAx==-1)
-		[vesselAnalysisParaShowLongAxisOption setState:NSOffState];
+		[vesselAnalysisParaShowLongAxisOption setState:NSControlStateValueOff];
 	else
-		[vesselAnalysisParaShowLongAxisOption setState:NSOnState];
+		[vesselAnalysisParaShowLongAxisOption setState:NSControlStateValueOn];
 	
 	int showMeanAxisInAx=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVShowMeanAxisInAxView"];
 	if(showMeanAxisInAx==0)
@@ -8587,21 +8579,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[[NSUserDefaults standardUserDefaults] setInteger:showMeanAxisInAx forKey:@"CMIVShowMeanAxisInAxView"];
 	}
 	if(showMeanAxisInAx==-1)
-		[vesselAnalysisParaShowMeanAxisOption setState:NSOffState];
+		[vesselAnalysisParaShowMeanAxisOption setState:NSControlStateValueOff];
 	else
-		[vesselAnalysisParaShowMeanAxisOption setState:NSOnState];
+		[vesselAnalysisParaShowMeanAxisOption setState:NSControlStateValueOn];
 	
 }
 - (IBAction)changeROIShowingInAxView:(id)sender
 {
 	int showShortAxisInAx=-1,showLongAxisInAx=-1,showMeanAxisInAx=-1;
-	if([vesselAnalysisParaShowShortAxisOption state]==NSOnState)
+	if([vesselAnalysisParaShowShortAxisOption state]==NSControlStateValueOn)
 		showShortAxisInAx=1;
 
-	if([vesselAnalysisParaShowLongAxisOption  state]==NSOnState)
+	if([vesselAnalysisParaShowLongAxisOption  state]==NSControlStateValueOn)
 		showLongAxisInAx=1;
 			
-	if([vesselAnalysisParaShowMeanAxisOption   state]==NSOnState)
+	if([vesselAnalysisParaShowMeanAxisOption   state]==NSControlStateValueOn)
 		showMeanAxisInAx=1;
 
 	[[NSUserDefaults standardUserDefaults] setInteger:showShortAxisInAx forKey:@"CMIVShowShortAxisInAxView"];
@@ -8708,9 +8700,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (void)performCrossSectionAnalysis
 {
 	[axViewMeasurePolygon setComments: @"updating"];
-	if([vesselAnalysisParaAutoRefineOption state]==NSOnState)
+	if ([vesselAnalysisParaAutoRefineOption state]==NSControlStateValueOn)
 		[self refineCenterlineWithCrossSection:self];
-	
 	
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
 	float len;
@@ -8726,7 +8717,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[vesselAnalysisArea removeAllObjects];
 	[vesselAnalysisShortDiameter removeAllObjects];
 	DCMPix* curImage;
-	for( len = startdistance ; len < enddistance; len+=distanceofstep)
+	for ( len = startdistance ; len < enddistance; len+=distanceofstep)
 	{
 		
 		[axImageSlider setFloatValue:len];
@@ -8734,13 +8725,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		curImage=[axViewPixList objectAtIndex:0];
 		unsigned int i;
 		temproi=nil;
-		for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
+		for (i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 		{
 			temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
 			if([temproi type]==tClosedPolygon)
 				break;
 		}
-		if(temproi&&[temproi type]==tClosedPolygon)
+		if (temproi && [temproi type]==tClosedPolygon)
 		{
 			float x1,y1,x2,y2;
 			[endPoints removeAllObjects];
@@ -8819,7 +8810,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)vesselAnalysisShowAllPara:(id)sender
 {
-	if ([vesselAnalysisShowAllParaButton state]!=NSOnState)
+	if ([vesselAnalysisShowAllParaButton state]!=NSControlStateValueOn)
 	{
 		NSRect plotframe= [plotView frame];
 		NSRect paraframe=[vesselAnalysisPanel frame];
@@ -8916,20 +8907,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[axViewMeasurePolygon setName:[NSString stringWithFormat:@"Area:%.1fmm^2",roiarea]];
 		[axViewMeasurePolygon setComments:[axImageSlider stringValue]];
 		[roiList addObject:axViewMeasurePolygon];
-		if([vesselAnalysisParaShowShortAxisOption state]==NSOnState||[vesselAnalysisParaShowLongAxisOption state]==NSOnState||[vesselAnalysisParaShowMeanAxisOption state]==NSOnState)
+		if ([vesselAnalysisParaShowShortAxisOption state] == NSControlStateValueOn ||
+            [vesselAnalysisParaShowLongAxisOption state] == NSControlStateValueOn ||
+            [vesselAnalysisParaShowMeanAxisOption state] == NSControlStateValueOn)
 		{
 			BOOL needShowMin=NO,needShowMax=NO,needShowMean=NO;
-			if([vesselAnalysisParaShowShortAxisOption state]==NSOnState)
+			if ([vesselAnalysisParaShowShortAxisOption state]==NSControlStateValueOn)
 				needShowMin=YES;
-			if([vesselAnalysisParaShowLongAxisOption state]==NSOnState)
+			if ([vesselAnalysisParaShowLongAxisOption state]==NSControlStateValueOn)
 				needShowMax=YES;
-			if([vesselAnalysisParaShowMeanAxisOption state]==NSOnState)
+			if ([vesselAnalysisParaShowMeanAxisOption state]==NSControlStateValueOn)
 				needShowMean=YES;
 			[self creatPolygonROIsMeasurementROIsForAImage:roiList:[axViewPixList objectAtIndex:0]:needShowMin:needShowMax:needShowMean];
-			
 		}
-
-	
 	}
 	else
 	{
@@ -9266,31 +9256,39 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	vesselAnalysisLongitudeStep=distanceofstep*cViewSpace[1];
 	[self vesselAnalysisSetNewSource:self];
 }
+
 -(void)updateAxViewMeasureAfterROIChanged
 {
 	BOOL needShowMin=NO,needShowMax=NO,needShowMean=NO;
-	if([vesselAnalysisParaShowShortAxisOption state]==NSOnState)
+	if ([vesselAnalysisParaShowShortAxisOption state] == NSControlStateValueOn)
 		needShowMin=YES;
-	if([vesselAnalysisParaShowLongAxisOption state]==NSOnState)
+	
+    if ([vesselAnalysisParaShowLongAxisOption state] == NSControlStateValueOn)
 		needShowMax=YES;
-	if([vesselAnalysisParaShowMeanAxisOption state]==NSOnState)
+	
+    if ([vesselAnalysisParaShowMeanAxisOption state] == NSControlStateValueOn)
 		needShowMean=YES;
-	unsigned i=0;
+	
+    unsigned i=0;
 	for(i=0;i<[[axViewROIList objectAtIndex:0] count];i++)
 	{
-		if([[axViewROIList objectAtIndex:0] objectAtIndex:i]!=axViewMeasurePolygon)
+		if ([[axViewROIList objectAtIndex:0] objectAtIndex:i]!=axViewMeasurePolygon)
 		{
 			[[axViewROIList objectAtIndex:0] removeObjectAtIndex:i];
 			i--;
 		}
 	}
 	
-	[self creatPolygonROIsMeasurementROIsForAImage:[axViewROIList objectAtIndex:0]:[axViewPixList objectAtIndex:0]:needShowMin:needShowMax:needShowMean];
-	
+	[self creatPolygonROIsMeasurementROIsForAImage:[axViewROIList objectAtIndex:0]
+                                                  :[axViewPixList objectAtIndex:0]
+                                                  :needShowMin
+                                                  :needShowMax
+                                                  :needShowMean];
 }
+
 - (IBAction)refineCenterline:(id)sender
 {
-		if([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
+		if ([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
 		{
 			[self refineCenterlineWithLongitudeSection:sender];
 		}
@@ -9600,11 +9598,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	unsigned int i;
 	BOOL needAddMin=NO,needAddMax=NO,needAddMean=NO;
-	if([caculateMinDiameterButton state]==NSOnState)
+	if([caculateMinDiameterButton state]==NSControlStateValueOn)
 		needAddMin=YES;
-	if([caculateMaxDiameterButton state]==NSOnState)
+	if([caculateMaxDiameterButton state]==NSControlStateValueOn)
 		needAddMax=YES;
-	if([caculateMeanDiameterButton state]==NSOnState)
+	if([caculateMeanDiameterButton state]==NSControlStateValueOn)
 		needAddMean=YES;
 	
 
@@ -10123,20 +10121,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			meandiameter*=[[pixList objectAtIndex:i] pixelSpacingX]*0.2;
 			
 			
-			if([caculateAreaButton state]==NSOnState)
+			if([caculateAreaButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rarea];
-			if([caculateMeanDiameterButton state]==NSOnState)
+			if([caculateMeanDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",meandiameter];
-			if([caculateMinDiameterButton state]==NSOnState)
+			if([caculateMinDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",mindiamter];
-			if([caculateMaxDiameterButton state]==NSOnState)
+			if([caculateMaxDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",maxdiameter];
 			
-			if([caculateMeanHuButton state]==NSOnState)
+			if([caculateMeanHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmean];
-			if([caculateMinHuButton state]==NSOnState)
+			if([caculateMinHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmin];
-			if([caculateMaxHuButton state]==NSOnState)
+			if([caculateMaxHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmax];			
 			exportinfo=[exportinfo stringByAppendingString:@"\n"];	
 			

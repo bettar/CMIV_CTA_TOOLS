@@ -33,7 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#import "CMIVSpoonController.h"
 #import "CMIVContrastController.h"
 #import "CMIVVRcontroller.h"
+#endif
 #import "CMIVScissorsController.h"
+#if 0 // @@@
 #import "CMIVContrastPreview.h"
 #import "CMIVSaveResult.h"
 #import "CMIV_AutoSeeding.h"
@@ -266,31 +268,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
     int err=0;
 	if ([menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)])
-		err = [self checkIntermediatDataForWizardMode:0];
+		err = [self checkIntermediatDataForWizardMode: 0];
 
-    else if ([menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)])
 		[self showAutoSeedingDlg];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)])
 		err = [self startChopper:viewerController];
 	
-    //else if ([menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)] == YES)
-	//	err = [self startSpoon:viewerController];
+    //else if ([menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)])
+	//	err = [self startSpoon: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"2D Views", nil)] == YES)
-		err = [self startScissors:viewerController];	
+    else if ([menuName isEqualToString:NSLocalizedString(@"2D Views", nil)])
+		err = [self startScissors: viewerController];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
-		err = [self startContrast:viewerController];	
+		err = [self startContrast: viewerController];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES)
-		err = [self startVR:viewerController];
+		err = [self startVR: viewerController];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES)
-		err = [self saveResult:viewerController];
+		err = [self saveResult: viewerController];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES)
-		err = [self startPolygonMeasure:viewerController];
+		err = [self startPolygonMeasure: viewerController];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
 	{
@@ -387,10 +389,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (int)  startScissors:(ViewerController *) vc
 {
-	return [self checkIntermediatDataForFreeMode:-1];
-	
+	return [self checkIntermediatDataForFreeMode: -1];
 }
-
 
 - (int) startContrast:(ViewerController *) vc
 {
@@ -444,23 +444,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[[CMIVChopperController alloc] showPanelAsWizard:viewerController
                                                         :self];
 	}
-#if 0 // @@@
-	else if (stage==2)// 2D viewer
+	else if (stage==2) // 2D viewer
 	{
 		NSLog( @"step 2");
-		[[CMIVScissorsController alloc]  showPanelAsWizard:viewerController :self];
+		[[CMIVScissorsController alloc]  showPanelAsWizard:viewerController
+                                                          :self];
 	}
-	else if (stage==3) //result preview
+#if 0 // @@@
+	else if (stage==3) // result preview
 	{
 		NSLog( @"finish step 3");
-		[[CMIVContrastPreview alloc] showPanelAsWizard:viewerController :self];
-	}
-	else if (stage==4) //2D viewer CPR only
-	{
-		NSLog( @"finish step 4");
-		[[CMIVScissorsController alloc] showPanelAsCPROnly:viewerController :self];
+		[[CMIVContrastPreview alloc] showPanelAsWizard:viewerController
+                                                      :self];
 	}
 #endif
+	else if (stage==4) // 2D viewer CPR only
+	{
+		NSLog( @"finish step 4");
+		[[CMIVScissorsController alloc] showPanelAsCPROnly:viewerController
+                                                          :self];
+	}
 }
 
 - (NSMutableDictionary*) dataOfWizard
@@ -575,26 +578,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	[window close];
     [NSApp endSheet:window returnCode:[sender tag]];
 }
+
 - (IBAction) showAdvancedSettingDlg:(id)sender
 {
-	[NSApp beginSheet: advanceSettingWindow modalForWindow:[NSApp keyWindow] modalDelegate:self didEndSelector:nil contextInfo:nil];
-	if(ifAutoSeedingOnReceive)
-		[autoWatchOnReceivingButton setState:NSOnState];
+	[NSApp beginSheet:advanceSettingWindow
+       modalForWindow:[NSApp keyWindow]
+        modalDelegate:self
+       didEndSelector:nil
+          contextInfo:nil];
+	
+    if (ifAutoSeedingOnReceive)
+		[autoWatchOnReceivingButton setState: NSControlStateValueOn];
 	else
-		[autoWatchOnReceivingButton setState:NSOffState];
-	if(performRibCageRemoval==1)
-		[autoRibCageRemovalButton setState:NSOnState];
+		[autoWatchOnReceivingButton setState: NSControlStateValueOff];
+
+    if (performRibCageRemoval==1)
+		[autoRibCageRemovalButton setState: NSControlStateValueOn];
 	else
-		[autoRibCageRemovalButton setState:NSOffState];
-	if(performCenterlineTracking==1)
-		[autoCenterlineButton setState:NSOnState];
+		[autoRibCageRemovalButton setState: NSControlStateValueOff];
+	
+    if (performCenterlineTracking==1)
+		[autoCenterlineButton setState: NSControlStateValueOn];
 	else
-		[autoCenterlineButton setState:NSOffState];
-	if(performVesselEnhance==1)
-		[autoVesselEnhanceButton setState:NSOnState];
+		[autoCenterlineButton setState: NSControlStateValueOff];
+	
+    if (performVesselEnhance==1)
+		[autoVesselEnhanceButton setState: NSControlStateValueOn];
 	else
-		[autoVesselEnhanceButton setState:NSOffState];
-	[autoCleanCachDaysText setIntValue:autoCleanCachDays];
+		[autoVesselEnhanceButton setState: NSControlStateValueOff];
+	
+    [autoCleanCachDaysText setIntValue:autoCleanCachDays];
 	autoWatchOnReceivingStudyDesciptionFilterString=[[NSUserDefaults standardUserDefaults] stringForKey:@"CMIVAutoWatchStudyDescriptionKeyWord"];
 	autoWatchOnReceivingSeriesDesciptionFilterString=[[NSUserDefaults standardUserDefaults] stringForKey:@"CMIVAutoWatchSeriesDescriptionKeyWord"];
 	if(!autoWatchOnReceivingStudyDesciptionFilterString)
@@ -617,44 +630,49 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {
 	autoWatchOnReceivingStudyDesciptionFilterString=[autoWatchOnReceivingKeyWordTextField1 stringValue];
 	autoWatchOnReceivingSeriesDesciptionFilterString=[autoWatchOnReceivingKeyWordTextField2 stringValue];
-	if([autoCenterlineButton state]==NSOnState)
+	if ([autoCenterlineButton state] == NSControlStateValueOn)
 		performCenterlineTracking=1;
 	else
 		performCenterlineTracking=-1;
-	[[NSUserDefaults standardUserDefaults] setInteger:performCenterlineTracking forKey:@"CMIVAutoCenterlineTracking"];
 
-	if([autoRibCageRemovalButton state]==NSOnState)
+    [[NSUserDefaults standardUserDefaults] setInteger:performCenterlineTracking forKey:@"CMIVAutoCenterlineTracking"];
+
+	if ([autoRibCageRemovalButton state] == NSControlStateValueOn)
 		performRibCageRemoval=1;
 	else
 		performRibCageRemoval=-1;
-	[[NSUserDefaults standardUserDefaults] setInteger:performRibCageRemoval forKey:@"CMIVAutoRibRemoval"];
+
+    [[NSUserDefaults standardUserDefaults] setInteger:performRibCageRemoval forKey:@"CMIVAutoRibRemoval"];
 	
 
-	if([autoWatchOnReceivingButton state]==NSOnState)
+	if ([autoWatchOnReceivingButton state] == NSControlStateValueOn)
 		ifAutoSeedingOnReceive=YES;
 	else
 		ifAutoSeedingOnReceive=NO;
-	[[NSUserDefaults standardUserDefaults] setBool:ifAutoSeedingOnReceive forKey:@"CMIVAutoSeedingOnReceive"];
+
+    [[NSUserDefaults standardUserDefaults] setBool:ifAutoSeedingOnReceive forKey:@"CMIVAutoSeedingOnReceive"];
 	
-	if([autoVesselEnhanceButton state]==NSOnState)
+	if ([autoVesselEnhanceButton state] == NSControlStateValueOn)
 		performVesselEnhance=1;
 	else
 		performVesselEnhance=-1;
-	[[NSUserDefaults standardUserDefaults] setInteger:performVesselEnhance forKey:@"CMIVAutoVesselEnhance"];
+
+    [[NSUserDefaults standardUserDefaults] setInteger:performVesselEnhance forKey:@"CMIVAutoVesselEnhance"];
 	
-	if(performCenterlineTracking==-1)
+	if (performCenterlineTracking==-1)
 		performCenterlineTracking=0;
-	if(performRibCageRemoval==-1)
+
+    if (performRibCageRemoval==-1)
 		performRibCageRemoval=0;
 
-	if(performVesselEnhance==-1)
+	if (performVesselEnhance==-1)
 		performVesselEnhance=0;
-	autoCleanCachDays=[autoCleanCachDaysText intValue];
-	if(autoCleanCachDays<=0)
-	{
+
+    autoCleanCachDays=[autoCleanCachDaysText intValue];
+	if (autoCleanCachDays<=0)
 		autoCleanCachDays=10;
-	}
-	[[NSUserDefaults standardUserDefaults] setInteger:autoCleanCachDays forKey:@"CMIVAutoCleanCachDays"];
+	
+    [[NSUserDefaults standardUserDefaults] setInteger:autoCleanCachDays forKey:@"CMIVAutoCleanCachDays"];
 
 	autoWatchOnReceivingStudyDesciptionFilterString=[autoWatchOnReceivingKeyWordTextField1 stringValue];
 	autoWatchOnReceivingSeriesDesciptionFilterString=[autoWatchOnReceivingKeyWordTextField2 stringValue];
@@ -689,29 +707,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (IBAction)closeAboutDlg:(id)sender
 {
-
 	[aboutWindow close];
     [NSApp endSheet:aboutWindow returnCode:[sender tag]];
 }
+
 - (IBAction)openCMIVWebSite:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.cmiv.liu.se/"]];
 }
+
 - (IBAction)mailToAuthors:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:chunliang.wang@liu.se,orjan.smedby@liu.se"]]; 
 }
 
-- (int)  startPolygonMeasure:(ViewerController *) vc
+- (int) startPolygonMeasure:(ViewerController *) vc
 {
 	int err=0;
-#if 0 // @@@
 	CMIVScissorsController * scissorsController = [[CMIVScissorsController alloc] init];
-	err=[scissorsController showPolygonMeasurementPanel:vc:self];
-	if(!err)
+	err = [scissorsController showPolygonMeasurementPanel:vc:self];
+	if (!err)
 		currentController=scissorsController;
-#endif
-	return err;
+
+    return err;
 }
 
 #define OUR_DATA_LOCATION       @"Miele-LXIV Data"  // TODO: use CFBundleName
@@ -945,10 +963,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	int err=0;
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
-	NSString* path=[self hostAppDocumentPath];
-	NSString* file;
-	file= [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
+	NSString* path = [self hostAppDocumentPath];
+	NSString* file = [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
 	NSMutableDictionary* savedData=[[NSMutableDictionary alloc] initWithContentsOfFile:file];
+
+    NSLog(@"%s %d, file:%@", __FUNCTION__, __LINE__, file);
 
 	[self cleanDataOfWizard];
 	dataOfWizard=[self dataOfWizard];
@@ -959,46 +978,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	int imageWidth = [curPix pwidth];
 	int imageHeight = [curPix pheight];
 	int imageAmount = [pixList count];
-
 	
-	if(savedData&&[savedData objectForKey:@"SeedsDataCompressedArray"])
+	if (savedData&&[savedData objectForKey:@"SeedsDataCompressedArray"])
 	{	
-		int seedsDataSize=[[savedData objectForKey:@"SeedsDataSize"] intValue];
-		if(imageWidth*imageHeight*imageAmount*(signed)sizeof(unsigned short)==seedsDataSize)
+		int seedsDataSize = [[savedData objectForKey:@"SeedsDataSize"] intValue];
+		if (imageWidth * imageHeight * imageAmount * (signed)sizeof(unsigned short) == seedsDataSize)
 		{
-			if(userRespond==1)
-				nrespond=-1;
-			else if(userRespond==0)
-				nrespond=0;
+			if (userRespond == 1)
+				nrespond = -1;
+			else if (userRespond == 0)
+				nrespond = 0;
 			else
-				nrespond=NSRunAlertPanel(NSLocalizedString  (@"Load Previous Results", nil), NSLocalizedString(@"Found seeds from Previous Processing. Do you want to load them", nil), NSLocalizedString(@"Load", nil), NSLocalizedString(@"Cancel", nil), NSLocalizedString(@"Do not load", nil));
-			
-				
-				if(nrespond==1)
-				{
-			
-
-					err = [self loadIntermediateDataForSeedPlanting:savedData];
-		
-					
-				}
-				else if(nrespond==0)
-				{
-					return 0;
-				}
+				nrespond = NSRunAlertPanel(NSLocalizedString(@"Load Previous Results", nil),
+                                           NSLocalizedString(@"Found seeds from Previous Processing. Do you want to load them", nil),
+                                           NSLocalizedString(@"Load", nil),
+                                           NSLocalizedString(@"Cancel", nil),
+                                           NSLocalizedString(@"Do not load", nil));
+            if (nrespond == 1)
+            {
+                err = [self loadIntermediateDataForSeedPlanting:savedData];
+            }
+            else if (nrespond == 0)
+            {
+                return 0;
+            }
 		}
 	}
 	
-	if([savedData objectForKey:@"CenterlineArrays"])
+	if ([savedData objectForKey:@"CenterlineArrays"])
 	{
 		err = [self loadIntermediateDataForCPRViewing:savedData];
 	}
-#if 0 // @@@
-	CMIVScissorsController * scissorsController = [[CMIVScissorsController alloc] showScissorsPanel:viewerController:self];
-	if(!scissorsController)
+
+	CMIVScissorsController * scissorsController = [[CMIVScissorsController alloc] showScissorsPanel:viewerController
+                                                                                                   :self];
+	if (!scissorsController)
 		err=1;
-#endif
-	return err;
+
+    return err;
 }
 
 - (int) checkIntermediatDataForWizardMode:(int)userRespond
@@ -1048,7 +1065,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             if (step2)
 			{
 #if 0 // @@@
-				[[CMIVScissorsController alloc] showPanelAsAutomaticWizard:viewerController:self];
+				[[CMIVScissorsController alloc] showPanelAsAutomaticWizard:viewerController
+                                                                          :self];
 #endif
 			}
 			else if(step1)

@@ -48,7 +48,6 @@
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkThresholdSegmentationLevelSetImageFilter.h"
 
-
 #include <vtkImageImport.h>
 #include <vtkTransform.h>
 #include <vtkImageReslice.h>
@@ -58,16 +57,22 @@
 #include <vtkPolyDataConnectivityFilter.h>
 #include <vtkPolyData.h>
 #include "spline.h"
-
-
 #undef id
 
-static		float						deg2rad = 3.14159265358979/180.0;
+static float deg2rad = 3.14159265358979/180.0;
+
 @implementation CMIVAutoSeedingCore
 
-#pragma mark-
-#pragma mark 1 Rib Cage Removal
--(int)autoCroppingBasedOnLungSegment:(float*)inData :(unsigned char*)outData :(float)threshold :(float)diameter : (long*)origin :(long*)dimension :(float*)spacing :(float)zoomfactor
+#pragma mark - 1 Rib Cage Removal
+
+-(int)autoCroppingBasedOnLungSegment:(float*)inData
+                                    :(unsigned char*)outData
+                                    :(float)threshold
+                                    :(float)diameter
+                                    :(long*)origin
+                                    :(long*)dimension
+                                    :(float*)spacing
+                                    :(float)zoomfactor
 {
 	//NSLog( @"lung segment ");
 	int err=0;
@@ -95,24 +100,29 @@ static		float						deg2rad = 3.14159265358979/180.0;
 
 	err=[self findingHeart:inData:outData:origin:dimension];
 	[self smoothOutput:outData];
-	if(err)
-		return err;
-	return err;
+	
+//    if(err)
+//		return err;
+
+    return err;
 }
--(void)lungSegmentation:(float*)inData :(unsigned char*)outData :(float)diameter
+
+-(void)lungSegmentation:(float*)inData
+                       :(unsigned char*)outData
+                       :(float)diameter
 {
 	long size=imageAmount*imageSize;
-	long i;
-	for(i=0;i<size;i++)
+	for (long i=0; i<size; i++)
 	{
 		if(inData[i]<lungThreshold)
 			outData[i]=1;
 	}
-	int preLungSegNumber=0;
+
+    int preLungSegNumber=0;
 	long* buffer=(long*)malloc(4*imageSize*sizeof(long));
 	unsigned char* preSlice=nil;
 	
-	for(i=imageAmount-1;i>=0;i--)
+	for (long i=imageAmount-1; i>=0; i--)
 	{
 		memset(buffer, 0x00, 2*imageSize*sizeof(long));
 		preLungSegNumber=[self connectedComponetsLabeling2D:outData+i*imageSize:preSlice:buffer];
@@ -120,7 +130,10 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 	free(buffer);
 }
--(int)connectedComponetsLabeling2D:(unsigned char*)img2d8bit:(unsigned char*)preSlice:(long*)buffer
+
+-(int)connectedComponetsLabeling2D:(unsigned char*)img2d8bit
+                                  :(unsigned char*)preSlice
+                                  :(long*)buffer
 {
 	long labebindex=1;
 	long isconnected=0;
@@ -131,12 +144,12 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	long* connectingmap=buffer+imageSize;
 	long* areaList=buffer+2*imageSize;
 
-	for(j=0;j<imageHeight;j++)
-		for(i=0;i<imageWidth;i++)
-			if(*(img2d8bit+j*imageWidth+i))
+	for (j=0;j<imageHeight;j++)
+		for (i=0;i<imageWidth;i++)
+			if (*(img2d8bit+j*imageWidth+i))
 			{
 				isconnected=0;
-				for(neighbor=0;neighbor<4;neighbor++)
+				for (neighbor=0;neighbor<4;neighbor++)
 				{
 					switch(neighbor)
 					{
@@ -149,18 +162,20 @@ static		float						deg2rad = 3.14159265358979/180.0;
 						case 3:
 							x=i-1;y=j;break;
 					}
-					if(x<0 || y<0 ||x>=imageWidth)
+					
+                    if (x<0 || y<0 ||x>=imageWidth)
 						continue;
-					if(*(tempimg+y*imageWidth+x))
+
+                    if (*(tempimg+y*imageWidth+x))
 					{
-						if(!isconnected)
+						if (!isconnected)
 						{
 							*(tempimg+j*imageWidth+i)=*(tempimg+y*imageWidth+x);
 							isconnected=1;
 						}
 						else
 						{
-							if(*(tempimg+j*imageWidth+i)!=*(tempimg+y*imageWidth+x))
+							if (*(tempimg+j*imageWidth+i)!=*(tempimg+y*imageWidth+x))
 							{
 								index1=*(tempimg+j*imageWidth+i);
 								index2=*(tempimg+y*imageWidth+x);
@@ -309,7 +324,10 @@ static		float						deg2rad = 3.14159265358979/180.0;
 {
 	
 }
--(int)findingHeart:(float*)inData:(unsigned char*)outData:(long*)origin:(long*)dimension
+-(int)findingHeart:(float*)inData
+                  :(unsigned char*)outData
+                  :(long*)origin
+                  :(long*)dimension
 {
 	int err=0;
 
@@ -329,7 +347,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	heartcentery=heartcenterx/imageWidth;
 	heartcenterx=heartcenterx%imageWidth;
 	
-	for(i=imageAmount-1;i>=0;i--)
+	for (i=imageAmount-1;i>=0;i--)
 	{
 		img8bit=outData+i*imageSize;
 		image=inData+i*imageSize;
@@ -379,12 +397,17 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	free(costMapBuffer);
 	return err;
 }
--(int)createParameterFunctionWithCenter:(long)centerx:(long)centery:(float)diameter:(unsigned char*)img2d8bit:(float*)curve:(float*)precurve
+-(int)createParameterFunctionWithCenter:(long)centerx
+                                       :(long)centery
+                                       :(float)diameter
+                                       :(unsigned char*)img2d8bit
+                                       :(float*)curve
+                                       :(float*)precurve
 {
 	int i=0;
 	long tempx=0,tempy=0,tempdiameter;
 
-		for(i=0;i<360;i++)
+		for (i=0;i<360;i++)
 		{
 			tempdiameter=0;
 			curve[i]=0;
@@ -399,8 +422,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 					break;
 				}
 					
-			}while(*(img2d8bit+tempy*imageWidth+tempx)==0);
-			if(curve[i]==0)
+			} while (*(img2d8bit+tempy*imageWidth+tempx)==0);
+			if (curve[i]==0)
 			{
 				curve[i]=tempdiameter;
 			}
@@ -439,29 +462,37 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	return 0;
 	
 }
--(int)convertParameterFunctionIntoCircle:(long)x:(long)y:(float*)curve:(float*)precurve:(unsigned char*)img2d8bit:(float*)image
+-(int)convertParameterFunctionIntoCircle:(long)x
+                                        :(long)y
+                                        :(float*)curve
+                                        :(float*)precurve
+                                        :(unsigned char*)img2d8bit
+                                        :(float*)image
 {
-	int i,j,segnum=0;
+	int j,segnum=0;
 	int gapstart,gapend;
 	int err=0;
 
-	i=0;
+	int i=0;
 	//first round check based on lung contour
 	{
 
-		while(i<360&&curve[i%360]==10000)i++;
+		while (i<360&&curve[i%360]==10000)
+            i++;
 
-		if(i>=360)
+		if (i>=360)
 			return 2;
 		
-		for(j=0;j<360;j++)
+		for (j=0;j<360;j++)
 		{
-			if(curve[(i+j)%360]==10000)
+			if (curve[(i+j)%360]==10000)
 			{ 
 				segnum++;
 				gapstart=(i+j)%360-1;
-				while(j<360&&(curve[(i+j)%360]==10000))j++;
-				if(j>360)
+				while(j<360&&(curve[(i+j)%360]==10000))
+                    j++;
+
+                if(j>360)
 					return 2;
 
 				gapend=(i+j)%360;
@@ -473,18 +504,20 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		}
 	}
 	return 0;
-	i=0;
+
+    i=0;
 	segnum=0;
-	if(precurve[0]>0)
+	if (precurve[0]>0)
 	{
 		gapstart=abs(curve[i%360]-precurve[i%360]);
 		while(i<360&&gapstart>30)
 		{i++;gapstart=abs(curve[i%360]-precurve[i%360]);}
 		
-		if(i>=360)
+		if (i>=360)
 			return 2;
-		float distancethreshold=30/zoomFactor;
-		for(j=0;j<360;j++)
+
+        float distancethreshold=30/zoomFactor;
+		for (j=0;j<360;j++)
 		{
 			if(abs(curve[(i+j)%360]-precurve[(i+j)%360])>distancethreshold)
 			{ 
@@ -508,7 +541,12 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	
 	return 0;
 }
--(void)fillAreaInsideCircle:(long*)pcenterx:(long*)pcentery:(unsigned char*)img2d8bit:(float*)curve:(float*)precurve;
+
+-(void)fillAreaInsideCircle:(long*)pcenterx
+                           :(long*)pcentery
+                           :(unsigned char*)img2d8bit
+                           :(float*)curve
+                           :(float*)precurve;
 {
 	int i,j;
 	float angle;
@@ -761,51 +799,67 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		precurve[0]=-1;
 	
 }
--(int)finding2DMinimiumCostPath:(long)centerx:(long)centery:(float*)curve:(float*)precurve:(unsigned char*)img2d8bit:(float*)image:(long)startangle:(long)endangle
+-(int)finding2DMinimiumCostPath:(long)centerx
+                               :(long)centery
+                               :(float*)curve
+                               :(float*)precurve
+                               :(unsigned char*)img2d8bit
+                               :(float*)image
+                               :(long)startangle
+                               :(long)endangle
 {
 	long minradius,maxradius,tempradius;
 	long gapborderfactor=20;
 	float gapatfactor=0.02;
 	long gapattitude;
-	long i;
 	long searchareawidth,searchareaheight;
 	long stepcostrange=1000;
 	long endseedsangle;
 	long tempx,tempy;
-	if(endangle<startangle)endangle+=360;
-	if(startangle<0){startangle+=360;endangle+=360;}
-	minradius = maxradius =curve[(startangle+360)%360];
-	if(*precurve!=-1)
-		for(i=startangle;i<=endangle;i++)
+	if (endangle<startangle)
+        endangle+=360;
+
+    if (startangle<0)
+    {
+        startangle+=360;
+        endangle+=360;
+    }
+
+    long i;
+
+    minradius = maxradius =curve[(startangle+360)%360];
+	if (*precurve!=-1)
+		for (long i=startangle;i<=endangle;i++)
 		{
 			tempradius=precurve[(i+360)%360];
-			if(tempradius==10000)
+			if (tempradius==10000)
 			{
 				i=gapborderfactor;
 				continue;
 			}
-			if(tempradius>maxradius)
+			if (tempradius>maxradius)
 				maxradius=tempradius;
-			if(tempradius<minradius)
+			if (tempradius<minradius)
 				minradius=tempradius;
-			
 		}
 	
-	for(i=0;i<gapborderfactor;i++)
+	for (i=0;i<gapborderfactor;i++)
 	{
 		tempradius=curve[(startangle-i+360)%360];
-		if(tempradius==10000)
+		if (tempradius==10000)
 		{
 			i=gapborderfactor;
 			break;
 		}
-		if(tempradius>maxradius)
+		if (tempradius>maxradius)
 			maxradius=tempradius;
-		if(tempradius<minradius)
+		if (tempradius<minradius)
 			minradius=tempradius;
 	}
-	startangle-=i-1;
-	for(i=0;i<gapborderfactor;i++)
+
+    startangle -= i-1;
+	
+    for(i=0;i<gapborderfactor;i++)
 	{
 		tempradius=curve[(endangle+i+360)%360];
 		if(tempradius==10000)
@@ -818,18 +872,20 @@ static		float						deg2rad = 3.14159265358979/180.0;
 		if(tempradius<minradius)
 			minradius=tempradius;
 	}	
-	endangle+=i-1;
+
+    endangle+=i-1;
 	endseedsangle=i;
 	
-
-	
-	if(endangle<startangle)endangle+=360;
-	if(*precurve!=-1)
+	if (endangle<startangle)
+        endangle+=360;
+    
+    if (*precurve!=-1)
 		gapattitude=20/zoomFactor;//
 	else
 		gapattitude=(maxradius - minradius)*gapatfactor*(endangle-startangle);
-	 minradius-=gapattitude;
-	 maxradius+=gapattitude;
+	
+    minradius-=gapattitude;
+    maxradius+=gapattitude;
 	
 	// check min radius
 	int ifneedchechminradius=1;
@@ -852,14 +908,15 @@ static		float						deg2rad = 3.14159265358979/180.0;
 			break;
 
 	}
-	 if(minradius<=0)
-	 minradius=1;
-	if(maxradius>sqrt(imageWidth*imageWidth+imageHeight*imageHeight))
+
+    if (minradius<=0)
+        minradius=1;
+	if (maxradius>sqrt(imageWidth*imageWidth+imageHeight*imageHeight))
 		maxradius=sqrt(imageWidth*imageWidth+imageHeight*imageHeight);
 	
 	searchareawidth=endangle-startangle;
 	searchareaheight=maxradius-minradius;
-	if(searchareaheight*searchareawidth<=0)
+	if (searchareaheight*searchareawidth<=0)
 	{
 		NSLog( @"width*height<");
 		return 1;
@@ -1009,9 +1066,14 @@ else
 	
 	
 }
--(long)dijkstraAlgorithm:(long)width:(long)height:(long)costrange:(long*)weightmap:(unsigned char*)directormap
-{//return the bridge point between two seeds
-	
+
+// Return the bridge point between two seeds
+-(long)dijkstraAlgorithm:(long)width
+                        :(long)height
+                        :(long)costrange
+                        :(long*)weightmap
+                        :(unsigned char*)directormap
+{
 	long i,j;
 	long x,y;
 	long item;
@@ -1019,7 +1081,7 @@ else
 	long directiondev;
 	long directioncost;
 	long directionweight[5]={0,10,100,999,1000};
-	if(height*width<=0)
+	if (height*width<=0)
 	{
 		NSLog( @"width*height<");
 		return -1;
@@ -1027,15 +1089,15 @@ else
 	
 	long* costmap= costMapBuffer;
 	memset(costmap,0x00,height*width*sizeof(long));
-	CMIVBuketPirortyQueue* pirortyQueue=[[CMIVBuketPirortyQueue alloc] initWithParameter:1000*curveWeightFactor+1000*distanceWeightFactor+1000*intensityWeightFactor+1000*gradientWeightFactor+1 :width*height];
+	CMIVBuketPirortyQueue* pirortyQueue=[[CMIVBuketPirortyQueue alloc] initWithParameter: 1000*curveWeightFactor + 1000*distanceWeightFactor + 1000*intensityWeightFactor + 1000*gradientWeightFactor+1
+                                                                                        :width*height];
 	
-	
-	for(j=0;j<height;j++)
-		for(i=0;i<width;i++)
+	for (j=0;j<height;j++)
+		for (i=0;i<width;i++)
 		{
-			if((*(directormap+j*width+i))&0x80 && !((*(directormap+j*width+i))&0x10))//0x80 is seeds or checked point 0x10 is another side
+			if ((*(directormap+j*width+i))&0x80 && !((*(directormap+j*width+i))&0x10))//0x80 is seeds or checked point 0x10 is another side
 			{
-				for(neighbors=1;neighbors<9;neighbors++)
+				for (neighbors=1;neighbors<9;neighbors++)
 				{
 					switch(neighbors)
 					{/*
@@ -1183,7 +1245,10 @@ else
 	return -1;
 	
 }
--(void)intensityRelatedWeightMap:(long)width:(long)height:(long*)weightmap
+
+-(void)intensityRelatedWeightMap:(long)width
+                                :(long)height
+                                :(long*)weightmap
 {
 
 	if(width*height<=0)
@@ -1334,11 +1399,17 @@ else
 	free(tempweightmap);
 
 }
--(void)distanceReleatedWeightMap:(long)startangle:(long)minradius:(long)width:(long)height:(float*)precurve:(float*)lastweightmap
+
+-(void)distanceReleatedWeightMap:(long)startangle
+                                :(long)minradius
+                                :(long)width
+                                :(long)height
+                                :(float*)precurve
+                                :(float*)lastweightmap
 {
-	float* tempweightmap=(float*)malloc(width*height*sizeof(float));
+	float* tempweightmap = (float*)malloc(width*height*sizeof(float));
 	//float* curweightmap=curSliceWeightMapBuffer;
-	long size=width*height;
+	long size = width*height;
 	/*	float  fkernel[25]={0.0192, 0.0192, 0.0385, 0.0192, 0.0192, 
 	 0.0192, 0.0385, 0.0769, 0.0385, 0.0192,
 	 0.0385, 0.0769, 0.1538, 0.0769, 0.0385,
@@ -1350,7 +1421,7 @@ else
 	 0.0133, 0.0591, 0.0983, 0.0591, 0.0133,
 	 0.0030, 0.0133, 0.0219, 0.0133, 0.0030};*/
 	
-	float  fkernel[49]={
+	float fkernel[49]={
 		0.0049,    0.0092,    0.0134,    0.0152,    0.0134,    0.0092,    0.0049,
 		0.0092,    0.0172,    0.0250,    0.0283,    0.0250,    0.0172,    0.0092,
 		0.0134,    0.0250,    0.0364,    0.0412,    0.0364,    0.0250,    0.0134,
@@ -1359,7 +1430,6 @@ else
 		0.0092,    0.0172,    0.0250,    0.0283,    0.0250,    0.0172,    0.0092,
 		0.0049,    0.0092,    0.0134,    0.0152,    0.0134,    0.0092,    0.0049
 	};
-	
 	
 	memcpy(tempweightmap, lastweightmap, size*sizeof(float));
 	vImage_Buffer dstf, srcf;
@@ -1493,9 +1563,13 @@ else
 		
 	}*/
 }
-#pragma mark-
-#pragma mark 2 Aorta Detecting
--(float)findAorta:(float*)inData:(long*)origin:(long*)dimension:(float*)spacing
+
+#pragma mark - 2 Aorta Detecting
+
+-(float)findAorta:(float*)inData
+                 :(long*)origin
+                 :(long*)dimension
+                 :(float*)spacing
 {
 	NSLog( @" circle detection ");
 	int err=0;
@@ -1515,12 +1589,14 @@ else
 	err=[self detectCircles:(NSMutableArray*) circlesArray:imageAmount/3];
 	if(err)
 		return -1.0;
-	NSLog( @"remove useless circle");	
+
+    NSLog( @"remove useless circle");
 
 	err=[self removeUnrelatedCircles:circlesArray];
 	if(err)
 		return -1.0;
-	//[self exportCircles:circlesArray];
+
+    //[self exportCircles:circlesArray];
 	CMIV3DPoint* acircle=[circlesArray objectAtIndex:0];
 	origin[0]=acircle.x;
 	origin[1]=acircle.y;
@@ -1529,9 +1605,14 @@ else
 	//float maxHu=[self caculateAortaMaxIntensity:circlesArray];
 	[circlesArray removeAllObjects];
 	return radius;
-	
 }
--(float)caculateAortaMaxIntensity:(float*)img:(int)imgwidth:(int)imgheight:(int)centerx:(int)centery:(int)radius
+
+-(float)caculateAortaMaxIntensity:(float*)img
+                                 :(int)imgwidth
+                                 :(int)imgheight
+                                 :(int)centerx
+                                 :(int)centery
+                                 :(int)radius
 {
 //	unsigned int i;
 	int x1,y1,r;
@@ -1546,24 +1627,28 @@ else
 		y2=centery+r;		
 		x1=centerx-r;
 		y1=centery-r;
-		if(x1<0)
+		if (x1<0)
 			x1=0;
-		if(y1<0)
+
+        if (y1<0)
 			y1=0;
 
-		if(x2>imgwidth-1)
+		if (x2>imgwidth-1)
 			x2=imgwidth-1;
-		if(y2>imgheight-1)
+
+        if (y2>imgheight-1)
 			y2=imgheight-1;
-		for(y=y1;y<y2;y++)
-			for(x=x1;x<x2;x++)
-				if((x-centerx)*(x-centerx)+(y-centery)*(y-centery)<=r*r)
-					if(maxhu<*(img+y*imgwidth+x))
+		
+        for (y=y1;y<y2;y++)
+			for (x=x1;x<x2;x++)
+				if ((x-centerx)*(x-centerx)+(y-centery)*(y-centery)<=r*r)
+					if (maxhu<*(img+y*imgwidth+x))
 						maxhu=*(img+y*imgwidth+x);
 	}
-	return maxhu;
-	
+
+    return maxhu;
 }
+
 -(void)exportCircles:(NSArray*)circles
 {
 	unsigned int i;
@@ -1695,17 +1780,15 @@ else
 	
 	
 }
--(int)detectCircles:(NSMutableArray*) circlesArray:(int)nslices
+-(int)detectCircles:(NSMutableArray*) circlesArray
+                   :(int)nslices
 {
+	const unsigned int Dimension = 2;
+	typedef float InputPixelType;
+	typedef float OutputPixelType;
 	
-
-	
-	const     unsigned int        Dimension       = 2;
-	typedef   float               InputPixelType;
-	typedef   float               OutputPixelType;
-	
-	typedef   itk::Image< InputPixelType, Dimension >   InputImageType;
-	typedef   itk::Image< OutputPixelType, Dimension >  OutputImageType;
+	typedef itk::Image< InputPixelType, Dimension >   InputImageType;
+	typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
 	typedef itk::ImportImageFilter< InputPixelType, Dimension > ImportFilterType;
 	
 	ImportFilterType::Pointer importFilter;
@@ -1715,7 +1798,6 @@ else
 	ImportFilterType::SizeType itksize;
 	itksize[0] = imageWidth; // size along X
 	itksize[1] = imageHeight; // size along Y
-
 	
 	ImportFilterType::IndexType start;
 	start.Fill( 0 );
@@ -1744,37 +1826,36 @@ else
 	smoothing->SetInput( importFilter->GetOutput() );
 
 	const bool importImageFilterWillOwnTheBuffer = false;
-	typedef   float           AccumulatorPixelType;  
-	typedef itk::HoughTransform2DCirclesImageFilter<InputPixelType,
-	AccumulatorPixelType> HoughTransformFilterType;
+	typedef float AccumulatorPixelType;
+#if 0 // @@@
+	typedef itk::HoughTransform2DCirclesImageFilter<InputPixelType, AccumulatorPixelType> HoughTransformFilterType;
 	HoughTransformFilterType::Pointer houghFilter = HoughTransformFilterType::New();
-	int i;
 	houghFilter->SetInput( smoothing->GetOutput() );
-	
-	for(i=imageAmount-1;i>=imageAmount-nslices;i--)
+#endif
+
+	for (int i=imageAmount-1; i>=imageAmount-nslices; i--)
 	{
 		importFilter->SetImportPointer( (inputData+imageSize*i), itksize[0] * itksize[1], importImageFilterWillOwnTheBuffer);
 		
-		
-		
+#if 0 // @@@
 		houghFilter->SetNumberOfCircles( 3 );
 		houghFilter->SetMinimumRadius(   7/xSpacing );
 		houghFilter->SetMaximumRadius(  25/xSpacing );
 		houghFilter->SetThreshold(100);
 	
-		 houghFilter->SetSweepAngle(3*deg2rad);
-		 houghFilter->SetSigmaGradient( 3 );
-		 houghFilter->SetVariance( 5 );
-		 houghFilter->SetDiscRadiusRatio( 1.5 );
+		houghFilter->SetSweepAngle(3*deg2rad);
+        houghFilter->SetSigmaGradient( 3 );
+        houghFilter->SetVariance( 5 );
+        houghFilter->SetDiscRadiusRatio( 1.5 );
 		
-		houghFilter->Update(); 
+		houghFilter->Update();
 		
 		HoughTransformFilterType::CirclesListType circles;
 		circles = houghFilter->GetCircles( 4 );
 		typedef HoughTransformFilterType::CirclesListType CirclesListType;
 		CirclesListType::const_iterator itCircles = circles.begin();
 		
-		while( itCircles != circles.end() )
+		while ( itCircles != circles.end() )
 		{
 			float centerx,centery,radius;
 			centerx=(*itCircles)->GetObjectToParentTransform()->GetOffset()[0];
@@ -1789,38 +1870,38 @@ else
 			[aNewCircle release];
 			itCircles++;
 		}
+#endif
 	}
-	
-
 
 	return 0;
-	
-	
 }
+
 -(int)findFirstCenter:(unsigned char*)firstSlice
 {
 	unsigned char *tempSlice=(unsigned char*)malloc(imageSize*sizeof(char));
 	memcpy(tempSlice, firstSlice, imageSize*sizeof(char));
-	int i,j;
+	int j;
 	int lungupborder=0,lunglowborder=0;
-	for(i=0;i<imageSize;i++)
-		if(*(firstSlice+i))
+	for (int i=0; i<imageSize; i++)
+		if (*(firstSlice+i))
 		{
 			lungupborder=i/imageWidth;
 			break;
 		}
-	for(i=imageSize-1;i>=0;i--)
-		if(*(firstSlice+i))
+
+    for (int i=imageSize-1; i>=0; i--)
+		if (*(firstSlice+i))
 		{
 			lunglowborder=i/imageWidth;
 			break;
 		}	
-	memset(tempSlice, 0x00, lungupborder*imageWidth*sizeof(char));
+
+    memset(tempSlice, 0x00, lungupborder*imageWidth*sizeof(char));
 
 	//int buffersize=	imageWidth*imageHeight;
-	typedef  unsigned char   InputPixelType;
-	typedef  float  OutputPixelType;
-	const     unsigned int    Dimension = 2;
+	typedef unsigned char   InputPixelType;
+	typedef float  OutputPixelType;
+	const unsigned int Dimension = 2;
 	typedef itk::Image< InputPixelType,  2 >   InputImageType;
 	typedef itk::Image< OutputPixelType, 2 >   OutputImageType;
 	
@@ -1867,35 +1948,34 @@ else
 		NSLog(@"ITK distance map failed!");
 		return -1;
 	}
-	float* fsegresult=filter->GetOutput()->GetBufferPointer();	
 
-		
+    float* fsegresult=filter->GetOutput()->GetBufferPointer();
 	
-	if(lungupborder<imageHeight/3)
+	if (lungupborder<imageHeight/3)
 		lungupborder=imageHeight/3;
-	if(lunglowborder>imageHeight*2/3)
+	if (lunglowborder>imageHeight*2/3)
 		lunglowborder=imageHeight*2/3;
-	int centerx=imageWidth/2,centery=(lungupborder+lunglowborder)/2;
-	float maxdis=*(fsegresult+centery*imageWidth+centerx);
+
+    int centerx = imageWidth/2;
+    int centery = (lungupborder+lunglowborder)/2;
+	float maxdis = *(fsegresult + centery*imageWidth + centerx);
 	
-	for(j=lungupborder;j<lunglowborder;j++)
+	for (j=lungupborder;j<lunglowborder;j++)
 	{
 
-		for(i=imageWidth/3;i<imageWidth*2/3;i++)
+		for (int i=imageWidth/3; i<imageWidth*2/3; i++)
 		{
-			if(*(fsegresult+j*imageWidth+i)>maxdis)
+			if (*(fsegresult+j*imageWidth+i)>maxdis)
 			{
 				maxdis=*(fsegresult+j*imageWidth+i);
 				centerx=i;
 				centery=j;
 			}
-	
 		}
 	}
 	
 	free(tempSlice);
-	return centery*imageWidth+centerx;
-
+	return centery*imageWidth + centerx;
 }
 /*
 -(void)noiseRemoveUsingOpeningAtHighResolution:(unsigned char*)imgdata:(int)width:(int)height:(int)amount:(int)kernelsize
@@ -2084,35 +2164,40 @@ else
 	return 0;
 }
 */
-#pragma mark-
-#pragma mark 3 Vesselness Filter
-- (int) vesselnessFilter:(float *)inData:(float*)outData:(long*)dimension:(float*)imgspacing:(float)startscale:(float)endscale:(float)scalestep
+
+#pragma mark - 3 Vesselness Filter
+
+- (int) vesselnessFilter:(float *)inData
+                        :(float*)outData
+                        :(long*)dimension
+                        :(float*)imgspacing
+                        :(float)startscale
+                        :(float)endscale
+                        :(float)scalestep
 {
-	
 	imageWidth=dimension[0];
 	imageHeight=dimension[1];
 	imageAmount=dimension[2];
 	
 	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	
+	const unsigned int Dimension = 3;
+	typedef float InputPixelType;
+	typedef float OutputPixelType;
 	
-	const     unsigned int        Dimension       = 3;
-	typedef   float               InputPixelType;
-	typedef   float               OutputPixelType;
+	typedef itk::Image< InputPixelType, Dimension >   InputImageType;
+	typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
 	
-	typedef   itk::Image< InputPixelType, Dimension >   InputImageType;
-	typedef   itk::Image< OutputPixelType, Dimension >  OutputImageType;
+	typedef itk::HessianRecursiveGaussianImageFilter<InputImageType >  HessianFilterType;
 	
-	typedef   itk::HessianRecursiveGaussianImageFilter<InputImageType >  HessianFilterType;
-	
-	typedef   itk::Hessian3DToVesselnessMeasureImageFilter<OutputPixelType > VesselnessMeasureFilterType;
+	typedef itk::Hessian3DToVesselnessMeasureImageFilter<OutputPixelType > VesselnessMeasureFilterType;
 	
 	typedef itk::ImportImageFilter< InputPixelType, Dimension > ImportFilterType;
 	
 	ImportFilterType::Pointer importFilter;
-	
+#if 0 // @@@
 	itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
-	
+#endif
 	importFilter = ImportFilterType::New();
 	
 	ImportFilterType::SizeType itksize;
@@ -2143,7 +2228,6 @@ else
 	const bool importImageFilterWillOwnTheBuffer = false;
 	importFilter->SetImportPointer( inData, itksize[0] * itksize[1] * itksize[2], importImageFilterWillOwnTheBuffer);
 	NSLog(@"ITK Image allocated");
-	
 	
 	HessianFilterType::Pointer hessianFilter = HessianFilterType::New();
 	VesselnessMeasureFilterType::Pointer vesselnessFilter =	VesselnessMeasureFilterType::New();
@@ -2178,17 +2262,19 @@ else
 		[[NSNotificationCenter defaultCenter] postNotificationName: @"CMIVLeveIndicatorStep" object:self userInfo: nil];
 	}
 	
-	
 	return 0;
-	
-	
 }
-#pragma mark-
-#pragma mark 4 Cross Section Growing
--(int)crossectionGrowingWithinVolume:(float*)volumeData ToSeedVolume:(unsigned short*)seedData Dimension:(long*)dim Spacing:(float*)spacing StartPt:(float*)ptxyz Threshold:(float)threshold Diameter:(float)diameter
+
+#pragma mark - 4 Cross Section Growing
+
+-(int)crossectionGrowingWithinVolume:(float*)volumeData
+                        ToSeedVolume:(unsigned short*)seedData
+                           Dimension:(long*)dim
+                             Spacing:(float*)spacing
+                             StartPt:(float*)ptxyz
+                           Threshold:(float)threshold
+                            Diameter:(float)diameter
 {
-
-
 	float steplength=2.0;
 	int pnums=10.0/steplength;
 	int step=0;
@@ -2223,7 +2309,9 @@ else
 	vtkImageReslice *imageSlice = vtkImageReslice::New();
 	imageSlice->SetAutoCropOutput( true);
 	imageSlice->SetInformationInput( reader->GetOutput());
+#if 0 // @@@
 	imageSlice->SetInput( reader->GetOutput());
+#endif
 	imageSlice->SetOptimization( true);
 	imageSlice->SetResliceTransform( rotationTransform);
 	imageSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -2233,18 +2321,18 @@ else
 //	imageSlice->SetOutputSpacing(0.5,0.5,0.5);
 	imageSlice->SetBackgroundLevel( -1024);
 	
-	vtkImageData	*tempIm;
+	vtkImageData *tempIm;
 	int	imSliceExtent[ 6];
 	double imSliceSpacing[3],imSliceOrigin[3];
 	tempIm = imageSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imSliceExtent);
+#endif
 	tempIm->GetSpacing( imSliceSpacing);
 	tempIm->GetOrigin( imSliceOrigin);
-
-
 	
-	//creat buffer for levelset segmentation
+	// Create buffer for levelset segmentation
 	
 	int costMapWidth,costMapHeight;
 	vtkMatrix4x4* lastVTKTransformMatrix=nil;
@@ -2260,8 +2348,8 @@ else
 	float curscale=40;
 	const double initialDistance = 2.0;
 	
-	typedef   float           InternalPixelType;
-	const     unsigned int    Dimension = 2;
+	typedef float InternalPixelType;
+	const unsigned int Dimension = 2;
 	typedef itk::Image< InternalPixelType, Dimension >  InternalImageType;
 	typedef unsigned char OutputPixelType;
 	typedef itk::Image< OutputPixelType, Dimension > OutputImageType;	
@@ -2373,8 +2461,10 @@ else
 	do {
 		//get cross-section image
 		tempIm = imageSlice->GetOutput();
+#if 0 // @@@
 		tempIm->Update();
 		tempIm->GetWholeExtent( imSliceExtent);
+#endif
 		tempIm->GetSpacing( imSliceSpacing);
 		tempIm->GetOrigin( imSliceOrigin);
 		float *im = (float*) tempIm->GetScalarPointer();
@@ -2385,18 +2475,21 @@ else
 		height=imSliceExtent[ 3]-imSliceExtent[ 2]+1;
 		costMapOrigin[0]=(int)((-diameter/2-imSliceOrigin[0])/imSliceSpacing[0]);
 		costMapOrigin[1]=(int)((-diameter/2-imSliceOrigin[1])/imSliceSpacing[1]);
-		for(y=0;y<costMapHeight;y++)
-			for(x=0;x<costMapWidth;x++)
+		for (y=0;y<costMapHeight;y++)
+			for (x=0;x<costMapWidth;x++)
 			{
-				if(costMapOrigin[0]+x>=0 && costMapOrigin[0]+x<width && costMapOrigin[1]+y>=0 && costMapOrigin[1]+y<height)
-					*(costMap+y*costMapWidth+x)
-					=*(im+(y+costMapOrigin[1])*width+x+costMapOrigin[0]);
+				if (costMapOrigin[0]+x >= 0 &&
+                    costMapOrigin[0]+x < width &&
+                    costMapOrigin[1]+y >= 0 &&
+                    costMapOrigin[1]+y < height)
+                {
+                    *(costMap+y*costMapWidth+x) = *(im+(y+costMapOrigin[1]) * width + x + costMapOrigin[0]);
+                }
 				else
-					*(costMap+y*costMapWidth+x)=minValueInSeries;
+                {
+                    *(costMap+y*costMapWidth+x) = minValueInSeries;
+                }
 			}
-		
-
-		
 		
 		//get threshold levelset segmentation
 	
@@ -2617,8 +2710,8 @@ else
 		NSLog(@"try next step");
 		
 	} while (!reachAEndCondition);
-	int iii;
-	for(iii=postedIndicatorNotification;iii<3;iii++)
+
+	for (int iii=postedIndicatorNotification;iii<3;iii++)
 		[[NSNotificationCenter defaultCenter] postNotificationName: @"CMIVLeveIndicatorStep" object:self userInfo: nil];
 	//plant seed for ventricle and put barrier in between	
 	{
@@ -2628,19 +2721,21 @@ else
 			rotationTransform->Identity();
 			translateTransform->SetMatrix(lastVTKTransformMatrix);
 			tempIm = imageSlice->GetOutput();
+#if 0 // @@@
 			tempIm->Update();
 			tempIm->GetWholeExtent( imSliceExtent);
+#endif
 			tempIm->GetSpacing( imSliceSpacing);
 			tempIm->GetOrigin( imSliceOrigin);
 			segmentedRegion=lastSegmentedRegion;
-			costMapOrigin[0]=(int)((-diameter/2-imSliceOrigin[0])/imSliceSpacing[0]);
-			costMapOrigin[1]=(int)((-diameter/2-imSliceOrigin[1])/imSliceSpacing[1]);
-
+			costMapOrigin[0] = (int)((-diameter/2-imSliceOrigin[0])/imSliceSpacing[0]);
+			costMapOrigin[1] = (int)((-diameter/2-imSliceOrigin[1])/imSliceSpacing[1]);
 		}
-		int gravitycenter[2];
-		[self findingGravityCenterOfRegion:segmentedRegion:costMapWidth:costMapHeight:gravitycenter];
-		float maxradius = [self findingMaxDistanceToGravityCenterOfRegion:segmentedRegion:costMapWidth:costMapHeight:gravitycenter];
-		if(maxradius>0)
+
+        int gravitycenter[2];
+		[self findingGravityCenterOfRegion:segmentedRegion :costMapWidth :costMapHeight :gravitycenter];
+		float maxradius = [self findingMaxDistanceToGravityCenterOfRegion: segmentedRegion :costMapWidth :costMapHeight :gravitycenter];
+		if (maxradius>0)
 		{
 			// clean aorta seeds cross barrier
 			
@@ -2649,20 +2744,20 @@ else
 			int xx,yy,zz;	
 			float point[3];
 		
-			for(zz=0;zz<dim[2];zz++)
-				for(yy=0;yy<dim[1];yy++)
-					for(xx=0;xx<dim[0];xx++)
-						if(*(seedData+zz*imageSize+yy*imageWidth+xx))
+			for (zz=0;zz<dim[2];zz++)
+				for (yy=0;yy<dim[1];yy++)
+					for (xx=0;xx<dim[0];xx++)
+						if (*(seedData+zz*imageSize+yy*imageWidth+xx))
 						{
 							point[0]=xx*spacing[0];
 							point[1]=yy*spacing[1];
 							point[2]=zz*spacing[2];
 							inverseTransform->TransformPoint(point,point);
-							if(point[2]<maxSpacing)
+							if (point[2]<maxSpacing)
 								*(seedData+zz*imageSize+yy*imageWidth+xx)=0;
-							
 						}
-			//now plant the seeds
+
+            // Now plant the seeds
 			maxradius+=1/imSliceSpacing[0];
 			int i,j,height,width;
 			int x,y,z;
@@ -2778,7 +2873,9 @@ else
 	return 0;
 }
 
--(float)compareOverlappedRegion:(unsigned char*)firstRegion:(unsigned char*)secondRegion:(int)regionSize
+-(float)compareOverlappedRegion:(unsigned char*)firstRegion
+                               :(unsigned char*)secondRegion
+                               :(int)regionSize
 {
 	int i;
 	int matchCount=0;
@@ -2787,7 +2884,11 @@ else
 			matchCount++;
 	return (float)matchCount/(float)regionSize;
 }
--(float)findingIncirleCenterOfRegion:(unsigned char*)buffer:(int)width:(int)height:(int*)center
+
+-(float)findingIncirleCenterOfRegion:(unsigned char*)buffer
+                                    :(int)width
+                                    :(int)height
+                                    :(int*)center
 {
 	int buffersize=	width*height;
 	int i;
@@ -2830,9 +2931,6 @@ else
 	const bool importImageFilterWillOwnTheBuffer = false;
 	importFilter->SetImportPointer( buffer, itksize[0] * itksize[1], importImageFilterWillOwnTheBuffer);
 	
-	
-	
-	
 	typedef itk::DanielssonDistanceMapImageFilter<	InputImageType, OutputImageType >  FilterType;
 	FilterType::Pointer filter = FilterType::New();
 	
@@ -2851,22 +2949,26 @@ else
 	float* fsegresult=filter->GetOutput()->GetBufferPointer();	
 	int maxindex=0;
 	float maxdis=*fsegresult;
-	for(i=0;i<buffersize;i++)
-		if(*(fsegresult+i)>maxdis)
+	for (i=0;i<buffersize;i++)
+		if (*(fsegresult+i)>maxdis)
 		{
 			maxindex=i;
 			maxdis=*(fsegresult+i);
 		}
 	
-	for(i=0;i<buffersize;i++)
+	for (i=0;i<buffersize;i++)
 		buffer[i]=!buffer[i];
-	center[1]=maxindex/width;
+
+    center[1]=maxindex/width;
 	center[0]=maxindex-center[1]*width;
-	
 	
 	return maxdis;
 }
--(void)findingGravityCenterOfRegion:(unsigned char*)buffer:(int)width:(int)height:(int*)center
+
+-(void)findingGravityCenterOfRegion:(unsigned char*)buffer
+                                   :(int)width
+                                   :(int)height
+                                   :(int*)center
 {
 	int i,j;
 	float totalx=0,totaly=0,totalpoint=0;
@@ -2892,30 +2994,38 @@ else
 	}
 	return;
 }
--(float)findingMaxDistanceToGravityCenterOfRegion:(unsigned char*)buffer:(int)width:(int)height:(int*)center
+
+-(float)findingMaxDistanceToGravityCenterOfRegion:(unsigned char*)buffer
+                                                 :(int)width
+                                                 :(int)height
+                                                 :(int*)center
 {
-	int i,j;
 	float furthestLength=0,lentocenter;
-	for(j=0;j<height;j++)
-		for(i=0;i<width;i++)
+	for (int j=0;j<height;j++)
+		for (int i=0;i<width;i++)
 		{
-			if(*(buffer+j*width+i))
+			if (*(buffer+j*width+i))
 			{
 				lentocenter=sqrt((i-center[0])*(i-center[0])+(j-center[1])*(j-center[1]));
-				if(lentocenter>furthestLength)
+				if (lentocenter>furthestLength)
 					furthestLength=lentocenter;
 			}
 		}
-	return furthestLength;
-	
+
+    return furthestLength;
 }
--(int) LinearRegression:(double*)data :(int)rows:(double*)a:(double*)b
+
+-(int) LinearRegression:(double*)data
+                       :(int)rows
+                       :(double*)a
+                       :(double*)b
 {
 	int m;
 	double *p,Lxx=0,Lxy=0,xa=0,ya=0;
-	if(data==0||a==0||b==0||rows<1)
+	if (data==0||a==0||b==0||rows<1)
 		return -1;
-	for(p=data,m=0;m<rows;m++)
+
+    for (p=data,m=0;m<rows;m++)
 	{
 		xa+=*p++;
 		ya+=*p++;
@@ -2931,7 +3041,14 @@ else
 	*a=ya-*b*xa;
 	return 0;
 }
--(BOOL) detectAorticValve:(float*)inputimg:(unsigned char*)segmenresult:(int)width:(int)height:(int*)center:(float)radius:(double*)spacing
+
+-(BOOL) detectAorticValve:(float*)inputimg
+                         :(unsigned char*)segmenresult
+                         :(int)width
+                         :(int)height
+                         :(int*)center
+                         :(float)radius
+                         :(double*)spacing
 {
 	int i,j;
 	double totalsum=0,centersum=0;
@@ -3059,18 +3176,18 @@ else
 								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
 							else if((x+1)<=maxx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
 								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							
-							
-						}	
-						
-						
+						}
 					}
 	}
 }
 
-#pragma mark-
-#pragma mark 5 smoothing Filter
-- (int) smoothingFilter:(float *)inData:(float*)outData:(long*)dimension:(float*)imgspacing:(int)iteration
+#pragma mark - 5 smoothing Filter
+
+- (int) smoothingFilter:(float *)inData
+                       :(float*)outData
+                       :(long*)dimension
+                       :(float*)imgspacing
+                       :(int)iteration
 {
 	
 	imageWidth=dimension[0];
@@ -3079,20 +3196,19 @@ else
 	
 	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	
+	const unsigned int Dimension = 3;
+	typedef float InputPixelType;
+	typedef float OutputPixelType;
 	
-	const     unsigned int        Dimension       = 3;
-	typedef   float               InputPixelType;
-	typedef   float               OutputPixelType;
-	
-	typedef   itk::Image< InputPixelType, Dimension >   InputImageType;
-	typedef   itk::Image< OutputPixelType, Dimension >  OutputImageType;
+	typedef itk::Image< InputPixelType, Dimension >   InputImageType;
+	typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
 	
 	typedef itk::ImportImageFilter< InputPixelType, Dimension > ImportFilterType;
 	
 	ImportFilterType::Pointer importFilter;
-	
+#if 0 // @@@
 	itk::MultiThreader::SetGlobalDefaultNumberOfThreads( MPProcessors());
-	
+#endif
 	importFilter = ImportFilterType::New();
 	
 	ImportFilterType::SizeType itksize;

@@ -31,39 +31,45 @@
 #import "CMIV3DPoint.h"
 #import "CMIV_AutoSeeding.h"
 #import "CMIVSegmentCore.h"
+#if 0 // @@@
 #import "QuicktimeExport.h"
+#endif
+
 @implementation CMIVContrastPreview
 
 - (IBAction)chooseASeed:(id)sender
 {
 	[mprView setCurrentTool:tPlain];
 	[resultView setCurrentTool:tWL];
-	
 }
 
 - (IBAction)chooseATool:(id)sender
 {
-	int tag=[sender tag];
-	if(tag<4&& tag>=0)
+    ToolMode tag = (ToolMode)[sender tag];
+	if (tag<tNext && tag>=0)
 	{
 		[mprView setCurrentTool:tag];
 		[resultView setCurrentTool:tag];
+#if 0 // @@@
 		[vrView setCurrentTool: tag];
-		
+#endif
 	}
-	else if(tag==4)
+	else if (tag==tNext)
 	{
 		[mprView setCurrentTool:tPlain];
 		[resultView setCurrentTool:tWL];
+#if 0 // @@@
 		[vrView setCurrentTool: t3DRotate];
+#endif
 	}
-	else if(tag==5)
+	else if (tag==5)
 	{
 		[mprView setCurrentTool:t2DPoint];
 		[resultView setCurrentTool:tWL];
+#if 0 // @@@
 		[vrView setCurrentTool: t3DRotate];
+#endif
 	}
-	
 }
 
 - (IBAction)setBrushWidth:(id)sender
@@ -177,40 +183,41 @@
 	else
 		mprViewSlice->SetInterpolationModeToNearestNeighbor();
 	
-	
 	tempIm = mprViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( mprViewSpace);
 	tempIm->GetOrigin( mprViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :mprViewSpace[0] :mprViewSpace[1] :mprViewOrigin[0] :mprViewOrigin[1] :mprViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :mprViewSpace[0] :mprViewSpace[1] :mprViewOrigin[0] :mprViewOrigin[1] :mprViewOrigin[2]];
 	[mypix copySUVfrom: firstPix];	
 	
 	//creat roi list
-	double	 space[3], origin[3];
-	if(newSeedsBuffer)
+	double space[3], origin[3];
+	if (newSeedsBuffer)
 	{
 		tempROIIm = mprViewROISlice->GetOutput();
+#if 0 // @@@
 		tempROIIm->Update();
 		tempROIIm->GetWholeExtent( imExtent);
+#endif
 		tempROIIm->GetSpacing( space);
 		tempROIIm->GetOrigin( origin);	
 		
 		isRemoveROIBySelf=1;
 		//to avoid those ROIs remove seeds when autorelease pool
 
-		unsigned i;
 		ROI* tempROI;
 		NSString* emptystr=@"";
-		for(i=0;i<[[MPRROIList objectAtIndex: 0] count];i++)
+		for (unsigned i=0; i<[[MPRROIList objectAtIndex: 0] count]; i++)
 		{
-			tempROI=[[MPRROIList objectAtIndex: 0] objectAtIndex: i];
+			tempROI = [[MPRROIList objectAtIndex: 0] objectAtIndex: i];
 			[tempROI setComments:emptystr];
 			//[tempROI setPix:nil];
 		}
-
 		
 		[[MPRROIList objectAtIndex: 0] removeAllObjects];
 		isRemoveROIBySelf=0;
@@ -218,32 +225,42 @@
 		[self creatROIListFromSlices:[MPRROIList objectAtIndex: 0] :imExtent[ 1]-imExtent[ 0]+1  :imExtent[ 3]-imExtent[ 2]+1 :imROI : space[0]:space[1]:origin[0]:origin[1]];
 	}
 	
-	if([endPointsArray count])
-			[self reCaculateCPRPath:[MPRROIList objectAtIndex: 0] :imExtent[ 1]-imExtent[ 0]+1  :imExtent[ 3]-imExtent[ 2]+1 :space[0]:space[1]:space[2]:origin[0]:origin[1]:origin[3]];
+	if ([endPointsArray count])
+			[self reCaculateCPRPath:[MPRROIList objectAtIndex: 0]
+                                   :imExtent[ 1]-imExtent[ 0]+1
+                                   :imExtent[ 3]-imExtent[ 2]+1
+                                   :space[0]
+                                   :space[1]
+                                   :space[2]
+                                   :origin[0]
+                                   :origin[1]
+                                   :origin[3]];
 	[MPRPixList removeAllObjects];
 	[MPRPixList addObject: mypix];
 	[mypix release];
 	//to cheat DCMView not reset current roi;
 	
-	[mprView setIndex: 0 ];
+	[mprView setIndex: 0];
 	
-	if([crossShowButton state]== NSOnState)
+	if ([crossShowButton state] == NSControlStateValueOn)
 	{
-		float crossX,crossY;
-		crossX=-mprViewOrigin[0]/mprViewSpace[0];
-		crossY=mprViewOrigin[1]/mprViewSpace[1];
-		if(crossX<0)
+        float crossX=-mprViewOrigin[0]/mprViewSpace[0];
+        float crossY=mprViewOrigin[1]/mprViewSpace[1];
+		
+        if (crossX<0)
 			crossX=0;
-		else if(crossX>imExtent[ 1]-imExtent[ 0])
+		else if (crossX>imExtent[ 1]-imExtent[ 0])
 			crossX=imExtent[ 1]-imExtent[ 0];
-		if(crossY>0)
+
+        if (crossY>0)
 			crossY=0;
-		else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
+		else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
-		[mprView setCrossCoordinates:crossX:crossY :YES];
+
+        [mprView setCrossCoordinates:crossX:crossY :YES];
 	}
-	
 }
+
 - (void) updateResultView
 {
 	int index= [resultPageSlider intValue];
@@ -251,10 +268,10 @@
 	
 	[self resultViewUpdateROI:index];
 	
-	DCMPix	*curPix = [[originalViewController pixList] objectAtIndex: index];
+	DCMPix *curPix = [[originalViewController pixList] objectAtIndex: index];
 	
-	DCMPix	*copyPix = [curPix copy];
-	if(copyPix)
+	DCMPix *copyPix = [curPix copy];
+	if (copyPix)
 	{
 		[resultPixList removeAllObjects];
 		[resultPixList addObject: copyPix];
@@ -466,31 +483,33 @@
 	
 	[self autorelease];
 }
+
 -(void) dealloc
 {
-	
 	[super dealloc];
+#if 0 // @@@
 	[vrView prepareForRelease];
+#endif
 }
+
 - (IBAction)onCancel:(id)sender
 {
 	CMIV_CTA_TOOLS* tempparent=parent;
-	int tag=[sender tag];
+	int tag = [sender tag];
 	[[self window] performClose:sender];
-	if(tag==2)
+	if (tag==2)
 	{
 		[tempparent gotoStepNo:4];
 	}
-	
-	
-	
 }
-- (id)showPanelAsWizard:(ViewerController *) vc:(	CMIV_CTA_TOOLS*) owner
+
+- (id)showPanelAsWizard:(ViewerController *) vc
+                       :(CMIV_CTA_TOOLS*) owner
 {
 	float *indata,*outdata;
 	unsigned char* colordata,*directdata;
-	parent=owner;
-	isInWizardMode=YES;
+	parent = owner;
+	isInWizardMode = YES;
 	choosenSeedsArray    =[[parent dataOfWizard] objectForKey:@"SeedList"];
 	showSeedsArray       =[[parent dataOfWizard] objectForKey:@"ShownColorList"];
 	newSeedsROIList      =[[parent dataOfWizard] objectForKey:@"ROIList"];
@@ -532,8 +551,9 @@
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"SegPreview"];
+#if 0 // @@@
 	[[self window] setDelegate:self];
-	
+#endif
 	//prepare images and VRT view
 	int err=0;
 	originalViewController=vc;	
@@ -550,8 +570,7 @@
 	directionData = direData;
 	
 	MPRFileList =[originalViewController fileList ];
-	DCMPix* curPix;	
-	curPix = [[originalViewController pixList] objectAtIndex: 0];
+	DCMPix* curPix = [[originalViewController pixList] objectAtIndex: 0];
 	imageWidth = [curPix pwidth];
 	imageHeight = [curPix pheight];
 	imageAmount = [[originalViewController pixList] count];	
@@ -562,10 +581,8 @@
 	err=[self initViews];
 	interpolationMode=1;
 	
-	if(err!=1)
+	if (err!=1)
 	{
-		
-		
 		[self updateMPRView];
 		[self resetMPRSliders];
 		[self setBrushWidth: brushWidthSlider];
@@ -582,7 +599,6 @@
 		id waitWindow = [originalViewController startWaitWindow:@"processing"];	
 		//[window setWindowController: self];
 		
-		
 		[[self window] setHorizontalSlider:mprYRotateSlider];
 		[[self window] setVerticalSlider:mprXRotateSlider];
 		[[self window] setTranlateSlider:mprPageSlider];
@@ -595,7 +611,7 @@
 		roiShowNameOnly=[[NSUserDefaults standardUserDefaults] boolForKey: @"ROITEXTNAMEONLY"];
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey: @"ROITEXTNAMEONLY"];
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ROITEXTIFSELECTED"];
-		if(!segmentNeighborhood)
+		if (!segmentNeighborhood)
 			segmentNeighborhood=26;
 		
 		NSNotificationCenter *nc;
@@ -607,16 +623,20 @@
 		[nc	addObserver: self selector: @selector(changeWLWW:) name: @"changeWLWW" object: nil];	
 		[nc	addObserver: self selector: @selector(crossMove:) name: @"crossMove" object: nil];	
 		[nc	addObserver: self selector: @selector(Display3DPoint:) name: @"Display3DPoint" object: nil];
+#if 0 // @@@
 		[seedList setDataSource: self];
+#endif
 
-		//hide other segments
-		if(err!=2)
+        //hide other segments
+		if (err!=2)
 		{
+#if 0 // @@@
 			osirixOffset=[vrView offset] ;
 			osirixValueFactor=[vrView valueFactor] ;
 			renderOfVRView = [vrView renderer];
 			
 			volumeOfVRView = (vtkVolume * )[vrView volume];
+#endif
 			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
 			//if( volumeMapper) volumeMapper->SetMinimumImageSampleDistance( 2.0);
 			volumeImageData=(vtkImageData *)volumeMapper->GetInput();
@@ -624,17 +644,16 @@
 			[self updateVRView];
 		}
 		
-		if(parent.ifVesselEnhanced==YES)
+		if (parent.ifVesselEnhanced)
 		{
 			[vesselEnhancedNotice setHidden:NO];
 			NSColor *color = [NSColor redColor];
-			
 			[vesselEnhancedNotice setTextColor:color];
 		}
 		else
 			[vesselEnhancedNotice setHidden:YES];
-		[originalViewController endWaitWindow: waitWindow];	
-		
+
+        [originalViewController endWaitWindow: waitWindow];
 	}
 	
 	endPointsArray=[[NSMutableArray alloc] initWithCapacity:0];
@@ -647,28 +666,40 @@
 	NSPoint apoint;
 	apoint.x=1;
 	apoint.y=1;
-	NSEvent* virtualMouseDownEvent=[NSEvent mouseEventWithType:NSRightMouseDown location:apoint
-												 modifierFlags:nil timestamp:GetCurrentEventTime() windowNumber: 0 context:context eventNumber: nil clickCount:1 pressure:nil];
-	NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType:NSRightMouseUp location:apoint
-												 modifierFlags:nil timestamp:GetCurrentEventTime() windowNumber: 0 context:context eventNumber: nil clickCount:1 pressure:nil];
+#if 0 // @@@
+    NSEvent* virtualMouseDownEvent=[NSEvent mouseEventWithType: NSRightMouseDown
+                                                      location: apoint
+                                                 modifierFlags: nil
+                                                     timestamp: GetCurrentEventTime()
+                                                  windowNumber: 0
+                                                       context: context
+                                                   eventNumber: nil
+                                                    clickCount: 1
+                                                      pressure: nil];
+
+    NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType:NSRightMouseUp
+                                                      location:apoint
+												 modifierFlags:nil
+                                                     timestamp:GetCurrentEventTime()
+                                                  windowNumber: 0
+                                                       context:context
+                                                   eventNumber: nil
+                                                    clickCount:1
+                                                      pressure:nil];
 	[mprView mouseDown:virtualMouseDownEvent];
 	[mprView mouseUp:virtualMouseUpEvent];
+#endif
 	//mistery bug above
 	
-	
 	return self;
-	
 }
 
 - (int) initViews
 {
-	DCMPix* curPix;	
+	DCMPix* curPix;
+	NSMutableArray *pixList = [originalViewController pixList];
 	
-	
-	long                size;
-	NSMutableArray				*pixList = [originalViewController pixList];
-	
-	size = sizeof(short unsigned int) * imageWidth * imageHeight * imageAmount;
+	long size = sizeof(short unsigned int) * imageWidth * imageHeight * imageAmount;
 	if( !newSeedsBuffer)
 	{
 		newSeedsBuffer = (unsigned short int*) malloc( size);
@@ -747,7 +778,9 @@
 	mprViewSlice = vtkImageReslice::New();
 	mprViewSlice->SetAutoCropOutput( true);
 	mprViewSlice->SetInformationInput( reader->GetOutput());
+#if 0 // @@@
 	mprViewSlice->SetInput( reader->GetOutput());
+#endif
 	mprViewSlice->SetOptimization( true);
 	mprViewSlice->SetResliceTransform( mprViewUserTransform);
 	mprViewSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -758,7 +791,9 @@
 	mprViewROISlice= vtkImageReslice::New();
 	mprViewROISlice->SetAutoCropOutput( true);
 	mprViewROISlice->SetInformationInput( roiReader->GetOutput());
+#if 0 // @@@
 	mprViewROISlice->SetInput( roiReader->GetOutput());
+#endif
 	mprViewROISlice->SetOptimization( true);
 	mprViewROISlice->SetResliceTransform( mprViewUserTransform);
 	mprViewROISlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -766,12 +801,14 @@
 	mprViewROISlice->SetOutputDimensionality( 2);
 	mprViewROISlice->SetBackgroundLevel( -1024);	
 	
-	vtkImageData	*tempIm;
-	int				imExtent[ 6];
-	double		space[ 3], origin[ 3];
+	vtkImageData *tempIm;
+	int imExtent[ 6];
+	double space[ 3], origin[ 3];
 	tempIm = mprViewSlice->GetOutput();
+#if 0 // @@@
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
+#endif
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
 	float iwl, iww;
@@ -861,96 +898,94 @@
 	
 	[resultView setOrigin: NSMakePoint(0,0)];
 	[resultView setCurrentTool:tWL];
-	
-	
-	
-	
+
+    int err = 0;
+#if 0 // @@@
 	[vrView setRotate: NO];
-	int err=[vrView setPixSource:pixList :inputData];
-	NSString	*str =  @"/" ;
+    err = [vrView setPixSource:pixList :inputData];
+#endif
+	NSString *str = @"/" ;
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
-	
+#if 0 // @@@
 	[vrView set3DStateDictionary:dict];
+#endif
 	
-	if(err)
+	if (err)
 		[tab2D3DView removeTabViewItem:[tab2D3DView tabViewItemAtIndex:1]];
 	else
 	{
+#if 0 // @@@
 		[vrView setRotate: NO];
 		[vrView setRotate: NO];
 		[vrView setMode: 1];
-		NSDictionary		*aOpacity;
-		NSArray				*array;
+#endif
 		
-		
-		aOpacity = [[[NSUserDefaults standardUserDefaults] dictionaryForKey: @"OPACITY"] objectForKey: NSLocalizedString(@"Logarithmic Inverse Table", nil)];
-		if( aOpacity)
+        NSDictionary *aOpacity = [[[NSUserDefaults standardUserDefaults] dictionaryForKey: @"OPACITY"] objectForKey: NSLocalizedString(@"Logarithmic Inverse Table", nil)];
+		if (aOpacity)
 		{
-			array = [aOpacity objectForKey:@"Points"];
-			
+            NSArray *array = [aOpacity objectForKey:@"Points"];
+#if 0 // @@@
 			[vrView setOpacity:array];
+#endif
 		}
 	}
-	
-	
-	
-	
 
-	resultPrivateROIList=[[NSMutableArray alloc] initWithCapacity: 0];
-	unsigned ii;
-	for(ii=0;ii<[choosenSeedsArray count];ii++)
-	{
+	resultPrivateROIList = [[NSMutableArray alloc] initWithCapacity: 0];
+	for (unsigned ii=0; ii<[choosenSeedsArray count]; ii++)
 		[self creatNewResultROI:ii];
-	}
-	[self resultViewUpdateROI:imageAmount/2 ];	
-	[resultView  scaleToFit];
-	if(err)
+
+    [self resultViewUpdateROI:imageAmount/2];
+	[resultView scaleToFit];
+	if (err)
 		return 2;
-	else
-		return 0;
+
+    return 0;
 }
+
 - (void)creatNewResultROI:(int)index
 {
 	ROI* tempROI;
-	RGBColor	color;
+	RGBColor color;
 	NSString *roiName;
-	unsigned char *textureBuffer=(unsigned char *) malloc(sizeof(unsigned char)*imageSize);
+	unsigned char *textureBuffer = (unsigned char *) malloc(sizeof(unsigned char)*imageSize);
 	*textureBuffer=0xff;
 	*(textureBuffer+imageSize-1)=0xff;
 	
 	tempROI = [choosenSeedsArray objectAtIndex:index];
 	roiName = [tempROI name];
 	
-
-	color= [tempROI rgbcolor];
+	color = [tempROI rgbcolor];
 	
-	DCMPix* curPix;	
-	curPix = [resultPixList objectAtIndex: 0];
+	DCMPix* curPix = [resultPixList objectAtIndex: 0];
 	
-	ROI *newROI=[[ROI alloc] initWithTexture:textureBuffer textWidth:imageWidth textHeight:imageHeight textName:roiName positionX:0 positionY:0 spacingX:[curPix pixelSpacingX] spacingY:[curPix pixelSpacingY]  imageOrigin:NSMakePoint( [curPix originX], [curPix originY])];
+	ROI *newROI = [[ROI alloc] initWithTexture:textureBuffer
+                                     textWidth:imageWidth
+                                    textHeight:imageHeight
+                                      textName:roiName
+                                     positionX:0
+                                     positionY:0
+                                      spacingX:[curPix pixelSpacingX]
+                                      spacingY:[curPix pixelSpacingY]
+                                   imageOrigin:NSMakePoint( [curPix originX], [curPix originY])];
 	
 	//	[newROI reduceTextureIfPossible];
-	
-	
-	
+
 	[newROI setColor:color];
 	
 	[resultPrivateROIList insertObject:newROI atIndex:index];
 	[newROI release];
 	
 	free(textureBuffer);
-	
 }
 
 - (void)resultViewUpdateROI:(int)index
 {
-	if(index>=imageAmount)
+	if (index>=imageAmount)
 		return;
-	if(resultViewROIMode==1)
+
+    if (resultViewROIMode==1)
 	{
-		
-		
 		ROI* tempROI;
 		unsigned int i;
 		int colorIndex,j;
@@ -961,7 +996,7 @@
 		
 		unsigned char *textureBuffer;
 		
-		for(i=0;i< [showSeedsArray count];i++)
+		for (i=0;i< [showSeedsArray count];i++)
 		{
 			colorIndex = [[showSeedsArray objectAtIndex:i] intValue];
 			tempROI = [resultPrivateROIList objectAtIndex: colorIndex-1];
@@ -1543,68 +1578,73 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"] == YES)
 	{
 		float oX,oY;
-		vtkImageData	*tempIm;
-		double		space[ 3], origin[ 3];
+		vtkImageData *tempIm;
+		double space[ 3], origin[ 3];
 		tempIm = mprViewSlice->GetOutput();
+#if 0 // @@@
 		tempIm->Update();
+#endif
 		tempIm->GetSpacing( space);
 		tempIm->GetOrigin( origin);	
 		
 		[mprView getCrossCoordinates: &oX  :&oY];
-		oY=-oY;
-		oX=oX*space[0]+origin[0];
-		oY=oY*space[1]+origin[1];
-		if(!(oX==0&&oY==0))
+		oY = -oY;
+		oX = oX*space[0]+origin[0];
+		oY = oY*space[1]+origin[1];
+		if (!(oX==0 && oY==0))
 		{
 			mprViewUserTransform->Translate(oX,oY,0);
-			
-			
 		}
 	}
-	if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"] == YES)
+
+    if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 	{	
 		float angle= [mprView angle];
-		if(angle!=0)
+		if (angle!=0)
 			[self rotateZMPRView:angle];
 		else
 			[self updateMPRView];
-		//[self rotateZMPRView:angle];
+
+        //[self rotateZMPRView:angle];
 		[mprView setMPRAngle: 0.0];
 	}
-	
 }
+
 - (IBAction)setConnectnessMapThreshold:(id)sender
 {
 	[thresholdForConnectedness setIntValue:[thresholdSlider intValue]];
 	[self updateResultView];
 }
+
 - (IBAction)exportResults:(id)sender
 {
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];		
 	int tag=[sender tag];
-	if(tag==1)
+	if (tag==1)
 	{
 		[self exportUnderMaskToImages];
 	}
-	else if(tag==2)
+	else if (tag==2)
 	{
 		[self exportToROIs];
 	}
-	else if(tag==3)
+	else if (tag==3)
 	{
 		[self exportToPreResult];
 	}
-	else if(tag==4)
+	else if (tag==4)
 	{
 		[self exportToSeparateSeries];
 	}
-	[originalViewController endWaitWindow: waitWindow];
+
+    [originalViewController endWaitWindow: waitWindow];
 }
+
 - (void) exportUnderMaskToImages
 {
 	
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
 	
 	long size=sizeof(float)*imageWidth*imageHeight*imageAmount;
 	float* volumeData=(float*)malloc(size);
@@ -1692,15 +1732,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					   :newDcmList
 					   :newData];  
 		
-		NSString* tempstr=@"Results of ;
-		unsigned int i;
+		NSString* tempstr=@"Results of ";
 		int colorIndex;
-		for(i=0;i< [showSeedsArray count];i++)
+		for(unsigned int i=0;i< [showSeedsArray count];i++)
 		{
 			colorIndex = [[showSeedsArray objectAtIndex:i] intValue];
 			tempstr=[tempstr stringByAppendingFormat:@" %@",[[choosenSeedsArray objectAtIndex:colorIndex-1] name]];
 		}
-		[new2DViewer checkEverythingLoaded];
+
+        [new2DViewer checkEverythingLoaded];
 		[[new2DViewer window] setTitle:tempstr];
 		NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
 		if(!temparray)
@@ -1708,7 +1748,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			temparray=[NSMutableArray arrayWithCapacity:0];
 			[[parent dataOfWizard] setObject:temparray forKey:@"VCList"];
 		}
-		[temparray addObject:new2DViewer];
+		
+        [temparray addObject:new2DViewer];
 		temparray=[[parent dataOfWizard] objectForKey: @"VCTitleList"];
 		if(!temparray)
 		{
@@ -1717,15 +1758,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 		
 		[temparray addObject:tempstr];
-		
-		
 	}
-	[[self window] makeKeyAndOrderFront:parent];
+
+    [[self window] makeKeyAndOrderFront:parent];
 }
+
 - (void) exportToROIs
 {
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
 	
 	long size=sizeof(float)*imageWidth*imageHeight*imageAmount;
 	float* volumeData=(float*)malloc(size);
@@ -1930,47 +1971,48 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[self updateMPRPageSlider];				
 	}	
 }
+
 - (IBAction)changMPRViewDirection:(id)sender
 {
-	if(!centerIsLocked)
+	if (!centerIsLocked)
 	{
 		float origin[3]={0,0,0};
 		mprViewUserTransform->TransformPoint(origin,origin);
 		mprViewBasicTransform->Identity();
 		mprViewBasicTransform->Translate( origin[0], origin[1], origin[2] );
-		
 	}
 	
 	mprViewUserTransform->Identity();	
 	mprViewUserTransform->RotateX(-90);
-	if([sender tag]==0)
+	if ([sender tag]==0)
 	{
 		
 	}
-	else if([sender tag]==1)
+	else if ([sender tag]==1)
 	{
 		mprViewUserTransform->RotateY(180);
 	}
-	else if([sender tag]==2)
+	else if ([sender tag]==2)
 	{
 		mprViewUserTransform->RotateX(-90);
 	}
-	else if([sender tag]==3)
+	else if ([sender tag]==3)
 	{
 		mprViewUserTransform->RotateX(90);
 	}
-	else if([sender tag]==4)
+	else if ([sender tag]==4)
 	{
 		mprViewUserTransform->RotateY(90);
 	}
-	else if([sender tag]==5)
+	else if ([sender tag]==5)
 	{
 		mprViewUserTransform->RotateY(-90);
 	}
-	[self updateMPRView];
+
+    [self updateMPRView];
 	[self resetMPRSliders];
-	
 }
+
 - (IBAction)resetMPRView:(id)sender
 {
 	mprViewBasicTransform->Identity();
@@ -1992,7 +2034,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)showCross:(id)sender
 {
-	if([sender state]== NSOnState)
+	if ([sender state] == NSControlStateValueOn)
 	{
 		mprViewUserTransform->Translate(0,0,0.5);
 		mprViewUserTransform->Translate(0,0,-0.5);
@@ -2070,13 +2112,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else
 		[self createUnsignedShortVolumDataUnderMask:volumeDataOfVR];
 
-
+#if 0 // @@@
 	float ww,wl;
 	[vrView getWLWW: &wl :&ww];
 	[vrView setWLWW: wl : ww];
-	
+#endif
 }
-
 
 - (void) Display3DPoint:(NSNotification*) note
 {
@@ -2157,7 +2198,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)loadAEndPointForCenterline:(id)sender
 {
-	NSOpenPanel         *oPanel = [NSOpenPanel openPanel];
+	NSOpenPanel *oPanel = [NSOpenPanel openPanel];
     [oPanel setAllowsMultipleSelection:NO];
     [oPanel setCanChooseDirectories:NO];
     
@@ -2174,14 +2215,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		y=[[nums objectAtIndex:1] floatValue];
 		z=[[nums objectAtIndex:2] floatValue];	
 	}
-	mprViewBasicTransform->Identity();
+
+    mprViewBasicTransform->Identity();
 	mprViewBasicTransform->Translate( x, y, z );
 	mprViewUserTransform->Identity ();
 	
 	x=(int)(x/xSpacing);
 	y=(int)(y/ySpacing);
 	z=(int)(z/zSpacing);
-	CMIV3DPoint* anewpoint=[[CMIV3DPoint alloc] init];
+	CMIV3DPoint* anewpoint = [[CMIV3DPoint alloc] init];
 	[anewpoint setX:x];
 	[anewpoint setY:y];
 	[anewpoint setZ:z];
@@ -2205,15 +2247,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[resultPageSlider setFloatValue:z];
 
 	[self pageResultView:resultPageSlider];
-	
-	
 }
+
 - (void) updateAllCenterlines
 {
 	return;
-	if([endPointsArray count]<1)
+
+    if ([endPointsArray count]<1)
 		return;
-	[manualCenterlinesArray removeAllObjects];
+
+    [manualCenterlinesArray removeAllObjects];
 	[manualCenterlineROIsArray removeAllObjects];
 	CMIVSegmentCore *segmentCoreFunc = [[CMIVSegmentCore alloc] init];
 	float spacing[3];
@@ -2221,8 +2264,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	spacing[1]=ySpacing;
 	spacing[2]=zSpacing;
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
-	unsigned i;
-	for(i=0;i<[endPointsArray count];i++)
+
+	for(unsigned i=0;i<[endPointsArray count];i++)
 	{
 		NSMutableArray* apath=[NSMutableArray arrayWithCapacity:0];
 		CMIV3DPoint* apoint=[endPointsArray objectAtIndex:i];
@@ -2238,13 +2281,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		[segmentCoreFunc dungbeetleSearching:apath :inputData Pointer:directionData];
 
-		
 		[manualCenterlinesArray addObject:apath];
-		ROI* temproi;
-		
-	
+			
 		DCMPix * curImage= [MPRPixList objectAtIndex:0];
-		temproi=[[ROI alloc] initWithType: tOPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+        ROI* temproi = [[ROI alloc] initWithType: tOpenPolygon
+                                           :[curImage pixelSpacingX]
+                                           :[curImage pixelSpacingY]
+                                           : NSMakePoint( [curImage originX], [curImage originY])];
 		NSString *roiName = @"Centerline";
 		RGBColor color;
 		color.red = 65535;
@@ -2256,30 +2299,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[temproi setThickness:1.0];
 		NSMutableArray* points2D=[temproi points];
 		[points2D removeAllObjects];
-		unsigned j;
-		for(j=0;j<[apath count];j++)
+
+		for (unsigned j=0; j<[apath count]; j++)
 		{
 			MyPoint *mypt = [[MyPoint alloc] initWithPoint: NSMakePoint(0,0)];
-			
 			[points2D addObject: mypt];
-			
 			[mypt release];
-			
-			
 		}
-		[temproi setROIMode:ROI_sleep];
-		
+
+        [temproi setROIMode:ROI_sleep];
 		[manualCenterlineROIsArray addObject:temproi];
-		
 		[temproi release];
-		
-		
 	}
+    
 	[self convertCenterlinesToVTKCoordinate:manualCenterlinesArray];
 	[[NSUserDefaults standardUserDefaults] setFloat:defaultROIThickness forKey:@"ROIThickness"];
 	[segmentCoreFunc release];
-	
 }
+
 - (void) convertCenterlinesToVTKCoordinate:(NSArray*)centerlines
 {
 	CMIV3DPoint* temppoint;
@@ -2327,8 +2364,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)createSkeleton:(id)sender
 {
-	
-	
 	NSLog( @"start step 4");
 	//get parameters
 	skeletonParaLengthThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterLengthThreshold"];
@@ -2340,21 +2375,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float  pathWeightLength,lengthThreshold,weightThreshold;
 	weightThreshold=skeletonParaEndHuThreshold ;
 	lengthThreshold=skeletonParaLengthThreshold;
-	if(lengthThreshold<5.0)
+	if (lengthThreshold<5.0)
 		lengthThreshold=5.0;
-	lengthThreshold/=minSpacing;
+
+    lengthThreshold/=minSpacing;
 	
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
-	if([saveBeforeSkeletonization state]== NSOnState)
+	if ([saveBeforeSkeletonization state] == NSControlStateValueOn)
 		[self saveCurrentSeeds];
 		//[self saveNewPlantedSeeds];
 	
-	if(![self prepareForSkeletonizatin])
+	if (![self prepareForSkeletonizatin])
 	{	
 		NSRunAlertPanel(NSLocalizedString(@"no root seeds are found, try seed planting again", nil), NSLocalizedString(@"no root seeds", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		[originalViewController endWaitWindow: waitWindow];
-		
-		
 		return;
 	}
 	
@@ -2365,51 +2399,61 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	spacing[0]=xSpacing;
 	spacing[1]=ySpacing;
 	spacing[2]=zSpacing;
-	
 
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 	//[parent loadVesselnessMap:inputData];
-	if(segmentNeighborhood==6)
+	if (segmentNeighborhood == 6)
 		[segmentCoreFunc startShortestPathSearchAsFloatWith6Neighborhood:inputData Out:outputData Direction: directionData];
 	else 
 		[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
-	unsigned short* pdismap=nil;
-	if([[tab2D3DView tabViewItems] count]>1)  
+
+    unsigned short* pdismap=nil;
+	if ([[tab2D3DView tabViewItems] count]>1)
 		pdismap = volumeDataOfVR;
 	else
 		pdismap = (unsigned short*)malloc(imageSize*imageAmount*sizeof(unsigned short));
-	if(!pdismap)
+	
+    if (!pdismap)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM to build distance map", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"no enough RAM to build distance map", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
-	//relase some space for next step
-	if(parentColorData)    								
-		[parentColorData  release];
+
+    //relase some space for next step
+	if (parentColorData)
+		[parentColorData release];
 	else
 		free(colorData);
-	colorData=nil;
+
+    colorData=nil;
 	parentColorData=nil;
 	if(parentSeedData )    							
-		[parentSeedData      release];
+		[parentSeedData release];
 	else
 		free(newSeedsBuffer);
-	newSeedsBuffer=nil;
+
+    newSeedsBuffer=nil;
 	parentSeedData=nil;
 	float origin[3];
 	long dimension[3];
 	origin[0]=vtkOriginalX;origin[1]=vtkOriginalY;origin[2]=vtkOriginalZ;
 	spacing[0]=xSpacing;spacing[1]=ySpacing;spacing[2]=zSpacing;
 	dimension[0]=imageWidth;dimension[1]=imageHeight;dimension[2]=imageAmount;
-	if(parent.ifVesselEnhanced==NO && ![parent loadVesselnessMap:outputData:origin:spacing:dimension])
+	if (parent.ifVesselEnhanced==NO &&
+        ![parent loadVesselnessMap:outputData :origin :spacing :dimension])
 	{
 		NSLog( @"creating low resolution vesselness map");
 		CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
-		int err=[autoSeedingController createCoronaryVesselnessMap: originalViewController:  parent:1.5:4.0:0.5:1.5:maxHuofRootSeeds:NO];
-		if(err)
+		int err = [autoSeedingController createCoronaryVesselnessMap: originalViewController
+                                                                    : parent
+                                                                    : 1.5 :4.0 :0.5 :1.5
+                                                                    :maxHuofRootSeeds
+                                                                    :NO];
+        if (err)
 		{
 			NSLog( @"failed to create vesselnessmap");
-						
 		}
 		else
 		{
@@ -3049,60 +3093,69 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				
 				
 			}
-	sum=sum/27;
+
+    sum=sum/27;
 	return sum;
 }
+
 - (IBAction)changeVRMode:(id)sender
 {
-	if([vrMode selectedRow] == 0)
+#if 0 // @@@
+	if ([vrMode selectedRow] == 0)
 		[vrView setMode: 1];
 	else
 		[vrView setMode: 0];
 	
-	
-	
+#endif
 }
+
 - (IBAction)changeVRColor:(id)sender
 {
-	if([sender state]== NSOnState)
+	if ([sender state] == NSControlStateValueOn)
 	{
-		NSDictionary		*aCLUT;
-		NSArray				*array;
-		long				i;
-		unsigned char		red[256], green[256], blue[256];
+		NSDictionary *aCLUT;
+		NSArray *array;
+		unsigned char red[256], green[256], blue[256];
 		
 		aCLUT = [[[NSUserDefaults standardUserDefaults] dictionaryForKey: @"CLUT"] objectForKey: @"VR Muscles-Bones"];
-		if( aCLUT)
+		if ( aCLUT)
 		{
 			array = [aCLUT objectForKey:@"Red"];
-			for( i = 0; i < 256; i++)
+			for ( long i = 0; i < 256; i++)
 			{
 				red[i] = [[array objectAtIndex: i] longValue];
 			}
 			
 			array = [aCLUT objectForKey:@"Green"];
-			for( i = 0; i < 256; i++)
+			for ( long i = 0; i < 256; i++)
 			{
 				green[i] = [[array objectAtIndex: i] longValue];
 			}
 			
 			array = [aCLUT objectForKey:@"Blue"];
-			for( i = 0; i < 256; i++)
+			for ( long i = 0; i < 256; i++)
 			{
 				blue[i] = [[array objectAtIndex: i] longValue];
 			}
-			
+#if 0 // @@@
 			[vrView setCLUT:red :green: blue];
+#endif
 		}
 	}
 	else
-		[vrView setCLUT: 0L :0L :0L];	
+    {
+#if 0 // @@@
+        [vrView setCLUT: 0L :0L :0L];
+#endif
+    }
 }
+
 //just for cheat
 - (float) minimumValue
 {
 	return minValueInCurSeries;
 }
+
 - (float) maximumValue
 {
 	return maxValueInCurSeries;
@@ -3119,42 +3172,51 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	return @"standard";
 }
+
 - (NSMatrix*) toolsMatrix
 {
 	return toolsMatrix;
 }
-////////////////////////////////////
+
+// //////////////////////////////////
 - (IBAction)changeVRDirection:(id)sender
 {
+#if 0 // @@@
 	int tag=[sender tag];
-	if(tag==0)
+	if (tag==0)
 		[vrView coView:sender];
-	else if(tag==4)
+	else if (tag==4)
 		[vrView saView: sender];
-	else if(tag==5)
+	else if (tag==5)
 		[vrView saViewOpposite:sender];
-	else if(tag==3)
+	else if (tag==3)
 		[vrView axView:sender];
+#endif
 }
 
 - (IBAction)showSkeletonDialog:(id)sender
 {
-	if(!isInWizardMode)
+	if (!isInWizardMode)
 		[saveBeforeSkeletonization setHidden: YES];
-	skeletonParaLengthThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterLengthThreshold"];
+
+    skeletonParaLengthThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterLengthThreshold"];
 	skeletonParaEndHuThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterBranchEndThreshold"];
 	skeletonParaCalThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterCalciumThreshold"];
-	if(skeletonParaLengthThreshold<5.0)
+	if (skeletonParaLengthThreshold<5.0)
 		skeletonParaLengthThreshold=10.0;
-	if(skeletonParaEndHuThreshold<=0.0)
+
+    if (skeletonParaEndHuThreshold<=0.0)
 		skeletonParaEndHuThreshold=100.0;
-	if(skeletonParaCalThreshold<200.0)
+	
+    if (skeletonParaCalThreshold<200.0)
 		skeletonParaCalThreshold=650.0;
-	[thresholdForBranch setFloatValue:skeletonParaLengthThreshold];
+	
+    [thresholdForBranch setFloatValue:skeletonParaLengthThreshold];
 	[thresholdForDistalEnd setFloatValue:skeletonParaEndHuThreshold];
 	[skeletonParaCalciumThreshold setFloatValue:skeletonParaCalThreshold];
 	[NSApp beginSheet: skeletonWindow modalForWindow:[self window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
+
 - (IBAction)endSkeletonDialog:(id)sender
 {
 	if([sender tag])

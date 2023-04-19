@@ -9,24 +9,38 @@
 /* Begin PBXBuildFile section */
 		22C9712C0BA9BAC900ADA848 /* 3DRotate.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */; };
 		4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353EEF729EE665600ECAEE1 /* MieleAPI.framework */; };
+		4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */; };
+		4391B69129EFDE55008DBCDA /* CMIVChopperController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */; };
+		4391B69229EFDE61008DBCDA /* CMIVDCMView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */; };
+		4391B69329EFDE6D008DBCDA /* CMIVScissorsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B29B900B147D2600DE2C1F /* CMIVScissorsController.mm */; };
+		4391B69429EFDEC8008DBCDA /* CMIVVesselPlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C3BAAC0F5D9B89001D6931 /* CMIVVesselPlotView.h */; };
+		4391B69529EFDECC008DBCDA /* CMIV_AutoSeeding.h in Headers */ = {isa = PBXBuildFile; fileRef = B917308B0D9908C6005A0FF9 /* CMIV_AutoSeeding.h */; };
+		4391B69629EFDECF008DBCDA /* CMIVAutoSeedingCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B917308D0D9908C7005A0FF9 /* CMIVAutoSeedingCore.h */; };
+		4391B69729EFDED2008DBCDA /* CMIV_CTA_TOOLS.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E39DE70B03648700387A56 /* CMIV_CTA_TOOLS.h */; };
+		4391B69829EFDED6008DBCDA /* CMIVSaveResult.h in Headers */ = {isa = PBXBuildFile; fileRef = B9ADCE050B3B31CD008B5B9C /* CMIVSaveResult.h */; };
+		4391B69929EFDED9008DBCDA /* CMIVSegmentCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B930E81C0B0B490400434C33 /* CMIVSegmentCore.h */; };
+		4391B69A29EFDEDC008DBCDA /* CMIVChopperController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E3A0430B048ED300387A56 /* CMIVChopperController.h */; };
+		4391B69B29EFDEE0008DBCDA /* CMIVContrastController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9FB33530B0A1FD000A5A87A /* CMIVContrastController.h */; };
+		4391B69C29EFDEE6008DBCDA /* CMIVContrastPreview.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B07E980B67A703008879EF /* CMIVContrastPreview.h */; };
+		4391B69D29EFDEE9008DBCDA /* CMIVVRcontroller.h in Headers */ = {isa = PBXBuildFile; fileRef = B96B0F1F0B10B1B60044D904 /* CMIVVRcontroller.h */; };
+		4391B69E29EFDEED008DBCDA /* CMIVCLUTOpacityView.h in Headers */ = {isa = PBXBuildFile; fileRef = B98C764E0D312EF2004CBA19 /* CMIVCLUTOpacityView.h */; };
+		4391B69F29EFDEF0008DBCDA /* CMIVScissorsController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B29B8F0B147D2600DE2C1F /* CMIVScissorsController.h */; };
+		4391B6A029EFDEF3008DBCDA /* CMIVDCMView.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C5969D0D127F810082FCAF /* CMIVDCMView.h */; };
+		4391B6A129EFDEF6008DBCDA /* CMIVExport.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B4195B0B36C8FC00AD244F /* CMIVExport.h */; };
+		4391B6A229EFDEFA008DBCDA /* CMIV3DPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = B9A4171D0B4BAF4D009AEE95 /* CMIV3DPoint.h */; };
+		4391B6A329EFDEFD008DBCDA /* CMIVSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = B9960E810C5A7F01004A4E89 /* CMIVSlider.h */; };
+		4391B6A429EFDEFF008DBCDA /* CMIVWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = B969E7AE0D111DC700868834 /* CMIVWindow.h */; };
+		4391B6A529EFDF02008DBCDA /* CMIVBuketPirortyQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */; };
+		4391B6A629EFDFBB008DBCDA /* CMIVAutoSeedingCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAA0F5D9B89001D6931 /* CMIVAutoSeedingCore.mm */; };
+		4391B6A729EFDFD5008DBCDA /* CMIVContrastController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FB33540B0A1FD000A5A87A /* CMIVContrastController.mm */; };
+		4391B6A829EFDFE8008DBCDA /* CMIVContrastPreview.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B07E990B67A703008879EF /* CMIVContrastPreview.mm */; };
+		4391B6AA29EFE09A008DBCDA /* CMIV_AutoSeeding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B917308C0D9908C6005A0FF9 /* CMIV_AutoSeeding.mm */; };
 		43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F86FDA29EE7A09003F0102 /* DCM.framework */; };
-		43F86FDC29EEA606003F0102 /* CMIVChopperController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */; };
-		43F86FDD29EEB1B7003F0102 /* CMIVDCMView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */; };
-		43F86FDE29EEB407003F0102 /* CMIVScissorsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B29B900B147D2600DE2C1F /* CMIVScissorsController.mm */; };
-		43F86FDF29EEC26E003F0102 /* CMIVSegmentCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
-		B909F0840D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */; };
 		B909F0850D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B909F0830D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m */; };
-		B917308F0D9908C7005A0FF9 /* CMIV_AutoSeeding.h in Headers */ = {isa = PBXBuildFile; fileRef = B917308B0D9908C6005A0FF9 /* CMIV_AutoSeeding.h */; };
-		B91730910D9908C7005A0FF9 /* CMIVAutoSeedingCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B917308D0D9908C7005A0FF9 /* CMIVAutoSeedingCore.h */; };
-		B930E81E0B0B490400434C33 /* CMIVSegmentCore.h in Headers */ = {isa = PBXBuildFile; fileRef = B930E81C0B0B490400434C33 /* CMIVSegmentCore.h */; };
 		B95EA4360C54F418005A35CB /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B95EA4350C54F418005A35CB /* logo.jpg */; };
-		B969E7B00D111DC700868834 /* CMIVWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = B969E7AE0D111DC700868834 /* CMIVWindow.h */; };
 		B969E7B10D111DC700868834 /* CMIVWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = B969E7AF0D111DC700868834 /* CMIVWindow.m */; };
-		B96B0F210B10B1B60044D904 /* CMIVVRcontroller.h in Headers */ = {isa = PBXBuildFile; fileRef = B96B0F1F0B10B1B60044D904 /* CMIVVRcontroller.h */; };
-		B98C764F0D312EF2004CBA19 /* CMIVCLUTOpacityView.h in Headers */ = {isa = PBXBuildFile; fileRef = B98C764E0D312EF2004CBA19 /* CMIVCLUTOpacityView.h */; };
-		B9960E830C5A7F01004A4E89 /* CMIVSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = B9960E810C5A7F01004A4E89 /* CMIVSlider.h */; };
 		B9960E840C5A7F01004A4E89 /* CMIVSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = B9960E820C5A7F01004A4E89 /* CMIVSlider.m */; };
 		B99792060D3E391B004D8613 /* AboutDlg.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99791FE0D3E391B004D8613 /* AboutDlg.xib */; };
 		B99792070D3E391B004D8613 /* Chopper_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99791FF0D3E391B004D8613 /* Chopper_Panel.xib */; };
@@ -35,10 +49,7 @@
 		B997920A0D3E391B004D8613 /* Scissors_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792020D3E391B004D8613 /* Scissors_Panel.xib */; };
 		B997920B0D3E391B004D8613 /* SegPreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792030D3E391B004D8613 /* SegPreview.xib */; };
 		B997920D0D3E391B004D8613 /* VR_Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = B99792050D3E391B004D8613 /* VR_Panel.xib */; };
-		B9A4171F0B4BAF4D009AEE95 /* CMIV3DPoint.h in Headers */ = {isa = PBXBuildFile; fileRef = B9A4171D0B4BAF4D009AEE95 /* CMIV3DPoint.h */; };
 		B9A417200B4BAF4D009AEE95 /* CMIV3DPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A4171E0B4BAF4D009AEE95 /* CMIV3DPoint.m */; };
-		B9ADCE070B3B31CD008B5B9C /* CMIVSaveResult.h in Headers */ = {isa = PBXBuildFile; fileRef = B9ADCE050B3B31CD008B5B9C /* CMIVSaveResult.h */; };
-		B9B07E9A0B67A703008879EF /* CMIVContrastPreview.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B07E980B67A703008879EF /* CMIVContrastPreview.h */; };
 		B9B295F10B0862A100505F84 /* Opened Polygon.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295EB0B0862A100505F84 /* Opened Polygon.tiff */; };
 		B9B295F20B0862A100505F84 /* Oval.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295EC0B0862A100505F84 /* Oval.tiff */; };
 		B9B295F30B0862A100505F84 /* Pencil.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B295ED0B0862A100505F84 /* Pencil.tiff */; };
@@ -48,21 +59,14 @@
 		B9B29B060B145C1F00DE2C1F /* Cross.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B29B030B145C1F00DE2C1F /* Cross.tiff */; };
 		B9B29B070B145C1F00DE2C1F /* Move.tif in Resources */ = {isa = PBXBuildFile; fileRef = B9B29B040B145C1F00DE2C1F /* Move.tif */; };
 		B9B29B080B145C1F00DE2C1F /* Rotate.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B29B050B145C1F00DE2C1F /* Rotate.tiff */; };
-		B9B29B910B147D2600DE2C1F /* CMIVScissorsController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B29B8F0B147D2600DE2C1F /* CMIVScissorsController.h */; };
-		B9B4195D0B36C8FC00AD244F /* CMIVExport.h in Headers */ = {isa = PBXBuildFile; fileRef = B9B4195B0B36C8FC00AD244F /* CMIVExport.h */; };
 		B9B4F79A0B245953002E9350 /* Rectangle.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B4F7990B245953002E9350 /* Rectangle.tiff */; };
 		B9B702040CA5460D00CF333E /* Length.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9B702030CA5460D00CF333E /* Length.tiff */; };
-		B9C3BAB00F5D9B89001D6931 /* CMIVVesselPlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C3BAAC0F5D9B89001D6931 /* CMIVVesselPlotView.h */; };
 		B9C3BAB10F5D9B89001D6931 /* CMIVVesselPlotView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAD0F5D9B89001D6931 /* CMIVVesselPlotView.mm */; };
 		B9C3BAB60F5D9BC0001D6931 /* camera.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB20F5D9BC0001D6931 /* camera.tiff */; };
 		B9C3BAB70F5D9BC0001D6931 /* CTAICON.tiff in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB30F5D9BC0001D6931 /* CTAICON.tiff */; };
 		B9C3BAB80F5D9BC0001D6931 /* Repulsor.tif in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB40F5D9BC0001D6931 /* Repulsor.tif */; };
 		B9C3BAB90F5D9BC0001D6931 /* trash.icns in Resources */ = {isa = PBXBuildFile; fileRef = B9C3BAB50F5D9BC0001D6931 /* trash.icns */; };
-		B9C596A10D127F810082FCAF /* CMIVDCMView.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C5969D0D127F810082FCAF /* CMIVDCMView.h */; };
-		B9E39DE90B03648700387A56 /* CMIV_CTA_TOOLS.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E39DE70B03648700387A56 /* CMIV_CTA_TOOLS.h */; };
 		B9E39DEA0B03648700387A56 /* CMIV_CTA_TOOLS.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E39DE80B03648700387A56 /* CMIV_CTA_TOOLS.mm */; };
-		B9E3A0450B048ED300387A56 /* CMIVChopperController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9E3A0430B048ED300387A56 /* CMIVChopperController.h */; };
-		B9FB33550B0A1FD000A5A87A /* CMIVContrastController.h in Headers */ = {isa = PBXBuildFile; fileRef = B9FB33530B0A1FD000A5A87A /* CMIVContrastController.h */; };
 		CE7E504915020CDA00B6222F /* spline.C in Sources */ = {isa = PBXBuildFile; fileRef = CE7E504715020CDA00B6222F /* spline.C */; };
 		CE7E504A15020CDA00B6222F /* spline.H in Headers */ = {isa = PBXBuildFile; fileRef = CE7E504815020CDA00B6222F /* spline.H */; };
 /* End PBXBuildFile section */
@@ -310,25 +314,25 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9E39DE90B03648700387A56 /* CMIV_CTA_TOOLS.h in Headers */,
-				B9E3A0450B048ED300387A56 /* CMIVChopperController.h in Headers */,
-				B9FB33550B0A1FD000A5A87A /* CMIVContrastController.h in Headers */,
-				B930E81E0B0B490400434C33 /* CMIVSegmentCore.h in Headers */,
-				B96B0F210B10B1B60044D904 /* CMIVVRcontroller.h in Headers */,
-				B9B29B910B147D2600DE2C1F /* CMIVScissorsController.h in Headers */,
-				B9B4195D0B36C8FC00AD244F /* CMIVExport.h in Headers */,
-				B9ADCE070B3B31CD008B5B9C /* CMIVSaveResult.h in Headers */,
-				B9A4171F0B4BAF4D009AEE95 /* CMIV3DPoint.h in Headers */,
-				B9B07E9A0B67A703008879EF /* CMIVContrastPreview.h in Headers */,
-				B9960E830C5A7F01004A4E89 /* CMIVSlider.h in Headers */,
-				B969E7B00D111DC700868834 /* CMIVWindow.h in Headers */,
-				B9C596A10D127F810082FCAF /* CMIVDCMView.h in Headers */,
-				B98C764F0D312EF2004CBA19 /* CMIVCLUTOpacityView.h in Headers */,
-				B917308F0D9908C7005A0FF9 /* CMIV_AutoSeeding.h in Headers */,
-				B91730910D9908C7005A0FF9 /* CMIVAutoSeedingCore.h in Headers */,
-				B909F0840D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h in Headers */,
-				B9C3BAB00F5D9B89001D6931 /* CMIVVesselPlotView.h in Headers */,
 				CE7E504A15020CDA00B6222F /* spline.H in Headers */,
+				4391B6A429EFDEFF008DBCDA /* CMIVWindow.h in Headers */,
+				4391B69A29EFDEDC008DBCDA /* CMIVChopperController.h in Headers */,
+				4391B69C29EFDEE6008DBCDA /* CMIVContrastPreview.h in Headers */,
+				4391B6A229EFDEFA008DBCDA /* CMIV3DPoint.h in Headers */,
+				4391B69729EFDED2008DBCDA /* CMIV_CTA_TOOLS.h in Headers */,
+				4391B69F29EFDEF0008DBCDA /* CMIVScissorsController.h in Headers */,
+				4391B6A029EFDEF3008DBCDA /* CMIVDCMView.h in Headers */,
+				4391B6A529EFDF02008DBCDA /* CMIVBuketPirortyQueue.h in Headers */,
+				4391B69429EFDEC8008DBCDA /* CMIVVesselPlotView.h in Headers */,
+				4391B69829EFDED6008DBCDA /* CMIVSaveResult.h in Headers */,
+				4391B69E29EFDEED008DBCDA /* CMIVCLUTOpacityView.h in Headers */,
+				4391B6A129EFDEF6008DBCDA /* CMIVExport.h in Headers */,
+				4391B69529EFDECC008DBCDA /* CMIV_AutoSeeding.h in Headers */,
+				4391B69B29EFDEE0008DBCDA /* CMIVContrastController.h in Headers */,
+				4391B69629EFDECF008DBCDA /* CMIVAutoSeedingCore.h in Headers */,
+				4391B6A329EFDEFD008DBCDA /* CMIVSlider.h in Headers */,
+				4391B69D29EFDEE9008DBCDA /* CMIVVRcontroller.h in Headers */,
+				4391B69929EFDED9008DBCDA /* CMIVSegmentCore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,17 +437,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4391B69129EFDE55008DBCDA /* CMIVChopperController.mm in Sources */,
+				4391B6A829EFDFE8008DBCDA /* CMIVContrastPreview.mm in Sources */,
 				B9A417200B4BAF4D009AEE95 /* CMIV3DPoint.m in Sources */,
-				43F86FDE29EEB407003F0102 /* CMIVScissorsController.mm in Sources */,
+				4391B6AA29EFE09A008DBCDA /* CMIV_AutoSeeding.mm in Sources */,
 				B9960E840C5A7F01004A4E89 /* CMIVSlider.m in Sources */,
 				B969E7B10D111DC700868834 /* CMIVWindow.m in Sources */,
 				B9E39DEA0B03648700387A56 /* CMIV_CTA_TOOLS.mm in Sources */,
-				43F86FDF29EEC26E003F0102 /* CMIVSegmentCore.mm in Sources */,
-				43F86FDC29EEA606003F0102 /* CMIVChopperController.mm in Sources */,
 				B909F0850D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m in Sources */,
+				4391B6A629EFDFBB008DBCDA /* CMIVAutoSeedingCore.mm in Sources */,
+				4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */,
 				B9C3BAB10F5D9B89001D6931 /* CMIVVesselPlotView.mm in Sources */,
+				4391B69329EFDE6D008DBCDA /* CMIVScissorsController.mm in Sources */,
+				4391B69229EFDE61008DBCDA /* CMIVDCMView.mm in Sources */,
+				4391B6A729EFDFD5008DBCDA /* CMIVContrastController.mm in Sources */,
 				CE7E504915020CDA00B6222F /* spline.C in Sources */,
-				43F86FDD29EEB1B7003F0102 /* CMIVDCMView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,8 +505,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(LIBRARY_SEARCH_PATHS)",
 					"$(SRCROOT)",
-					"$(SRCROOT)/../../osirix/Binaries/VTKLibs",
-					"$(SRCROOT)/../../osirix/osirix/ITK180/bin",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
@@ -507,7 +513,6 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../osirix/osirix/ITK180/lib\"";
 				MACH_O_TYPE = mh_bundle;
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.2;
@@ -562,7 +567,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(LIBRARY_SEARCH_PATHS)",
 					"$(SRCROOT)",
-					"$(SRCROOT)/../../osirix/Binaries/VTKLibs",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
@@ -572,7 +576,6 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../osirix/osirix/ITK180/lib\"";
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.2;
 				OTHER_CFLAGS = "";

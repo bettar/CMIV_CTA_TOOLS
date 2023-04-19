@@ -124,13 +124,14 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	}
 	return tempImage;
 }
+
 - (int) prepareImageFor4DQTVR
 {
 	QTTime curTime;
 	QTMovie *mMovie = 0L;
 	
-	NSString *fileName = [[self osirixDocumentPath2] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
-	NSDictionary *myDict = [NSDictionary dictionaryWithObjectsAndKeys: @"jpeg", QTAddImageCodecType, [NSNumber numberWithInt: codecHighQuality], QTAddImageCodecQuality, nil];	//qdrw , tiff, jpeg
+	NSString *fileName = [[self hostAppDocumentPath2] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
+	NSDictionary *myDict = [NSDictionary dictionaryWithObjectsAndKeys: @"jpeg", QTAddImageCodecType, [NSNumber numberWithInt: codecHighQuality], QTAddImageCodecQuality, nil];	// qdrw, tiff, jpeg
 	[[QTMovie movie] writeToFile: fileName withAttributes: 0L];
 	
 	mMovie = [QTMovie movieWithFile:fileName error:nil];
@@ -141,18 +142,16 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	
 	curTime = QTMakeTime(timeValue, timeScale);
 	
-	int i,j;
-	
 	NSImage* tempImage;
 	
-	for(i=0;i<maxMovieIndex;i++)
+	for (int i=0; i<maxMovieIndex; i++)
 	{
 		[segmentList selectRow:i byExtendingSelection:NO];
 		[self selectASegment:segmentList];
 		
-		for(j=0;j<220;j++)
+		for (int j=0; j<220; j++)
 		{
-			NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 			
 			tempImage=[self imageForVR:[NSNumber numberWithInt:j] maxFrame:[NSNumber numberWithInt:220]];
 			[mMovie addImage:tempImage forDuration:curTime withAttributes: myDict];
@@ -189,7 +188,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			
 			volumeOfVRView = (vtkVolume * )[vrViewer volume]; 
 			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
-			if([cutPlaneSwitch state] == NSOnState)
+			if ([cutPlaneSwitch state] == NSControlStateValueOn)
 				volumeMapper->AddClippingPlane(clipPlane1);
 			
 			[clutViewer setCurves:[mutiplePhaseOpacityCurves objectAtIndex:i ]];
@@ -200,9 +199,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 //			[vrViewer display];
 			[vrViewer renderImageWithBestQuality: YES waitDialog: NO display: YES];
 			
-			
-			
-			long	width, height, spp, bpp, err;
+			long width, height, spp, bpp, err;
 			
 			unsigned char *dataPtr = [vrViewer getRawPixels:&width :&height :&spp :&bpp :YES :NO];
 			[vrViewer endRenderImageWithBestQuality];
@@ -444,13 +441,10 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	wl = [wlSlider floatValue];	
 	unsigned int i;	
 	
-	if([wlwwForAll state] == NSOnState)
+	if ([wlwwForAll state] == NSControlStateValueOn)
 	{
-		
 		for(i=0;i<[propertyDictList count];i++)
 		{
-			
-			
 			[[propertyDictList objectAtIndex:i] setObject: [NSNumber numberWithFloat:ww]  forKey:@"WW"];
 			[[propertyDictList objectAtIndex:i] setObject: [NSNumber numberWithFloat:wl]  forKey:@"WL"];
 		}
@@ -467,9 +461,9 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	}
 	
 	[self applyCLUT];
-	[self applyOpacity];	
-	
+	[self applyOpacity];
 }
+
 - (id) showVRPanel:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner
 {
 	//initialize the window
@@ -1086,10 +1080,11 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	return err;
 	
 }
+
 - (IBAction)disableCLUTView:(id)sender
 {
 	unsigned int row = [segmentList selectedRow];
-	if([sender state]== NSOnState)
+	if ([sender state] == NSControlStateValueOn)
 	{	//[self SetMusclarCLUT];
 		[isShowingVolumeArray replaceObjectAtIndex:row withObject:[NSNumber numberWithInt:1]];
 	}
@@ -1097,19 +1092,17 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	{	//[self initCLUTView];
 		[isShowingVolumeArray replaceObjectAtIndex:row withObject:[NSNumber numberWithInt:0]];
 	}
-	[clutViewer setClutChanged];
-	[clutViewer updateView];
 
-	
-	
+    [clutViewer setClutChanged];
+	[clutViewer updateView];
 }
+
 - (void)setBlendVolumeCLUT
 {
-	if(blendingController)
+	if (blendingController)
 	{
-		
-		Pixel_8			*alphaTable, *redTable, *greenTable, *blueTable;
-		float			iwl, iww;
+		Pixel_8 *alphaTable, *redTable, *greenTable, *blueTable;
+		float iwl, iww;
 		
 		[[originalViewController imageView] blendingColorTables:&alphaTable :&redTable :&greenTable :&blueTable];
 		
@@ -1419,7 +1412,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 			volumeOfVRView = (vtkVolume * )[vrViewer volume]; 
 			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
-			if([cutPlaneSwitch state] == NSOnState)
+			if ([cutPlaneSwitch state] == NSControlStateValueOn)
 			{
 				volumeMapper->AddClippingPlane(clipPlane1);
 				//blendedVolumeMapper->AddClippingPlane(clipPlane1);
@@ -1429,13 +1422,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[clutViewer setPointColors:[mutiplePhaseColorCurves objectAtIndex:row ]];
 			[clutViewer setClutChanged];
 			[clutViewer updateView];
-			
-			
-			
 		}
-		
 	}
 }
+
 - (IBAction)applyCLUTToAll:(id)sender
 {
 	unsigned int row = [segmentList selectedRow];
@@ -1443,9 +1433,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSArray* tempcurve;
 	NSArray* tempcolor;
 	
-	for(i=0;i<[mutiplePhaseOpacityCurves count];i++)//evever segment or volume
+	for (i=0;i<[mutiplePhaseOpacityCurves count];i++)//evever segment or volume
 	{
-		if(i!=row)
+		if (i!=row)
 		{
 			for(j=0;j<[[mutiplePhaseOpacityCurves objectAtIndex:i] count];j++)//ever curve for each segment or volume
 			{
@@ -1485,31 +1475,32 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	[vrViewer setMode:[sender selectedRow]];
 }
+
 - (IBAction)switchShadingONorOFF:(id)sender
 {
-	if(isSegmentVR)
+	if (isSegmentVR)
 	{
-		if([sender state] == NSOnState)
+		if ([sender state] == NSControlStateValueOn)
 			myVolumeProperty->ShadeOn();
 		else
 			myVolumeProperty->ShadeOff();
 	}
 	else
 	{
-		if([sender state] == NSOnState)
+		if ([sender state] == NSControlStateValueOn)
 			[vrViewer activateShading:YES];
 		else
 			[vrViewer activateShading:NO];
 	}
-	float savedWl, savedWw;
+
+    float savedWl, savedWw;
 	[vrViewer getWLWW: &savedWl :&savedWw];
 	[vrViewer setWLWW: savedWl : savedWw];
-	
-	
 }
+
 - (IBAction)switchCutPlanONorOFF:(id)sender
 {
-	if([sender state] == NSOnState)
+	if ([sender state] == NSControlStateValueOn)
 	{
 		volumeMapper->AddClippingPlane(clipPlane1);
 		//blendedVolumeMapper->AddClippingPlane(clipPlane1);
@@ -1519,10 +1510,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		volumeMapper->RemoveClippingPlane(clipPlane1);
 		//blendedVolumeMapper->RemoveClippingPlane(clipPlane1);
 	}
-	float savedWl, savedWw;
+
+    float savedWl, savedWw;
 	[vrViewer getWLWW: &savedWl :&savedWw];
 	[vrViewer setWLWW: savedWl : savedWw];
 }
+
 - (void)restoreCLUTFromPropertyList:(int)index
 {
 	float x;
@@ -1736,8 +1729,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		rayCastVolumeMapper=myMapper;
 	}
 	
-	
-	if([sender state] == NSOnState)
+	if ([sender state] == NSControlStateValueOn)
 	{
 		myVolumeProperty->SetInterpolationTypeToLinear();
 		volumeMapper=rayCastVolumeMapper;
@@ -1750,10 +1742,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		volumeMapper=fixedPointVolumeMapper;
 		volumeOfVRView->SetMapper(volumeMapper);
 	}
-	[vrViewer setWLWW: wholeVolumeWL :wholeVolumeWW];
-	
-	
+
+    [vrViewer setWLWW: wholeVolumeWL :wholeVolumeWW];
 }
+
 - (IBAction)saveDirection:(id)sender
 {
 	NSString* path=[parent hostAppDocumentPath2];
