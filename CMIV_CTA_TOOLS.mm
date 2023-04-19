@@ -38,8 +38,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if 0 // @@@
 #import "CMIVContrastPreview.h"
 #import "CMIVSaveResult.h"
-#import "CMIV_AutoSeeding.h"
 #endif // @@@
+#import "CMIV_AutoSeeding.h"
 
 // Don't modify this line. If you really want to update it run `uuidgen`
 #define PLUGIN_ID "77DFD501-BF5F-4363-B678-50D0EF7F0F16"
@@ -200,9 +200,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	if(!isAutoSeeding&&[seriesNeedToAutomaticProcess count])
 		[NSThread detachNewThreadSelector: @selector(startAutoProg:) toTarget: self withObject: nil];
-	return;
-
-		
 }
 
 -(void) startAutoProg:(id) sender
@@ -267,56 +264,62 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     currentController = nil;
 	
     int err=0;
-	if ([menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)])
+	if ([menuName isEqualToString:NSLocalizedString(@"Wizard For Coronary CTA", nil)]) // menu 1
 		err = [self checkIntermediatDataForWizardMode: 0];
 
-    else if ([menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)])
+    else if ([menuName isEqualToString:NSLocalizedString(@"Auto-Seeding", nil)]) // menu 7
 		[self showAutoSeedingDlg];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)])
+    else if ([menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)]) // menu 2
 		err = [self startChopper:viewerController];
 	
-    //else if ([menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)])
-	//	err = [self startSpoon: viewerController];
-	
-    else if ([menuName isEqualToString:NSLocalizedString(@"2D Views", nil)])
+#ifdef EXTRA_MENU_ENTRIES
+    else if ([menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)])
+		err = [self startSpoon: viewerController];
+#endif
+
+    else if ([menuName isEqualToString:NSLocalizedString(@"2D Views", nil)]) // menu 3
 		err = [self startScissors: viewerController];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
 		err = [self startContrast: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES) // menu 5
 		err = [self startVR: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES) // menu 6
 		err = [self saveResult: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES) // menu 4
 		err = [self startPolygonMeasure: viewerController];
-	
+
+#ifdef EXTRA_MENU_ENTRIES
     else if ([menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
 	{
-		//float* volumeData=[viewerController volumePtr:0];
-		//err = [self loadVesselnessMap:volumeData];
+		float* volumeData=[viewerController volumePtr:0];
+		err = [self loadVesselnessMap:volumeData];
 	}
-#if 0 // @@@
-	else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 5", nil)] == YES)
+#endif
+
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 5", nil)] == YES)
 	{
 		CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
-		err=[autoSeedingController smoothingImages3D:viewerController:self:5];
+		err = [autoSeedingController smoothingImages3D:viewerController:self:5];
 		[autoSeedingController release];
 		
 	}
-	else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 10", nil)] == YES)
+
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 10", nil)] == YES)
 	{
 		CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
-		err=[autoSeedingController smoothingImages3D:viewerController:self:10];
+		err = [autoSeedingController smoothingImages3D:viewerController:self:10];
 		[autoSeedingController release];
-		
 	}
-#endif // @@@
-	else
-		[self showAboutDlg:nil];
+	
+    else
+    {
+        [self showAboutDlg:nil];
+    }
 	
 	return err;
 }
@@ -557,6 +560,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	[NSApp beginSheet: window modalForWindow:[viewerController window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 	[self checkMaxValueForSeedingIndicator];
 }
+
 - (IBAction)clickAutoSeeding:(id)sender
 {
 	[self startAutomaticSeeding:viewerController];

@@ -195,7 +195,7 @@
 	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :mprViewSpace[0] :mprViewSpace[1] :mprViewOrigin[0] :mprViewOrigin[1] :mprViewOrigin[2]];
 	[mypix copySUVfrom: firstPix];	
 	
-	//creat roi list
+	//create ROI list
 	double space[3], origin[3];
 	if (newSeedsBuffer)
 	{
@@ -1011,7 +1011,8 @@
 			
 			
 		}	
-		for(i=0;i<[endPointsArray count];i++)
+
+        for (i=0;i<[endPointsArray count];i++)
 		{
 			CMIV3DPoint* apoint=[endPointsArray objectAtIndex:i];
 			int z;
@@ -1086,11 +1087,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					colorIndex = [[showSeedsArray objectAtIndex:i] intValue];
 					if(colorIndex-1==rowIndex)
 						return;
-				}	
-				[showSeedsArray addObject:[NSNumber numberWithInt:rowIndex+1]];
+				}
+
+                [showSeedsArray addObject:[NSNumber numberWithInt:rowIndex+1]];
 				[self updateResultView];
 				[self updateVRView];
-				
 			}
 			else
 			{
@@ -1106,11 +1107,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					}
 				}	
 			}
-		}		
-		
+		}
 	}	
 }
-- (void)setSeedLists:(NSMutableArray *)choosenseedList: (NSMutableArray *)showSeedList
+
+- (void)setSeedLists:(NSMutableArray *)choosenseedList
+                    :(NSMutableArray *)showSeedList
 {
 	choosenSeedsArray = choosenseedList;
 	[choosenSeedsArray retain];
@@ -1397,56 +1399,64 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	id sender = [note object];
 	
-	if(sender)
+	if (sender)
 	{
 		if ([sender isKindOfClass:[ROI class]])
 		{
 			ROI* roi=(ROI*)sender;
-			if([roi type]==tPlain)
+			if ([roi type]==tPlain)
 			{
-				if(!isRemoveROIBySelf)
+				if (!isRemoveROIBySelf)
 				{
-					
 					NSString * commentstr=[sender comments];
-					if([commentstr length]==0)
+					if ([commentstr length]==0)
 						return;
+                    
 					short unsigned int marker=(short unsigned int)[commentstr intValue];
 					if(marker&&marker<=[newSeedsROIList count])
 					{
 						[[newSeedsROIList objectAtIndex: marker-1 ] setComments:nil];
 						[newSeedsROIList removeObjectAtIndex: marker-1 ];
 						unsigned int i;
-						for(i = 0;i<[[MPRROIList objectAtIndex: 0] count];i++)
+						for (i = 0;i<[[MPRROIList objectAtIndex: 0] count];i++)
 						{ 
 							commentstr=[[[MPRROIList objectAtIndex: 0] objectAtIndex: i] comments];
 							short unsigned int tempmarker=(short unsigned int)[commentstr intValue];
-							if(tempmarker>marker)
+							if (tempmarker>marker)
 								[[[MPRROIList objectAtIndex: 0] objectAtIndex: i] setComments: [NSString stringWithFormat:@"%d",tempmarker-1]];
-							if(tempmarker==marker)
+							if (tempmarker==marker)
 								[[[MPRROIList objectAtIndex: 0] objectAtIndex: i] setComments: [NSString stringWithFormat:@"%d",0]];
 						}
 						
-						for(i = marker-1;i<[newSeedsROIList count];i++)
+						for (i = marker-1;i<[newSeedsROIList count];i++)
 							[[newSeedsROIList objectAtIndex: i] setComments: [NSString stringWithFormat:@"%d",i+1]];
-						long j,size;
+						
+                        long j,size;
 						size =imageWidth * imageHeight * imageAmount;
-						for(j=0;j<size;j++)
+						for (j=0;j<size;j++)
 						{
 							if(*(newSeedsBuffer + j)==marker)
 								*(newSeedsBuffer + j)=0;
 							else if (*(newSeedsBuffer + j)>marker)
 								*(newSeedsBuffer + j)=*(newSeedsBuffer + j)-1;
 						}
-						uniIndex--;
+						
+                        uniIndex--;
 					}
-					
 				}
 			}
 		}
 	}
-	
 }
-- (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width:(int)height:(short unsigned int*)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY
+
+- (void) creatROIListFromSlices:(NSMutableArray*) roiList
+                               :(int) width
+                               :(int)height
+                               :(short unsigned int*)im
+                               :(float)spaceX
+                               :(float)spaceY
+                               :(float)originX
+                               :(float)originY
 {
 	int x,y;
 	unsigned int i;
@@ -1458,14 +1468,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	rect.origin.y=-1;
 	rect.size.width =-1;
 	rect.size.height =-1;
-	for(i=0;i<[newSeedsROIList count];i++)
+	for (i=0;i<[newSeedsROIList count];i++)
 		[[newSeedsROIList objectAtIndex:i] setROIRect:rect];
 	
-	for(y=0;y<height;y++)
-		for(x=0;x<width;x++)
+	for (y=0;y<height;y++)
+		for (x=0;x<width;x++)
 		{
 			marker=*(im+y*width+x);
-			if(marker>0&&marker<=[newSeedsROIList count])
+			if (marker>0&&marker<=[newSeedsROIList count])
 			{
 				roi=[newSeedsROIList objectAtIndex:marker-1];
 				rect=[roi rect];
@@ -2109,8 +2119,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	if(!volumeDataOfVR)
 		return;
-	else
-		[self createUnsignedShortVolumDataUnderMask:volumeDataOfVR];
+
+    [self createUnsignedShortVolumDataUnderMask:volumeDataOfVR];
 
 #if 0 // @@@
 	float ww,wl;
@@ -2885,8 +2895,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (void)createROIfrom3DPaths:(NSArray*)pathsList:(NSArray*)namesList
 {
-	//doesn't work anymore after change result view stratergy
+	//doesn't work anymore after change result view strategy
 	return;
+    
 	RGBColor color;
 	color.red = 65535;
 	color.blue = 0;

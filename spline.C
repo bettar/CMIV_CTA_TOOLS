@@ -1022,9 +1022,8 @@ void bc_val ( int n, double t, double xcon[], double ycon[], double *xval,
   }
 
   delete [] bval;
-
-  return;
 }
+
 //****************************************************************************80
 
 double bez_val ( int n, double x, double a, double b, double y[] )

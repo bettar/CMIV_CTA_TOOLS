@@ -2992,7 +2992,6 @@ else
 		center[0]=0;
 		center[1]=0;
 	}
-	return;
 }
 
 -(float)findingMaxDistanceToGravityCenterOfRegion:(unsigned char*)buffer

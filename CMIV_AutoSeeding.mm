@@ -360,18 +360,20 @@
 		if(originalViewController)
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		
-		return ;	
+		return;
 	}
-	size = sizeof(char) * imageWidth * imageHeight * imageAmount;
+
+    size = sizeof(char) * imageWidth * imageHeight * imageAmount;
 	colorData = (unsigned char*) malloc( size);
 	if( !colorData)
 	{
 		if(originalViewController)
 		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
-		return ;	
-	}	
-	directionData= (unsigned char*) malloc( size);
+		return;
+	}
+
+    directionData= (unsigned char*) malloc( size);
 	if( !directionData)
 	{
 		if(originalViewController)
@@ -379,10 +381,8 @@
 		free(outputData);
 		free(colorData);
 		
-		return ;	
-	}		
-	
-
+		return;
+	}
 	
 	memset(directionData,0,size);
 	int i;
@@ -788,6 +788,7 @@
 	}	
 	free(vesselnessMap);
 }
+
 -(void)deEnhanceVolumeWithVesselness
 {
 	DCMPix* curPix = [controllersPixList objectAtIndex: 0];
@@ -832,20 +833,22 @@
 	}	
 	free(vesselnessMap);
 }
+
 -(void)rescaleVolume:(float*)img :(int)size :(float)tagetscale
 {
-	int i;
 	float originmax=-100000;
-	for(i=0;i<size;i++)
-		if(img[i]>originmax)
+	for (int i=0;i<size;i++)
+		if (img[i]>originmax)
 			originmax=img[i];
-	float sfactor=tagetscale/originmax;
-	for(i=0;i<size;i++)
+
+    float sfactor=tagetscale/originmax;
+	for (int i=0;i<size;i++)
 		img[i]*=sfactor;
-	return;
-		
 }
-- (int) searchBackToCreatCenterlines:(NSMutableArray *)acenterline :(int)endpointindex :(unsigned char*)directionData
+
+- (int) searchBackToCreatCenterlines:(NSMutableArray *)acenterline
+                                    :(int)endpointindex
+                                    :(unsigned char*)directionData
 {
 	int branchlen=0;
 	unsigned char startpointcoloindex;
@@ -854,7 +857,6 @@
 	z = endpointindex/imageSize ;
 	y = (endpointindex-imageSize*z)/imageWidth ;
 	x = endpointindex-imageSize*z-imageWidth*y;
-	
 	
 	CMIV3DPoint* new3DPoint=[[CMIV3DPoint alloc] init] ;
 	[new3DPoint setX: x];

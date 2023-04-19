@@ -7,9 +7,10 @@
 //
 
 #import "CMIVCLUTOpacityView.h"
+#if 0 // @@@
 #import "VRView.h"
+#endif
 #import "CMIVVRcontroller.h"
-
 
 @implementation CMIVCLUTOpacityView
 
@@ -144,15 +145,20 @@
 
 - (void)simplifyHistogram;
 {
-	if(!histogram) return;
-	if(histogramSize==0) return;
+	if (!histogram)
+        return;
+
+    if (histogramSize==0)
+        return;
 	
 	vImagePixelCount sum = 0;
 	for (int i=0 ; i<histogramSize; i++)
 	{
 		sum += histogram[i];
 	}
-	if(sum<=100) return;
+    
+	if(sum<=100)
+        return;
 	
 	int maxBin = histogramSize-1;
 	float binWidth = (HUmax - HUmin) / histogramSize;
@@ -168,10 +174,12 @@
 		else i=-1;
 	}
 	
-	if(maxBin < histogramSize-2)
+	if (maxBin < histogramSize-2)
 	{
-		if(newHUmax >= HUmax) return;
-		[self setHUmin:HUmin HUmax:newHUmax];
+		if(newHUmax >= HUmax)
+            return;
+		
+        [self setHUmin:HUmin HUmax:newHUmax];
 		[self computeHistogram];
 	}
 }
@@ -651,8 +659,10 @@
 
 - (void)selectCurveAtIndex:(int)i;
 {
-	if([curves count]==0) return;
-	NSPoint controlPoint = [self controlPointForCurveAtIndex:i];
+	if([curves count]==0)
+        return;
+
+    NSPoint controlPoint = [self controlPointForCurveAtIndex:i];
 	selectedCurveIndex = i;
 	selectedPoint = controlPoint;
 	[self setCLUTtoVRView:NO];
@@ -663,8 +673,8 @@
 	nothingChanged = NO;
 	clutChanged = YES;
 	[[undoManager prepareWithInvocationTarget:self] setColors:[NSMutableArray arrayWithArray:[pointColors objectAtIndex:curveIndex]] forCurveAtIndex:curveIndex];
-	int i;
-	for (i=0; i<[[curves objectAtIndex:curveIndex] count]; i++)
+
+    for (int i=0; i<[[curves objectAtIndex:curveIndex] count]; i++)
 	{
 		[[pointColors objectAtIndex:curveIndex] replaceObjectAtIndex:i withObject:color];
 	}
@@ -750,8 +760,10 @@
 
 - (void)updateView;
 {
-	if( updateView) return;	// avoid re-entry
-	updateView = YES;
+	if( updateView)
+        return;	// avoid re-entry
+
+    updateView = YES;
 	
 	[self setNeedsDisplay:YES];
 	//if(!nothingChanged)[self setCLUTtoVRView];
@@ -823,7 +835,8 @@
 					return;
 				}
 			}
-			NSPoint controlPoint = [self controlPointForCurveAtIndex:i];
+
+            NSPoint controlPoint = [self controlPointForCurveAtIndex:i];
 			if((int) controlPoint.x==(int) selectedPoint.x && (float) controlPoint.y==(float) selectedPoint.y)
 			{
 				[self setColor:[[(NSColorPanel*)[notification object] color] colorUsingColorSpaceName: NSDeviceRGBColorSpace] forCurveAtIndex:i];
@@ -917,9 +930,10 @@ NSRect rect = drawingRect;
 	{
 		[self deleteCurveAtIndex:ic];
 	}
-	else if(ip==0 || ip==[theCurve count]-1) return;
-	else
-	{
+	else if(ip==0 || ip==[theCurve count]-1)
+        return;
+
+    {
 		[[undoManager prepareWithInvocationTarget:self] addPoint:[[theCurve objectAtIndex:ip] pointValue] atIndex:ip inCurveAtIndex:ic withColor:[[pointColors objectAtIndex:ic] objectAtIndex:ip]];
 		[theCurve removeObjectAtIndex:ip];
 		[[pointColors objectAtIndex:ic] removeObjectAtIndex:ip];
@@ -1350,7 +1364,8 @@ NSRect rect = drawingRect;
 {
 	[super mouseMoved:theEvent];
 
-	if( ![[self window] isMainWindow]) return;
+	if( ![[self window] isMainWindow])
+        return;
 	
 	NSPoint mousePositionInView = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	
@@ -1384,7 +1399,6 @@ NSRect rect = drawingRect;
 		return;
 	}
 	
-	
 	NSAffineTransform* transformView2Coordinate = [self transform];
 	[transformView2Coordinate invert];
 	NSPoint location = [transformView2Coordinate transformPoint:mousePositionInView];
@@ -1403,13 +1417,14 @@ NSRect rect = drawingRect;
 	unichar c = [[theEvent characters] characterAtIndex:0];
 	if(c==NSDeleteCharacter)
 	{
-		if([self isAnyPointSelected])
+		if ([self isAnyPointSelected])
 		{
 			[self delete:self];
 			return;
 		}
 	}
-	[super keyDown:theEvent];
+
+    [super keyDown:theEvent];
 }
 
 - (BOOL)acceptsFirstResponder
@@ -1417,8 +1432,7 @@ NSRect rect = drawingRect;
 	return YES;
 }
 
-#pragma mark -
-#pragma mark GUI
+#pragma mark - GUI
 
 - (IBAction)computeHistogram:(id)sender;
 {
@@ -2162,8 +2176,10 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 
 - (void)setCLUTtoVRView:(BOOL)lowRes;
 {
-	if( setCLUTtoVRView) return;	// avoid re-entry
-	setCLUTtoVRView = YES;
+	if( setCLUTtoVRView)
+        return;	// avoid re-entry
+
+    setCLUTtoVRView = YES;
 
 	if([curves count]>0)
 	{
@@ -2171,43 +2187,46 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 		[clut setObject:curves forKey:@"curves"];
 		[clut setObject:pointColors forKey:@"colors"];
 		
-
+#if 0 // @@@
 		VRView* aview=(VRView*)vrView;
 		[aview setAdvancedCLUT:clut lowResolution:lowRes];
-
-		if(isInTaggedVRMode&&vrController)
+#endif
+		if (isInTaggedVRMode&&vrController)
 		{
 			CMIVVRcontroller* acmivController=vrController;
 			[acmivController setAdvancedCLUT:clut lowResolution:lowRes];
 		}
-		float savedWl, savedWw;
+
+#if 0 // @@@
+        float savedWl, savedWw;
 		[aview getWLWW: &savedWl :&savedWw];
 		[aview setWLWW: savedWl : savedWw];
-		
-
+#endif
 	}
 	setCLUTtoVRView = NO;
 }
+
 - (void)setCLUTtoVRViewWithoutRedraw
 {
-	VRView* aview=(VRView*)vrView;
-	if([curves count]>0)
+	if ([curves count]>0)
 	{
 		NSMutableDictionary *clut = [NSMutableDictionary dictionaryWithCapacity:2];
 		[clut setObject:curves forKey:@"curves"];
 		[clut setObject:pointColors forKey:@"colors"];
 
-		
+#if 0 // @@@
+        VRView* aview=(VRView*)vrView;
 		[aview setAdvancedCLUT:clut lowResolution:YES];
+#endif
 	}
 	setCLUTtoVRView = NO;
-
 }
 
 - (void)setWL:(float)wl ww:(float)ww;
 {
 	int curveIndex = [self selectedCurveIndex];
-	if(curveIndex<0) curveIndex = 0;
+	if(curveIndex<0)
+        curveIndex = 0;
 	
 	NSMutableArray *theCurve = [curves objectAtIndex:curveIndex];
 	NSPoint firstPoint = [[theCurve objectAtIndex:0] pointValue];
@@ -2218,25 +2237,27 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 	// wl
 	float shiftWL = wl - middle;
 	
-	//ww
+	// ww
 	float shiftWW = firstPoint.x + shiftWL - (wl - 0.5 * ww);
 	
 	NSPoint pt;
 	float factor = 1.0;
-	int i;
-	for (i=0; i<[theCurve count]; i++)
+	for (int i=0; i<[theCurve count]; i++)
 	{
 		pt = [[theCurve objectAtIndex:i] pointValue];
 		factor = fabsf(pt.x - middle) / half;
-		if(factor<0.0) factor = 0.0;
+		if(factor<0.0)
+            factor = 0.0;
 		pt.x += shiftWL;
-		if(i<[theCurve count]/2.0) pt.x -= shiftWW * factor;
-		else  pt.x += shiftWW * factor;
+		if(i<[theCurve count]/2.0)
+            pt.x -= shiftWW * factor;
+		else
+            pt.x += shiftWW * factor;
 		pt = [self legalizePoint:pt inCurve:theCurve atIndex:i];
 		[theCurve replaceObjectAtIndex:i withObject:[NSValue valueWithPoint:pt]];
 	}
 
-	for (i=0; i<[theCurve count]; i++)
+	for (int i=0; i<[theCurve count]; i++)
 	{
 		pt = [[theCurve objectAtIndex:i] pointValue];
 		pt = [self legalizePoint:pt inCurve:theCurve atIndex:i];
@@ -2249,8 +2270,7 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 	[self updateView];
 }
 
-#pragma mark -
-#pragma mark Cursor
+#pragma mark - Cursor
 
 - (void)setCursorLabelWithText:(NSString*)text;
 {

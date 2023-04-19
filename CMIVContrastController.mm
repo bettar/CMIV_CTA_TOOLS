@@ -101,16 +101,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			outputcomponent++;
 	if(!outputcomponent)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no output", nil), NSLocalizedString(@"no export component is selected, nothing to export", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		return;	
-
+		NSRunAlertPanel(NSLocalizedString(@"no output", nil),
+                        NSLocalizedString(@"no export component is selected, nothing to export", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
+		return;
 	}
 
 	// Display a waiting window
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
 	[self runSegmentation:&inputData :&outputData:&colorData:&directionData];
 	//export result and release memory
-	if(inputData&&outputData&&colorData&&directionData)
+	if (inputData&&outputData&&colorData&&directionData)
 	{
 		if ([exportCenterlineChechBox state] != NSControlStateValueOn)
 			free(directionData);
@@ -166,9 +167,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	seedVolume=(unsigned short int*)malloc(size);
 	if(!seedVolume)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
+    
 	memset(seedVolume, 0, size);
 	// Display a waiting window
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
@@ -177,9 +181,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	[originalViewController endWaitWindow: waitWindow];	
 	
-
-	
-	if(inputData&&outputData&&colorData&&directionData)
+	if (inputData&&outputData&&colorData&&directionData)
 	{
 		[parent cleanDataOfWizard];
 		size= sizeof(float)*imageWidth*imageHeight*imageAmount;
@@ -207,34 +209,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[dic setObject:seedROIList  forKey:@"ROIList"];
 		if([neighborhoodModeMatrix selectedRow])
 			[dic setObject:[NSNumber numberWithInt:6] forKey:@"CFCTNeighborhood"];
-		//[parent setDataofWizard:dic];
+
+        //[parent setDataofWizard:dic];
 		[self onCancel: sender];
 		[parent gotoStepNo:3];
-
 	}
 	else
 		free(seedVolume);
-	
-		
-	
-	
 }
-- (void) runSegmentation:(float **)ppInData :(float **)ppOutData :(unsigned char **)ppColorData:(unsigned char **)ppDirectionData
+
+- (void) runSegmentation:(float **)ppInData
+                        :(float **)ppOutData
+                        :(unsigned char **)ppColorData
+                        :(unsigned char **)ppDirectionData
 {
-	long				y, x, z;
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
-	float               *inputData=0L, *outputData=0L;
-	unsigned char       *colorData=0L, *directionData=0L;
+	long y, x, z;
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
+	float *inputData=0L, *outputData=0L;
+	unsigned char *colorData=0L, *directionData=0L;
 	int err=0;
 	ifUseSmoothFilter=0;
 	
-	if([outROIArray count]>62)
+	if ([outROIArray count]>62)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"too many kinds of seeds", nil), NSLocalizedString(@"no more than 62 kinds of seeds can be selected in one round segment.", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
-	
 	
 	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	imageSize=imageWidth * imageHeight;
@@ -243,7 +244,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	//	ifUseSmoothFilter=1;
 
     // get memory first
-	if(ifUseSmoothFilter)
+	if (ifUseSmoothFilter)
 	{
 		inputData = [originalViewController volumePtr:0];
 		if( !inputData)
@@ -252,7 +253,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             NSLocalizedString(@"no enough RAM", nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			
-			return ;	
+			return;
 		}
 		
 		//err=[self smoothInputData:inputData];
@@ -267,7 +268,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			inputData=0L;
 			outputData=0L;
 			colorData=0L;
-			return ;	
+			return;
 		}	
 
         return;
@@ -278,29 +279,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	outputData = (float*) malloc( size);
 	if( !outputData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		if(ifUseSmoothFilter)
+		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
+		if (ifUseSmoothFilter)
 			free(inputData);
-		inputData=0L;
+
+        inputData=0L;
 		outputData=0L;
 		colorData=0L;
-		return ;	
+		return;
 	}
-	
 	
 	size = sizeof(char) * imageWidth * imageHeight * imageAmount;
 	colorData = (unsigned char*) malloc( size);
-	if( !colorData)
+	if ( !colorData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"no enough RAM", nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		if(ifUseSmoothFilter)
 			free(inputData);
 		free(outputData);
 		inputData=0L;
 		outputData=0L;
 		colorData=0L;
-		return ;	
-	}	
+		return;
+	}
+    
 	directionData= (unsigned char*) malloc( size);
 	if( !directionData)
 	{
@@ -313,35 +319,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		outputData=0L;
 		colorData=0L;
 		directionData=0L;
-		return ;	
-	}		
-	
-
+		return;
+	}
 	
 	curPix = [pixList objectAtIndex: 0];
 	
 	upperThreshold = [curPix maxValueOfSeries];
 	lowerThreshold = minValueInCurSeries = [curPix minValueOfSeries];
 	
-	
-	for( z = 0; z < imageAmount; z++)
-		for(y = 0;y < imageHeight; y++)
-			for(x = 0; x < imageWidth; x++)
+	for ( z = 0; z < imageAmount; z++)
+		for (y = 0;y < imageHeight; y++)
+			for (x = 0; x < imageWidth; x++)
 			{
 				*(outputData+ imageWidth * imageHeight*z + imageWidth*y + x) = minValueInCurSeries;
-				if( *(inputData+ imageWidth * imageHeight*z + imageWidth*y + x) > upperThreshold ||  *(inputData+ imageWidth * imageHeight*z + imageWidth*y + x) <= lowerThreshold )
+				if ( *(inputData+ imageWidth * imageHeight*z + imageWidth*y + x) > upperThreshold ||  *(inputData+ imageWidth * imageHeight*z + imageWidth*y + x) <= lowerThreshold )
 					*(directionData+ imageWidth * imageHeight*z + imageWidth*y + x) = 0xbf; // binary 1011 1111 the 63rd kind of seeds -- empty space
 				else 
 					*(directionData+ imageWidth * imageHeight*z + imageWidth*y + x) = 0x00;
 			}
-				
-				
+    
 	//planting seed in color matrix
 				
 	int seednumber = [self seedPlantingfloat:inputData:outputData:directionData];
-	if(seednumber < 1)
+	if (seednumber < 1)
 	{
-		
 		NSRunAlertPanel(NSLocalizedString(@"no seed", nil), NSLocalizedString(@"no seeds are found, draw ROI first.", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		if(ifUseSmoothFilter)
 			free(inputData);
@@ -354,9 +355,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		directionData=0L;
 		
 		return;
-		
 	}			
-	//creat ouput color list
+
+    // create ouput color list
 	unsigned int rowIndex;
 	outputColorList= [[NSMutableArray alloc] initWithCapacity: 0];
 	for(rowIndex=0;rowIndex<[outROIArray count];rowIndex++)
@@ -369,8 +370,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
 	}
-	float spacing[3];
-	
+
+    float spacing[3];
 	spacing[0]=[curPix pixelSpacingX];
 	spacing[1]=[curPix pixelSpacingY];
 	spacing[2]=sliceThickness;
@@ -814,7 +815,7 @@ if( originalViewController == 0L) return 0L;
 		}
 	}
 	
-	//creat a new series
+	//create a new series
 	float* tempinput=[originalViewController volumePtr:0];
 	memcpy(outputData,tempinput,size);
 	
@@ -1019,7 +1020,7 @@ if( originalViewController == 0L) return 0L;
 		}
 	}
 	
-	//creat a new series
+	//create a new series
 	float* tempinput=[originalViewController volumePtr:0];
 	memcpy(outputData,tempinput,size);
 	

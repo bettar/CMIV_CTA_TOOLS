@@ -43,9 +43,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[databaseUpdateTimer release];
 		databaseUpdateTimer=nil;
 	}
-	if(waitWindow)
+
+    if (waitWindow)
 		[originalViewController endWaitWindow: waitWindow];
-	if([window isVisible])
+	
+    if ([window isVisible])
 	{
 		[window setReleasedWhenClosed:YES];
 		[window close];
@@ -63,31 +65,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	[okButton setEnabled: NO];
 	
 }
--(void) exportSeries:(ViewerController *) vc:(NSString*)sname:(int)snumber:(CMIV_CTA_TOOLS*) owner
-{	
 
+-(void) exportSeries:(ViewerController *) vc
+                    :(NSString*)sname
+                    :(int)snumber
+                    :(CMIV_CTA_TOOLS*) owner
+{
 	checkTime=0;
 	originalViewController=vc;	
 	parent = owner;
 	CMIVExport *exporter=[[CMIVExport alloc] init];
 	[exporter setSeriesDescription: sname];
-	if(snumber<=0)
+	if (snumber<=0)
 		[exporter setSeriesNumber:6600 + [[NSCalendarDate date] minuteOfHour] + [[NSCalendarDate date] secondOfMinute]];
 	else
 		[exporter setSeriesNumber:snumber];
-	[exporter exportCurrentSeries: vc];
+
+    [exporter exportCurrentSeries: vc];
 	//exportSeriesUID=[[exporter exportSeriesUID] retain];
 	[exporter release];	
 	[self onCancel:nil];
-	return;
-	
 }
-- (id) showSaveResultPanel:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner
-{
 
+- (id) showSaveResultPanel:(ViewerController *) vc
+                          :(CMIV_CTA_TOOLS*) owner
+{
 	originalViewController=vc;	
 	parent = owner;
-
 
 	[NSBundle loadNibNamed:@"Save_Panel" owner:self];
 	[seriesName setStringValue:[[originalViewController window] title]];

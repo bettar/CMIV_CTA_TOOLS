@@ -8,11 +8,10 @@
 
 #import "CMIVVesselPlotView.h"
 
-
 @implementation CMIVVesselPlotView
 @synthesize curPtX;
-#pragma mark-
-#pragma mark 1. init and delloc functions
+
+#pragma mark - 1. init and delloc functions
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -68,18 +67,18 @@
 	return YES;
 }
 
-#pragma mark-
-#pragma mark 2. drawing functions
-- (void)drawRect:(NSRect)rect {
+#pragma mark - 2. drawing functions
+
+- (void)drawRect:(NSRect)rect
+{
     [self drawAxesInRect:rect];
 	[self drawCurveInRect:rect]; 
 	[self drawSelectedBoxInRect:rect];
 	[self drawStenosisBoxInRect:rect];
-	
-	
-	
 }
-- (void)drawAxesInRect:(NSRect)rect {
+
+- (void)drawAxesInRect:(NSRect)rect
+{
 	//background
 	[backgroundColor set];
 	NSRectFill(rect);
@@ -138,9 +137,12 @@
 	
 
 }
-- (void)drawCurveInRect:(NSRect)rect {
-	if(!currentCurve||[currentCurve count]==0)
+
+- (void)drawCurveInRect:(NSRect)rect
+{
+	if (!currentCurve||[currentCurve count]==0)
 		return;
+    
 	NSAffineTransform *transform = [self transform:rect];
 	NSBezierPath *line = [NSBezierPath bezierPath];
 	NSPoint pt;
@@ -157,13 +159,14 @@
 	[curveColor set];
 	[line setLineWidth:lineWidth];
 	[line stroke];
-	 
 }
-- (void)drawSelectedBoxInRect:(NSRect)rect 
+
+- (void)drawSelectedBoxInRect:(NSRect)rect
 {
 	//draw box borders
-	if(!currentCurve||[currentCurve count]==0||(endPtX==0&&startPtX==0))
+	if (!currentCurve||[currentCurve count]==0||(endPtX==0&&startPtX==0))
 		return;
+    
 	NSRect selectRect;
 	selectRect.origin.x=startPtX;
 	selectRect.origin.y=0;
@@ -256,32 +259,28 @@
 	curXHandleRect.size.width=handleSize;
 	curXHandleRect.size.height=handleSize;
 	curPtY=y;
-	[line stroke];	
-	
+	[line stroke];
 }
-- (void)drawStenosisBoxInRect:(NSRect)rect {
-	if(!currentCurve||[currentCurve count]==0||(endPtX==0&&startPtX==0))
-		return;
 
+- (void)drawStenosisBoxInRect:(NSRect)rect
+{
+	if (!currentCurve||[currentCurve count]==0||(endPtX==0&&startPtX==0))
+		return;
 
 	NSMutableDictionary *attrsDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
 	[attrsDictionary setObject:textLabelColor forKey:NSForegroundColorAttributeName];
 	
 	NSAttributedString *label = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f/%.2f=%d%%", curPtY, referenceY, (int)(100.0*curPtY/referenceY)] attributes:attrsDictionary] autorelease];
 	
-
 	NSPoint pt1 = curXHandleRect.origin;
 	NSPoint labelPosition = NSMakePoint(pt1.x + 2*handleSize, pt1.y);
 	
-	
-
 	NSRect labelBounds = [label boundingRectWithSize:rect.size options:NSStringDrawingUsesDeviceMetrics];
 
 	labelBounds.size.height += 1.0;
 	labelBounds.size.width += 4.0;
 	
-	
-	if(labelPosition.x+labelBounds.size.width >= rect.size.width)
+	if (labelPosition.x+labelBounds.size.width >= rect.size.width)
 	{
 		labelPosition.x = pt1.x - handleSize - labelBounds.size.width;
 	}
@@ -292,17 +291,16 @@
 	[label drawAtPoint:labelPosition];
 }
 
-#pragma mark-
-#pragma mark 3. central parameters
+#pragma mark - 3. central parameters
 
 - (NSAffineTransform *)transform:(NSRect) rect
 {
-	if(!globalTransform || rect.size.width!=viewFrame.size.width ||rect.size.height!=viewFrame.size.height)
+	if (!globalTransform || rect.size.width!=viewFrame.size.width ||rect.size.height!=viewFrame.size.height)
 	{
-		if(globalTransform)
+		if (globalTransform)
 			[globalTransform release];
 
-		if(xRightLimit>0&&yTopLimit>0)
+		if (xRightLimit>0&&yTopLimit>0)
 		{
 			xScaleFactor=(rect.size.width-leftSpace)/xRightLimit;
 			yScaleFactor=(rect.size.height-bottomSpace)/yTopLimit;
@@ -318,58 +316,58 @@
 		[globalTransform appendTransform:transform2];
 		[globalTransform retain];
 		viewFrame=rect;
-		if(invertedTransfer)
+		if (invertedTransfer)
 			[invertedTransfer release];
 		invertedTransfer = [[NSAffineTransform alloc] initWithTransform:globalTransform];
 		[invertedTransfer invert];
 	}
 	return globalTransform;
 }
+
 -(void) updateAllControllsWithCurve:(NSString*)name
 {
 }
-#pragma mark-
-#pragma mark 4. mouse operations
+
+#pragma mark - 4. mouse operations
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	
-	if(currentCurve&&[currentCurve count]>0)
+	if (currentCurve&&[currentCurve count]>0)
 	{
 			
 		[[self window] makeFirstResponder: self];
-		
 
 		NSPoint mousePositionInWindow = [theEvent locationInWindow];
 		NSPoint mousePositionInView = [self convertPoint:mousePositionInWindow fromView:nil];
 		
-		if(mousePositionInView.x>0  && mousePositionInView.y>0 && mousePositionInView.x<viewFrame.size.width && mousePositionInView.y<viewFrame.size.height)
+		if (mousePositionInView.x>0 &&
+            mousePositionInView.y>0 &&
+            mousePositionInView.x<viewFrame.size.width &&
+            mousePositionInView.y<viewFrame.size.height)
 		{
-		
-
 			NSPoint ptInPlot;
 			ptInPlot = [invertedTransfer transformPoint:mousePositionInView];
 			mouseStartDraggingFlag=0;
-			if(ptInPlot.x>0 && ptInPlot.y>0 && ptInPlot.x<xRightLimit && ptInPlot.y<yTopLimit)
+			if (ptInPlot.x>0 && ptInPlot.y>0 && ptInPlot.x<xRightLimit && ptInPlot.y<yTopLimit)
 			{
 				mouseStartDraggingFlag=1;
 				startPtX=endPtX= curPtX=ptInPlot.x;
 				[viewControllor syncWithPlot];
 			}
-			else if(NSPointInRect(mousePositionInView, curXHandleRect))
+			else if (NSPointInRect(mousePositionInView, curXHandleRect))
 			{
 				mouseStartDraggingFlag=2;
 				startDragPoint=ptInPlot;
 				startDragPoint.y=curPtX;
 			}
 		}	
-		[self setNeedsDisplay:YES];
-	}
-	[super mouseDown:theEvent];
-
-
 	
+        [self setNeedsDisplay:YES];
+	}
+
+    [super mouseDown:theEvent];
 }
+
 - (void)mouseDragged:(NSEvent *)theEvent
 {
 	if(currentCurve&&[currentCurve count]>0)
@@ -474,15 +472,20 @@
 	[cursor release];
 }
 
-#pragma mark-
-#pragma mark 4. outlet for controllor
+#pragma mark - 4. outlet for controllor
+
 - (void)setViewControllor:(id)controllor
 {
 	viewControllor=controllor;
 }
-- (void)setACurve:(NSString*)name:(NSArray*)curve:(NSColor*)color:(float)xu:(float)yu
+
+- (void)setACurve:(NSString*)name
+                 :(NSArray*)curve
+                 :(NSColor*)color
+                 :(float)xu
+                 :(float)yu
 {
-	if(currentCurve)
+	if (currentCurve)
 		[currentCurve release];
 	currentCurve=curve;
 	[currentCurve retain];
@@ -494,9 +497,9 @@
 	xRightLimit=[currentCurve count]*xUnit*1.05;
 	unsigned i;
 	yTopLimit=[[currentCurve objectAtIndex:0] floatValue];
-	for(i=0;i<[currentCurve count];i++)
+	for (i=0;i<[currentCurve count];i++)
 	{
-		if(yTopLimit<[[currentCurve objectAtIndex:i] floatValue])
+		if (yTopLimit<[[currentCurve objectAtIndex:i] floatValue])
 			yTopLimit=[[currentCurve objectAtIndex:i] floatValue];
 	}
 	yTopLimit=yTopLimit*1.2;
@@ -504,13 +507,13 @@
 	[globalTransform release];
 	globalTransform=nil;
 	[self setNeedsDisplay:YES];
-	
-	
 }
+
 - (void)removeCurCurve
 {
 	if(currentCurve)
 		[currentCurve release];
+    
 	currentCurve=nil;
 	curveColor = [NSColor whiteColor];
 	xUnit=1.0;

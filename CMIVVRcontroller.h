@@ -36,7 +36,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import <Cocoa/Cocoa.h>
 #import <MieleAPI/PluginFilter.h>
 #import "CMIV_CTA_TOOLS.h"
+#if 0 // @@@
 #import "VRView.h"
+#endif
 #import "CMIVCLUTOpacityView.h"
 #define id Id
 #include <vtkColorTransferFunction.h>
@@ -50,10 +52,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vtkCallbackCommand.h>
 #include <vtkObject.h>
 #include <vtkPlaneWidget.h>
+#if 0 // @@@
 #include <vtkVolumeRayCastMapper.h>
 #include <vtkVolumeRayCastCompositeFunction.h>
+#endif
 #undef id
-
 
 @interface CMIVVRcontroller : NSWindowController
 {
@@ -63,7 +66,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     IBOutlet NSSlider *opacitySlider;
 	IBOutlet NSSlider *clipPlaneOriginSlider;
     IBOutlet NSTableView *segmentList;
+#if 0 // @@@
     IBOutlet VRView *vrViewer;
+#endif
     IBOutlet NSSlider *wlSlider;
     IBOutlet NSSlider *wwSlider;
     IBOutlet NSButton *wlwwForAll;
@@ -105,10 +110,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	vtkPlane *clipPlane1;
 	vtkCallbackCommand *clipCallBack;
 	vtkPlaneWidget* clipPlaneWidget;
+    vtkVolumeMapper *blendedVolumeMapper;
+#if 0 // @@@
 	vtkVolumeRayCastMapper* myMapper;
-	vtkVolumeMapper *blendedVolumeMapper;
 	vtkVolumeRayCastCompositeFunction* myCompositionFunction;
-
+#endif
 	float verticalAngleForVR;
 	float osirixOffset;
 	unsigned short* realVolumedata;
@@ -119,8 +125,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSRect screenrect;
 	NSMutableArray *isShowingVolumeArray;
 	unsigned char* colorMapFromFile;
-	
 }
+
 - (IBAction)capureImage:(id)sender;
 - (IBAction)exportQTVR:(id)sender;
 - (IBAction)setColorProtocol:(id)sender;

@@ -61,23 +61,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (IBAction)onPreview:(id)sender;
 - (IBAction)onOk:(id)sender;
 - (IBAction)removeFromRight:(id)sender;
-- (int) showContrastPanel:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner;
+- (int) showContrastPanel:(ViewerController *) vc :(CMIV_CTA_TOOLS*) owner;
 - (long) seedPlantingfloat:(float *)inputData :(float *)outputData :(unsigned char *)colorData;
 - (int) exportToImages:(float *)inputData :(float *)outputData :(unsigned char *)colorData;
 - (int) exportToROIs:(float *)inputData :(float *)outputData :(unsigned char *)colorData;
 - (int) exportToSeries:(float *)inputData :(float *)outputData :(unsigned char *)colorData;
-- (int) exportToCenterLines:(float *)inputData :(float *)outputData :(unsigned char *)directData:(unsigned char *)colorData;
+- (int) exportToCenterLines:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData;
 - (int) exportToTempFolder:(float *)inputData :(float *)outputData :(unsigned char *)colorData;
 - (int) createCenterlines:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData :(NSMutableArray*)roilist;
-- (BOOL) prepareForSkeletonizatin:(float *)inputData :(float *)outputData :(unsigned char *)directData:(unsigned char *)colorData;
-- (int)plantRootSeeds:(float *)inputData :(float *)outputData :(unsigned char *)directData:(unsigned char *)colorData;
+- (BOOL) prepareForSkeletonizatin:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData;
+- (int)plantRootSeeds:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData;
 - (void) prepareForCaculateLength:(unsigned short *)distanceMap :(unsigned char *)directData;
 - (void) prepareForCaculateWeightedLength:(float *)distanceMap :(unsigned char *)directData;
 
-- (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList:(int)endpointindex:(unsigned char*)directionData:(unsigned char*)color;
-- (void)createROIfrom3DPaths:(NSArray*)pathsList:(NSArray*)namesList:(NSMutableArray*)roilist;
-- (void) runSegmentation:(float **)ppInData :(float **)ppOutData :(unsigned char **)ppColorData:(unsigned char **)ppDirectionData;
-- (void) enhanceCenterline:(float *)inputData:(unsigned char *)colorData:(NSMutableArray *)pathlists;
+- (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList :(int)endpointindex :(unsigned char*)directionData :(unsigned char*)color;
+- (void)createROIfrom3DPaths:(NSArray*)pathsList :(NSArray*)namesList :(NSMutableArray*)roilist;
+- (void) runSegmentation:(float **)ppInData :(float **)ppOutData :(unsigned char **)ppColorData :(unsigned char **)ppDirectionData;
+- (void) enhanceCenterline:(float *)inputData :(unsigned char *)colorData :(NSMutableArray *)pathlists;
 	// Table view data source methods
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)tableView:(NSTableView *)aTableView

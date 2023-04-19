@@ -38,40 +38,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkHessian3DToVesselnessMeasureImageFilter.h"
 #undef id
 
-
 @implementation CMIVSegmentCore
-- (void) setImageWidth:(long) width Height:(long) height Amount: (long) amount Spacing:(float*)spacing
-{
 
+- (void) setImageWidth:(long) width
+                Height:(long) height
+                Amount: (long) amount
+               Spacing:(float*)spacing
+{
 	imageWidth=width;
 	imageHeight=height;
 	imageAmount=amount;
 	imageSize=width*height;
 	xSpacing=spacing[0],ySpacing=spacing[1],zSpacing=spacing[2];
-  
-  return;
-  
-}  
+}
 
-- (void) startShortestPathSearchAsFloat:(float *) pIn Out:(float *) pOut :(unsigned char*) pMarker Direction: (unsigned char*) pPointers
+- (void) startShortestPathSearchAsFloat:(float *) pIn
+                                    Out:(float *) pOut
+                                       :(unsigned char*) pMarker
+                              Direction:(unsigned char*) pPointers
 {
-
 	long i,j,k;
 	int changed;
 	float maxvalue;
 	unsigned char maxcolorindex;
-
 	
 	long itemp;
-	long ilong,iwidth,iheight;
 	long position_i1,position_i2,position_j1,position_j2,position_j3;
 	
+    long ilong=imageWidth;
+    long iwidth=imageHeight;
+    long iheight=imageAmount;
 	
-	ilong=imageWidth;
-	iwidth=imageHeight;
-	iheight=imageAmount;
-	
-
 	inputData=pIn;
 	outputData=pOut;
 	directionOfData=pPointers;
@@ -79,9 +76,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	unsigned char* marker=pMarker;
 	long long* longmarker=(long long*)marker;
 
-	if(!marker)
+	if (!marker)
 		return;
-
 	
 	[self runFirstRoundFasterWith26Neigbhorhood];
 	memset(marker,0xff,imageSize*imageAmount/8+1);
@@ -91,53 +87,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		changed=0;
 		
 //**********************positive direction*****************************
-		for(i=1;i<iheight-1;i++)
+		for (i=1;i<iheight-1;i++)
 		{
 			position_i1 = (i-1)*imageSize;
 			position_i2 = i*imageSize;
 			
-			for(j=1;j<iwidth-1;j++)
+			for (j=1;j<iwidth-1;j++)
 			{
 				position_j1 = (j-1)*ilong;
 				position_j2 = j*ilong;
 				position_j3 = (j+1)*ilong;
 				
-				for(k=1;k<ilong-1;k++)
+				for (k=1;k<ilong-1;k++)
 				{
 					itemp= position_i2+position_j2+k;
-					if(!(*(longmarker+(itemp>>6))))
+					if (!(*(longmarker+(itemp>>6))))
 					{
 						itemp=itemp>>6;
 						do
 						{
 							itemp++;
 						}while(!(*(longmarker+itemp)));
-						itemp=itemp<<6;
+
+                        itemp=itemp<<6;
 						k=itemp-position_i2-position_j2;
 						
 						if(k>=ilong-1)
 							continue;
-						
 					}
 
-					if(!(*(marker+(itemp>>3))))
+					if (!(*(marker+(itemp>>3))))
 					{
 						itemp=itemp>>3;
 						do
 						{
 							itemp++;
 						}while(!(*(marker+itemp)));
+                        
 						itemp=itemp<<3;
 						k=itemp-position_i2-position_j2;
 						
 						if(k>=ilong-1)
 							continue;
-	
 					}
 						
-					if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07)))//if this point need to be check again
+					if ((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07)))//if this point need to be check again
 					{
-						if(*(directionOfData + itemp)&0xc0)//if this is a seed point or saturated point
+						if (*(directionOfData + itemp)&0xc0)//if this is a seed point or saturated point
 							*(marker+(itemp>>3))=*(marker+(itemp>>3))&(~(0x01<<(itemp&0x07)));
 						else
 						{
