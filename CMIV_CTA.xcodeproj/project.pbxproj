@@ -11,6 +11,8 @@
 		4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353EEF729EE665600ECAEE1 /* MieleAPI.framework */; };
 		4356AA9029EFE81800E22267 /* CMIVSaveResult.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ADCE060B3B31CD008B5B9C /* CMIVSaveResult.mm */; };
 		4356AA9129EFEF0700E22267 /* CMIVCLUTOpacityView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B98C76530D313003004CBA19 /* CMIVCLUTOpacityView.mm */; };
+		4356AA9229EFF49800E22267 /* CMIVVRcontroller.mm in Sources */ = {isa = PBXBuildFile; fileRef = B96B0F200B10B1B60044D904 /* CMIVVRcontroller.mm */; };
+		4356AA9329F007ED00E22267 /* CMIVExport.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B4195C0B36C8FC00AD244F /* CMIVExport.mm */; };
 		4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */; };
 		4391B69129EFDE55008DBCDA /* CMIVChopperController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */; };
 		4391B69229EFDE61008DBCDA /* CMIVDCMView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */; };
@@ -447,6 +449,7 @@
 				B969E7B10D111DC700868834 /* CMIVWindow.m in Sources */,
 				4356AA9029EFE81800E22267 /* CMIVSaveResult.mm in Sources */,
 				B9E39DEA0B03648700387A56 /* CMIV_CTA_TOOLS.mm in Sources */,
+				4356AA9329F007ED00E22267 /* CMIVExport.mm in Sources */,
 				B909F0850D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m in Sources */,
 				4391B6A629EFDFBB008DBCDA /* CMIVAutoSeedingCore.mm in Sources */,
 				4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */,
@@ -455,6 +458,7 @@
 				4391B69229EFDE61008DBCDA /* CMIVDCMView.mm in Sources */,
 				4356AA9129EFEF0700E22267 /* CMIVCLUTOpacityView.mm in Sources */,
 				4391B6A729EFDFD5008DBCDA /* CMIVContrastController.mm in Sources */,
+				4356AA9229EFF49800E22267 /* CMIVVRcontroller.mm in Sources */,
 				CE7E504915020CDA00B6222F /* spline.C in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

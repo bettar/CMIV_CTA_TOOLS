@@ -29,9 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import "CMIVScissorsController.h"
 #import "CMIV3DPoint.h"
 #import "CMIVSegmentCore.h"
-#if 0 // @@@
 #import "QuicktimeExport.h"
-#endif
 
 #define id Id
 //#include "itkConnectedThresholdImageFilter.h"
@@ -54,15 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkLabelStatisticsImageFilter.h"
 #undef id
 
-
-
-
-//#define VERBOSEMODE
-//print out some detail logs
-
-
-
-static		float						deg2rad = 3.14159265358979/180.0; 
+static float deg2rad = 3.14159265358979/180.0; 
 
 @implementation CMIVScissorsController
 
@@ -2491,7 +2481,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 {
 	if (activeView==originalView)
 	{
-		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"] == YES)
+		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
 			if ([originalView angle]==0)
@@ -2544,7 +2534,8 @@ static		float						deg2rad = 3.14159265358979/180.0;
 				lastOViewZAngle=[originalView angle];
 			}
 		}
-		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"] == YES)
+
+        if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 		{	
 //			float angle= [originalView angle];
 //			
@@ -2564,7 +2555,7 @@ static		float						deg2rad = 3.14159265358979/180.0;
 	}
 	else if(activeView==cPRView)
 	{
-		if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"] == YES)
+		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
 			if([cPRView angle]==0)
@@ -4247,15 +4238,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//FSSpec spec, newspec;
 	//	[vrViewer renderImageWithBestQuality: YES waitDialog: NO];
 	{
-#if 0 // @@@
 		QuicktimeExport *mov = [[QuicktimeExport alloc] initWithSelector: self : @selector(imageForQuickTime: maxFrame:) :20];
 		
-		NSString* path;
-		
-		path=[mov createMovieQTKit:YES :NO :[[[originalViewController fileList] objectAtIndex:0] valueForKeyPath:@"series.study.name"]];
+		NSString* path = [mov createMovieQTKit:YES :NO :[[[originalViewController fileList] objectAtIndex:0] valueForKeyPath:@"series.study.name"]];
 		
 		[mov release];
-#endif
 	}
 	//	[vrViewer endRenderImageWithBestQuality];
 }
@@ -6301,26 +6288,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 		}
 	}
-	else if(currentTool==7)
+	else if (currentTool==7)
 	{
-		if([sender isEqual:oViewArrow ])
+		if ([sender isEqual:oViewArrow ])
 		{
 			ROI* roi=(ROI*)sender;
 			int roitype =[roi type];
 			
-			if(roitype==tArrow)
+			if (roitype==tArrow)
 			{
-				if([roi ROImode]== ROI_drawing)
+				if ([roi ROImode] == ROI_drawing)
 				{
-					if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"] == YES)
+					if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 					{
 						if([[roi points] count]==3)
 							[[roi points] removeLastObject];
 #ifdef VERBOSEMODE
 						NSLog( @"ROI drawing finished");
-#endif
-						
-						
+#endif						
 					}
 					else
 					{
@@ -8339,31 +8324,32 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
     long result = [oPanel runModalForDirectory:0L file:nil types:[NSArray arrayWithObject:@"txt"]];
     
-    if (result == NSOKButton) 
+    if (result == NSModalResponseOK)
     {
 		float x,y,z;
 		NSString* pointstr=[NSString stringWithContentsOfFile:[[oPanel filenames] objectAtIndex:0]];
 		NSArray* lines=[pointstr componentsSeparatedByString:@"\n"];
 		unsigned i;
 		
-		if([lines count]>3)
+		if ([lines count]>3)
 		{
 			[reference3Dpoints removeAllObjects];
 			for(i=0;i<[lines count];i++)
 			{
 				NSArray* nums=[[lines objectAtIndex:i] componentsSeparatedByString:@" "];
-				if([nums  count]<3)
+				if ([nums  count]<3)
 					continue;
-				CMIV3DPoint* anewpoint=[[CMIV3DPoint alloc] init];
+
+                CMIV3DPoint* anewpoint=[[CMIV3DPoint alloc] init];
 				anewpoint.x=[[nums objectAtIndex:0] floatValue];
 				anewpoint.y=[[nums objectAtIndex:1] floatValue];
 				anewpoint.z=[[nums objectAtIndex:2] floatValue];
 				[reference3Dpoints insertObject:anewpoint atIndex:0 ];
 				[anewpoint release];
-				
 			}
-			[self resample3DPath:0.4:reference3Dpoints];
-			if(!referenceCurvedMPR2DPath)
+
+            [self resample3DPath:0.4:reference3Dpoints];
+			if (!referenceCurvedMPR2DPath)
 			{
 				DCMPix * curImage= [oViewPixList objectAtIndex:0];
 				referenceCurvedMPR2DPath=[[ROI alloc] initWithType: tOpenPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
@@ -10721,7 +10707,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//		if(volumeData)
 	//		{
 	//			FILE* tempFile;
-	//			tempFile= fopen([directionmapfile cString],"r");
+	//			tempFile= fopen([directionmapfile cStringUsingEncoding:NSASCIIStringEncoding],"r");
 	//			fread(outData,sizeof(char),[directionmapsize intValue],tempFile);
 	//			fclose(tempFile);
 	//		}

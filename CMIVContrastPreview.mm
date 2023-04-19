@@ -31,9 +31,7 @@
 #import "CMIV3DPoint.h"
 #import "CMIV_AutoSeeding.h"
 #import "CMIVSegmentCore.h"
-#if 0 // @@@
 #import "QuicktimeExport.h"
-#endif
 
 @implementation CMIVContrastPreview
 
@@ -1079,7 +1077,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			unsigned int i;
 			int colorIndex;
-			if( [anObject boolValue] == YES )
+			if ([anObject boolValue])
 			{
 				
 				for(i=0;i< [showSeedsArray count];i++)
@@ -1585,7 +1583,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (void) crossMove:(NSNotification*) note
 {
-	if([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"] == YES)
+	if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 	{
 		float oX,oY;
 		vtkImageData *tempIm;
@@ -2214,9 +2212,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
     long result = [oPanel runModalForDirectory:0L file:nil types:[NSArray arrayWithObject:@"txt"]];
 	float x,y,z;
-    if (result == NSOKButton) 
+    if (result == NSModalResponseOK)
     {
-
 		NSString* pointstr=[NSString stringWithContentsOfFile:[[oPanel filenames] objectAtIndex:0]];
 		NSArray* lines=[pointstr componentsSeparatedByString:@"\n"];
 

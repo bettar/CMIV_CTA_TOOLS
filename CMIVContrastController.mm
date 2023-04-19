@@ -522,45 +522,43 @@ if( originalViewController == 0L) return 0L;
 	if([outROIList isEqual:aTableView])
 	{
 
-		if( [[aTableColumn identifier] isEqualToString:@"IfExport"])
+		if ( [[aTableColumn identifier] isEqualToString:@"IfExport"])
 		{
-			if( [anObject boolValue] == YES )
+			if ([anObject boolValue])
 			{
 				[[outROIArray objectAtIndex:rowIndex] setROIMode:ROI_selected];
 				[[NSNotificationCenter defaultCenter] postNotificationName: @"roiSelected" object: [outROIArray objectAtIndex:rowIndex] userInfo: nil];
 			}
 			else
 				[[outROIArray objectAtIndex:rowIndex] setROIMode:ROI_sleep];
-
-		}		
-		
+		}
 	}	
 }
-- (long) seedPlantingfloat:(float *)inputData :(float *)outputData :(unsigned char *)colorData
+
+- (long) seedPlantingfloat:(float *)inputData
+                          :(float *)outputData
+                          :(unsigned char *)colorData
 {
 	long seedNumber=0;
-	int             x,y;
-	int             isAStopSeed;
+	int x,y;
+	int isAStopSeed;
 	NSMutableArray  *roiSeriesList;
 	NSMutableArray  *roiImageList;
-	ROI				*curROI = 0L;
-	unsigned int			i,j;
-	unsigned int    k;
-	long            lefttopx, lefttopy,rightbottomx,rightbottomy;
-	unsigned int            pointamount;
-	int             tempxx,tempyy;
+	ROI *curROI = 0L;
+	unsigned int i,j;
+	unsigned int k;
+	long lefttopx, lefttopy,rightbottomx,rightbottomy;
+	unsigned int pointamount;
+	int tempxx,tempyy;
 	
-	
-	
-	// All rois contained in the current series
+	// All ROIs contained in the current series
 	roiSeriesList = [originalViewController roiList];
-	for( j = 0; j < [roiSeriesList count]; j++)
+	for ( j = 0; j < [roiSeriesList count]; j++)
 	{
-		// All rois contained in the current image
+		// All ROIs contained in the current image
 		roiImageList = [roiSeriesList objectAtIndex: j];
 		
-		
-		for( i = 0; i < [roiImageList count]; i++)
+		for ( i = 0; i < [roiImageList count]; i++)
 		{
 			curROI = [roiImageList objectAtIndex: i];
 			unsigned char colorindex=0;

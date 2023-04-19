@@ -1218,7 +1218,7 @@
 			if( vectorsB[ i] != 0) { equalZero = NO; break;}
 		}
 		
-		if( equalVector == YES && equalZero == NO)
+		if ( equalVector && !equalZero)
 		{
 			if( fabs( vectors[6]) > fabs(vectors[7]) && fabs( vectors[6]) > fabs(vectors[8]))
 			{

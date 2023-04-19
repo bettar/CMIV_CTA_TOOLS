@@ -78,8 +78,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSMutableArray* seriesNeedToAutomaticProcess;
 	BOOL isAutoSeeding;
 	unsigned int minimumImagesForEachSeriesToAutoSeeding;
-
 }
+
 @property BOOL ifVesselEnhanced;
 - (IBAction)closeAboutDlg:(id)sender;
 - (IBAction)openCMIVWebSite:(id)sender;

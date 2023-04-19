@@ -30,9 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import "CMIVSaveResult.h"
 #import "CMIVExport.h"
 
-//#define VERBOSEMODE
-
-
 @implementation CMIVSaveResult
 
 - (IBAction)onCancel:(id)sender

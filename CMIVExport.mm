@@ -20,9 +20,11 @@ PURPOSE.
 #import "CMIVExport.h"
 #import <MieleAPI/BrowserController.h>
 
+#if 0 // @@@
 #import "SRAnnotation.h"
+#endif
 
-#define VERBOSEMODE
+#import "url.h" // for OUR_DATA_LOCATION
 
 @implementation CMIVExport
 - (void) setSeriesDescription: (NSString*) desc
@@ -174,7 +176,7 @@ PURPOSE.
             dstPath = [NSString stringWithFormat:@"%@/%ld", OUTpath, index];
 			index++;
 		}
-		while( [[NSFileManager defaultManager] fileExistsAtPath:dstPath] == YES);
+		while ( [[NSFileManager defaultManager] fileExistsAtPath:dstPath]);
 	}
 
 	if( width != 0 && height != 0 && data != 0L)
@@ -188,7 +190,7 @@ PURPOSE.
 		
 		seriesNumber = [NSNumber numberWithInt:exportSeriesNumber];
 		
-		if( dcmSourcePath && [DicomFile isDICOMFile:dcmSourcePath])
+		if ( dcmSourcePath && [DicomFile isDICOMFile:dcmSourcePath])
 		{
 				dcmDst = [[DCMObject alloc] initWithContentsOfFile:dcmSourcePath decodingPixelData:NO];
 		}
@@ -388,12 +390,12 @@ PURPOSE.
 	width=[curPix pwidth];
 	height=[curPix pheight];
 	int maxImgSize=width*height;
-	for(ii=0;ii<[pixList count];ii++)
+	for (ii=0;ii<[pixList count];ii++)
 	{
 		curPix=[pixList objectAtIndex:ii];
-		if([curPix pwidth]*[curPix pheight]>maxImgSize)
+		if ([curPix pwidth]*[curPix pheight]>maxImgSize)
 		{
-			maxImgSize=[curPix pwidth]*[curPix pheight];
+			maxImgSize = [curPix pwidth]*[curPix pheight];
 		}
 	}
 	spp=1;
@@ -401,9 +403,9 @@ PURPOSE.
 	vImage_Buffer srcf, dst8;
 				
 	data=(unsigned char	*)malloc(maxImgSize*spp*bpp/8);
-	dicomFileData=(unsigned char	*)malloc(maxImgSize*spp*bpp/8+100000);
+	dicomFileData=(unsigned char *)malloc(maxImgSize*spp*bpp/8+100000);
 
-	tempuint= (unsigned int*) data;
+	tempuint= (unsigned short*) data;
 	
 	NSString *temppath = [[self hostAppDocumentPath3] stringByAppendingPathComponent:@"/TEMP"] ;
 	NSString *OUTpath = [[self hostAppDocumentPath3] stringByAppendingPathComponent:@"/INCOMING.noindex"] ;
@@ -426,15 +428,15 @@ PURPOSE.
 	NSNumber* backupInsNum=[[fakeDicomImage valueForKey:@"instanceNumber"] retain];
 	
 	
-	if(data&&fileList&&originalViewController)
+	if (data && fileList&&originalViewController)
 	{
 		id waitWindow = [originalViewController startWaitWindow:@"writing to disk..."];	
 		NSMutableArray* addedROIFiles=[[NSMutableArray alloc] initWithCapacity:0];
 
-		for(ii=0;ii<[fileList count];ii++)
+		for (ii=0;ii<[fileList count];ii++)
 		{	
-			NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
-						long	err;
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+            long err;
 			curPix=[pixList objectAtIndex: ii];
 			
 			width=[curPix pwidth];
@@ -449,13 +451,8 @@ PURPOSE.
 			dst8.rowBytes = width * sizeof( short);
 			dst8.data = data;
 			
-
-			
-			
 			vImageConvert_FTo16U( &srcf, &dst8, -1024,  1, 0);	//By default, we use a 1024 rescale intercept !!
 			[self setSourceFile: [[fileList objectAtIndex:ii] valueForKey:@"completePath"]];
-			
-			
 
 			[self setPixelSpacing: [curPix pixelSpacingX]:[curPix pixelSpacingY]];
 
@@ -465,7 +462,9 @@ PURPOSE.
 			[curPix orientation: o];
 			[self setOrientation: o];
 			
-			o[ 0] = [curPix originX];		o[ 1] = [curPix originY];		o[ 2] = [curPix originZ];
+			o[ 0] = [curPix originX];
+            o[ 1] = [curPix originY];
+            o[ 2] = [curPix originZ];
 			[self setPosition: o];
 			
 			//[self setPixelData: data samplePerPixel:spp bitsPerPixel:bpp width: width height: height];
@@ -481,48 +480,50 @@ PURPOSE.
 			//[imageView display];
 			//[originalViewController adjustSlider];
 			
-			if(tlength)
+			if (tlength)
 			{
 				long index = 0;
 				NSString *dstPath,*tempdstPath;
 				do
 				{
-					tempdstPath = [NSString stringWithFormat:@"%@/%d", temppath, index];
+                    tempdstPath = [NSString stringWithFormat:@"%@/%ld", temppath, index];
 					index++;
 				}
-				while( [[NSFileManager defaultManager] fileExistsAtPath:tempdstPath] == YES);
+				while( [[NSFileManager defaultManager] fileExistsAtPath:tempdstPath]);
 				
 				index = 0;
 				
 				do
 				{
-					dstPath = [NSString stringWithFormat:@"%@/%d", OUTpath, index];
+                    dstPath = [NSString stringWithFormat:@"%@/%ld", OUTpath, index];
 					index++;
 				}
-				while( [[NSFileManager defaultManager] fileExistsAtPath:dstPath] == YES);
+				while ( [[NSFileManager defaultManager] fileExistsAtPath:dstPath]);
 					
-				FILE* tempFile;
-				tempFile= fopen([tempdstPath cString],"wb");
+				FILE* tempFile = fopen([tempdstPath cStringUsingEncoding:NSASCIIStringEncoding],"wb");
 				fwrite(dicomFileData,sizeof(char),tlength,tempFile);
 				fclose(tempFile);
 				[[NSFileManager defaultManager] copyPath:tempdstPath  toPath:dstPath handler:nil];
 				[[NSFileManager defaultManager] removeFileAtPath:tempdstPath handler:nil];
-				if([[roiList objectAtIndex:ii] count])
+				if ([[roiList objectAtIndex:ii] count])
 				{
-					tempdstPath=[NSString stringWithFormat:@"/%@ %d-%d.dcm",sopInstanceUID, [curPix ID], [curPix frameNo]];
+                    tempdstPath=[NSString stringWithFormat:@"/%@ %ld-%ld.dcm",sopInstanceUID, [curPix ID], [curPix frameNo]];
 					tempdstPath=[roifolderpath stringByAppendingPathComponent:tempdstPath];
 					[fakeDicomImage setValue:sopInstanceUID forKey:@"sopInstanceUID"];
 					[fakeDicomImage setValue:[NSNumber numberWithInt:[curPix ID]] forKey:@"instanceNumber"];
-				
-					NSString *aROIpath = [SRAnnotation archiveROIsAsDICOM: [roiList objectAtIndex:ii]  toPath: tempdstPath forImage:fakeDicomImage ];
-					if(aROIpath)
+			
+                    NSString *aROIpath = nil;
+#if 0 // @@@
+                    aROIpath = [SRAnnotation archiveROIsAsDICOM: [roiList objectAtIndex:ii]  toPath: tempdstPath forImage:fakeDicomImage ];
+#endif
+					if (aROIpath)
 						[addedROIFiles addObject:aROIpath];
 					else
 						[addedROIFiles addObject:tempdstPath];//sometime aROIpath will be nil but the ROI is all right, donot know why
 				}
-				
 			}
-			[pool release];
+
+            [pool release];
 		}
 
 		[fakeDicomImage setValue:backupSOPIns forKey:@"sopInstanceUID"];

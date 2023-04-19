@@ -421,11 +421,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (IBAction)changeROIShowingInAxView:(id)sender;
 - (IBAction)quicktimeExport:(id)sender;
-- (id) showPanelAfterROIChecking:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner;
-- (id) showScissorsPanel:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner;
-- (int) showPolygonMeasurementPanel:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner;
-- (id)showPanelAsWizard:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner;
-- (id)showPanelAsCPROnly:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner;
+- (id) showPanelAfterROIChecking:(ViewerController *) vc : (CMIV_CTA_TOOLS*) owner;
+- (id) showScissorsPanel:(ViewerController *) vc : (CMIV_CTA_TOOLS*) owner;
+- (int) showPolygonMeasurementPanel:(ViewerController *) vc : (CMIV_CTA_TOOLS*) owner;
+- (id)showPanelAsWizard:(ViewerController *) vc : (CMIV_CTA_TOOLS*) owner;
+- (id)showPanelAsCPROnly:(ViewerController *) vc : (CMIV_CTA_TOOLS*) owner;
 - (int) initViews;
 - (int) initSeedsList;
 - (int) reloadSeedsFromExportedROI;
@@ -446,10 +446,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) crossMove:(NSNotification*) note;
 - (void) cAndAxViewReset;
 - (void) defaultToolModified: (NSNotification*) note;
-- (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width:(int)height:(short unsigned int*)im :(float)spaceX:(float)spaceY:(float)originX:(float)originY;
-- (void) creatCPRROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width:(int)height:(float *)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY;
-- (void) creatAxROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width:(int)height:(float *)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY;
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY:(float)originZ;
+- (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width :(int)height :(short unsigned int*)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
+- (void) creatCPRROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width :(int)height :(float *)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
+- (void) creatAxROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width :(int)height :(float *)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
+- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
 - (void) changeCurrentTool:(ToolMode) tag;
 - (void) fixHolesInBarrier:(int)minx :(int)maxx :(int)miny :(int)maxy :(int)minz :(int)maxz :(short unsigned int) marker;
 - (NSMutableArray *) create3DPathFromROIs:(NSString*) roiName;

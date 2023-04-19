@@ -29,17 +29,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #import "CMIV_CTA_TOOLS.h"
 #import "CMIVChopperController.h"
-#if 0 // @@@
 //#import "CMIVSpoonController.h"
 #import "CMIVContrastController.h"
 #import "CMIVVRcontroller.h"
-#endif
 #import "CMIVScissorsController.h"
-#if 0 // @@@
 #import "CMIVContrastPreview.h"
 #import "CMIVSaveResult.h"
-#endif // @@@
 #import "CMIV_AutoSeeding.h"
+
+#import "url.h" // for OUR_DATA_LOCATION
 
 // Don't modify this line. If you really want to update it run `uuidgen`
 #define PLUGIN_ID "77DFD501-BF5F-4363-B678-50D0EF7F0F16"
@@ -271,7 +269,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[self showAutoSeedingDlg];
 	
     else if ([menuName isEqualToString:NSLocalizedString(@"VOI Cutter", nil)]) // menu 2
-		err = [self startChopper:viewerController];
+		err = [self startChopper: viewerController];
 	
 #ifdef EXTRA_MENU_ENTRIES
     else if ([menuName isEqualToString:NSLocalizedString(@"MathMorph Tool", nil)])
@@ -281,35 +279,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     else if ([menuName isEqualToString:NSLocalizedString(@"2D Views", nil)]) // menu 3
 		err = [self startScissors: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"Interactive Segmentation", nil)])
 		err = [self startContrast: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)] == YES) // menu 5
+    else if ([menuName isEqualToString:NSLocalizedString(@"Tagged Volume Rendering", nil)]) // menu 5
 		err = [self startVR: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Save Results", nil)] == YES) // menu 6
+    else if ([menuName isEqualToString:NSLocalizedString(@"Save Results", nil)]) // menu 6
 		err = [self saveResult: viewerController];
 	
-    else if ([menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)] == YES) // menu 4
+    else if ([menuName isEqualToString:NSLocalizedString(@"Polygon Measurement", nil)]) // menu 4
 		err = [self startPolygonMeasure: viewerController];
 
 #ifdef EXTRA_MENU_ENTRIES
-    else if ([menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)] == YES)
+    else if ([menuName isEqualToString:NSLocalizedString(@"ShowVesselnessMap", nil)])
 	{
 		float* volumeData=[viewerController volumePtr:0];
 		err = [self loadVesselnessMap:volumeData];
 	}
 #endif
 
-    else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 5", nil)] == YES)
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 5", nil)])
 	{
 		CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
 		err = [autoSeedingController smoothingImages3D:viewerController:self:5];
-		[autoSeedingController release];
-		
+		[autoSeedingController release];		
 	}
 
-    else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 10", nil)] == YES)
+    else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 10", nil)])
 	{
 		CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
 		err = [autoSeedingController smoothingImages3D:viewerController:self:10];
@@ -370,12 +367,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (int) startChopper:(ViewerController *) vc
 {
 	int err=0;
-#if 0 // @@@
-	CMIVChopperController* chopperController=[[CMIVChopperController alloc] showChopperPanel:vc:self];
-	if(!chopperController)
+	CMIVChopperController* chopperController = [[CMIVChopperController alloc] showChopperPanel:vc:self];
+	if (!chopperController)
 		err=1;
-#endif
-	return err;
+
+    return err;
 }
 
 /*
@@ -411,27 +407,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (int) startVR:(ViewerController *) vc
 {
 	int err=0;
-#if 0 // @@@
+
 	CMIVVRcontroller* vrController = [[CMIVVRcontroller alloc] showVRPanel:vc:self];
 	if(!vrController)
 		err=1;
-#endif
+
 	return err;
 }
 
 - (int) saveResult:(ViewerController *) vc
 {
 	int err=0;
-#if 0 // @@@
-	CMIVSaveResult *saver=[[CMIVSaveResult alloc] showSaveResultPanel:vc:self];
+
+    CMIVSaveResult *saver = [[CMIVSaveResult alloc] showSaveResultPanel:vc
+                                                                       :self];
 
 //	CMIVSaveResult *saver=[[CMIVSaveResult alloc] init];
 //	err = [saver showSaveResultPanel:vc:self];
 
-	if(!err)
+	if (!err)
 		currentController=saver;
-#endif
-	return err;
+
+    return err;
 }
 
 - (void) gotoStepNo:(int)stage
@@ -736,7 +733,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     return err;
 }
 
-#define OUR_DATA_LOCATION       @"Miele-LXIV Data"  // TODO: use CFBundleName
 -(NSString*)hostAppDocumentPath
 {
 	char s[1024];
@@ -781,35 +777,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
 	
-	NSString* path=[self hostAppDocumentPath];
-	NSString* file1=[path stringByAppendingFormat:@"/CTACrashChach/%@CMIV.tmp",seriesUid];
-	NSString* file2=[path stringByAppendingFormat:@"/CTACrashChach/%@maskmap.tmp",seriesUid];
-	NSString* file3=[path stringByAppendingFormat:@"/CTACrashChach/%@vesselness.tmp",seriesUid];
-	NSString* file4=[path stringByAppendingFormat:@"/CTACrashChach/%@directionmap.tmp",seriesUid];
+	NSString* path = [self hostAppDocumentPath];
+	NSString* file1 = [path stringByAppendingFormat:@"/CTACrashChach/%@CMIV.tmp",seriesUid];
+	NSString* file2 = [path stringByAppendingFormat:@"/CTACrashChach/%@maskmap.tmp",seriesUid];
+	NSString* file3 = [path stringByAppendingFormat:@"/CTACrashChach/%@vesselness.tmp",seriesUid];
+	NSString* file4 = [path stringByAppendingFormat:@"/CTACrashChach/%@directionmap.tmp",seriesUid];
 	int err=0;
 	NSString* step=[dataOfWizard objectForKey:@"Step"];
-	if([step isEqualToString:@"Step1"])
+	if ([step isEqualToString:@"Step1"])
 	{
 		NSData* tempdata=[dataOfWizard objectForKey:@"VesselnessMap"];
 		NSNumber* size=[dataOfWizard objectForKey:@"VesselnessMapSize"];
 		char* tempbuffer=(char*)[tempdata bytes];
-		FILE* tempFile;
-		tempFile= fopen([file3 cString],"wb");
+		FILE* tempFile = fopen([file3 cStringUsingEncoding:NSASCIIStringEncoding],"wb");
 		fwrite(tempbuffer,sizeof(char),[size intValue],tempFile);
 		fclose(tempFile);
 		[dataOfWizard removeObjectForKey:@"VesselnessMap"];
 		[dataOfWizard setObject:file3 forKey:@"VesselnessMapPath"];
 		err=[dataOfWizard writeToFile:file1 atomically:YES];
-		
-		
 	}
 	else if([step isEqualToString:@"Step2"])
 	{
 		NSData* tempdata=[dataOfWizard objectForKey:@"SeedMap"];
 		NSNumber* size=[dataOfWizard objectForKey:@"SeedMapSize"];
 		char* tempbuffer=(char*)[tempdata bytes];
-		FILE* tempFile;
-		tempFile= fopen([file2 cString],"wb");
+		FILE* tempFile = fopen([file2 cStringUsingEncoding:NSASCIIStringEncoding],"wb");
 		fwrite(tempbuffer,sizeof(char),[size intValue],tempFile);
 		fclose(tempFile);
 		[dataOfWizard removeObjectForKey:@"SeedMap"];
@@ -823,8 +815,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		NSData* tempdata=[dataOfWizard objectForKey:@"DirectionMap"];
 		NSNumber* size=[dataOfWizard objectForKey:@"DirectionMapSize"];
 		char* tempbuffer=(char*)[tempdata bytes];
-		FILE* tempFile;
-		tempFile= fopen([file4 cString],"wb");
+		FILE* tempFile = fopen([file4 cStringUsingEncoding:NSASCIIStringEncoding],"wb");
 		fwrite(tempbuffer,sizeof(char),[size intValue],tempFile);
 		fclose(tempFile);
 		[dataOfWizard removeObjectForKey:@"DirectionMap"];
@@ -840,8 +831,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		NSData* tempdata=[dataOfWizard objectForKey:@"MaskMap"];
 		NSNumber* size=[dataOfWizard objectForKey:@"MaskMapSize"];
 		char* tempbuffer=(char*)[tempdata bytes];
-		FILE* tempFile;
-		tempFile= fopen([file2 cString],"wb");
+		FILE* tempFile = fopen([file2 cStringUsingEncoding:NSASCIIStringEncoding],"wb");
 		fwrite(tempbuffer,sizeof(char),[size intValue],tempFile);
 		fclose(tempFile);
 		[dataOfWizard removeObjectForKey:@"MaskMap"];
@@ -849,10 +839,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		err=[dataOfWizard writeToFile:file1 atomically:YES];
 	}
 
-	
-
 	return err;
-
 }
 
 - (void)saveCurrentStep
@@ -861,7 +848,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
 	[self saveIntermediateData:seriesUid];
 }
-- (int)  saveIntermediateData:(NSString*)seriesUid
+
+- (int) saveIntermediateData:(NSString*)seriesUid
 {
 	int err=0;
 	NSString* path=[self hostAppDocumentPath];
