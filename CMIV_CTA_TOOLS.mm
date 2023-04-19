@@ -205,24 +205,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	isAutoSeeding=YES;
-#if 0 // @@@
 	while ([seriesNeedToAutomaticProcess count])
 	{
 		sleep(60);
-		NSManagedObject	 *series=[seriesNeedToAutomaticProcess objectAtIndex:0];
-		if(series&&![series isFault])
+		NSManagedObject *series=[seriesNeedToAutomaticProcess objectAtIndex:0];
+		if (series && ![series isFault])
 		{
 			NSArray	*fileList = [[series valueForKey:@"images"] allObjects] ;
-			if(fileList&&[fileList count]>minimumImagesForEachSeriesToAutoSeeding)
+			if (fileList&&[fileList count] > minimumImagesForEachSeriesToAutoSeeding)
 			{
-				NSMutableArray* pixList =[[NSMutableArray alloc] initWithCapacity:0];
-				CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
+				NSMutableArray* pixList = [[NSMutableArray alloc] initWithCapacity:0];
+				CMIV_AutoSeeding* autoSeedingController = [[CMIV_AutoSeeding alloc] init] ;
 				@try
 				{
-					NSData*volumeData=[autoSeedingController loadImageFromSeries:series To:pixList];
-					if(volumeData)
+					NSData *volumeData = [autoSeedingController loadImageFromSeries:series To:pixList];
+					if (volumeData)
 					{
-						float* imgbuff=(float*)[volumeData bytes];
+						float* imgbuff = (float*)[volumeData bytes];
 			//			float* testbuff=[viewerController volumePtr];
 			//			memcpy(testbuff, imgbuff, [volumeData length]);
 						
@@ -247,8 +246,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			NSLog(@"CMIV CTA Plugin: failed to auto proceed series- %@", [series valueForKey:@"name"]);
 		}
 	}
-#endif // @@@
-	isAutoSeeding=NO;
+
+    isAutoSeeding=NO;
 	[pool release];
 }
 
@@ -303,7 +302,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	{
 		CMIV_AutoSeeding* autoSeedingController=[[CMIV_AutoSeeding alloc] init] ;
 		err = [autoSeedingController smoothingImages3D:viewerController:self:5];
-		[autoSeedingController release];		
+		[autoSeedingController release];
 	}
 
     else if ( [menuName isEqualToString:NSLocalizedString(@"Smooth Filter 10", nil)])
@@ -327,10 +326,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSManagedObject	*curImage = [[viewerController fileList] objectAtIndex:0];
 	NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
 	NSString* path=[self hostAppDocumentPath];
-	NSString* file;
-	file= [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
+	NSString* file = [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
 	NSMutableDictionary* savedData=[[NSMutableDictionary alloc] initWithContentsOfFile:file];
-	if(savedData)
+	if (savedData)
 	{
 		[savedData release];
 		int nrespond = NSRunAlertPanel(NSLocalizedString(@"Found Previous Results", nil),
@@ -450,14 +448,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[[CMIVScissorsController alloc]  showPanelAsWizard:viewerController
                                                           :self];
 	}
-#if 0 // @@@
 	else if (stage==3) // result preview
 	{
 		NSLog( @"finish step 3");
 		[[CMIVContrastPreview alloc] showPanelAsWizard:viewerController
                                                       :self];
 	}
-#endif
 	else if (stage==4) // 2D viewer CPR only
 	{
 		NSLog( @"finish step 4");
@@ -470,38 +466,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {
 	if(!dataOfWizard)
 		dataOfWizard=[[NSMutableDictionary alloc] initWithCapacity: 0];
-	return dataOfWizard;
+
+    return dataOfWizard;
 }
+
 - (void) setDataofWizard:(NSMutableDictionary*) dic
 {
 	[dataOfWizard release];
 	dataOfWizard=dic;
 	[dic retain];
 }
+
 - (void) cleanDataOfWizard
 {
-	
-	if(dataOfWizard)
+	if (dataOfWizard)
 	{
-
 		NSArray* temparray=[dataOfWizard objectForKey:@"VCList"];
 		NSArray* tempnamearray=[dataOfWizard objectForKey:@"VCTitleList"];
-		if(temparray&&tempnamearray)
+		if (temparray&&tempnamearray)
 		{
-			unsigned int i;
-			for(i=0;i<[temparray count];i++)
+			for (unsigned int i=0;i<[temparray count];i++)
 				[[[temparray objectAtIndex: i] window] setTitle:[tempnamearray objectAtIndex: i]];
-
 		}
+        
 		[dataOfWizard removeAllObjects];//list in list shoule be clean separatedly
 	}
 }
+
 - (void) cleanSharedData
 {
-	if(dataOfWizard)
+	if (dataOfWizard)
 	{
 		NSString* stepstr=[dataOfWizard objectForKey:@"Step"];
-		if([stepstr isEqualToString:@"finish"])
+		if ([stepstr isEqualToString:@"finish"])
 			[self cleanUpCachFolder];
 		
 		[self cleanDataOfWizard];
@@ -509,7 +506,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		dataOfWizard=nil;
 	}
 
-    if(currentController)
+    if (currentController)
 		[currentController release];
 	
     currentController=nil;
@@ -529,11 +526,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		{
 			ViewerController* vc=[temparray objectAtIndex: 0];
 			NSString* sname=[tempnamearray objectAtIndex: 0];
-#if 0 // @@@
 			if (autosaver == nil)
 				autosaver = [[CMIVSaveResult alloc] init];
-#endif
-			if (autoSaveSeriesNumber == 0)
+
+            if (autoSaveSeriesNumber == 0)
 				autoSaveSeriesNumber = 6700 + [[NSCalendarDate date] minuteOfHour] + [[NSCalendarDate date] secondOfMinute];
 			else
 				autoSaveSeriesNumber++;
@@ -543,7 +539,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			[tempnamearray removeObject:sname];
 		}
 
-		if(autosaver)
+		if (autosaver)
 			[autosaver release];
 
         autosaver=nil;
@@ -553,8 +549,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (void) showAutoSeedingDlg
 {
-	if(!window)[NSBundle loadNibNamed:@"AboutDlg" owner:self];
-	[NSApp beginSheet: window modalForWindow:[viewerController window] modalDelegate:self didEndSelector:nil contextInfo:nil];
+	if (!window)
+        [NSBundle loadNibNamed:@"AboutDlg" owner:self];
+
+    [NSApp beginSheet: window modalForWindow:[viewerController window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 	[self checkMaxValueForSeedingIndicator];
 }
 
@@ -568,14 +566,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {
 	if(autoSeedingIndicator)
 	{
-		int step=[autoSeedingIndicator intValue];
-		[autoSeedingIndicator setIntValue:step+1];
+		int step = [autoSeedingIndicator intValue];
+		[autoSeedingIndicator setIntValue: step+1];
 		[autoSeedingIndicator displayIfNeeded];
 	}
 }
+
 - (IBAction)closeAutoSeedingDlg:(id)sender
 {
-	
 	[window close];
     [NSApp endSheet:window returnCode:[sender tag]];
 }
@@ -611,12 +609,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     [autoCleanCachDaysText setIntValue:autoCleanCachDays];
 	autoWatchOnReceivingStudyDesciptionFilterString=[[NSUserDefaults standardUserDefaults] stringForKey:@"CMIVAutoWatchStudyDescriptionKeyWord"];
 	autoWatchOnReceivingSeriesDesciptionFilterString=[[NSUserDefaults standardUserDefaults] stringForKey:@"CMIVAutoWatchSeriesDescriptionKeyWord"];
-	if(!autoWatchOnReceivingStudyDesciptionFilterString)
+	if (!autoWatchOnReceivingStudyDesciptionFilterString)
 	{
 		autoWatchOnReceivingStudyDesciptionFilterString=@"coronary";
 		[[NSUserDefaults standardUserDefaults] setObject:autoWatchOnReceivingStudyDesciptionFilterString forKey:@"CMIVAutoWatchStudyDescriptionKeyWord"];
 	}
-	if(!autoWatchOnReceivingSeriesDesciptionFilterString)
+
+    if (!autoWatchOnReceivingSeriesDesciptionFilterString)
 	{
 		autoWatchOnReceivingSeriesDesciptionFilterString=@"cor";
 		[[NSUserDefaults standardUserDefaults] setObject:autoWatchOnReceivingSeriesDesciptionFilterString forKey:@"CMIVAutoWatchSeriesDescriptionKeyWord"];
@@ -624,7 +623,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	[autoWatchOnReceivingKeyWordTextField1 setStringValue:autoWatchOnReceivingStudyDesciptionFilterString];
 	[autoWatchOnReceivingKeyWordTextField2 setStringValue:autoWatchOnReceivingSeriesDesciptionFilterString];
-
 }
 
 - (IBAction)closeAdvancedSettingDlg:(id)sender
@@ -645,7 +643,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     [[NSUserDefaults standardUserDefaults] setInteger:performRibCageRemoval forKey:@"CMIVAutoRibRemoval"];
 	
-
 	if ([autoWatchOnReceivingButton state] == NSControlStateValueOn)
 		ifAutoSeedingOnReceive=YES;
 	else
@@ -686,16 +683,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     [NSApp endSheet:advanceSettingWindow returnCode:[sender tag]];
 	[self checkMaxValueForSeedingIndicator];
 }
+
 -(void)checkMaxValueForSeedingIndicator
 {
 	int maxindicatorvalue=4;
-	if(performRibCageRemoval==1)
+
+    if (performRibCageRemoval==1)
 		maxindicatorvalue+=2;
-	if(performVesselEnhance==1)
+	
+    if (performVesselEnhance==1)
 		maxindicatorvalue+=4;
-	if(performCenterlineTracking==1)
+	
+    if (performCenterlineTracking==1)
 		maxindicatorvalue+=2;
-	if(autoSeedingIndicator)
+	
+    if (autoSeedingIndicator)
 		[autoSeedingIndicator setMaxValue:maxindicatorvalue];
 	[autoSeedingIndicator setIntValue:0];
 	[autoSeedingIndicator displayIfNeeded];
@@ -1056,17 +1058,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             if (step2)
 			{
-#if 0 // @@@
 				[[CMIVScissorsController alloc] showPanelAsAutomaticWizard:viewerController
                                                                           :self];
-#endif
 			}
-			else if(step1)
+			else if (step1)
 				[self gotoStepNo:2];
 			else
 				[self gotoStepNo:1];
 		}
-		else if(nrespond==0)
+		else if (nrespond==0)
 		{
 			return 0;
 		}
@@ -1084,6 +1084,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     return 0;
 }
+
 - (int)  loadIntermediateDataForVolumeCropping:(NSMutableDictionary*)savedData
 {
 	//if([savedData objectForKey:@"HeartRegionArrays"])

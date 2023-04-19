@@ -34,11 +34,20 @@
 #import "CMIV3DPoint.h"
 #import <MieleAPI/BrowserController.h>
 
+#import "url.h" // for MALLOC_ERROR_MESSAGE
+
 #define TOPOTHERSEEDS 4
 #define BOTTOMOTHERSEEDS 5
 
 @implementation CMIV_AutoSeeding
--(int)runAutoSeeding:(ViewerController *) vc: (CMIV_CTA_TOOLS*) owner :(NSArray*)pixList :(float*)volumePtr:(BOOL)ribRemoval :(BOOL)centerlineTracking :(BOOL)needVesselEnhance
+
+-(int)runAutoSeeding:(ViewerController *) vc
+                    :(CMIV_CTA_TOOLS*) owner
+                    :(NSArray*)pixList
+                    :(float*)volumePtr
+                    :(BOOL)ribRemoval
+                    :(BOOL)centerlineTracking
+                    :(BOOL)needVesselEnhance
 {
 	parent=owner;
 	if(vc)
@@ -299,7 +308,6 @@
 {
 	vImage_Buffer	srcVimage, dstVimage;
 	int outImageWidth,outImageHeight,outImageSize,outImageAmount;
-	int i;
 	int inImageWidth=indimesion[0], inImageHeight=indimesion[1], inImageAmount=indimesion[2];
 	outImageWidth=outdimesion[0];
 	outImageHeight=outdimesion[1];
@@ -307,14 +315,16 @@
 	outImageAmount=outdimesion[2];
 	
 	float* tempVolume=(float*)malloc(outImageWidth*outImageHeight*inImageAmount*sizeof(float));
-	if(!tempVolume)
+	if (!tempVolume)
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 		return 1;
 	}
 	
-	for(i=0;i<inImageAmount;i++)
+	for (int i=0;i<inImageAmount;i++)
 	{
 		
 		srcVimage.data = input+inImageWidth*inImageHeight*i;
@@ -342,45 +352,48 @@
 	
 	free(tempVolume);
 	return 0;
-	
 }
+
 - (void) runSegmentationAndSkeletonization:(unsigned short*)seedData :(float*)volumeData1
 {
-	
-	long size =  imageWidth * imageHeight * imageAmount;
-	
-	size = sizeof(float) * imageWidth * imageHeight * imageAmount;
-	float               *inputData=0L, *outputData=0L;
-	unsigned char       *colorData=0L, *directionData=0L;
+	//long size = imageWidth * imageHeight * imageAmount;
+	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
+    
+	float *inputData=0L, *outputData=0L;
+	unsigned char *colorData=0L, *directionData=0L;
 	inputData = volumeData1;
 	NSLog( @"start step 3");
 	outputData = (float*) malloc( size);
-	if( !outputData)
+	if ( !outputData)
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
 
     size = sizeof(char) * imageWidth * imageHeight * imageAmount;
 	colorData = (unsigned char*) malloc( size);
-	if( !colorData)
+	if ( !colorData)
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		return;
 	}
 
     directionData= (unsigned char*) malloc( size);
-	if( !directionData)
+	if ( !directionData)
 	{
 		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		free(colorData);
-		
 		return;
 	}
 	

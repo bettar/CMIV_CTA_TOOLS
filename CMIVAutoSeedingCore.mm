@@ -1655,7 +1655,7 @@ else
 	int x1,y1,z1,r1;
 	int x2,y2;
 	int x,y;
-	for(i=0;i<[circles count];i++)
+	for (i=0;i<[circles count];i++)
 	{
 		CMIV3DPoint* acircle=[circles objectAtIndex:i];
 		x1=acircle.x;
@@ -1667,31 +1667,35 @@ else
 		y=y1-r1;
 		if(x<0)
 			x=0;
-		if(y<0)
+		
+        if(y<0)
 			y=0;
+        
 		x2=x1+r1;
 		y2=y1+r1;
-		if(x2>imageWidth-1)
+		if (x2>imageWidth-1)
 			x2=imageWidth-1;
-		if(y2>imageHeight-1)
-			y2=imageHeight-1;
-		for(;x<x2;x++)
-			*(inputData+(z1*imageSize)+y1*imageWidth+x)=3000;
-		for(;y<y2;y++)
-			*(inputData+(z1*imageSize)+y*imageWidth+x1)=3000;
 		
+        if (y2>imageHeight-1)
+			y2=imageHeight-1;
+		
+        for (;x<x2;x++)
+			*(inputData+(z1*imageSize)+y1*imageWidth+x)=3000;
+		
+        for (;y<y2;y++)
+			*(inputData+(z1*imageSize)+y*imageWidth+x1)=3000;
 	}
-	
 }
+
 -(int)removeUnrelatedCircles:(NSMutableArray*)circles
 {
 	float centerxyDeltaThreshold=0.9;
 	float centerzDeltaThreshold=3.0;
-	NSMutableArray	*potentialVessels=[NSMutableArray arrayWithCapacity:0];
+	NSMutableArray *potentialVessels=[NSMutableArray arrayWithCapacity:0];
 	
 	unsigned int i,j,k;
 	float x1,y1,r1,z1,x2,y2,r2,z2;
-	for(i=0;i<[circles count];i++)
+	for (i=0;i<[circles count];i++)
 	{
 		CMIV3DPoint* acircle=[circles objectAtIndex:i];
 		x1=acircle.x;
@@ -1699,33 +1703,37 @@ else
 		z1=acircle.z;
 		r1=acircle.fValue;
 		
-		for(j=0;j<[potentialVessels count]&&acircle;j++)
-			for(k=0;k<[[potentialVessels objectAtIndex:j] count];k++)
+		for (j=0;j<[potentialVessels count]&&acircle;j++)
+			for (k=0;k<[[potentialVessels objectAtIndex:j] count];k++)
 			{
 				CMIV3DPoint* bcircle=[[potentialVessels objectAtIndex:j] objectAtIndex:k];
 				x2=bcircle.x;
 				y2=bcircle.y;
 				z2=bcircle.z;
 				r2=bcircle.fValue;
-				if(fabs(z2-z1)>centerzDeltaThreshold)
+				if (fabs(z2-z1)>centerzDeltaThreshold)
 					continue;
-				if((r1+r2-sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)))/(r1+r2)<centerxyDeltaThreshold)
+                
+				if ((r1+r2-sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)))/(r1+r2)<centerxyDeltaThreshold)
 					continue;
+                
 				[[potentialVessels objectAtIndex:j] addObject:acircle];
 				acircle=nil;
 				break;
-				
 			}
-		if(acircle)
+
+        if (acircle)
 		{
-			NSMutableArray	*aVessel=[NSMutableArray arrayWithCapacity:0];
+			NSMutableArray *aVessel=[NSMutableArray arrayWithCapacity:0];
 			[aVessel addObject:acircle];
 			[potentialVessels addObject:aVessel];
 		}
 	}
-	j=[potentialVessels count];
+
+    j=[potentialVessels count];
 	float* scoreArray=(float*)malloc(j*sizeof(float));
 	memset(scoreArray, 0x00, j*sizeof(float));
+    
 	for(j=0;j<[potentialVessels count];j++)
 		for(k=0;k<[[potentialVessels objectAtIndex:j] count];k++)
 		{
@@ -1733,18 +1741,19 @@ else
 			x2=bcircle.x;
 			y2=bcircle.y;
 			x1=imageWidth-x2;
-			if(x1>x2)
+			if (x1>x2)
 				x1=x2;
+            
 			y1=imageHeight-y2;
 			*(scoreArray+j)+=y1*4/imageHeight;
 			i=[circles indexOfObject:bcircle ];
 			*(scoreArray+j)+=2*(3-i%3);
-			
 		}
+    
 	float maxscore=*scoreArray;
 	k=0;
 	int secondcandidate=0;
-	for(j=1;j<[potentialVessels count];j++)
+	for (j=1;j<[potentialVessels count];j++)
 		if(maxscore<*(scoreArray+j))
 		{
 			maxscore=*(scoreArray+j);
@@ -1752,16 +1761,14 @@ else
 			k=j;
 		}
 	
-	
-	if(maxscore-*(scoreArray+secondcandidate)<maxscore/5)
+	if (maxscore - *(scoreArray+secondcandidate) < maxscore/5)
 	{
 		CMIV3DPoint* acircle=[[potentialVessels objectAtIndex:k] objectAtIndex:0];
 		x1=acircle.x;
 		acircle=[[potentialVessels objectAtIndex:secondcandidate] objectAtIndex:0];
 		x2=acircle.x;
-		if(x2<x1)
+		if (x2<x1)
 			k=secondcandidate;
-
 	}
 	
 	[circles removeAllObjects];
@@ -1769,17 +1776,15 @@ else
 	[circles addObjectsFromArray:[potentialVessels objectAtIndex:k]];
 	[circles addObjectsFromArray:[potentialVessels objectAtIndex:secondcandidate]];
 
-	for(j=0;j<[potentialVessels count];j++)
+	for (j=0;j<[potentialVessels count];j++)
 		[[potentialVessels objectAtIndex:j] removeAllObjects];
-	[potentialVessels removeAllObjects];
+
+    [potentialVessels removeAllObjects];
 	
 	free(scoreArray);
-	
 	return 0;
-	
-	
-	
 }
+
 -(int)detectCircles:(NSMutableArray*) circlesArray
                    :(int)nslices
 {
@@ -1818,7 +1823,7 @@ else
 
 	importFilter->SetSpacing( spacing );
 	
-	typedef   itk::CurvatureAnisotropicDiffusionImageFilter< 	InputImageType, 	InputImageType >  SmoothingFilterType;
+	typedef itk::CurvatureAnisotropicDiffusionImageFilter< 	InputImageType, 	InputImageType >  SmoothingFilterType;
 	SmoothingFilterType::Pointer smoothing = SmoothingFilterType::New();
 	smoothing->SetTimeStep( 0.125 );
 	smoothing->SetNumberOfIterations(  5 );
@@ -1833,7 +1838,7 @@ else
 	houghFilter->SetInput( smoothing->GetOutput() );
 #endif
 
-	for (int i=imageAmount-1; i>=imageAmount-nslices; i--)
+	for (int i=(imageAmount-1); i >= (imageAmount-nslices); i--)
 	{
 		importFilter->SetImportPointer( (inputData+imageSize*i), itksize[0] * itksize[1], importImageFilterWillOwnTheBuffer);
 		
@@ -2309,7 +2314,9 @@ else
 	vtkImageReslice *imageSlice = vtkImageReslice::New();
 	imageSlice->SetAutoCropOutput( true);
 	imageSlice->SetInformationInput( reader->GetOutput());
-#if 0 // @@@
+#if 1 // @@@
+    imageSlice->SetInputConnection( reader->GetOutputPort());
+#else // original
 	imageSlice->SetInput( reader->GetOutput());
 #endif
 	imageSlice->SetOptimization( true);

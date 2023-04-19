@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkHoughTransform2DCirclesImageFilter.h"
 #undef id
 
+#import "url.h" // for MALLOC_ERROR_MESSAGE
 
 @implementation CMIVContrastController
 
@@ -167,8 +168,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	seedVolume=(unsigned short int*)malloc(size);
 	if(!seedVolume)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
-                        NSLocalizedString(@"no enough RAM", nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
@@ -249,8 +250,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		inputData = [originalViewController volumePtr:0];
 		if( !inputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
-                            NSLocalizedString(@"no enough RAM", nil),
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			
 			return;
@@ -262,7 +263,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		if (err)
 		{
 			NSRunAlertPanel(NSLocalizedString(@"no enough to smooth input data", nil),
-                            NSLocalizedString(@"no enough RAM", nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			free(inputData);
 			inputData=0L;
@@ -279,8 +280,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	outputData = (float*) malloc( size);
 	if( !outputData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
-                        NSLocalizedString(@"no enough RAM", nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		if (ifUseSmoothFilter)
 			free(inputData);
@@ -295,8 +296,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	colorData = (unsigned char*) malloc( size);
 	if ( !colorData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil),
-                        NSLocalizedString(@"no enough RAM", nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		if(ifUseSmoothFilter)
 			free(inputData);
@@ -310,7 +311,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	directionData= (unsigned char*) malloc( size);
 	if( !directionData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		if(ifUseSmoothFilter)
 			free(inputData);
 		free(outputData);
@@ -718,7 +721,9 @@ if( originalViewController == 0L) return 0L;
 		outputData = (float*) malloc( size);
 		if( !outputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 			return 1;	
 		}
 	}
@@ -789,26 +794,25 @@ if( originalViewController == 0L) return 0L;
 	[temparray addObject:tempstr];
 	[[self window] makeKeyAndOrderFront:parent];
 	return 0;
-	
 }
+
 - (int) exportToROIs:(float *)inputData :(float *)outputData :(unsigned char *)colorData
 {
-
-		
 	long size= sizeof(float)*imageWidth * imageHeight * imageAmount;
 	RGBColor	color;
 	NSString *roiName;
 	ROI* curROI;
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
 
-	if(!outputData)
+	if (!outputData)
 	{
-		
 		outputData = (float*) malloc( size);
 		if( !outputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 			return 1;	
 		}
 	}
@@ -817,11 +821,10 @@ if( originalViewController == 0L) return 0L;
 	float* tempinput=[originalViewController volumePtr:0];
 	memcpy(outputData,tempinput,size);
 	
-	NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
-	NSMutableArray	*newDcmList = [NSMutableArray arrayWithCapacity: 0];
-	NSData	*newData = [NSData dataWithBytesNoCopy:outputData length: size freeWhenDone:YES];
-	int z;
-	for( z = 0 ; z < imageAmount; z ++)
+	NSMutableArray *newPixList = [NSMutableArray arrayWithCapacity: 0];
+	NSMutableArray *newDcmList = [NSMutableArray arrayWithCapacity: 0];
+	NSData *newData = [NSData dataWithBytesNoCopy:outputData length: size freeWhenDone:YES];
+	for (int z = 0 ; z < imageAmount; z ++)
 	{
 		curPix = [pixList objectAtIndex: z];
 		DCMPix	*copyPix = [curPix copy];
@@ -843,7 +846,9 @@ if( originalViewController == 0L) return 0L;
 	unsigned char *wholeTexTureBuffer=  (unsigned char *) malloc(size);
 	if( !wholeTexTureBuffer)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return 1;
 	}
 	unsigned int rowIndex;
@@ -915,15 +920,14 @@ if( originalViewController == 0L) return 0L;
 - (int) exportToSeries:(float *)inputData :(float *)outputData :(unsigned char *)colorData
 {
 	int index,z;
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
 	
 	unsigned int i;
 	unsigned char colorIndex;
 	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	
-	
-	for(i=0;i< [outputColorList count];i++)
+	for (i=0;i< [outputColorList count];i++)
 	{
 		
 		colorIndex = (unsigned char) [[outputColorList objectAtIndex:i] intValue];
@@ -934,7 +938,9 @@ if( originalViewController == 0L) return 0L;
 			outputData = (float*) malloc( size);
 			if( !outputData)
 			{
-				NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+				NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                                NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                                NSLocalizedString(@"OK", nil), nil, nil);
 				return 1;	
 			}
 		}
@@ -991,21 +997,21 @@ if( originalViewController == 0L) return 0L;
 			[[parent dataOfWizard] setObject:temparray forKey:@"VCTitleList"];
 		}
 		[temparray addObject:tempstr];
-		
-		
-		
 	}
-	[[self window] makeKeyAndOrderFront:parent];
+
+    [[self window] makeKeyAndOrderFront:parent];
 	return 0;
-	
 }
-- (int) exportToCenterLines:(float *)inputData :(float *)outputData :(unsigned char *)directData:(unsigned char *)colorData
+
+- (int) exportToCenterLines:(float *)inputData
+                           :(float *)outputData
+                           :(unsigned char *)directData
+                           :(unsigned char *)colorData
 {
-	
 	long size= sizeof(float)*imageWidth * imageHeight * imageAmount;
 	
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
 	
 	if(!outputData)
 	{
@@ -1013,7 +1019,9 @@ if( originalViewController == 0L) return 0L;
 		outputData = (float*) malloc( size);
 		if( !outputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 			return 1;	
 		}
 	}

@@ -52,6 +52,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkLabelStatisticsImageFilter.h"
 #undef id
 
+#import "url.h" // for MALLOC_ERROR_MESSAGE
+
 static float deg2rad = 3.14159265358979/180.0; 
 
 @implementation CMIVScissorsController
@@ -1415,13 +1417,14 @@ static float deg2rad = 3.14159265358979/180.0;
 #ifdef VERBOSEMODE
 	NSLog( @"updating Oview");
 #endif
-	vtkImageData	*tempIm,*tempROIIm;
-	int				imExtent[ 6];
+	vtkImageData *tempIm, *tempROIIm;
+	int imExtent[ 6];
 	
-	if(interpolationMode)
+	if (interpolationMode)
 		oViewSlice->SetInterpolationModeToCubic();
 	else
 		oViewSlice->SetInterpolationModeToNearestNeighbor();
+    
 	tempIm = oViewSlice->GetOutput();
 #if 0 // @@@
 	tempIm->Update();
@@ -4394,7 +4397,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				newVolumeData=(float*) malloc(size);
 				if (!newVolumeData)
 				{
-					NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+					NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                                    NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                                    NSLocalizedString(@"OK", nil), nil, nil);
 					[tempPixList removeAllObjects];
 					[originalViewController endWaitWindow: waitWindow];
 					return;
@@ -4532,13 +4537,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if (!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return nil;
 	}
 	
-	
-	for( i = 0 ; i < imageNumber; i ++)
+	for ( i = 0 ; i < imageNumber; i ++)
 	{
 		[axImageSlider setFloatValue:(startfromdistance+i*distanceofstep)];
 		[self pageAxView:axImageSlider];
@@ -4546,7 +4551,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		NSMutableArray	*imgRoiList=[NSMutableArray arrayWithCapacity: 0];
 		newPix=[self getCurPixFromAxView:(newVolumeData+i*maxwidth*maxheight):maxwidth:maxheight:imgRoiList];
 		
-
 		if (newPix)
 		{
 			[newPix setTot:imageNumber ];
@@ -4566,21 +4570,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[newDcmList addObject: [[originalViewController fileList] objectAtIndex: 0]];
 		[tempRoiList addObject:imgRoiList];
 	}
-	[axImageSlider setFloatValue:currentdistance];
-	[self pageAxView:axImageSlider];	
+
+    [axImageSlider setFloatValue:currentdistance];
+	[self pageAxView:axImageSlider];
 	
-	
-	
-	NSData	*newData = [NSData dataWithBytesNoCopy:newVolumeData length: size freeWhenDone:YES];
+	NSData *newData = [NSData dataWithBytesNoCopy:newVolumeData length: size freeWhenDone:YES];
 	ViewerController *new2DViewer;
 	new2DViewer = [originalViewController newWindow	:newPixList
-				   :newDcmList
-				   :newData]; 
-	NSMutableArray      *roiList= [new2DViewer roiList];
-	unsigned j;
-	for(i=0;i<imageNumber;i++)
+                                                    :newDcmList
+                                                    :newData];
+	NSMutableArray *roiList= [new2DViewer roiList];
+	for (i=0; i<imageNumber; i++)
 	{
-		for(j=0;j<[[tempRoiList objectAtIndex:i] count];j++)
+		for (unsigned j=0;j<[[tempRoiList objectAtIndex:i] count];j++)
 			[[roiList objectAtIndex:i] addObject:[[tempRoiList objectAtIndex:i] objectAtIndex:j]]; 
 		[[tempRoiList objectAtIndex:i] removeAllObjects];
 	}
@@ -4600,14 +4602,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSMutableArray	*tempRoiList = [NSMutableArray arrayWithCapacity: 0];
 	int i;
 	
-	// cross section view Images
-	int imageNumber=slicenumber;
+	// Cross section view Images
+
+    int imageNumber=slicenumber;
 	float distanceofstep,currentdistance,startfromdistance;
 	int maxwidth=0,maxheight=0;
 	startfromdistance=start;
 	currentdistance = [cImageSlider floatValue];
 	distanceofstep = step;
-	
 	
 	NSRect viewsize = [cPRView frame];
 	maxwidth=viewsize.size.width/[cPRView scaleValue];
@@ -4618,13 +4620,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if (!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return nil;
 	}
 	
-	
-	for( i = 0 ; i < imageNumber; i ++)
+	for ( i = 0 ; i < imageNumber; i ++)
 	{
 		[cImageSlider setFloatValue:(startfromdistance+i*distanceofstep)];
 		[self onlyPageCView:cImageSlider];
@@ -4632,7 +4634,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		DCMPix* newPix=nil;
 		NSMutableArray	*imgRoiList=[NSMutableArray arrayWithCapacity: 0];
 		newPix=[self getCurPixFromCView:(newVolumeData+i*maxwidth*maxheight):maxwidth:maxheight:imgRoiList];
-		
 		
 		if (newPix)
 		{
@@ -4656,20 +4657,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 	}
 	[cImageSlider setFloatValue:currentdistance];
-	[self onlyPageCView:cImageSlider];	
+	[self onlyPageCView:cImageSlider];
 	
-	
-	
-	NSData	*newData = [NSData dataWithBytesNoCopy:newVolumeData length: size freeWhenDone:YES];
+	NSData *newData = [NSData dataWithBytesNoCopy:newVolumeData length: size freeWhenDone:YES];
 	ViewerController *new2DViewer;
 	new2DViewer = [originalViewController newWindow	:newPixList
 				   :newDcmList
 				   :newData]; 
-	NSMutableArray      *roiList= [new2DViewer roiList];
-	unsigned j;
+	NSMutableArray *roiList= [new2DViewer roiList];
 	for(i=0;i<imageNumber;i++)
 	{
-		for(j=0;j<[[tempRoiList objectAtIndex:i] count];j++)
+		for(unsigned j=0;j<[[tempRoiList objectAtIndex:i] count];j++)
 			[[roiList objectAtIndex:i] addObject:[[tempRoiList objectAtIndex:i] objectAtIndex:j]]; 
 		[[tempRoiList objectAtIndex:i] removeAllObjects];
 	}
@@ -4678,23 +4676,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[[self window] makeKeyAndOrderFront:parent];
 	return new2DViewer;
 }
-- (ViewerController *) exportOViewImages:(float)start:(float)step:(int)slicenumber
-{
 
+- (ViewerController *) exportOViewImages:(float)start
+                                        :(float)step
+                                        :(int)slicenumber
+{
 	NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*newDcmList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*tempRoiList = [NSMutableArray arrayWithCapacity: 0];
 	
 	int i;
 	
-	// cross section view Images
-	
-	
-	
-	
-	int imageNumber=slicenumber;
+	// Cross section view Images
+
+    int imageNumber=slicenumber;
 	float distanceofstep,currentdistance,startfromdistance;
 	int maxwidth=0,maxheight=0;
 	startfromdistance=start;
@@ -4709,13 +4704,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if (!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return nil;
 	}
 	
-	
-	for( i = 0 ; i < imageNumber; i ++)
+	for ( i = 0 ; i < imageNumber; i ++)
 	{
 		[oImageSlider setFloatValue:(startfromdistance+i*distanceofstep)];
 		[self pageOView:oImageSlider];
@@ -4749,18 +4744,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[oImageSlider setFloatValue:currentdistance];
 	[self pageOView:oImageSlider];	
 	
-	
-	
 	NSData	*newData = [NSData dataWithBytesNoCopy:newVolumeData length: size freeWhenDone:YES];
 	ViewerController *new2DViewer;
 	new2DViewer = [originalViewController newWindow	:newPixList
 				   :newDcmList
 				   :newData]; 
-	NSMutableArray      *roiList= [new2DViewer roiList];
-	unsigned j;
+	NSMutableArray *roiList= [new2DViewer roiList];
 	for(i=0;i<imageNumber;i++)
 	{
-		for(j=0;j<[[tempRoiList objectAtIndex:i] count];j++)
+		for(unsigned j=0;j<[[tempRoiList objectAtIndex:i] count];j++)
 			[[roiList objectAtIndex:i] addObject:[[tempRoiList objectAtIndex:i] objectAtIndex:j]]; 
 		[[tempRoiList objectAtIndex:i] removeAllObjects];
 	}
@@ -5718,9 +5710,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (IBAction)saveImagesInBasket:(id)sender
 {
 	NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*newDcmList = [NSMutableArray arrayWithCapacity: 0];
-	
 	
 	int i;
 	float* newVolumeData=nil;
@@ -5728,7 +5718,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int imageNumber=[basketImageArray count];
 	DCMPix* tempPix,*newPix=nil;
 	int curwidth,curheight;
-	for(i=0;i<imageNumber;i++)
+	for( i=0;i<imageNumber;i++)
 	{
 		tempPix=[basketImageArray objectAtIndex:i];
 		curwidth = [tempPix pwidth];
@@ -5739,8 +5729,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if(!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
 	
@@ -5997,19 +5988,26 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[brushWidthSlider setHidden:YES];
 	[brushWidthText setHidden:YES];
 	
-	
-	
 	return [self reloadSeedsFromExportedROI];
 }
+
 - (int) reloadSeedsFromExportedROI
 {
 	
 	return 0;
 }
-- (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width:(int)height:(short unsigned int*)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY
+
+- (void) creatROIListFromSlices:(NSMutableArray*) roiList
+                               :(int) width
+                               :(int)height
+                               :(short unsigned int*)im
+                               :(float)spaceX
+                               :(float)spaceY
+                               :(float)originX
+                               :(float)originY
 {
-	int x,y;
-	unsigned int i;
+    NSLog(@"%s %d, im:%p", __FUNCTION__, __LINE__, im);
+    
 	short unsigned marker;
 	RGBColor color;
 	ROI* roi;
@@ -6018,14 +6016,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	rect.origin.y=-1;
 	rect.size.width =-1;
 	rect.size.height =-1;
-	for(i=0;i<[totalROIList count];i++)
+	for (unsigned int i=0; i<[totalROIList count]; i++)
 		[[totalROIList objectAtIndex:i] setROIRect:rect];
 	
-	for(y=0;y<height;y++)
-		for(x=0;x<width;x++)
+	for (int y=0; y<height; y++)
+		for (int x=0; x<width; x++)
 		{
-			marker=*(im+y*width+x);
-			if(marker>0&&marker<=[totalROIList count])
+			marker = *(im+y*width+x);
+			if (marker>0 && marker<=[totalROIList count])
 			{
 				roi=[totalROIList objectAtIndex:marker-1];
 				rect=[roi rect];
@@ -6054,38 +6052,43 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						rect.size.height = y-rect.origin.y;
 				}
 				[roi setROIRect: rect];
-				
-				
-				
 			}
 		}
 	
-	for(i=0;i<[totalROIList count];i++)
+	for (unsigned int i=0;i<[totalROIList count];i++)
 	{
-		roi=[totalROIList objectAtIndex:i];
+		roi = [totalROIList objectAtIndex:i];
 		rect = [roi rect];
 		
-		if(rect.origin.x>=0)
+		if (rect.origin.x >= 0)
 		{
 			rect.size.width+=1;
 			rect.size.height+=1; 
 			unsigned char* textureBuffer= (unsigned char*)malloc((int)(rect.size.width *rect.size.height));
 			
-			for(y=0;y<rect.size.height;y++)
-				for(x=0;x<rect.size.width;x++)
+			for (int y=0;y<rect.size.height;y++)
+				for (int x=0;x<rect.size.width;x++)
 				{
 					int ii=(int)((y+rect.origin.y)*width+x+rect.origin.x);
 					int jj=(int)(y*rect.size.width + x);
-					if(*(im+ii)==i+1)
+					if (*(im+ii)==i+1)
 						*(textureBuffer+jj)=0xff;
 			        else 
 						*(textureBuffer+jj)=0x00;
 				}
 			
-			ROI *newROI=[[ROI alloc] initWithTexture:textureBuffer textWidth:(int)rect.size.width textHeight:(int)rect.size.height textName:[roi name] positionX:(int)rect.origin.x positionY:(int)rect.origin.y spacingX:spaceX spacingY:spaceY imageOrigin:NSMakePoint( originX,  originY)];
-			[newROI setComments:[NSString stringWithFormat:@"%d",i+1]];
-			
-			
+			ROI *newROI=[[ROI alloc] initWithTexture:textureBuffer
+                                           textWidth:(int)rect.size.width
+                                          textHeight:(int)rect.size.height
+                                            textName:[roi name]
+                                           positionX:(int)rect.origin.x
+                                           positionY:(int)rect.origin.y
+                                            spacingX:spaceX
+                                            spacingY:spaceY
+                                         imageOrigin:NSMakePoint( originX,  originY)];
+
+            [newROI setComments:[NSString stringWithFormat:@"%d",i+1]];
+						
 			color= [roi rgbcolor];		
 			
 			[newROI setColor:color];
@@ -6096,8 +6099,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			free(textureBuffer);
 		}
 	}
-	
 }
+
 - (void) roiChanged: (NSNotification*) note
 {
 	id sender = [note object];
@@ -8098,7 +8101,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float* newVolumeData=(float*)malloc(size);
 	if(!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		[originalViewController endWaitWindow: waitWindow];
 		return;
 	}
@@ -10239,7 +10244,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	outputData = (float*) malloc( size);
 	if (!outputData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		
 		return;
 	}
@@ -10248,7 +10255,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	colorData = (unsigned char*) malloc( size);
 	if (!colorData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		return;
 	}
@@ -10256,7 +10265,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     directionData= (unsigned char*) malloc( size);
 	if (!directionData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		free(colorData);
 		
@@ -10337,7 +10348,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	outputData = (float*) malloc( size);
 //	if (!outputData)
 //	{
-//		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		
 //		return;
 //	}
@@ -10345,14 +10356,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	colorData = (unsigned char*) malloc( size);
 //	if (!colorData)
 //	{
-//		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		free(outputData);
 //		return;
 //	}	
 //	directionData= (unsigned char*) malloc( size);
 //	if (!directionData)
 //	{
-//		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		free(outputData);
 //		free(colorData);
 //		
@@ -10440,7 +10451,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	[self showPreviewResult:inputData:outputData:directionData:colorData];
 //}
 
-- (int) plantSeeds:(float*)inData:(float*)outData:(unsigned char *)directData
+- (int) plantSeeds:(float*)inData
+                  :(float*)outData
+                  :(unsigned char *)directData
 {
 	int seedNumber=0;
 	unsigned char * colorLookup;
@@ -10452,7 +10465,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	colorLookup=(unsigned char *)malloc(uniIndex);
 	if(!colorLookup)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		return seedNumber;
 	}
 	int i=0;

@@ -32,6 +32,7 @@
 #undef id
 
 #import "CMIVChopperController.h"
+#import "url.h" // for MALLOC_ERROR_MESSAGE
 
 @implementation CMIVChopperController
 
@@ -193,9 +194,11 @@
 	id waitWindow = [vc startWaitWindow:@"producing new volume"];
 	
 	outputVolumeData = (float*) malloc(size);
-	if( !outputVolumeData)
+	if ( !outputVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"no enough RAM", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		[vc endWaitWindow: waitWindow];
 		return 1;	
 	}
