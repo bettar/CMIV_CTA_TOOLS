@@ -432,7 +432,7 @@ static float deg2rad = M_PI/180.0;
 		totalSteps=3;
 		[self goSubStep:0:YES];
 		[previousButton setEnabled: NO];
-		howToContinueTip = [[NSString alloc] initWithString:@"You are using a general tools, to contiue seed planting, please click the button below."];
+		howToContinueTip = [[NSString alloc] initWithString:@"You are using a general tools, to continue seed planting, please click the button below."];
 		[continuePlantingButton setHidden:YES];
 	}
 	else if ([cpr3DPaths count])
@@ -2078,52 +2078,50 @@ static float deg2rad = M_PI/180.0;
 }
 - (IBAction)changOriginalViewDirection:(id)sender
 {
-
 	float origin[3]={0,0,0};
 	oViewUserTransform->TransformPoint(origin,origin);
 	oViewBasicTransform->Identity();
 	oViewBasicTransform->Translate( origin[0], origin[1], origin[2] );
-
 	
 	oViewUserTransform->Identity();	
 	oViewUserTransform->RotateX(-90);
-	if([sender tag]==0)
+
+    if ([sender tag]==0) // A
 	{
 		
 	}
-	else if([sender tag]==1)
+	else if ([sender tag]==1) // P
 	{
 		oViewUserTransform->RotateY(180);
 	}
-	else if([sender tag]==2)
+	else if ([sender tag]==2) // H
 	{
 		oViewUserTransform->RotateX(-90);
 	}
-	else if([sender tag]==3)
+	else if ([sender tag]==3) // F
 	{
 		oViewUserTransform->RotateX(90);
 	}
-	else if([sender tag]==4)
+	else if ([sender tag]==4) // R
 	{
 		oViewUserTransform->RotateY(90);
 	}
-	else if([sender tag]==5)
+	else if ([sender tag]==5) // L
 	{
 		oViewUserTransform->RotateY(-90);
 	}
-	[self updateOView];
+
+    [self updateOView];
 	[self resetSliders];
 	[self updatePageSliders];
 	[self cAndAxViewReset];
-	
 }
+
 - (IBAction)pageAxView:(id)sender
 {
-
-	
-	if(!cViewMPRorCPRMode)
+	if (!cViewMPRorCPRMode)
 	{
-		if([sender isMouseLeftKeyDown])
+		if ([sender isMouseLeftKeyDown])
 			interpolationMode=0;
 		else
 			interpolationMode=1;
