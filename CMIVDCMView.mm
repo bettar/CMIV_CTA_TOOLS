@@ -334,7 +334,7 @@ static float deg2rad = M_PI/180.0;
 {
     if (displayCrossLines)
     {
-#if 0 // @@@
+#if 0 // @@@ OGL
         CGLContextObj cgl_ctx = [[NSOpenGLContext currentContext] CGLContextObj];
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glEnable(GL_BLEND);
@@ -345,7 +345,7 @@ static float deg2rad = M_PI/180.0;
         float heighthalf = self.frame.size.height/2;
         float widthhalf = self.frame.size.width/2;
         
-#if 0 // @@@
+#if 0 // @@@ OGL
         if (widthhalf>800)
         {
             glLineWidth(4.0);
@@ -366,7 +366,7 @@ static float deg2rad = M_PI/180.0;
             crossglY = [self scaleValue] *(crossPoint.y-curDCM.pheight/2.);
         }
         
-#if 0 // @@@
+#if 0 // @@@ OGL
         glTranslatef(crossglX, crossglY, 0.0);
         glRotatef( crossAngle, 0, 0, 1);
         

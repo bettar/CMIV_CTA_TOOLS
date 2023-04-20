@@ -26,6 +26,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  =========================================================================*/
+
 #import "CMIVContrastPreview.h"
 #import "CMIVSegmentCore.h"
 #import "CMIV3DPoint.h"
@@ -35,7 +36,7 @@
 
 #import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
-#if 0 // @@@
+#if 1 // @@@ VR
 #import "VRView.h"
 #endif
 
@@ -54,7 +55,7 @@
 	{
 		[mprView setCurrentTool:tag];
 		[resultView setCurrentTool:tag];
-#if 0 // @@@
+#if 1 // @@@ VR
 		[vrView setCurrentTool: tag];
 #endif
 	}
@@ -62,7 +63,7 @@
 	{
 		[mprView setCurrentTool:tPlain];
 		[resultView setCurrentTool:tWL];
-#if 0 // @@@
+#if 1 // @@@ VR
 		[vrView setCurrentTool: t3DRotate];
 #endif
 	}
@@ -70,7 +71,7 @@
 	{
 		[mprView setCurrentTool:t2DPoint];
 		[resultView setCurrentTool:tWL];
-#if 0 // @@@
+#if 1 // @@@ VR
 		[vrView setCurrentTool: t3DRotate];
 #endif
 	}
@@ -492,7 +493,7 @@
 -(void) dealloc
 {
 	[super dealloc];
-#if 0 // @@@
+#if 1 // @@@ VR
 	[vrView prepareForRelease];
 #endif
 }
@@ -633,7 +634,7 @@
         //hide other segments
 		if (err!=2)
 		{
-#if 0 // @@@
+#if 1 // @@@ VR
 			osirixOffset=[vrView offset] ;
 			osirixValueFactor=[vrView valueFactor] ;
 			renderOfVRView = [vrView renderer];
@@ -898,14 +899,14 @@
 	[resultView setCurrentTool:tWL];
 
     int err = 0;
-#if 0 // @@@
+#if 1 // @@@ VR
 	[vrView setRotate: NO];
     err = [vrView setPixSource:pixList :inputData];
 #endif
 	NSString *str = @"/" ;
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
-#if 0 // @@@
+#if 1 // @@@ VR
 	[vrView set3DStateDictionary:dict];
 #endif
 	
@@ -913,7 +914,7 @@
 		[tab2D3DView removeTabViewItem:[tab2D3DView tabViewItemAtIndex:1]];
 	else
 	{
-#if 0 // @@@
+#if 1 // @@@ VR
 		[vrView setRotate: NO];
 		[vrView setRotate: NO];
 		[vrView setMode: 1];
@@ -923,7 +924,7 @@
 		if (aOpacity)
 		{
             NSArray *array = [aOpacity objectForKey:@"Points"];
-#if 0 // @@@
+#if 1 // @@@ VR
 			[vrView setOpacity:array];
 #endif
 		}
@@ -2122,7 +2123,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     [self createUnsignedShortVolumDataUnderMask:volumeDataOfVR];
 
-#if 0 // @@@
+#if 1 // @@@ VR
 	float ww,wl;
 	[vrView getWLWW: &wl :&ww];
 	[vrView setWLWW: wl : ww];
@@ -3110,7 +3111,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)changeVRMode:(id)sender
 {
-#if 0 // @@@
+#if 1 // @@@ VR
 	if ([vrMode selectedRow] == 0)
 		[vrView setMode: 1];
 	else
@@ -3146,14 +3147,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			{
 				blue[i] = [[array objectAtIndex: i] longValue];
 			}
-#if 0 // @@@
+#if 1 // @@@ VR
 			[vrView setCLUT:red :green: blue];
 #endif
 		}
 	}
 	else
     {
-#if 0 // @@@
+#if 1 // @@@ VR
         [vrView setCLUT: 0L :0L :0L];
 #endif
     }
@@ -3190,7 +3191,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 // //////////////////////////////////
 - (IBAction)changeVRDirection:(id)sender
 {
-#if 0 // @@@
+#if 1 // @@@ VR
 	int tag=[sender tag];
 	if (tag==0)
 		[vrView coView:sender];

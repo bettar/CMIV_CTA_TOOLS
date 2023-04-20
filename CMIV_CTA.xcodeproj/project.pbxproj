@@ -509,7 +509,8 @@
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
 					"$(SRCROOT)/Binaries/VTK/include/vtk-9.2",
 					"$(SRCROOT)/Binaries/DCMTK/include",
-					"$(SRCROOT)/Binaries",
+					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
+					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
@@ -572,7 +573,8 @@
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
 					"$(SRCROOT)/Binaries/VTK/include/vtk-9.2",
 					"$(SRCROOT)/Binaries/DCMTK/include",
-					"$(SRCROOT)/Binaries",
+					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
+					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";

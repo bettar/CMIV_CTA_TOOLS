@@ -88,7 +88,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	BOOL isInWizardMode;
 	BOOL isSelectAll;
 	NSRect screenrect;
-	
 }
 
 - (IBAction)changeReformView:(id)sender;
@@ -108,5 +107,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) defaultToolModified: (NSNotification*) note;
 - (void) changeWLWW: (NSNotification*) note;
 - (int)  initReformView;
-- (int)reduceTheVolume:(NSArray*)bordersArray:(ViewerController *) vc;
+- (int)reduceTheVolume:(NSArray*)bordersArray :(ViewerController *) vc;
 @end
