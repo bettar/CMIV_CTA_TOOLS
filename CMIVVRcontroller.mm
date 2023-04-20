@@ -1034,14 +1034,12 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	screenrect=[[[originalViewController window] screen] visibleFrame];
 	//[[self window]setFrame:screenrect display:NO animate:NO];
 	[super showWindow:parent];
-#if 1 // @@@
-	[segmentList setDataSource:self];	
-#endif
+	[segmentList setDataSource:self];
 	size=imageWidth*imageHeight*imageAmount;
-	for(i=0;i<size;i++)
+	for (i=0;i<size;i++)
 	{
 		tempfloat=( (*(originalVolumeData+i))-minInSeries)*2047/(maxInSeries-minInSeries);
-		if ( tempfloat<=0)
+		if (tempfloat<=0)
 			tempfloat= 1.0;
 		else if (tempfloat>2047.0)
 			tempfloat = 2047.0;
@@ -1142,10 +1140,9 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	[opacitySlider setEnabled: NO];
 	[wlSlider setEnabled: NO];
 	[wwSlider setEnabled: NO];
-#if 1 // @@@
-	[segmentList setDataSource:self];	
-#endif
-	return err;
+	[segmentList setDataSource:self];
+
+    return err;
 }
 
 - (IBAction)disableCLUTView:(id)sender

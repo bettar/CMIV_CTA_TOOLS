@@ -183,12 +183,7 @@
 		mprViewSlice->SetInterpolationModeToNearestNeighbor();
 	
     vtkImageData *tempIm = mprViewSlice->GetOutput();
-#if 1 // @@@ fixed ?
     tempIm->GetExtent( imExtent);
-#else
-	tempIm->Update();
-	tempIm->GetWholeExtent( imExtent);
-#endif
 	tempIm->GetSpacing( mprViewSpace);
 	tempIm->GetOrigin( mprViewOrigin);	
 	
@@ -209,12 +204,7 @@
 	if (newSeedsBuffer)
 	{
         vtkImageData *tempROIIm = mprViewROISlice->GetOutput();
-#if 1 // @@@ fixed ?
         tempROIIm->GetExtent( imExtent);
-#else
-        tempROIIm->Update();
-		tempROIIm->GetWholeExtent( imExtent);
-#endif
 		tempROIIm->GetSpacing( space);
 		tempROIIm->GetOrigin( origin);	
 		
@@ -790,11 +780,7 @@
 	mprViewSlice = vtkImageReslice::New();
 	mprViewSlice->SetAutoCropOutput( true);
 	mprViewSlice->SetInformationInput( reader->GetOutput());
-#if 1 // @@@ fixed
     mprViewSlice->SetInputConnection( reader->GetOutputPort());
-#else
-    mprViewSlice->SetInput( reader->GetOutput());
-#endif
 	mprViewSlice->SetOptimization( true);
 	mprViewSlice->SetResliceTransform( mprViewUserTransform);
 	mprViewSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -805,11 +791,7 @@
 	mprViewROISlice= vtkImageReslice::New();
 	mprViewROISlice->SetAutoCropOutput( true);
 	mprViewROISlice->SetInformationInput( roiReader->GetOutput());
-#if 1 // @@@ fixed
     mprViewROISlice->SetInputConnection( roiReader->GetOutputPort());
-#else
-    mprViewROISlice->SetInput( roiReader->GetOutput());
-#endif
 	mprViewROISlice->SetOptimization( true);
 	mprViewROISlice->SetResliceTransform( mprViewUserTransform);
 	mprViewROISlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -820,15 +802,11 @@
 	int imExtent[ 6];
 	double space[ 3], origin[ 3];
     vtkImageData *tempIm = mprViewSlice->GetOutput();
-#if 1 // @@@ fixed ?
     tempIm->GetExtent( imExtent);
-#else
-	tempIm->Update();
-	tempIm->GetWholeExtent( imExtent);
-#endif
 	tempIm->GetSpacing( space);
 	tempIm->GetOrigin( origin);	
-	float iwl, iww;
+
+    float iwl, iww;
 	iww = [[originalViewController imageView] curWW] ;
 	iwl = [[originalViewController imageView] curWL] ;
 	
@@ -1605,14 +1583,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		float oX,oY;
 		double space[ 3], origin[ 3];
-#if 1 // @@@ fixed ?
         mprViewSlice->Update();
-#endif
         vtkImageData *tempIm = mprViewSlice->GetOutput();
-#if 0 // @@@ fixed ? see 3 lines
-        above
-		tempIm->Update();
-#endif
 		tempIm->GetSpacing( space);
 		tempIm->GetOrigin( origin);	
 		

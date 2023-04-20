@@ -1876,11 +1876,7 @@ else
 		houghFilter->Update();
 		
 		HoughTransformFilterType::CirclesListType circles;
-#if 1 // @@@ fixed
         circles = houghFilter->GetCircles();
-#else // original
-        circles = houghFilter->GetCircles( 4 );
-#endif
 		typedef HoughTransformFilterType::CirclesListType CirclesListType;
 		CirclesListType::const_iterator itCircles = circles.begin();
 		
@@ -2338,11 +2334,7 @@ else
 	vtkImageReslice *imageSlice = vtkImageReslice::New();
 	imageSlice->SetAutoCropOutput( true);
 	imageSlice->SetInformationInput( reader->GetOutput());
-#if 1 // @@@ fixed
     imageSlice->SetInputConnection( reader->GetOutputPort());
-#else // original
-	imageSlice->SetInput( reader->GetOutput());
-#endif
 	imageSlice->SetOptimization( true);
 	imageSlice->SetResliceTransform( rotationTransform);
 	imageSlice->SetResliceAxesOrigin( 0, 0, 0);
@@ -2355,12 +2347,7 @@ else
 	int	imSliceExtent[ 6];
 	double imSliceSpacing[3],imSliceOrigin[3];
     vtkImageData *tempIm = imageSlice->GetOutput();
-#if 1 // @@@ fixed ?
     tempIm->GetExtent( imSliceExtent);
-#else
-	tempIm->Update();
-	tempIm->GetWholeExtent( imSliceExtent);
-#endif
 	tempIm->GetSpacing( imSliceSpacing);
 	tempIm->GetOrigin( imSliceOrigin);
 	
@@ -2489,16 +2476,12 @@ else
 	do {
 		// Get cross-section image
 		tempIm = imageSlice->GetOutput();
-#if 1 // @@@ fixed ?
         tempIm->GetExtent( imSliceExtent);
-#else
-		tempIm->Update();
-		tempIm->GetWholeExtent( imSliceExtent);
-#endif
 		tempIm->GetSpacing( imSliceSpacing);
 		tempIm->GetOrigin( imSliceOrigin);
 		float *im = (float*) tempIm->GetScalarPointer();
-		//prepare cost map
+
+        // Prepare cost map
 
 		int width  = imSliceExtent[ 1]-imSliceExtent[ 0]+1;
 		int height = imSliceExtent[ 3]-imSliceExtent[ 2]+1;
@@ -2758,12 +2741,7 @@ else
 			rotationTransform->Identity();
 			translateTransform->SetMatrix(lastVTKTransformMatrix);
 			tempIm = imageSlice->GetOutput();
-#if 1 // @@@ fixed ?
             tempIm->GetExtent( imSliceExtent);
-#else
-			tempIm->Update();
-			tempIm->GetWholeExtent( imSliceExtent);
-#endif
 			tempIm->GetSpacing( imSliceSpacing);
 			tempIm->GetOrigin( imSliceOrigin);
 			segmentedRegion=lastSegmentedRegion;

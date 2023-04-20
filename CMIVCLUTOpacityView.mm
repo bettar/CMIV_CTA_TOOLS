@@ -2219,7 +2219,8 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 		[aview setAdvancedCLUT:clut lowResolution:YES];
 #endif
 	}
-	setCLUTtoVRView = NO;
+
+    setCLUTtoVRView = NO;
 }
 
 - (void)setWL:(float)wl ww:(float)ww;
