@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vtkTransformFilter.h>
 #undef id
 
-@interface CMIVContrastPreview : NSWindowController
+@interface CMIVContrastPreview : NSWindowController<NSTableViewDataSource, NSWindowDelegate>
 {
     IBOutlet CMIVDCMView *mprView;
     IBOutlet NSTableView *seedList;
@@ -104,7 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSData               *originalViewVolumeData;
 	NSArray              *originalViewPixList;
 
-	BOOL     roiShowNameOnly, roiShowTextOnlyWhenSeleted;
+	BOOL roiShowNameOnly, roiShowTextOnlyWhenSeleted;
 	float *inputData ;
 	float *outputData ;
 	unsigned short *volumeDataOfVR;

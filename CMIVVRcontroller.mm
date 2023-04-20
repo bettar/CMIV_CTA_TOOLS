@@ -246,7 +246,11 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 #endif
 				[dcmSequence setOrientation: o];
 				
-				[dcmSequence setPixelData: dataPtr samplePerPixel:spp bitsPerPixel:bpp width: width height: height];
+				[dcmSequence setPixelData: dataPtr
+                           samplePerPixel: spp
+                             bitsPerPixel: bpp
+                                    width: width
+                                   height: height];
 				
 				NSString *f = [dcmSequence writeDCMFile: 0L];
 				if (f)
@@ -281,7 +285,11 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 
 - (IBAction)openQTVRExportDlg:(id)sender
 {
-	[NSApp beginSheet: qtvrsettingwin modalForWindow:[self window] modalDelegate:self didEndSelector:nil contextInfo:nil];
+	[NSApp beginSheet: qtvrsettingwin
+       modalForWindow: [self window]
+        modalDelegate: self
+       didEndSelector: nil
+          contextInfo: nil];
 }
 
 - (IBAction)creatQTVRFromFile:(id)sender
@@ -515,11 +523,9 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"VR_Panel"];
-#if 0 // @@@
 	[[self window] setDelegate:self];
-#endif
 	
-	//prepare vtk volume for 4d or 3.5d data
+	// Prepare VTK volume for 4D or 3.5D data
 	int err=0;
 	
 	originalViewController=vc;	
@@ -533,12 +539,12 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	[originalViewPixList retain];
 	
 	maxMovieIndex=[vc maxMovieIndex];
-	if(maxMovieIndex>1)
+	if (maxMovieIndex>1)
 		isSegmentVR=0;
 	else
 		isSegmentVR=1;
 	
-	if(isSegmentVR)
+	if (isSegmentVR)
 		err= [self initVRViewForSegmentalVR];
 	else
 	{
@@ -549,7 +555,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		[super showWindow:parent];
 
 	}
-	if(err)
+	if (err)
 	{
 		[self endPanel:self];
 		return nil;
@@ -919,7 +925,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	volumePropteryOfVRView = volumeOfVRView->GetProperty();
 	myVolumeProperty = vtkVolumeProperty::New();
 	myColorTransferFunction = vtkColorTransferFunction::New();
-#if 0 // @@@
+#if 1 // @@@
 	myOpacityTransferFunction = vtkPiecewiseFunction::New();
 #endif
 	myVolumeProperty->SetColor( myColorTransferFunction );
@@ -1028,7 +1034,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	screenrect=[[[originalViewController window] screen] visibleFrame];
 	//[[self window]setFrame:screenrect display:NO animate:NO];
 	[super showWindow:parent];
-#if 0 // @@@
+#if 1 // @@@
 	[segmentList setDataSource:self];	
 #endif
 	size=imageWidth*imageHeight*imageAmount;
@@ -1136,7 +1142,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	[opacitySlider setEnabled: NO];
 	[wlSlider setEnabled: NO];
 	[wwSlider setEnabled: NO];
-#if 0 // @@@
+#if 1 // @@@
 	[segmentList setDataSource:self];	
 #endif
 	return err;
@@ -1785,28 +1791,36 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)changeToLinearInterpolation:(id)sender
 {
-	
-	if(!rayCastVolumeMapper)
+	if (!rayCastVolumeMapper)
 	{
 		myVolumeProperty->SetAmbient(0.15);
 		myVolumeProperty->SetDiffuse(0.9);
 		myVolumeProperty->SetSpecular(0.3);
 		myVolumeProperty->SetSpecularPower(15);
 		myVolumeProperty->SetShade( 1);
-#if 0 // @@@
+
+#if 1 // @@@ tentative
+        myMapper = vtkFixedPointVolumeRayCastMapper::New();
+        myCompositionFunction=vtkFixedPointVolumeRayCastCompositeHelper::New();
+        #if 0 // @@@ todo
+        myCompositionFunction->SetCompositeMethodToClassifyFirst();
+        myMapper->SetInputConnection(volumeImageData->GetOutputPort());
+        myMapper->SetVolumeRayCastFunction(myCompositionFunction);
+        #endif
+#else // original
 		myMapper=vtkVolumeRayCastMapper::New();
 		myCompositionFunction=vtkVolumeRayCastCompositeFunction::New();
 		myCompositionFunction->SetCompositeMethodToClassifyFirst();
 		myMapper->SetInput(volumeImageData);
 		myMapper->SetVolumeRayCastFunction(myCompositionFunction);
-		
+#endif
+
 		if ( myMapper) myMapper->SetMinimumImageSampleDistance( 2.0);
 		if ( myMapper) myMapper->SetSampleDistance( [[NSUserDefaults standardUserDefaults] floatForKey: @"BESTRENDERING"]);
 		if ( myMapper) myMapper->SetMaximumImageSampleDistance( 6.0);
-#endif
 		
 		volumeOfVRView->SetProperty( myVolumeProperty);
-#if 0 // @@@
+#if 1 // @@@ done ?
 		rayCastVolumeMapper=myMapper;
 #endif
 	}

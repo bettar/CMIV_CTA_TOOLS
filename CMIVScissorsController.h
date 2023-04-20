@@ -53,10 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "spline.h"
 #undef id
 
-@interface CMIVScissorsController : NSWindowController
+@interface CMIVScissorsController : NSWindowController<NSTableViewDataSource, NSTabViewDelegate, NSWindowDelegate>
 {
-
-
 	IBOutlet NSWindow	*exportCPRWindow;
 	IBOutlet NSWindow	*exportMPRWindow;
 	IBOutlet NSWindow	*polygonMeasureWindow;
@@ -243,7 +241,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	vtkContourFilter	*axROIOutlineFilter;
 	vtkPolyDataConnectivityFilter	*axViewPolygonfilter;
 	vtkPolyDataConnectivityFilter	*axViewPolygonfilter2;
-	///////////////
+	// /////////////
 	ROI                 *curvedMPR2DPath;
 	NSMutableArray      *curvedMPR3DPath;
 	NSMutableArray      *curvedMPREven3DPath;
@@ -268,10 +266,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	int                  uniIndex;
 	int                  isRemoveROIBySelf;
 	int                  isChangingWWWLBySelf;
-	long		annotations	;
+	long annotations	;
 	
     ToolMode currentTool;
-	int      currentPathMode;
+    ROI_mode currentPathMode;
 	NSRect   cPRROIRect;
 	NSRect   axCircleRect;
 	int      centerIsLocked;
@@ -484,10 +482,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (int) generateSlidingNormals:(int)npts :(double*)pointsxyz :(double*)ptnormals;
 - (int) generateUnitRobbin:(int)npts :(double*)inputpointsxyz :(double*)ptnormals :(double*)outputpointsxyz :(double)angle :(double)width;
 -(int) thresholdLeveLSetAlgorithm:(float*)imgdata :(int)imgwidth :(int)imgheight :(int)offsetx :(int)offsety :(float)spaceX :(float)spaceY :(float)curscale :(float)lowerthreshold :(float)upperthreshold :(float)initdis :(unsigned char*)outrgndata :(ROI*)outroi :(int)seedmode;
--(NSPoint)polygonCenterOfMass:(NSArray*)ptarray;
+-(NSPoint) polygonCenterOfMass:(NSArray*)ptarray;
 - (float)signedPolygonArea:(NSArray*)ptarray;
-- (void)  creatPolygonROIsMeasurementROIsForViewController;
-- (void)  exportPolygonROIsInformation;
+- (void) creatPolygonROIsMeasurementROIsForViewController;
+- (void) exportPolygonROIsInformation;
 -(void) removeMeasurementROIs;
 -(float) measureAPolygonROI:(ROI*)aPolygon :(NSMutableArray*)axisesPoints;
 //-(void)crossSectionRegionGrowing:(id)parameters;

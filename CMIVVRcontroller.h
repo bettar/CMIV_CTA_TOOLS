@@ -52,13 +52,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vtkCallbackCommand.h>
 #include <vtkObject.h>
 #include <vtkPlaneWidget.h>
-#if 0 // @@@
+#if 1 // @@@ tentative
+#include "vtkFixedPointVolumeRayCastMapper.h"
+#include "vtkFixedPointVolumeRayCastCompositeHelper.h"
+#else // original
 #include <vtkVolumeRayCastMapper.h>
 #include <vtkVolumeRayCastCompositeFunction.h>
 #endif
 #undef id
 
-@interface CMIVVRcontroller : NSWindowController
+@interface CMIVVRcontroller : NSWindowController<NSTableViewDataSource, NSWindowDelegate>
 {
 
 	IBOutlet NSColorWell *colorControl;
@@ -111,7 +114,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	vtkCallbackCommand *clipCallBack;
 	vtkPlaneWidget* clipPlaneWidget;
     vtkVolumeMapper *blendedVolumeMapper;
-#if 0 // @@@
+#if 1 // @@@ tentative
+    vtkFixedPointVolumeRayCastMapper* myMapper;
+    vtkFixedPointVolumeRayCastCompositeHelper* myCompositionFunction;
+#else
 	vtkVolumeRayCastMapper* myMapper;
 	vtkVolumeRayCastCompositeFunction* myCompositionFunction;
 #endif

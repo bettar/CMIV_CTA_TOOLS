@@ -332,7 +332,7 @@ static float deg2rad = M_PI/180.0;
 
 - (void) subDrawRect: (NSRect) r
 {
-    if ( displayCrossLines)
+    if (displayCrossLines)
     {
 #if 0 // @@@
         CGLContextObj cgl_ctx = [[NSOpenGLContext currentContext] CGLContextObj];
@@ -358,7 +358,8 @@ static float deg2rad = M_PI/180.0;
         }
 #endif
         
-        float crossglX=0, crossglY=0;
+        float crossglX=0.;
+        float crossglY=0.;
         if (curDCM)
         {
             crossglX = [self scaleValue] *(crossPoint.x-curDCM.pwidth/2.);
@@ -369,7 +370,7 @@ static float deg2rad = M_PI/180.0;
         glTranslatef(crossglX, crossglY, 0.0);
         glRotatef( crossAngle, 0, 0, 1);
         
-        //drawing x axis
+        // Drawing x axis
         glColor4f (0.0, 0.0, 1.0, 0.5);
         glBegin(GL_LINES);
         glVertex2f(  -widthhalf*2, 0);
@@ -378,8 +379,8 @@ static float deg2rad = M_PI/180.0;
         glVertex2f(  +widthhalf*0.2,0);
         glEnd();
         
-        // drawing the center point
-        if(ifLeftButtonDown)
+        // Drawing the center point
+        if (ifLeftButtonDown)
             glColor4f (0.0, 1.0, 0.0, 1.0);
         else
             glColor4f (0.0, 1.0, 0.0, 0.5);
@@ -388,7 +389,7 @@ static float deg2rad = M_PI/180.0;
         glVertex2f( 0, 0);
         glEnd();
         
-        //drawing y axis
+        // Drawing y axis
         glColor4f (1.0, 0.0, 0.0, 0.5);
         glBegin(GL_LINES);
         glVertex2f(  0, -heighthalf*2);
@@ -406,7 +407,7 @@ static float deg2rad = M_PI/180.0;
         glDisable(GL_POLYGON_SMOOTH);
         glDisable(GL_POINT_SMOOTH);
         glDisable(GL_BLEND);
-#endif // @@@
+#endif
     }
 }
 

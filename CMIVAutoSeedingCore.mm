@@ -65,7 +65,7 @@ static float deg2rad = M_PI/180.0;
 
 void setNumberOfThreads()
 {
-#if 1 // @@@
+#if 1 // @@@ fixed
     int numCPU;
     int mib[2] = {CTL_HW, HW_NCPU};
     size_t dataLen = sizeof(int); // 'num' is an 'int'
@@ -1853,7 +1853,7 @@ else
 
 	const bool importImageFilterWillOwnTheBuffer = false;
 	typedef float AccumulatorPixelType;
-    typedef float RadiusPixelType; // @@@
+    typedef float RadiusPixelType; // @@@ added
     
 	typedef itk::HoughTransform2DCirclesImageFilter<InputPixelType, AccumulatorPixelType, RadiusPixelType> HoughTransformFilterType;
 	HoughTransformFilterType::Pointer houghFilter = HoughTransformFilterType::New();
@@ -1876,7 +1876,7 @@ else
 		houghFilter->Update();
 		
 		HoughTransformFilterType::CirclesListType circles;
-#if 1 // @@@
+#if 1 // @@@ fixed
         circles = houghFilter->GetCircles();
 #else // original
         circles = houghFilter->GetCircles( 4 );
@@ -1889,7 +1889,7 @@ else
 			float centerx,centery,radius;
 			centerx=(*itCircles)->GetObjectToParentTransform()->GetOffset()[0];
 			centery=(*itCircles)->GetObjectToParentTransform()->GetOffset()[1];
-#if 1 // @@@
+#if 1 // @@@ fixed
             radius=(*itCircles)->GetRadiusInObjectSpace()[0];
 #else // original
 			radius=(*itCircles)->GetRadius()[0];
@@ -2316,7 +2316,7 @@ else
 	imageAmount=dim[2];
 	imageSize=dim[0]*dim[1];
 
-	//initilize vtk part
+	// Initilize VTK part
 
 	vtkImageImport* reader = vtkImageImport::New();
 	reader->SetWholeExtent(0, dim[0]-1, 0, dim[1]-1, 0, dim[2]-1);
@@ -2333,13 +2333,12 @@ else
 	rotationTransform->Identity ();
 	rotationTransform->SetInput(translateTransform) ;
 
-	
 	vtkTransform* inverseTransform = (vtkTransform*)rotationTransform->GetLinearInverse();
 	
 	vtkImageReslice *imageSlice = vtkImageReslice::New();
 	imageSlice->SetAutoCropOutput( true);
 	imageSlice->SetInformationInput( reader->GetOutput());
-#if 1 // @@@
+#if 1 // @@@ fixed
     imageSlice->SetInputConnection( reader->GetOutputPort());
 #else // original
 	imageSlice->SetInput( reader->GetOutput());
@@ -2353,18 +2352,19 @@ else
 //	imageSlice->SetOutputSpacing(0.5,0.5,0.5);
 	imageSlice->SetBackgroundLevel( -1024);
 	
-	vtkImageData *tempIm;
 	int	imSliceExtent[ 6];
 	double imSliceSpacing[3],imSliceOrigin[3];
-	tempIm = imageSlice->GetOutput();
-#if 0 // @@@
+    vtkImageData *tempIm = imageSlice->GetOutput();
+#if 1 // @@@ fixed ?
+    tempIm->GetExtent( imSliceExtent);
+#else
 	tempIm->Update();
 	tempIm->GetWholeExtent( imSliceExtent);
 #endif
 	tempIm->GetSpacing( imSliceSpacing);
 	tempIm->GetOrigin( imSliceOrigin);
 	
-	// Create buffer for levelset segmentation
+	// Create buffer for level set segmentation
 	
 	int costMapWidth,costMapHeight;
 	vtkMatrix4x4* lastVTKTransformMatrix=nil;
@@ -2375,7 +2375,8 @@ else
 	unsigned char* segmentedRegion;//=(unsigned char*)malloc(sizeof(char)*regionSize);
 	unsigned char* lastSegmentedRegion=(unsigned char*)malloc(sizeof(char)*regionSize);
 	float* smoothedInputImg;
-	//intilize itk part
+
+    // Initialize itk part
 
 	float curscale=40;
 	const double initialDistance = 2.0;
@@ -2420,8 +2421,7 @@ else
 	smoothing->SetTimeStep( 0.125 );
 	smoothing->SetNumberOfIterations(  5 );
 	smoothing->SetConductanceParameter( 9.0 );
-	
-	
+		
 	typedef itk::BinaryThresholdImageFilter<InternalImageType, OutputImageType>
 	ThresholdingFilterType;
 	
@@ -2464,15 +2464,11 @@ else
 	
 	InternalImageType::IndexType  seedPosition;
 	
-	
-	
-	
 	NodeType node;
 	
 	const double seedValue = - initialDistance;
 	seeds->Initialize();
 
-	
 	seedPosition[0] = costMapWidth/2;//start from center
 	seedPosition[1] = costMapWidth/2;//start from center	
 	
@@ -2486,14 +2482,16 @@ else
 	fastMarching->SetSpeedConstant( 1.0 );
 	fastMarching->SetOutputSize( itksize);
 
-	//start growing
+	// Start growing
 	int reachAEndCondition=0;
 	NSMutableArray* newCenterline=[NSMutableArray arrayWithCapacity:0];
 	int costMapOrigin[2];
 	do {
-		//get cross-section image
+		// Get cross-section image
 		tempIm = imageSlice->GetOutput();
-#if 0 // @@@
+#if 1 // @@@ fixed ?
+        tempIm->GetExtent( imSliceExtent);
+#else
 		tempIm->Update();
 		tempIm->GetWholeExtent( imSliceExtent);
 #endif
@@ -2502,13 +2500,12 @@ else
 		float *im = (float*) tempIm->GetScalarPointer();
 		//prepare cost map
 
-		int x,y,width,height;
-		width=imSliceExtent[ 1]-imSliceExtent[ 0]+1;
-		height=imSliceExtent[ 3]-imSliceExtent[ 2]+1;
+		int width  = imSliceExtent[ 1]-imSliceExtent[ 0]+1;
+		int height = imSliceExtent[ 3]-imSliceExtent[ 2]+1;
 		costMapOrigin[0]=(int)((-diameter/2-imSliceOrigin[0])/imSliceSpacing[0]);
 		costMapOrigin[1]=(int)((-diameter/2-imSliceOrigin[1])/imSliceSpacing[1]);
-		for (y=0;y<costMapHeight;y++)
-			for (x=0;x<costMapWidth;x++)
+		for (int y=0;y<costMapHeight;y++)
+			for (int x=0;x<costMapWidth;x++)
 			{
 				if (costMapOrigin[0]+x >= 0 &&
                     costMapOrigin[0]+x < width &&
@@ -2539,7 +2536,6 @@ else
 			return 1;
 		}
 		
-		
 		segmentedRegion=thresholder->GetOutput()->GetBufferPointer();	
 		smoothedInputImg=smoothing->GetOutput()->GetBufferPointer();
 		//compare with last step cross-section, overlap percentage and radius
@@ -2558,7 +2554,7 @@ else
 		incircleradius=[self findingIncirleCenterOfRegion:segmentedRegion:costMapWidth:costMapHeight:incirclecenter];
 		[self findingGravityCenterOfRegion:segmentedRegion:costMapWidth:costMapHeight:gravitycenter];
 		
-		if(incircleradius<=0)
+		if (incircleradius<=0)
 		{
 			NSLog(@"fail to location the center of the cross section");
 			reachAEndCondition=2;
@@ -2566,14 +2562,22 @@ else
 		}
 		else
 		{
-			float centerdis=sqrt((incirclecenter[0]-gravitycenter[0])*(incirclecenter[0]-gravitycenter[0])+(incirclecenter[1]-gravitycenter[1])*(incirclecenter[1]-gravitycenter[1]));
-			if(centerdis>incircleradius/2)
+			float centerdis = sqrt((incirclecenter[0] - gravitycenter[0]) * (incirclecenter[0] - gravitycenter[0]) +
+                                   (incirclecenter[1] - gravitycenter[1]) * (incirclecenter[1] - gravitycenter[1]));
+			if (centerdis>incircleradius/2)
 			{
 				NSLog(@"irregular cross section found");
 				reachAEndCondition=4;
 				break;
 			}
-			if([self detectAorticValve:smoothedInputImg:segmentedRegion:costMapWidth:costMapHeight:incirclecenter:incircleradius:imSliceSpacing])
+
+            if ([self detectAorticValve:smoothedInputImg
+                                       :segmentedRegion
+                                       :costMapWidth
+                                       :costMapHeight
+                                       :incirclecenter
+                                       :incircleradius
+                                       :imSliceSpacing])
 			{
 				NSLog(@"found Aortic Valve");
 				reachAEndCondition=5;
@@ -2581,11 +2585,13 @@ else
 			}	
 			
 		}
-		newCenter3D[0]=imSliceOrigin[0]+(incirclecenter[0]+costMapOrigin[0]) *imSliceSpacing[0];
-		newCenter3D[1]=imSliceOrigin[1]+(incirclecenter[1]+costMapOrigin[1]) *imSliceSpacing[1];
-		newCenter3D[2]=0;
-		//plant seeds at this step
-		if(incircleradius>0)
+
+        newCenter3D[0] = imSliceOrigin[0]+(incirclecenter[0]+costMapOrigin[0]) *imSliceSpacing[0];
+		newCenter3D[1] = imSliceOrigin[1]+(incirclecenter[1]+costMapOrigin[1]) *imSliceSpacing[1];
+		newCenter3D[2] = 0;
+
+        // Plant seeds at this step
+		if (incircleradius>0)
 		{
 			float curXSpacing,curYSpacing;
 			float curOriginX,curOriginY;
@@ -2611,31 +2617,31 @@ else
 			a=a*a;
 			b=b*b;
 			
-			//step=0.3 pixel!	
-			for(j=0;j<seedheight;j++)
+			// step=0.3 pixel!
+			for (j=0;j<seedheight;j++)
 				for(i=0;i<seedwidth;i++)
 				{
 					point[0] = curOriginX + i * curXSpacing/3;
 					point[1] = curOriginY + j * curYSpacing/3;
 					point[2] = 0;
-					if((point[0]-x0)*(point[0]-x0)*b+(point[1]-y0)*(point[1]-y0)*a<=a*b) //x^2/a+y^2/b<1
+					if ((point[0]-x0) * (point[0]-x0) * b + // TODO: check / instead of *
+                        (point[1]-y0) * (point[1]-y0) * a <= a*b) //x^2/a+y^2/b<1
 					{
 						rotationTransform->TransformPoint(point,point);
 						x=lround((point[0])/spacing[0]);
 						y=lround((point[1])/spacing[1]);
 						z=lround((point[2])/spacing[2]);
-						if(x>=0 && x<dim[0] && y>=0 && y<dim[1] && z>=0 && z<dim[2])
+						if (x>=0 && x<dim[0] &&
+                            y>=0 && y<dim[1] &&
+                            z>=0 && z<dim[2])
 						{
 							*(seedData+ z*dim[1]*dim[0] + y*dim[0] + x) = AORTAMARKER;
-							
-							
 						}
 					}
-					
-				}				
-			
+				}
 		}
-		//move reslice plane further on the centerline direction (correct every 10mm)
+
+        // Move reslice plane further on the centerline direction (correct every 10mm)
 		lastVTKTransformMatrix=rotationTransform->GetMatrix();
 		{
 			step++;
@@ -2644,13 +2650,12 @@ else
 			oY=newCenter3D[1];
 			oZ=-steplength;
 			//NSLog(@"debug log check if need go further");
-			if(step>2 && sqrt(oX*oX+oY*oY)>incircleradius*imSliceSpacing[0]/2)
+			if (step>2 && sqrt(oX*oX+oY*oY) > incircleradius*imSliceSpacing[0]/2)
 			{
 				NSLog(@"center shift too much");
 				reachAEndCondition=3;
 				break;
 			}
-			
 			
 			rotationTransform->TransformPoint(newCenter3D,newCenter3D);
 			CMIV3DPoint* new3DPoint=[[CMIV3DPoint alloc] init] ;
@@ -2660,9 +2665,9 @@ else
 			[newCenterline insertObject:new3DPoint atIndex:0 ];
 			[new3DPoint release];
 			
-			if(step%pnums!=0)
+			if (step % pnums != 0)
 			{
-					rotationTransform->Translate(oX,oY,oZ);
+                rotationTransform->Translate(oX,oY,oZ);
 			}
 			else
 			{
@@ -2671,24 +2676,23 @@ else
 				double position[3],direction[3];
 				//rotationTransform->TransformPoint(origin,position);	
 	
-				
-				int ii;
 				double zxdata[pnums*2],zydata[pnums*2];
 				CMIV3DPoint* a3DPoint;
 				double x1=0,y1=0,z1=0,x2=0,y2=0,z2=0,kx=0,bx=0,ky=0,by=0;
-				for(ii=0;ii<pnums;ii++)
+				for (int ii=0;ii<pnums;ii++)
 				{
 					a3DPoint=[newCenterline objectAtIndex:ii];
 					zxdata[2*ii]=[a3DPoint z];
 					zxdata[2*ii+1]=[a3DPoint x];
 					zydata[2*ii]=[a3DPoint z];
 					zydata[2*ii+1]=[a3DPoint y];
-					if(ii==0)
+					if (ii==0)
 						z1=[a3DPoint z];
-					z2=[a3DPoint z];
-					
+
+                    z2=[a3DPoint z];
 				}
-				[self LinearRegression:zxdata :pnums:&bx:&kx];
+
+                [self LinearRegression:zxdata :pnums:&bx:&kx];
 				[self LinearRegression:zydata :pnums:&by:&ky];
 				x1=kx*z1+bx;
 				x2=kx*z2+bx;
@@ -2707,7 +2711,7 @@ else
 				rotationTransform->Identity();
 				translateTransform->Translate(position);
 				float anglex=0,angley=0;
-				if(direction[2]==0)
+				if (direction[2]==0)
 				{
 					if(direction[1]>0)
 						anglex=90;
@@ -2719,41 +2723,44 @@ else
 				else
 				{
 					anglex = atan(direction[1]/direction[2]) / deg2rad;
-					if(direction[2]<0)
+					if (direction[2]<0)
 						anglex+=180;
 				}
 				
-				
-				angley = asin(direction[0]/sqrt(direction[0]*direction[0]+direction[1]*direction[1]+direction[2]*direction[2])) / deg2rad;
+				angley = asin(direction[0] / sqrt(direction[0]*direction[0] +
+                                                  direction[1]*direction[1] +
+                                                  direction[2]*direction[2])) / deg2rad;
 				rotationTransform->RotateX(-anglex);	
 				rotationTransform->RotateY(angley);
 				rotationTransform->RotateX(180);
-				if(postedIndicatorNotification<3)
+				if (postedIndicatorNotification<3)
 				{
 					[[NSNotificationCenter defaultCenter] postNotificationName: @"CMIVLeveIndicatorStep" object:self userInfo: nil];
 					postedIndicatorNotification++;
 				}
-				
 			}
 		}
 		
-		//prepare for go further
+		// Prepare to go further
 		memcpy(lastSegmentedRegion,segmentedRegion,regionSize);
 		NSLog(@"try next step");
 		
 	} while (!reachAEndCondition);
 
-	for (int iii=postedIndicatorNotification;iii<3;iii++)
+	for (int iii=postedIndicatorNotification; iii<3; iii++)
 		[[NSNotificationCenter defaultCenter] postNotificationName: @"CMIVLeveIndicatorStep" object:self userInfo: nil];
-	//plant seed for ventricle and put barrier in between	
+	
+    // Plant seed for ventricle and put barrier in between	
 	{
-		if(reachAEndCondition<=3)
+		if (reachAEndCondition<=3)
 		{
 			translateTransform->Identity();
 			rotationTransform->Identity();
 			translateTransform->SetMatrix(lastVTKTransformMatrix);
 			tempIm = imageSlice->GetOutput();
-#if 0 // @@@
+#if 1 // @@@ fixed ?
+            tempIm->GetExtent( imSliceExtent);
+#else
 			tempIm->Update();
 			tempIm->GetWholeExtent( imSliceExtent);
 #endif
@@ -2771,14 +2778,15 @@ else
 		{
 			// clean aorta seeds cross barrier
 			
-			float maxSpacing=sqrt(spacing[0]*spacing[0]+spacing[1]*spacing[1]+spacing[2]*spacing[2]);
+			float maxSpacing=sqrt(spacing[0]*spacing[0] +
+                                  spacing[1]*spacing[1] +
+                                  spacing[2]*spacing[2]);
 			
-			int xx,yy,zz;	
 			float point[3];
 		
-			for (zz=0;zz<dim[2];zz++)
-				for (yy=0;yy<dim[1];yy++)
-					for (xx=0;xx<dim[0];xx++)
+			for (int zz=0;zz<dim[2];zz++)
+				for (int yy=0;yy<dim[1];yy++)
+					for (int xx=0;xx<dim[0];xx++)
 						if (*(seedData+zz*imageSize+yy*imageWidth+xx))
 						{
 							point[0]=xx*spacing[0];
@@ -2790,7 +2798,7 @@ else
 						}
 
             // Now plant the seeds
-			maxradius+=1/imSliceSpacing[0];
+			maxradius += 1/imSliceSpacing[0];
 			int i,j,height,width;
 			int x,y,z;
 			//for test
@@ -2829,11 +2837,11 @@ else
 			height=3*costMapHeight;
 			width=3*costMapWidth;
 			//step=0.3 pixel!	
-			for(j=0;j<height;j++)
-				for(i=0;i<width;i++)
+			for (j=0;j<height;j++)
+				for (i=0;i<width;i++)
 				{
-				
-					if((i/3.0-gravitycenter[0])*(i/3.0-gravitycenter[0])+(j/3.0-gravitycenter[1])*(j/3.0-gravitycenter[1])<=maxradius*maxradius)
+					if ((i/3.0-gravitycenter[0])*(i/3.0-gravitycenter[0]) +
+                        (j/3.0-gravitycenter[1])*(j/3.0-gravitycenter[1]) <= maxradius*maxradius)
 					{
 						point[0] = imSliceOrigin[0] + costMapOrigin[0]* imSliceSpacing[0]+i * imSliceSpacing[0]/3.0;
 						point[1] = imSliceOrigin[1] + costMapOrigin[1]* imSliceSpacing[0]+j * imSliceSpacing[1]/3.0;
@@ -2842,7 +2850,9 @@ else
 						x=lround((point[0])/spacing[0]);
 						y=lround((point[1])/spacing[1]);
 						z=lround((point[2])/spacing[2]);
-						if(x>=0 && x<dim[0] && y>=0 && y<dim[1] && z>=0 && z<dim[2])
+						if (x>=0 && x<dim[0] &&
+                            y>=0 && y<dim[1] &&
+                            z>=0 && z<dim[2])
 						{
 							*(seedData+z*imageSize+y*imageWidth+x) = BARRIERMARKER;
 							if(minx>x)
@@ -2857,19 +2867,18 @@ else
 								minz=z;
 							if(maxz<z)
 								maxz=z;
-							
 						}
 					}
-
 				}
 					
 			[self fixHolesInBarrierInVolume:seedData: minx :maxx :miny :maxy :minz :maxz :BARRIERMARKER];
 			maxradius/=2;
-			for(j=0;j<height;j++)
-				for(i=0;i<width;i++)
+			for (j=0;j<height;j++)
+				for (i=0;i<width;i++)
 				{
 					
-					if((i/3.0-gravitycenter[0])*(i/3.0-gravitycenter[0])+(j/3.0-gravitycenter[1])*(j/3.0-gravitycenter[1])<=maxradius*maxradius)
+					if ((i/3.0-gravitycenter[0])*(i/3.0-gravitycenter[0]) +
+                        (j/3.0-gravitycenter[1])*(j/3.0-gravitycenter[1]) <= maxradius*maxradius)
 					{
 						point[0] = imSliceOrigin[0] + costMapOrigin[0]* imSliceSpacing[0]+i * imSliceSpacing[0]/3.0;
 						point[1] = imSliceOrigin[1] + costMapOrigin[1]* imSliceSpacing[0]+j * imSliceSpacing[1]/3.0;
@@ -2878,22 +2887,16 @@ else
 						x=lround((point[0])/spacing[0]);
 						y=lround((point[1])/spacing[1]);
 						z=lround((point[2])/spacing[2]);
-						if(x>=0 && x<dim[0] && y>=0 && y<dim[1] && z>=0 && z<dim[2])
+						if (x>=0 && x<dim[0] &&
+                            y>=0 && y<dim[1] &&
+                            z>=0 && z<dim[2])
 						{
 							*(seedData+z*imageSize+y*imageWidth+x) = OTHERMARKER;
-							
 						}
 					}
 				}
-			
-			
 		}
-		
-		
-
 	}
-
-	
 	
 	imageSlice->Delete();
 	rotationTransform->Delete();
@@ -2909,12 +2912,12 @@ else
                                :(unsigned char*)secondRegion
                                :(int)regionSize
 {
-	int i;
 	int matchCount=0;
-	for(i=0;i<regionSize;i++)
-		if(firstRegion[i]==secondRegion[i])
+	for (int i=0;i<regionSize;i++)
+		if (firstRegion[i]==secondRegion[i])
 			matchCount++;
-	return (float)matchCount/(float)regionSize;
+
+    return (float)matchCount/(float)regionSize;
 }
 
 -(float)findingIncirleCenterOfRegion:(unsigned char*)buffer
@@ -3002,10 +3005,9 @@ else
                                    :(int)height
                                    :(int*)center
 {
-	int i,j;
 	float totalx=0,totaly=0,totalpoint=0;
-	for(j=0;j<height;j++)
-		for(i=0;i<width;i++)
+	for(int j=0;j<height;j++)
+		for(int i=0;i<width;i++)
 		{
 			if(*(buffer+j*width+i))
 			{
@@ -3061,16 +3063,20 @@ else
 		xa+=*p++;
 		ya+=*p++;
 	}
-	xa/=rows;
+
+    xa/=rows;
 	ya/=rows;
-	for(p=data,m=0;m<rows;m++,p+=2)
+	
+    for(p=data,m=0;m<rows;m++,p+=2)
 	{
 		Lxx+=((*p-xa)*(*p-xa));
 		Lxy+=((*p-xa)*(*(p+1)-ya));
 	}
-	*b=Lxy/Lxx;
+	
+    *b=Lxy/Lxx;
 	*a=ya-*b*xa;
-	return 0;
+	
+    return 0;
 }
 
 -(BOOL) detectAorticValve:(float*)inputimg
@@ -3135,78 +3141,99 @@ else
 		}
 	if(totalsum/totalpix-centersum/centerpix>100)
 		return YES;
-	return NO;
+
+    return NO;
 }
-- (void) fixHolesInBarrierInVolume:(unsigned short*)contrastVolumeData :(int)minx :(int)maxx :(int)miny :(int)maxy :(int)minz :(int)maxz :(short unsigned int) marker
+
+- (void) fixHolesInBarrierInVolume:(unsigned short*)contrastVolumeData
+                                  :(int)minx
+                                  :(int)maxx
+                                  :(int)miny
+                                  :(int)maxy
+                                  :(int)minz
+                                  :(int)maxz
+                                  :(short unsigned int) marker
 {
 	int x,y,z;
 	if(minx<maxx&&miny<maxy&&minz<maxz)
 	{
-		for(z=minz;z<=maxz;z++)
-			for(y=miny;y<=maxy;y++)
-				for(x=minx;x<=maxx;x++)
-					if(*(contrastVolumeData+z*imageSize+y*imageWidth+x) == marker)
+		for (z=minz;z<=maxz;z++)
+			for (y=miny;y<=maxy;y++)
+				for (x=minx;x<=maxx;x++)
+					if (*(contrastVolumeData+z*imageSize+y*imageWidth+x) == marker)
 					{
 						//x,y direction
-						if((y+1)<=maxy&& (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker))
+						if ((y+1)<=maxy&& (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker))
 						{
-							if((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) == marker))
+							if ((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) == marker))
 								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
 							
 							
-							else if( (x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) == marker))
+							else if ( (x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) == marker))
 								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
 						}
 						
 						//x,z direction
-						if((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
+						if ((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x-1) == marker))
+							if ((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x-1) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 							
-							else if( (x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x+1) == marker))
+							else if ( (x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x+1) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 						}		
 						
 						//y,z direction
-						if((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
+						if ((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((y-1)>=miny && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x) == marker))
+							if ((y-1)>=miny && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 							
 							
-							else if( (y+1)<=maxy && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
+							else if ( (y+1)<=maxy && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 						}	
 						//x,y,z direction
-						if((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
+						if ((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((y-1)>=miny && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x-1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-							
+							if ((y-1)>=miny && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x-1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
 							else if( (y+1)<=maxy && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x-1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
 							else if((y-1)>=miny && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x+1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-							
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
 							else if( (y+1)<=maxy && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x+1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-						}	
-						//leak from vertex connection
-						if((z-1)>=minz&& (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) != marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+						}
+
+                        // Leak from vertex connection
+						if ((z-1)>=minz&& (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((x-1)>=minx && (y-1)>=miny &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							else if((x+1)<=maxx && (y-1)>=miny &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							else if((x-1)>=minx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							else if((x+1)<=maxx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+							if ((x-1)>=minx && (y-1)>=miny &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x+1)<=maxx && (y-1)>=miny &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x-1)>=minx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x+1)<=maxx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
 						}
 					}
 	}
@@ -3268,9 +3295,8 @@ else
 	const bool importImageFilterWillOwnTheBuffer = false;
 	importFilter->SetImportPointer( inData, itksize[0] * itksize[1] * itksize[2], importImageFilterWillOwnTheBuffer);
 	NSLog(@"ITK Image allocated");
-	
 
-	typedef   itk::CurvatureAnisotropicDiffusionImageFilter< 	InputImageType, 	InputImageType >  SmoothingFilterType;
+	typedef itk::CurvatureAnisotropicDiffusionImageFilter< 	InputImageType, 	InputImageType >  SmoothingFilterType;
 	SmoothingFilterType::Pointer smoothing = SmoothingFilterType::New();
 	smoothing->SetTimeStep( 0.0625 );
 	smoothing->SetNumberOfIterations(  iteration );
@@ -3280,8 +3306,6 @@ else
 	void* smoothedInputImg=smoothing->GetOutput()->GetBufferPointer();
 	memcpy(outData, smoothedInputImg, sizeof(float) * imageWidth * imageHeight * imageAmount);
 	return 0;
-	
-	
 }
 
 @end

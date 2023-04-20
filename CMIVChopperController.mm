@@ -349,9 +349,7 @@
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"Chopper_Panel"];
-#if 0 // @@@
 	[[self window] setDelegate:self];
-#endif
 	int err=0;
 	originalViewController=vc;
 	parent = owner;
@@ -478,31 +476,30 @@
 -(void) defaultToolModified: (NSNotification*) note
 {
 	id sender = [note object];
-	int tag;
+    ToolMode tag;
 	
 	if ( sender)
 	{
 		if ([sender isKindOfClass:[NSMatrix class]])
 		{
 			NSButtonCell *theCell = [sender selectedCell];
-			tag = [theCell tag];
+			tag = (ToolMode)[theCell tag];
 		}
 		else
 		{
-			tag = [sender tag];
+			tag = (ToolMode)[sender tag];
 		}
 	}
 	else
-        tag = [[[note userInfo] valueForKey:@"toolIndex"] intValue];
+        tag = (ToolMode)[[[note userInfo] valueForKey:@"toolIndex"] intValue];
 	
-	if ( tag >= 0 )
+	if ( tag >= tWL )
 	{
-		if( tag > 4)
-			tag = 6;
-#if 0 // @@@
-		[originalView setCurrentTool: tag];
+		if ( tag > tNext)
+			tag = tROI;
+
+        [originalView setCurrentTool: tag];
 		[reformView setCurrentTool: tag];
-#endif
 	}
 }
 
@@ -690,7 +687,7 @@
 	rotate = vtkImageReslice::New();
 	rotate->SetAutoCropOutput( true);
 	rotate->SetInformationInput( reader->GetOutput());
-#if 1 // @@@
+#if 1 // @@@ fixed
     rotate->SetInputConnection( reader->GetOutputPort());
 #else
 	rotate->SetInput( reader->GetOutput());
@@ -705,11 +702,12 @@
 	//	rotate->SetOutputOrigin( 0,0,0);
 	rotate->SetBackgroundLevel( -1024);
 	
-	vtkImageData *tempIm;
 	int imExtent[ 6];
 	double space[ 3], origin[ 3];
-	tempIm = rotate->GetOutput();
-#if 0 // @@@
+    vtkImageData *tempIm = rotate->GetOutput();
+#if 1 // @@@ fixed ?
+    tempIm->GetExtent( imExtent);
+#else
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
 #endif
@@ -717,7 +715,15 @@
 	tempIm->GetOrigin( origin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                                :32
+                                                :imExtent[ 1]-imExtent[ 0]+1
+                                                :imExtent[ 3]-imExtent[ 2]+1
+                                                :space[0]
+                                                :space[1]
+                                                :origin[0]
+                                                :origin[1]
+                                                :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	reformPixList = [[NSMutableArray alloc] initWithCapacity:0];
@@ -798,11 +804,12 @@
 	}
 	
 	rotate->SetResliceAxesOrigin( 0, 0, 0);
-	vtkImageData *tempIm;
 	int imExtent[ 6];
 	double space[ 3], origin[ 3];
-	tempIm = rotate->GetOutput();
-#if 0 // @@@
+    vtkImageData *tempIm = rotate->GetOutput();
+#if 1 // @@@ todo
+    tempIm->GetExtent( imExtent);
+#else
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
 #endif
@@ -810,7 +817,15 @@
 	tempIm->GetOrigin( origin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                                :32
+                                                :imExtent[ 1]-imExtent[ 0]+1
+                                                :imExtent[ 3]-imExtent[ 2]+1
+                                                :space[0]
+                                                :space[1]
+                                                :origin[0]
+                                                :origin[1]
+                                                :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	//	finalPixList = [[NSMutableArray alloc] initWithCapacity:0];

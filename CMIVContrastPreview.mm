@@ -175,16 +175,17 @@
 }
 - (void) updateMPRView
 {
-	vtkImageData	*tempIm,*tempROIIm;
-	int				imExtent[ 6];
+	int imExtent[ 6];
 	
-	if(interpolationMode)
+	if (interpolationMode)
 		mprViewSlice->SetInterpolationModeToCubic();
 	else
 		mprViewSlice->SetInterpolationModeToNearestNeighbor();
 	
-	tempIm = mprViewSlice->GetOutput();
-#if 0 // @@@
+    vtkImageData *tempIm = mprViewSlice->GetOutput();
+#if 1 // @@@ fixed ?
+    tempIm->GetExtent( imExtent);
+#else
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
 #endif
@@ -192,16 +193,26 @@
 	tempIm->GetOrigin( mprViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :mprViewSpace[0] :mprViewSpace[1] :mprViewOrigin[0] :mprViewOrigin[1] :mprViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                                :32
+                                                :imExtent[ 1] - imExtent[ 0] + 1
+                                                :imExtent[ 3] - imExtent[ 2] + 1
+                                                :mprViewSpace[0]
+                                                :mprViewSpace[1]
+                                                :mprViewOrigin[0]
+                                                :mprViewOrigin[1]
+                                                :mprViewOrigin[2]];
 	[mypix copySUVfrom: firstPix];	
 	
-	//create ROI list
+	// Create ROI list
 	double space[3], origin[3];
 	if (newSeedsBuffer)
 	{
-		tempROIIm = mprViewROISlice->GetOutput();
-#if 0 // @@@
-		tempROIIm->Update();
+        vtkImageData *tempROIIm = mprViewROISlice->GetOutput();
+#if 1 // @@@ fixed ?
+        tempROIIm->GetExtent( imExtent);
+#else
+        tempROIIm->Update();
 		tempROIIm->GetWholeExtent( imExtent);
 #endif
 		tempROIIm->GetSpacing( space);
@@ -551,10 +562,9 @@
 {
 	//initialize the window
 	self = [super initWithWindowNibName:@"SegPreview"];
-#if 0 // @@@
 	[[self window] setDelegate:self];
-#endif
-	//prepare images and VRT view
+
+    // Prepare images and VRT view
 	int err=0;
 	originalViewController=vc;	
 	originalViewVolumeData=[vc volumeData];
@@ -623,9 +633,8 @@
 		[nc	addObserver: self selector: @selector(changeWLWW:) name: @"changeWLWW" object: nil];	
 		[nc	addObserver: self selector: @selector(crossMove:) name: @"crossMove" object: nil];	
 		[nc	addObserver: self selector: @selector(Display3DPoint:) name: @"Display3DPoint" object: nil];
-#if 0 // @@@
-		[seedList setDataSource: self];
-#endif
+
+        [seedList setDataSource: self];
 
         //hide other segments
 		if (err!=2)
@@ -781,7 +790,7 @@
 	mprViewSlice = vtkImageReslice::New();
 	mprViewSlice->SetAutoCropOutput( true);
 	mprViewSlice->SetInformationInput( reader->GetOutput());
-#if 1 // @@@
+#if 1 // @@@ fixed
     mprViewSlice->SetInputConnection( reader->GetOutputPort());
 #else
     mprViewSlice->SetInput( reader->GetOutput());
@@ -796,7 +805,7 @@
 	mprViewROISlice= vtkImageReslice::New();
 	mprViewROISlice->SetAutoCropOutput( true);
 	mprViewROISlice->SetInformationInput( roiReader->GetOutput());
-#if 1 // @@@
+#if 1 // @@@ fixed
     mprViewROISlice->SetInputConnection( roiReader->GetOutputPort());
 #else
     mprViewROISlice->SetInput( roiReader->GetOutput());
@@ -808,11 +817,12 @@
 	mprViewROISlice->SetOutputDimensionality( 2);
 	mprViewROISlice->SetBackgroundLevel( -1024);	
 	
-	vtkImageData *tempIm;
 	int imExtent[ 6];
 	double space[ 3], origin[ 3];
-	tempIm = mprViewSlice->GetOutput();
-#if 0 // @@@
+    vtkImageData *tempIm = mprViewSlice->GetOutput();
+#if 1 // @@@ fixed ?
+    tempIm->GetExtent( imExtent);
+#else
 	tempIm->Update();
 	tempIm->GetWholeExtent( imExtent);
 #endif
@@ -823,7 +833,15 @@
 	iwl = [[originalViewController imageView] curWL] ;
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix*		mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                                :32
+                                                :imExtent[ 1]-imExtent[ 0]+1
+                                                :imExtent[ 3]-imExtent[ 2]+1
+                                                :space[0]
+                                                :space[1]
+                                                :origin[0]
+                                                :origin[1]
+                                                :origin[2]];
 	[mypix copySUVfrom: curPix];
 	[mypix changeWLWW:iwl :iww];
 	
@@ -852,7 +870,6 @@
 		crossY=-(imExtent[ 3]-imExtent[ 2] );
 	[mprView setCrossCoordinates:crossX:crossY :YES];
 
-	
 	[mprView setIndexWithReset: imageAmount/2 :YES];
 	[mprView setOrigin: NSMakePoint(0,0)];
 	[mprView setCurrentTool:tPlain];
@@ -860,20 +877,13 @@
 	float scale=[mprView scaleValue];
 	[mprView setScaleValue:scale*0.9];
 	
-	
-	
 	int i;
 //	for( i = 0; i < imageAmount; i++)
 //	{
 //		[MPRROIList addObject:[NSMutableArray arrayWithCapacity:0]];
 //	}
 	
-	
-	
-	
-	
-	
-	//create result data
+	// Create result data
 	// CREATE A NEW SERIES TO CONTAIN THIS NEW SERIES
 	resultPixList = [[NSMutableArray alloc] initWithCapacity: 0];
 	resultROIList = [[NSMutableArray alloc] initWithCapacity: 0];
@@ -892,7 +902,6 @@
 	
 	[[resultPixList lastObject] setfImage: (float*) (outputData + imageSize * i)];
 	[resultFileList addObject: [MPRFileList objectAtIndex: i]];
-	
 	
 	[resultPageSlider setMaxValue: imageAmount-1];
 	[resultPageSlider setIntValue:imageAmount/2];
@@ -1595,10 +1604,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 	{
 		float oX,oY;
-		vtkImageData *tempIm;
 		double space[ 3], origin[ 3];
-		tempIm = mprViewSlice->GetOutput();
-#if 0 // @@@
+#if 1 // @@@ fixed ?
+        mprViewSlice->Update();
+#endif
+        vtkImageData *tempIm = mprViewSlice->GetOutput();
+#if 0 // @@@ fixed ? see 3 lines
+        above
 		tempIm->Update();
 #endif
 		tempIm->GetSpacing( space);
@@ -3122,7 +3134,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[vrView setMode: 1];
 	else
 		[vrView setMode: 0];
-	
 #endif
 }
 

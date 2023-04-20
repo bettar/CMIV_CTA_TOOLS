@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import "CMIV_CTA_TOOLS.h"
 #import "CMIVDCMView.h"
 
-@interface CMIVChopperController : NSWindowController
+@interface CMIVChopperController : NSWindowController<NSWindowDelegate>
 {
     IBOutlet NSTextField *imageFrom;
     IBOutlet NSSlider *imageFromSlider;
