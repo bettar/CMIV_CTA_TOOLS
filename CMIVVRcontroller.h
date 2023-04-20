@@ -36,10 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import <Cocoa/Cocoa.h>
 #import <MieleAPI/PluginFilter.h>
 #import "CMIV_CTA_TOOLS.h"
-#if 0 // @@@
-#import "VRView.h"
-#endif
 #import "CMIVCLUTOpacityView.h"
+
 #define id Id
 #include <vtkColorTransferFunction.h>
 #include <vtkRenderer.h>
@@ -61,6 +59,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #undef id
 
+@class VRView;
+
 @interface CMIVVRcontroller : NSWindowController<NSTableViewDataSource, NSWindowDelegate>
 {
 
@@ -69,9 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     IBOutlet NSSlider *opacitySlider;
 	IBOutlet NSSlider *clipPlaneOriginSlider;
     IBOutlet NSTableView *segmentList;
-#if 0 // @@@
     IBOutlet VRView *vrViewer;
-#endif
     IBOutlet NSSlider *wlSlider;
     IBOutlet NSSlider *wwSlider;
     IBOutlet NSButton *wlwwForAll;
@@ -81,12 +79,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	IBOutlet NSButton *showVolumeSwitch;
 	IBOutlet NSMatrix	*toolsMatrix;
 	int imageWidth,imageHeight,imageAmount; 	
-	ViewerController     *originalViewController;
-	ViewerController     *blendingController;
-	NSData               *originalViewVolumeData;
-	NSArray              *originalViewPixList;
+	ViewerController *originalViewController;
+	ViewerController *blendingController;
+	NSData *originalViewVolumeData;
+	NSArray *originalViewPixList;
 
-	float  wholeVolumeWL,wholeVolumeWW;
+	float wholeVolumeWL,wholeVolumeWW;
 	NSMutableArray      *propertyDictList;	
 	NSMutableDictionary *curProperyDict;
 	NSMutableArray      *toolbarList;

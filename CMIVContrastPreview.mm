@@ -35,6 +35,10 @@
 
 #import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
+#if 0 // @@@
+#import "VRView.h"
+#endif
+
 @implementation CMIVContrastPreview
 
 - (IBAction)chooseASeed:(id)sender
@@ -239,7 +243,7 @@
 	[MPRPixList removeAllObjects];
 	[MPRPixList addObject: mypix];
 	[mypix release];
-	//to cheat DCMView not reset current roi;
+	// To cheat DCMView not reset current ROI
 	
 	[mprView setIndex: 0];
 	
@@ -1824,6 +1828,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				[newROI release];
 			}
 		}
+        
 		NSString* tempstr=@"ROI results of ";
 		int colorIndex;
 		for(i=0;i< [showSeedsArray count];i++)
@@ -1831,6 +1836,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			colorIndex = [[showSeedsArray objectAtIndex:i] intValue];
 			tempstr=[tempstr stringByAppendingFormat:@" %@",[[choosenSeedsArray objectAtIndex:colorIndex-1] name]];
 		}
+        
 		[new2DViewer checkEverythingLoaded];
 		[[new2DViewer window] setTitle:tempstr];
 		NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
@@ -1842,59 +1848,59 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		[temparray addObject:new2DViewer];
 		temparray=[[parent dataOfWizard] objectForKey: @"VCTitleList"];
-		if(!temparray)
+		if (!temparray)
 		{
 			temparray=[NSMutableArray arrayWithCapacity:0];
 			[[parent dataOfWizard] setObject:temparray forKey:@"VCTitleList"];
 		}
-		[temparray addObject:tempstr];
-		
+	
+        [temparray addObject:tempstr];
 	}
-	[[self window] makeKeyAndOrderFront:parent];
+
+    [[self window] makeKeyAndOrderFront:parent];
 }
+
 - (void) exportToPreResult
 {
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *curPix = [pixList objectAtIndex: 0];
 	
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix				*curPix = [pixList objectAtIndex: 0];
-	
-	long size=sizeof(float)*imageWidth*imageHeight*imageAmount;
-	float* volumeData=(float*)malloc(size);
+	long size = sizeof(float)*imageWidth*imageHeight*imageAmount;
+	float* volumeData = (float*)malloc(size);
 	unsigned char* choosenColorList;
-	int choosenColorNumber=[showSeedsArray count];
+	int choosenColorNumber = [showSeedsArray count];
 	int isAChoosenColor;
 	float offset=maxValueInCurSeries-minValueInCurSeries;
 	float curOffset=0;
 	size=sizeof(unsigned char)*choosenColorNumber;
 	choosenColorList=(unsigned char*)malloc(size);
 	size=imageAmount*imageSize;
-	int i,j;
-	for(i=0;i<choosenColorNumber;i++)
+
+    for (int i=0;i<choosenColorNumber;i++)
 		*(choosenColorList+i) = (unsigned char) [[showSeedsArray objectAtIndex:i] intValue];
-	for(i=0;i<size;i++)
+	
+    for (int i=0;i<size;i++)
 	{
 		isAChoosenColor=0;
-		for(j=0;j<choosenColorNumber;j++)
-			if(*(choosenColorList+j)==*(colorData+i))
+		for (int j=0;j<choosenColorNumber;j++)
+			if (*(choosenColorList+j)==*(colorData+i))
 			{
 				isAChoosenColor=1;
 				curOffset=offset*j;
 			}
-		if(isAChoosenColor)
+
+        if (isAChoosenColor)
 			*(volumeData+i)=*(inputData+i)+curOffset;
 		else
 			*(volumeData+i)=minValueInCurSeries;
-		
-		
 	}
 	
 	free(choosenColorList);
 	
-	NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
-	NSMutableArray	*newDcmList = [NSMutableArray arrayWithCapacity: 0];
-	NSData	*newData = [NSData dataWithBytesNoCopy:volumeData length: size freeWhenDone:YES];
-	int z;
-	for( z = 0 ; z < imageAmount; z ++)
+	NSMutableArray *newPixList = [NSMutableArray arrayWithCapacity: 0];
+	NSMutableArray *newDcmList = [NSMutableArray arrayWithCapacity: 0];
+	NSData *newData = [NSData dataWithBytesNoCopy:volumeData length: size freeWhenDone:YES];
+	for (int z = 0; z < imageAmount; z++)
 	{
 		curPix = [pixList objectAtIndex: z];
 		DCMPix	*copyPix = [curPix copy];
@@ -1904,19 +1910,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		[[newPixList lastObject] setfImage: (float*) (volumeData + imageSize * z)];
 	}
-	ViewerController *new2DViewer;
+
+    ViewerController *new2DViewer;
 	new2DViewer = [originalViewController newWindow	:newPixList
 				   :newDcmList
 				   :newData];  
 	NSString* tempstr=@"Mixture";
 	[new2DViewer checkEverythingLoaded];
 	[[new2DViewer window] setTitle:tempstr];
-	NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
-	if(!temparray)
+	NSMutableArray *temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
+	if (!temparray)
 	{
 		temparray=[NSMutableArray arrayWithCapacity:0];
 		[[parent dataOfWizard] setObject:temparray forKey:@"VCList"];
 	}
+    
 	[temparray addObject:new2DViewer];
 	temparray=[[parent dataOfWizard] objectForKey: @"VCTitleList"];
 	if(!temparray)
@@ -1924,10 +1932,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		temparray=[NSMutableArray arrayWithCapacity:0];
 		[[parent dataOfWizard] setObject:temparray forKey:@"VCTitleList"];
 	}
+    
 	[temparray addObject:tempstr];
 	[[self window] makeKeyAndOrderFront:parent];
-	
 }
+
 - (IBAction)rotateXMPRView:(id)sender
 {
 	float angle;

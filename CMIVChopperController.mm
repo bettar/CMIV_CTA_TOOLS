@@ -722,7 +722,7 @@
 	
 	reformFileList = [originalViewController fileList ];
 	
-	//initlize roi
+	// Initialize ROI
 	
 	coronalROIRect.origin.x = roiRect.origin.x;
 	coronalROIRect.origin.y = (iImageFrom-1) / ratioYtoThick ;

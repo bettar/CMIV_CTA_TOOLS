@@ -35,23 +35,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import <Cocoa/Cocoa.h>
 #import <MieleAPI/PluginFilter.h>
 #import "CMIV_CTA_TOOLS.h"
+
 @interface CMIVSaveResult : NSObject
 {
-	IBOutlet NSWindow	*window;
+	IBOutlet NSWindow *window;
     IBOutlet NSTextField *seriesName;
     IBOutlet NSTextField *seriesNumber;
 	IBOutlet NSButton *okButton;
-	ViewerController     *originalViewController;
+	ViewerController *originalViewController;
 	CMIV_CTA_TOOLS* parent;
 	NSMatrix * previewMatrix;
 	int seriesBefore;
-	NSString			*exportSeriesUID;
+	NSString *exportSeriesUID;
 	NSTimer* databaseUpdateTimer;
 	int checkTime;
 	id waitWindow;
 }
+
 - (IBAction)onCancel:(id)sender;
 - (IBAction)onSave:(id)sender;
-- (id) showSaveResultPanel:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner;
-- (void) exportSeries:(ViewerController *) vc:(NSString*)sname:(int)snumber:(CMIV_CTA_TOOLS*) owner;
+- (id) showSaveResultPanel:(ViewerController *) vc
+                          :(CMIV_CTA_TOOLS*) owner;
+
+- (void) exportSeries:(ViewerController *) vc
+                     :(NSString*)sname
+                     :(int)snumber
+                     :(CMIV_CTA_TOOLS*) owner;
 @end

@@ -576,10 +576,12 @@ static float deg2rad = M_PI/180.0;
 	return self;
 	
 }
-- (id)showPanelAsAutomaticWizard:(ViewerController *) vc:(	CMIV_CTA_TOOLS*) owner
+
+- (id)showPanelAsAutomaticWizard:(ViewerController *) vc
+                                :(CMIV_CTA_TOOLS*) owner
 {
 	[self showScissorsPanel:vc :owner];
-	if(contrastVolumeData&&[cpr3DPaths count]==0)
+	if (contrastVolumeData && [cpr3DPaths count]==0)
 	{
 		timeCountDown=3;
 		[saveButton setTitle:[NSString stringWithFormat:@"Seg. start in %d seconds",timeCountDown]];
@@ -600,9 +602,10 @@ static float deg2rad = M_PI/180.0;
 		autoSegmentTimer = [[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(changeSegmentButtonTitle:) userInfo:self repeats:YES] retain];
 		
 	}
+    
 	return self;
-	
 }
+
 //{
 //	isInWizardMode=2;
 //	parent = owner;	
@@ -1475,7 +1478,8 @@ static float deg2rad = M_PI/180.0;
 	[oViewPixList removeAllObjects];
 	[oViewPixList addObject: mypix];
 	[mypix release];
-	//to cheat DCMView not reset current roi;
+
+    // To cheat DCMView not reset current ROI
 	
 	[originalView setIndex: 0];
 	
@@ -4508,14 +4512,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}	
 }
 
-- (ViewerController *) exportCrossSectionImages:(float)start:(float)step:(int)slicenumber
+- (ViewerController *) exportCrossSectionImages:(float)start
+                                               :(float)step
+                                               :(int)slicenumber
 {
-	
-
 	NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*newDcmList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*tempRoiList = [NSMutableArray arrayWithCapacity: 0];
 	
 	int i;
@@ -4588,14 +4590,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[[self window] makeKeyAndOrderFront:parent];
 	return new2DViewer;
 }
-- (ViewerController *) exportCViewImages:(float)start:(float)step:(int)slicenumber
-{
-	
 
+- (ViewerController *) exportCViewImages:(float)start
+                                        :(float)step
+                                        :(int)slicenumber
+{
 	NSMutableArray	*newPixList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*newDcmList = [NSMutableArray arrayWithCapacity: 0];
-	
 	NSMutableArray	*tempRoiList = [NSMutableArray arrayWithCapacity: 0];
 	int i;
 	
@@ -4943,29 +4944,30 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		NSPoint origin=NSMakePoint(NSMaxX([[basketScrollView documentView] frame])
 						   -NSWidth([[basketScrollView contentView] bounds]),0.0);
-		[[basketScrollView documentView] scrollPoint:origin];	
-		
+		[[basketScrollView documentView] scrollPoint:origin];
 	}
-	
 }
-- (DCMPix*)getCurPixFromOView:(float*)imgdata:(int)imgwidth:(int)imgheight:(NSMutableArray*)imgROIs
+
+- (DCMPix*)getCurPixFromOView:(float*)imgdata
+                             :(int)imgwidth
+                             :(int)imgheight
+                             :(NSMutableArray*)imgROIs
 {
 	NSPoint point[4];
-	NSArray				*pixList = [originalViewController pixList];
-	DCMPix	*firstPix=[pixList objectAtIndex: 0];
-	DCMPix  *temppix;
+	NSArray *pixList = [originalViewController pixList];
+	DCMPix *firstPix=[pixList objectAtIndex: 0];
+	DCMPix *temppix;
 	float vector[ 9], origin[3];
 	
 	//double doublevector[3];
 
-	//copy data
+	// Copy data
 	int x,y;
 	int offsetx,offsety;
 	int minx,miny,maxx,maxy;
 	int width,height;
 	float* tempfloat;
 	temppix=[oViewPixList objectAtIndex: 0];
-	
 	
 	width = [temppix pwidth];
 	height = [temppix pheight];
@@ -4989,7 +4991,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	minx=maxx=point[0].x;
 	miny=maxy=point[0].y;
 	unsigned j;
-	for(j=1;j<4;j++)
+	for (j=1;j<4;j++)
 	{
 		if(point[j].x<minx)
 			minx=point[j].x;
@@ -4999,7 +5001,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			maxx=point[j].x;
 		if(point[j].y>maxy)
 			maxy=point[j].y;
-		
 	}
 	
 	offsetx=minx;
@@ -5013,16 +5014,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if(maxy>height)
 		maxy=height;
 	
-	for(y=0;y<imgheight;y++)
-		for(x=0;x<imgwidth;x++)
+	for (y=0;y<imgheight;y++)
+		for (x=0;x<imgwidth;x++)
 		{
-			if(x+offsetx>=minx&&x+offsetx<maxx&&y+offsety>=miny&&y+offsety<maxy)
+			if (x+offsetx>=minx&&x+offsetx<maxx&&y+offsety>=miny&&y+offsety<maxy)
 				*(imgdata+y*imgwidth+x)=*(tempfloat+(y+offsety)*width+x+offsetx);
 			else
 				*(imgdata+y*imgwidth+x) = minValueInSeries;
 		}
 	
-	//calculate orietion
+	// Calculate orientation
 	float inversedvector[9];
 	float unitvector[3];
 	float originpat[3],unitvectorpat[3];
@@ -5107,8 +5108,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[newPix setSliceInterval: 0];
 	
 	
-	// ////////////////
-	//create new rois using the new origin
+	// Create new ROIs using the new origin
 		
 	if(cViewMPRorCPRMode&&[oViewCrossShowButton state]== NSControlStateValueOn)
 	{
@@ -5227,7 +5227,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				*(imgdata+y*imgwidth+x) = minValueInSeries;
 		}
 	
-	//calculate orietion
+	// Calculate orientation
 	float inversedvector[9];
 	float unitvector[3];
 	float originpat[3],unitvectorpat[3];
@@ -5456,7 +5456,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				*(imgdata+y*imgwidth+x) = minValueInSeries;
 		}
 	
-	//calculate orietion
+	// Calculate orientation
 	float inversedvector[9];
 	float unitvector[3];
 	float originpat[3],unitvectorpat[3];
@@ -5572,7 +5572,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[newPix setSliceThickness: 0];
 	[newPix setSliceInterval: 0];
 	
-	//create new rois using the new origin
+	// Create new ROIs using the new origin
 	
 	int ifpolygonfound=0;
 	for (j=0;j<[[axViewROIList objectAtIndex: 0] count];j++)
@@ -5588,9 +5588,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[imgROIs addObject:anewroi];
 			[anewroi release];
 		}
-		else if([temproi type] == tClosedPolygon && [temproi valid] )
+		else if ([temproi type] == tClosedPolygon && [temproi valid] )
 		{
-			ROI* anewroi=[[ROI alloc] initWithType: tClosedPolygon :axViewSpace[0]  :axViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
+			ROI* anewroi=[[ROI alloc] initWithType: tClosedPolygon
+                                                  : axViewSpace[0]
+                                                  : axViewSpace[1]
+                                                  : NSMakePoint( origin[0],  origin[1])];
 			
 			NSArray* oldPoints=[temproi points];
 			unsigned int k;
@@ -5615,9 +5618,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			ifpolygonfound=1;
 			
 		}
-		else if([temproi type] == tMeasure && [temproi valid])
+		else if ([temproi type] == tMeasure && [temproi valid])
 		{
-			ROI* anewroi=[[ROI alloc] initWithType: tMeasure :axViewSpace[0]  :axViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
+			ROI* anewroi=[[ROI alloc] initWithType: tMeasure
+                                                  : axViewSpace[0]
+                                                  : axViewSpace[1]
+                                                  : NSMakePoint( origin[0],  origin[1])];
 			
 			NSArray* oldPoints=[temproi points];
 			unsigned int k;
@@ -5640,11 +5646,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[anewroi setColor:color];
 			[imgROIs addObject:anewroi];
 			ifpolygonfound=1;
-			
 		}
-		
 	}
-	if(!ifpolygonfound && axViewROIMode != 0)
+
+    if (!ifpolygonfound && axViewROIMode != 0)
 	{
 		NSRect roiRect;
 		roiRect.origin.x=-axViewOrigin[0]/axViewSpace[0]-offsetx;
@@ -6585,13 +6590,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						[curvedMPR2DPath release];
 						isRemoveROIBySelf=0;
 					}
-//					if(curvedMPR2DPath&&curvedMPR2DPath!=roi)
+
+//					if (curvedMPR2DPath&&curvedMPR2DPath!=roi)
 //					{
 //						isRemoveROIBySelf=1;
 //						[curvedMPR2DPath release];
 //						isRemoveROIBySelf=0;
 //					}
-					curvedMPR2DPath=roi;
+
+                    curvedMPR2DPath=roi;
 					[curvedMPR2DPath retain];
 					
 					[curvedMPR2DPath setThickness:1.0];
@@ -6625,10 +6632,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					unsigned int i;
 					for(i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
-						[[roi pix] retain];// to avoid a bug. pix seems not retain by the roi, but will be release
+						[[roi pix] retain];// to avoid a bug. pix seems not retain by the ROI, but will be release
 					}
-					DCMPix * curImage= [cViewPixList objectAtIndex:0];
-					ROI* newROI=[[ROI alloc] initWithType: tROI :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
+
+                    DCMPix * curImage= [cViewPixList objectAtIndex:0];
+					ROI* newROI=[[ROI alloc] initWithType: tROI
+                                                         : [curImage pixelSpacingX]
+                                                         : [curImage pixelSpacingY]
+                                                         : NSMakePoint( [curImage originX], [curImage originY])];
 					[newROI setName:currentSeedName];
 					[newROI setComments:indexstr];	
 					[newROI setColor:c];
@@ -6703,8 +6714,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					NSLog( @"Get OView ROI");
 #endif
 					
-					
-					//create roi in cview and axview
+					// Create ROI in cview and axview
 					DCMPix * curImage= [cViewPixList objectAtIndex:0];
 					ROI* newROI=[[ROI alloc] initWithType: tArrow :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
 					[newROI setName:currentSeedName];
@@ -10838,7 +10848,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		if(temproi&&[temproi type]==tPlain)
 		{
-			//NSLog(@"debug log plain roi found");
+			//NSLog(@"debug log plain ROI found");
 			if(lastroi)
 			{
 				unsigned char* lastroibuffer=[lastroi textureBuffer];
@@ -10897,7 +10907,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					continueGrowingCondition=0;
 				}
 				lasttotalpoints=curtotalpoints;
-				//NSLog(@"debug log compared with last roi");
+				//NSLog(@"debug log compared with last ROI");
 				
 			}
 			else

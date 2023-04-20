@@ -1270,7 +1270,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 }
 
-- (BOOL)loadVesselnessMap:(float*)volumeData:(float*)origin:(float*)spacing:(long*)dimension
+- (BOOL)loadVesselnessMap:(float*)volumeData
+                         :(float*)origin
+                         :(float*)spacing
+                         :(long*)dimension
 {
     BOOL resampleresult=YES;
     

@@ -35,9 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 =========================================================================*/
 #import <Cocoa/Cocoa.h>
 #import <MieleAPI/PluginFilter.h>
-#if 0 // @@@
-#import "VRView.h"
-#endif
+
 #import "CMIV_CTA_TOOLS.h"
 #import "CMIVWindow.h"
 #import "CMIVDCMView.h"
@@ -56,12 +54,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vtkTransformFilter.h>
 #undef id
 
+@class VRView;
+
 @interface CMIVContrastPreview : NSWindowController<NSTableViewDataSource, NSWindowDelegate>
 {
     IBOutlet CMIVDCMView *mprView;
     IBOutlet NSTableView *seedList;
     IBOutlet CMIVDCMView *resultView;
-	IBOutlet NSWindow	*skeletonWindow;
+	IBOutlet NSWindow *skeletonWindow;
     IBOutlet NSSlider *mprPageSlider;
 	IBOutlet NSSlider *resultPageSlider;
 	IBOutlet NSSlider *thresholdSlider;
@@ -87,9 +87,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	IBOutlet NSSlider *brushWidthSlider;
 	IBOutlet NSTabView *tab2D3DView;
-#if 0 // @@@
 	IBOutlet VRView *vrView;
-#endif
 	
 	IBOutlet NSButton *saveBeforeSkeletonization;
 	IBOutlet NSTextField *oViewRotateXText;
@@ -200,11 +198,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (IBAction)changeVRDirection:(id)sender;
 - (IBAction)loadAEndPointForCenterline:(id)sender;
 
-- (void)    rotateZMPRView:(float)angle;
-- (id) showPreviewPanel:(ViewerController *) vc:(float*)inData:(float*)outData:(unsigned char*)colData:(unsigned char*)direData;
-- (id)showPanelAsWizard:(ViewerController *) vc:(	CMIV_CTA_TOOLS*) owner;
+- (void) rotateZMPRView:(float)angle;
+- (id) showPreviewPanel:(ViewerController *) vc :(float*)inData :(float*)outData :(unsigned char*)colData :(unsigned char*)direData;
+- (id)showPanelAsWizard:(ViewerController *) vc :(CMIV_CTA_TOOLS*) owner;
 - (int) initViews;
-- (void)setSeedLists:(NSMutableArray *)choosenseedList: (NSMutableArray *)showSeedList;
+- (void)setSeedLists:(NSMutableArray *)choosenseedList :(NSMutableArray *)showSeedList;
 - (void)resultViewUpdateROI:(int)index;
 - (void) roiChanged: (NSNotification*) note;
 - (void) roiAdded: (NSNotification*) note;
@@ -222,22 +220,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) resetMPRSliders;
 - (void) synchronizeMPRView:(int)page;
 - (void) updateVRView;
-- (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width:(int)height:(short unsigned int*)im:(float)spaceX:(float)spaceY:(float)originX:(float)originY;
-- (void) createVolumDataUnderMask:(float*)volumeData:(NSArray*)exportList;
+- (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width :(int)height :(short unsigned int*)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
+- (void) createVolumDataUnderMask:(float*)volumeData :(NSArray*)exportList;
 - (void) createUnsignedShortVolumDataUnderMask:(unsigned short*)volumeData;
 - (void) Display3DPoint:(NSNotification*) note;
 - (BOOL) prepareForSkeletonizatin;
 - (void) prepareForCaculateLength:(unsigned short*)dismap;
 - (void) prepareForCaculateWightedLength;
 
-- (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList:(int)endpointindex:(unsigned char*)color;
+- (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList :(int)endpointindex :(unsigned char*)color;
 - (void) replaceDistanceMap;
-- (float)valueAfterConvolutionAt:(int)x:(int)y:(int)z;
+- (float)valueAfterConvolutionAt:(int)x :(int)y :(int)z;
 
 - (int)plantNewSeeds;
 - (int)plantRootSeeds;
 
-- (void)createROIfrom3DPaths:(NSArray*)pathsList:(NSArray*)namesList;
+- (void)createROIfrom3DPaths:(NSArray*)pathsList :(NSArray*)namesList;
 
 	// Table view data source methods
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
@@ -252,7 +250,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void)creatNewResultROI:(int)index;
 - (void)saveNewPlantedSeeds;
 - (void) updateAllCenterlines;
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY:(float)originZ;
+- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
 - (void) convertCenterlinesToVTKCoordinate:(NSArray*)centerlines;
 
 //only to cheat vrView

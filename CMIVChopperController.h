@@ -90,6 +90,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSRect screenrect;
 	
 }
+
 - (IBAction)changeReformView:(id)sender;
 - (IBAction)setImageFromTo:(id)sender;
 - (IBAction)setImageFromToSlider:(id)sender;
@@ -98,8 +99,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (IBAction)setCurrentToImageFromTo:(id)sender;
 - (IBAction)setReformViewIndex:(id)sender;
 - (IBAction)selectAll:(id)sender;
-- (id) showChopperPanel:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner;
-- (id)showPanelAsWizard:(ViewerController *) vc:(CMIV_CTA_TOOLS*) owner;
+- (id) showChopperPanel:(ViewerController *) vc :(CMIV_CTA_TOOLS*) owner;
+- (id) showPanelAsWizard:(ViewerController *) vc :(CMIV_CTA_TOOLS*) owner;
 - (void) updateAllTextField;
 - (void) updateImageFromToSliders;
 - (void) updateALLROIs;

@@ -39,13 +39,12 @@
 	
 	int mouseStartDraggingFlag;
 	int curseLabelFlag;
-	
 }
 
 @property(readonly) float curPtX;
 
 - (NSAffineTransform *)transform:(NSRect) rect;
-- (void)setACurve:(NSString*)name:(NSArray*)curve:(NSColor*)color:(float)xscale:(float)yscale;
+- (void)setACurve:(NSString*)name :(NSArray*)curve :(NSColor*)color :(float)xscale :(float)yscale;
 - (void)removeCurCurve;
 - (void)setViewControllor:(id)controllor;
 - (void)drawAxesInRect:(NSRect)rect;

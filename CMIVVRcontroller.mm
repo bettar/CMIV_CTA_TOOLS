@@ -41,6 +41,10 @@
 #import <MieleAPI/BrowserController.h>
 #import "url2.h" // for OUR_DATA_LOCATION
 
+#if 0 // @@@
+#import "VRView.h"
+#endif
+
 static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 {
 	CMIVVRcontroller* controller = (CMIVVRcontroller*) ptr;
