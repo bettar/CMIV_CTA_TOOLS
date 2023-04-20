@@ -1335,7 +1335,8 @@ NSRect rect = drawingRect;
 	}
 	else
 	{
-		if(fabsf([theEvent deltaX])>fabsf([theEvent deltaY]))
+        // Absolute value function 'fabsf' given an argument of type 'CGFloat' (aka 'double') but has parameter of type 'float' which may cause truncation of value
+        if (std::abs([theEvent deltaX]) > std::abs([theEvent deltaY]))
 		{
 			zoomFixedPoint -= [theEvent deltaX] / zoomFactor;
 		}

@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkHoughTransform2DCirclesImageFilter.h"
 #undef id
 
-#import "url.h" // for MALLOC_ERROR_MESSAGE
+#import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
 @implementation CMIVContrastController
 
@@ -168,8 +168,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	seedVolume=(unsigned short int*)malloc(size);
 	if(!seedVolume)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
@@ -250,8 +250,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		inputData = [originalViewController volumePtr:0];
 		if( !inputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			
 			return;
@@ -263,7 +263,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		if (err)
 		{
 			NSRunAlertPanel(NSLocalizedString(@"no enough to smooth input data", nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			free(inputData);
 			inputData=0L;
@@ -280,8 +280,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	outputData = (float*) malloc( size);
 	if( !outputData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		if (ifUseSmoothFilter)
 			free(inputData);
@@ -296,8 +296,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	colorData = (unsigned char*) malloc( size);
 	if ( !colorData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		if(ifUseSmoothFilter)
 			free(inputData);
@@ -311,8 +311,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	directionData= (unsigned char*) malloc( size);
 	if( !directionData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		if(ifUseSmoothFilter)
 			free(inputData);
@@ -721,8 +721,8 @@ if( originalViewController == 0L) return 0L;
 		outputData = (float*) malloc( size);
 		if( !outputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			return 1;	
 		}
@@ -810,8 +810,8 @@ if( originalViewController == 0L) return 0L;
 		outputData = (float*) malloc( size);
 		if( !outputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			return 1;	
 		}
@@ -846,8 +846,8 @@ if( originalViewController == 0L) return 0L;
 	unsigned char *wholeTexTureBuffer=  (unsigned char *) malloc(size);
 	if( !wholeTexTureBuffer)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return 1;
 	}
@@ -938,8 +938,8 @@ if( originalViewController == 0L) return 0L;
 			outputData = (float*) malloc( size);
 			if( !outputData)
 			{
-				NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                                NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+				NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                                NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                                 NSLocalizedString(@"OK", nil), nil, nil);
 				return 1;	
 			}
@@ -1019,8 +1019,8 @@ if( originalViewController == 0L) return 0L;
 		outputData = (float*) malloc( size);
 		if( !outputData)
 		{
-			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			return 1;	
 		}

@@ -32,7 +32,7 @@
 #undef id
 
 #import "CMIVChopperController.h"
-#import "url.h" // for MALLOC_ERROR_MESSAGE
+#import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
 @implementation CMIVChopperController
 
@@ -196,8 +196,8 @@
 	outputVolumeData = (float*) malloc(size);
 	if ( !outputVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		[vc endWaitWindow: waitWindow];
 		return 1;	

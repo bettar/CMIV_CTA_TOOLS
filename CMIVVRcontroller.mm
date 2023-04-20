@@ -27,8 +27,8 @@
  
  =========================================================================*/
 #define id Id
-#include "vtkCamera.h"
-#include "vtkPiecewiseFunction.h"
+#include <vtkCamera.h>
+#include <vtkPiecewiseFunction.h>
 #undef id
 
 #import "CMIVVRcontroller.h"
@@ -39,7 +39,7 @@
 #endif
 #import "DICOMExport.h"
 #import <MieleAPI/BrowserController.h>
-#import "url.h" // for OUR_DATA_LOCATION
+#import "url2.h" // for OUR_DATA_LOCATION
 
 static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 {

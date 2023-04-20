@@ -34,7 +34,7 @@
 #import "CMIV3DPoint.h"
 #import <MieleAPI/BrowserController.h>
 
-#import "url.h" // for MALLOC_ERROR_MESSAGE
+#import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
 #define TOPOTHERSEEDS 4
 #define BOTTOMOTHERSEEDS 5
@@ -318,8 +318,8 @@
 	if (!tempVolume)
 	{
 		if (originalViewController)
-            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 		return 1;
 	}
@@ -367,8 +367,8 @@
 	if ( !outputData)
 	{
 		if (originalViewController)
-            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
@@ -378,8 +378,8 @@
 	if ( !colorData)
 	{
 		if (originalViewController)
-            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                            NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		return;
@@ -389,8 +389,8 @@
 	if ( !directionData)
 	{
 		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		free(colorData);

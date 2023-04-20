@@ -24,7 +24,7 @@ PURPOSE.
 #import "SRAnnotation.h"
 #endif
 
-#import "url.h" // for OUR_DATA_LOCATION
+#import "url2.h" // for OUR_DATA_LOCATION
 
 @implementation CMIVExport
 - (void) setSeriesDescription: (NSString*) desc

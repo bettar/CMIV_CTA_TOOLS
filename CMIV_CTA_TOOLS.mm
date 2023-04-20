@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #import "CMIVSaveResult.h"
 #import "CMIV_AutoSeeding.h"
 
-#import "url.h" // for OUR_DATA_LOCATION
+#import "url2.h" // for OUR_DATA_LOCATION
 
 // Don't modify this line. If you really want to update it run `uuidgen`
 #define PLUGIN_ID "77DFD501-BF5F-4363-B678-50D0EF7F0F16"

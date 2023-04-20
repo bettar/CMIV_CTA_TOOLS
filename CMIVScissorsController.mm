@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "itkLabelStatisticsImageFilter.h"
 #undef id
 
-#import "url.h" // for MALLOC_ERROR_MESSAGE
+#import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
 extern void setNumberOfThreads();
 
@@ -4394,8 +4394,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				newVolumeData=(float*) malloc(size);
 				if (!newVolumeData)
 				{
-					NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                                    NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+					NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                                    NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                                     NSLocalizedString(@"OK", nil), nil, nil);
 					[tempPixList removeAllObjects];
 					[originalViewController endWaitWindow: waitWindow];
@@ -4534,8 +4534,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if (!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return nil;
 	}
@@ -4617,8 +4617,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if (!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return nil;
 	}
@@ -4701,8 +4701,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if (!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return nil;
 	}
@@ -5726,8 +5726,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	newVolumeData=(float*) malloc(size);
 	if(!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
@@ -8095,8 +8095,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float* newVolumeData=(float*)malloc(size);
 	if(!newVolumeData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		[originalViewController endWaitWindow: waitWindow];
 		return;
@@ -10259,8 +10259,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	outputData = (float*) malloc( size);
 	if (!outputData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		
 		return;
@@ -10270,8 +10270,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	colorData = (unsigned char*) malloc( size);
 	if (!colorData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		return;
@@ -10280,8 +10280,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     directionData= (unsigned char*) malloc( size);
 	if (!directionData)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		free(outputData);
 		free(colorData);
@@ -10363,7 +10363,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	outputData = (float*) malloc( size);
 //	if (!outputData)
 //	{
-//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(@"OK", nil), nil, nil);
+//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		
 //		return;
 //	}
@@ -10371,14 +10371,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	colorData = (unsigned char*) malloc( size);
 //	if (!colorData)
 //	{
-//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(@"OK", nil), nil, nil);
+//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		free(outputData);
 //		return;
 //	}	
 //	directionData= (unsigned char*) malloc( size);
 //	if (!directionData)
 //	{
-//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE, nil), NSLocalizedString(@"OK", nil), nil, nil);
+//		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(@"OK", nil), nil, nil);
 //		free(outputData);
 //		free(colorData);
 //		
@@ -10480,8 +10480,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	colorLookup=(unsigned char *)malloc(uniIndex);
 	if(!colorLookup)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
-                        NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return seedNumber;
 	}

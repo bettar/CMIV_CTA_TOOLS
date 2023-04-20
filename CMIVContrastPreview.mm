@@ -33,7 +33,7 @@
 #import "CMIVSegmentCore.h"
 #import "QuicktimeExport.h"
 
-#import "url.h" // for MALLOC_ERROR_MESSAGE
+#import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
 @implementation CMIVContrastPreview
 
@@ -706,7 +706,7 @@
 	}
 	if( !newSeedsBuffer)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"not enough RAM to build seed buffer", nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return 1;	
@@ -2415,7 +2415,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
     if (!pdismap)
 	{
-		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE, nil),
+		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"not enough RAM to build distance map", nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return;

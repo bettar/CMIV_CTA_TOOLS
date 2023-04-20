@@ -39,6 +39,7 @@
 		4391B6A729EFDFD5008DBCDA /* CMIVContrastController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FB33540B0A1FD000A5A87A /* CMIVContrastController.mm */; };
 		4391B6A829EFDFE8008DBCDA /* CMIVContrastPreview.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B07E990B67A703008879EF /* CMIVContrastPreview.mm */; };
 		4391B6AA29EFE09A008DBCDA /* CMIV_AutoSeeding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B917308C0D9908C6005A0FF9 /* CMIV_AutoSeeding.mm */; };
+		43F257E729F15BA3003D0AB2 /* url2.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F257E629F15BA3003D0AB2 /* url2.h */; };
 		43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F86FDA29EE7A09003F0102 /* DCM.framework */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
@@ -82,6 +83,7 @@
 		22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = 3DRotate.tiff; sourceTree = "<group>"; };
 		4353EEF729EE665600ECAEE1 /* MieleAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MieleAPI.framework; path = Binaries/MieleAPI.framework; sourceTree = "<group>"; };
 		4353EEF929EE66C000ECAEE1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43F257E629F15BA3003D0AB2 /* url2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = url2.h; sourceTree = "<group>"; };
 		43F86FDA29EE7A09003F0102 /* DCM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DCM.framework; path = Binaries/DCM.framework; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMIVBuketPirortyQueue.h; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				B969E7AF0D111DC700868834 /* CMIVWindow.m */,
 				B909F0820D9F7F71002C42B5 /* CMIVBuketPirortyQueue.h */,
 				B909F0830D9F7F71002C42B5 /* CMIVBuketPirortyQueue.m */,
+				43F257E629F15BA3003D0AB2 /* url2.h */,
 			);
 			name = CMIV_CTA_TOOLS;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				4391B69C29EFDEE6008DBCDA /* CMIVContrastPreview.h in Headers */,
 				4391B6A229EFDEFA008DBCDA /* CMIV3DPoint.h in Headers */,
 				4391B69729EFDED2008DBCDA /* CMIV_CTA_TOOLS.h in Headers */,
+				43F257E729F15BA3003D0AB2 /* url2.h in Headers */,
 				4391B69F29EFDEF0008DBCDA /* CMIVScissorsController.h in Headers */,
 				4391B6A029EFDEF3008DBCDA /* CMIVDCMView.h in Headers */,
 				4391B6A529EFDF02008DBCDA /* CMIVBuketPirortyQueue.h in Headers */,

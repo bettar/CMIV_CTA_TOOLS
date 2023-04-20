@@ -58,7 +58,7 @@
 #include <vtkContourFilter.h>
 #include <vtkPolyDataConnectivityFilter.h>
 #include <vtkPolyData.h>
-#include "spline.h"
+#import "spline.h"
 #undef id
 
 static float deg2rad = M_PI/180.0;

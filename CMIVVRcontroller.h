@@ -53,8 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vtkObject.h>
 #include <vtkPlaneWidget.h>
 #if 1 // @@@ tentative
-#include "vtkFixedPointVolumeRayCastMapper.h"
-#include "vtkFixedPointVolumeRayCastCompositeHelper.h"
+#include <vtkFixedPointVolumeRayCastMapper.h>
+#include <vtkFixedPointVolumeRayCastCompositeHelper.h>
 #else // original
 #include <vtkVolumeRayCastMapper.h>
 #include <vtkVolumeRayCastCompositeFunction.h>

@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vtkContourFilter.h>
 #include <vtkPolyDataConnectivityFilter.h>
 #include <vtkPolyData.h>
-#include "spline.h"
+#import "spline.h"
 #undef id
 
 @interface CMIVScissorsController : NSWindowController<NSTableViewDataSource, NSTabViewDelegate, NSWindowDelegate>
