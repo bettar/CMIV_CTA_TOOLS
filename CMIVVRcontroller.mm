@@ -841,15 +841,23 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	wholeVolumeWW = [propertyDictList count]*2048;
 	wholeVolumeWL = wholeVolumeWW/2;
 	
-	if([curPix SUVConverted])
+	if ([curPix SUVConverted])
 	{
-		NSRunCriticalAlertPanel( NSLocalizedString(@"SUVConverted",nil), NSLocalizedString( @"SUVConverted is true, can not apply segment volume rendering.",nil), NSLocalizedString(@"OK",nil), nil, nil);	
+        NSAlert *alert = [[NSAlert new] autorelease];
+        alert.alertStyle = NSAlertStyleCritical;
+        alert.messageText = NSLocalizedString(@"SUVConverted",nil);
+        alert.informativeText = NSLocalizedString(@"SUVConverted is true, can not apply segment volume rendering.",nil);
+        [alert runModal];
 		return 0;
 	}
-	if( [curPix isRGB])
+
+    if ([curPix isRGB])
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil), NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		
+        NSAlert *alert = [[NSAlert new] autorelease];
+        alert.alertStyle = NSAlertStyleCritical;
+        alert.messageText = NSLocalizedString(@"no RGB Support",nil);
+        alert.informativeText = NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil);
+        [alert runModal];
 		return 0;
 	}
 	
@@ -867,11 +875,13 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 //	if(dict)
 //		[self applyAdvancedCLUT:dict];
 
-	if( err != 0)
+	if (err != 0)
 	{
-		NSRunCriticalAlertPanel(NSLocalizedString(@"Not Enough Memory",nil),
-                                NSLocalizedString( @"Not enough memory (RAM) to use the 3D engine.",nil),
-                                NSLocalizedString(@"OK",nil), nil, nil);
+        NSAlert *alert = [[NSAlert new] autorelease];
+        alert.alertStyle = NSAlertStyleCritical;
+        alert.messageText = NSLocalizedString(MALLOC_ERROR_MESSAGE2,nil);
+        alert.informativeText = NSLocalizedString(@"Not enough memory (RAM) to use the 3D engine.",nil);
+        [alert runModal];
 		return err;
 	}
     
@@ -1080,11 +1090,13 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 //		[self applyAdvancedCLUT:dict];
 	[vrViewer set3DStateDictionary:dict];
 
-    if ( err != 0)
+    if (err != 0)
 	{
-		NSRunCriticalAlertPanel( NSLocalizedString(@"Not Enough Memory",nil),
-                                NSLocalizedString( @"Not enough memory (RAM) to use the 3D engine.",nil),
-                                NSLocalizedString(@"OK",nil), nil, nil);
+        NSAlert *alert = [[NSAlert new] autorelease];
+        alert.alertStyle = NSAlertStyleCritical;
+        alert.messageText = NSLocalizedString(MALLOC_ERROR_MESSAGE2,nil);
+        alert.informativeText = NSLocalizedString(@"Not enough memory (RAM) to use the 3D engine.",nil);
+        [alert runModal];
 		return 0L;
 	}
 	

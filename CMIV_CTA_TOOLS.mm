@@ -69,7 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
     else if ([hostAppName isEqualToString: @"miele-lxiv"])
     {
-        minVersion = @"9.26.116";
+        minVersion = @"9.26.114";
     }
 
     if ([hostAppVersion compare: minVersion options: NSNumericSearch] < 0)
@@ -83,7 +83,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         //[alert setShowsSuppressionButton:YES]; // Do not show this message again
         [alert runModal];
 #else
-        NSRunCriticalAlertPanel(thisPluginName,
+        NSRunCriticalAlertPanel(thisBundleName,
                                 msgFormat,
                                 @"OK", nil, nil);
 #endif

@@ -470,10 +470,14 @@ PURPOSE.
             //[self setPixelData: data samplePerPixel:spp bitsPerPixel:bpp width: width height: height];
             
             err = [self writeDCMFile: 0L];
-            if( err)
-                NSRunCriticalAlertPanel(NSLocalizedString(@"Error", nil),
-                                        NSLocalizedString(@"Error during the creation of the DICOM File!", nil),
-                                        NSLocalizedString(@"OK", nil), nil, nil);
+            if (err)
+            {
+                NSAlert *alert = [[NSAlert new] autorelease];
+                alert.alertStyle = NSAlertStyleCritical;
+                alert.messageText = NSLocalizedString(@"Error", nil);
+                alert.informativeText = NSLocalizedString(@"Error during the creation of the DICOM File!", nil);
+                [alert runModal];
+            }
             
             //[imageView setIndex:ii];
             //[imageView sendSyncMessage:1];
