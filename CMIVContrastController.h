@@ -71,8 +71,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (int) createCenterlines:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData :(NSMutableArray*)roilist;
 - (BOOL) prepareForSkeletonizatin:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData;
 - (int)plantRootSeeds:(float *)inputData :(float *)outputData :(unsigned char *)directData :(unsigned char *)colorData;
-- (void) prepareForCaculateLength:(unsigned short *)distanceMap :(unsigned char *)directData;
-- (void) prepareForCaculateWeightedLength:(float *)distanceMap :(unsigned char *)directData;
+- (void) prepareForCalculateLength:(unsigned short *)distanceMap :(unsigned char *)directData;
+- (void) prepareForCalculateWeightedLength:(float *)distanceMap :(unsigned char *)directData;
 
 - (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList :(int)endpointindex :(unsigned char*)directionData :(unsigned char*)color;
 - (void)createROIfrom3DPaths:(NSArray*)pathsList :(NSArray*)namesList :(NSMutableArray*)roilist;

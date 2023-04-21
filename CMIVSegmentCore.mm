@@ -1972,7 +1972,7 @@ extern void setNumberOfThreads();
 	}while(changed);
 			
 }
-- (void) caculatePathLength:(unsigned short *) pDistanceMap Pointer: (unsigned char*) pPointers
+- (void) calculatePathLength:(unsigned short *) pDistanceMap Pointer: (unsigned char*) pPointers
 {
 
 	distanceMap=pDistanceMap;
@@ -2134,7 +2134,7 @@ extern void setNumberOfThreads();
     return(*(distanceMap+pointer));
 }
 
-- (int) caculatePathLengthWithWeightFunction: (float *) pIn
+- (int) calculatePathLengthWithWeightFunction: (float *) pIn
                                             : (float *) pOut
                                      Pointer: (unsigned char*) pPointers
                                             : (float) threshold
@@ -2303,7 +2303,7 @@ extern void setNumberOfThreads();
 	return(*(outputData+pointer));
 }
 
-- (void) caculateColorMapFromPointerMap: (unsigned char*) pColor
+- (void) calculateColorMapFromPointerMap: (unsigned char*) pColor
                                        : (unsigned char*) pPointers
 {
 	colorOfData=pColor;
@@ -2491,7 +2491,7 @@ extern void setNumberOfThreads();
 	int needchangedis=0;
 	imageSize=imageWidth*imageHeight;
 	
-	[self caculatePathLength:pDistanceMap Pointer:pPointers];
+	[self calculatePathLength:pDistanceMap Pointer:pPointers];
 	if (isNeedSmooth)
 	{
 		itemp=0;

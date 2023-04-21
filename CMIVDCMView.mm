@@ -26,6 +26,7 @@
 
 #import "CMIVDCMView.h"
 
+// TODO: use vtkMath::RadiansFromDegrees()
 static float deg2rad = M_PI/180.0;
 
 @implementation CMIVDCMView
@@ -353,7 +354,7 @@ static float deg2rad = M_PI/180.0;
 
 - (void) subDrawRect: (NSRect) r
 {
-    [self setScaleValue:2.3]; // @@@ Added. TBC
+    //[self setScaleValue:2.3]; // @@@ Added. TBC
     
     if (displayCrossLines)
     {

@@ -165,7 +165,7 @@
 - (void)drawSelectedBoxInRect:(NSRect)rect
 {
 	//draw box borders
-	if (!currentCurve||[currentCurve count]==0||(endPtX==0&&startPtX==0))
+	if (!currentCurve||[currentCurve count]==0||(endPtX==0 && startPtX==0))
 		return;
     
 	NSRect selectRect;
@@ -265,7 +265,7 @@
 
 - (void)drawStenosisBoxInRect:(NSRect)rect
 {
-	if (!currentCurve||[currentCurve count]==0||(endPtX==0&&startPtX==0))
+	if (!currentCurve||[currentCurve count]==0||(endPtX==0 && startPtX==0))
 		return;
 
 	NSMutableDictionary *attrsDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
@@ -301,7 +301,7 @@
 		if (globalTransform)
 			[globalTransform release];
 
-		if (xRightLimit>0&&yTopLimit>0)
+		if (xRightLimit>0 && yTopLimit>0)
 		{
 			xScaleFactor=(rect.size.width-leftSpace)/xRightLimit;
 			yScaleFactor=(rect.size.height-bottomSpace)/yTopLimit;
@@ -333,7 +333,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
-	if (currentCurve&&[currentCurve count]>0)
+	if (currentCurve && [currentCurve count]>0)
 	{
 			
 		[[self window] makeFirstResponder: self];
@@ -371,7 +371,7 @@
 
 - (void)mouseDragged:(NSEvent *)theEvent
 {
-	if(currentCurve&&[currentCurve count]>0)
+	if(currentCurve && [currentCurve count]>0)
 	{
 		NSPoint mousePositionInWindow = [theEvent locationInWindow];
 		NSPoint mousePositionInView = [self convertPoint:mousePositionInWindow fromView:nil];
@@ -398,7 +398,7 @@
 }
 - (void)mouseMoved:(NSEvent *)theEvent
 {
-	if(currentCurve&&[currentCurve count]>0)
+	if(currentCurve && [currentCurve count]>0)
 	{
 		
 		NSPoint mousePositionInWindow = [theEvent locationInWindow];

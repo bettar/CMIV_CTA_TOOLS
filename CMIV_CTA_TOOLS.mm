@@ -1038,7 +1038,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     NSString* seriesUid=[curImage valueForKeyPath: @"series.seriesInstanceUID"];
     NSString* path=[self hostAppDocumentPath];
     NSString* file = [path stringByAppendingFormat:@"/CMIVCTACache/%@.sav",seriesUid];
-    NSLog(@"%s %d, file:%@", __FUNCTION__, __LINE__, file);
     
     NSMutableDictionary* savedData = [[NSMutableDictionary alloc] initWithContentsOfFile:file];
     if (!savedData) {

@@ -56,6 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern void setNumberOfThreads();
 
+// TODO: use vtkMath::RadiansFromDegrees()
 static float deg2rad = M_PI/180.0;
 
 @implementation CMIVScissorsController
@@ -92,7 +93,7 @@ static float deg2rad = M_PI/180.0;
 
 - (void)windowWillClose:(NSNotification *)notification
 {
-	NSLog(@"cmiv 2D view will close");
+	NSLog(@"CMIV 2D view will close");
 	[originalView setDrawing: NO];
 	[cPRView setDrawing: NO];
 	[crossAxiasView setDrawing: NO];
@@ -129,7 +130,8 @@ static float deg2rad = M_PI/180.0;
 	NSString* emptystr=@"";
 	for(i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 		[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] setComments:emptystr];	
-	[[oViewROIList objectAtIndex: 0] removeAllObjects];
+
+    [[oViewROIList objectAtIndex: 0] removeAllObjects];
 //	[[oViewROIList objectAtIndex: 1] removeAllObjects];
 	[oViewROIList removeAllObjects];
 	[oViewROIList release];
@@ -150,7 +152,6 @@ static float deg2rad = M_PI/180.0;
 		[[contrastList objectAtIndex: i] removeAllObjects];
 	[contrastList removeAllObjects];
 	[contrastList release];
-	
 	
 	[totalROIList  removeAllObjects];
 	[totalROIList release];
@@ -202,14 +203,13 @@ static float deg2rad = M_PI/180.0;
 		{
 			axROIReader->Delete();
 			axViewROISlice->Delete();
-			
 		}
-		///////////////
-		
 	}
-	if(axViewConnectednessCostMap)
+
+    if(axViewConnectednessCostMap)
 		free(axViewConnectednessCostMap);
-	if(connectednessROIBuffer)
+	
+    if(connectednessROIBuffer)
 		free(connectednessROIBuffer);
 
 	if(howToContinueTip)
@@ -232,21 +232,22 @@ static float deg2rad = M_PI/180.0;
 	[seedToolTipsTabView setDelegate:nil];
 
 	[self autorelease];
-	
 }
+
 -(void) dealloc
 {
-	
 	[super dealloc];
 	NSLog(@"cmiv 2d view dealloced");
 }
+
 - (IBAction)onCancel:(id)sender
 {
 	int tag=[sender tag];
 	
+	// Must not be here otherwise windowwillclose will not be called
+    //[[NSNotificationCenter defaultCenter] removeObserver: self];
 	
-	// must not be here otherwise windowwillclose will not be called[[NSNotificationCenter defaultCenter] removeObserver: self];
-	if(isInitialWithCPRMode)
+    if (isInitialWithCPRMode)
 	{
 		NSMutableDictionary* dic=[parent dataOfWizard];
 		[dic setObject:@"finish" forKey:@"Step"];
@@ -254,12 +255,10 @@ static float deg2rad = M_PI/180.0;
 
 	CMIV_CTA_TOOLS* tempparent=parent;
 	[[self window] performClose:self];
-	if(tag)
+	if (tag)
 	{
 		[tempparent gotoStepNo:3];
 	}
-	
-	
 }
 
 - (IBAction)onOK:(id)sender
@@ -271,7 +270,8 @@ static float deg2rad = M_PI/180.0;
 		[autoSegmentTimer release];
 		autoSegmentTimer=nil;
 	}
-	if(uniIndex>=2)
+
+    if (uniIndex>=2)
 	{
 		int i;
 		NSString* roiname;
@@ -286,14 +286,12 @@ static float deg2rad = M_PI/180.0;
 				err=0;
 				break;
 			}
-			   
 		}
-		
-
 	}
 	else 
 		err=1;
-	if(err)
+
+    if (err)
 	{
 		NSRunAlertPanel(NSLocalizedString(@"Not enough seeds found", nil),
                         NSLocalizedString(@"We need at least two sets of seeds with different names to start the segmenation algorithm", nil),
@@ -382,7 +380,7 @@ static float deg2rad = M_PI/180.0;
 	
 	minValueInSeries = [curPix minValueOfSeries]; 
 	
-	//initilize original view CPRView and Axial View;
+	// Initilize original view CPRView and Axial View;
 	err = [self initViews];
 	if (err)
 		return nil;
@@ -728,7 +726,7 @@ static float deg2rad = M_PI/180.0;
 	[self setAxViewThreshold:axViewLowerThresholdSlider];
 	[self convertCenterlinesToVTKCoordinate:cpr3DPaths];
 	[self setCurrentCPRPathWithPath:[cpr3DPaths objectAtIndex: 0]:[resampleRatioSlider floatValue]];
-	[self recaculateAllCenterlinesLength];
+	[self recalculateAllCenterlinesLength];
 	[centerlinesList reloadData];
 	[cImageSlider setEnabled: NO];
 	//[cYRotateSlider setEnabled: NO];
@@ -794,7 +792,7 @@ static float deg2rad = M_PI/180.0;
 		[self setCurrentCPRPathWithPath:[cpr3DPaths objectAtIndex: 0]:[resampleRatioSlider floatValue]];
 		[cImageSlider setEnabled: NO];
 		//[cYRotateSlider setEnabled: NO];
-		[self recaculateAllCenterlinesLength];
+		[self recalculateAllCenterlinesLength];
 		[centerlinesList reloadData];
 
 	}
@@ -1122,8 +1120,7 @@ static float deg2rad = M_PI/180.0;
 	}
 	
 	inverseTransform = (vtkTransform*)oViewUserTransform->GetLinearInverse();
-	
-	
+		
 	cViewTransform = vtkTransform::New();
 	cViewTransform->SetInput(oViewUserTransform) ;
 	cViewTransform->RotateY(-90);
@@ -1309,7 +1306,15 @@ static float deg2rad = M_PI/180.0;
 	}
 	
 	im = (float*) tempIm->GetScalarPointer();
-	mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                        :32
+                                        :imExtent[ 1]-imExtent[ 0]+1
+                                        :imExtent[ 3]-imExtent[ 2]+1
+                                        :space[0]
+                                        :space[1]
+                                        :origin[0]
+                                        :origin[1]
+                                        :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	[mypix changeWLWW:iwl :iww];
 	
@@ -1464,7 +1469,7 @@ static float deg2rad = M_PI/180.0;
 	else // else is CPR mode
 	{
 		if (curvedMPR2DPath)
-			[self reCaculateCPRPath:[oViewROIList objectAtIndex: 0]
+			[self reCalculateCPRPath:[oViewROIList objectAtIndex: 0]
                                    :imExtent[ 1]-imExtent[ 0]+1
                                    :imExtent[ 3]-imExtent[ 2]+1
                                    :oViewSpace[0]
@@ -1645,9 +1650,9 @@ static float deg2rad = M_PI/180.0;
 	if (cViewMPRorCPRMode)
 	{
 		if (!isStraightenedCPR)
-			[self recaculateAxViewForCPR];
+			[self recalculateAxViewForCPR];
 		else
-			[self recaculateAxViewForStraightenedCPR];
+			[self recalculateAxViewForStraightenedCPR];
 	}
 
 	int imExtent[ 6];
@@ -2736,7 +2741,8 @@ static float deg2rad = M_PI/180.0;
 		}
 		[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
 	}
-	if(sender==cViewCrossShowButton)
+
+    if(sender==cViewCrossShowButton)
 	{
 		if([sender state]==NSControlStateValueOn)
 		{
@@ -2770,12 +2776,10 @@ static float deg2rad = M_PI/180.0;
 	[self updateOView];
 	[self updateCView];
 	[self updateAxView];
-	
 }
 
 - (void) cAndAxViewReset
 {
-	
 	axViewTransform->Identity();
 	axViewTransform->RotateX(90);
 	if(!cViewMPRorCPRMode)
@@ -2783,7 +2787,8 @@ static float deg2rad = M_PI/180.0;
 		[axImageSlider setFloatValue: 0];
 		lastAxViewTranslate=0;
 	}
-	cViewTransform->Identity();
+
+    cViewTransform->Identity();
 	cViewTransform->RotateY(-90);
 	[cImageSlider setFloatValue: 0];
 	if(currentViewMode==0)
@@ -2791,13 +2796,15 @@ static float deg2rad = M_PI/180.0;
 		[cYRotateSlider setFloatValue:0];
 		lastCViewYAngle=0;
 	}
-	cPRViewCenter.x=0;
+
+    cPRViewCenter.x=0;
 	cPRViewCenter.y=0;
 	oViewToCViewZAngle=0;
 	cViewToAxViewZAngle=0;	
 	[self updateCView];
 	[self updateAxView];
 }
+
 - (int)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if ([seedsList isEqual:tableView])
@@ -2816,8 +2823,10 @@ static float deg2rad = M_PI/180.0;
 objectValueForTableColumn:(NSTableColumn *)tableColumn
             row:(int)row
 {
-	if (originalViewController == 0L) return 0L;
-	if ([seedsList isEqual:tableView])
+	if (originalViewController == 0L)
+        return 0L;
+	
+    if ([seedsList isEqual:tableView])
 	{
 		
 		if ([[tableColumn identifier] isEqualToString:@"Index"])
@@ -2836,9 +2845,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			if(!centerlinesLengthArrays)
 				centerlinesLengthArrays=[[NSMutableArray alloc] initWithCapacity:0];
-			if([centerlinesLengthArrays count]!=[cpr3DPaths count])
-				[self recaculateAllCenterlinesLength];
-			return [NSString stringWithFormat:@"%d", [[centerlinesLengthArrays objectAtIndex: row] intValue]];
+			
+            if([centerlinesLengthArrays count]!=[cpr3DPaths count])
+				[self recalculateAllCenterlinesLength];
+
+            return [NSString stringWithFormat:@"%d", [[centerlinesLengthArrays objectAtIndex: row] intValue]];
 		} 
 		if ([[tableColumn identifier] isEqualToString:@"Name"])
 		{
@@ -2877,8 +2888,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				[[contrastList objectAtIndex:rowIndex] setValue:newname forKey:@"Name"];
 			}
-		}		
-		
+		}
 	}
 	else if ([centerlinesList isEqual:aTableView])
 	{
@@ -2893,36 +2903,48 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}		
 	}
 }
-- (int)inverseMatrix:(float*)inm :(float*)outm
+
+// TODO: ise glm
+- (int)inverseMatrix:(float*)inm
+                    :(float*)outm
 {
-	float detinm=inm[0]*inm[4]*inm[8]+inm[1]*inm[5]*inm[6]+inm[2]*inm[3]*inm[7]-inm[2]*inm[4]*inm[6]-inm[1]*inm[3]*inm[8]-inm[0]*inm[5]*inm[7];
-	if(detinm==0) return 0;
-	outm[0]=inm[4]*inm[8]-inm[5]*inm[7];
-	outm[1]=inm[2]*inm[7]-inm[1]*inm[8];
-	outm[2]=inm[1]*inm[5]-inm[2]*inm[4];
-	outm[3]=inm[5]*inm[6]-inm[3]*inm[8];
-	outm[4]=inm[0]*inm[8]-inm[2]*inm[6];
-	outm[5]=inm[2]*inm[3]-inm[0]*inm[5];
-	outm[6]=inm[3]*inm[7]-inm[5]*inm[6];
-	outm[7]=inm[1]*inm[6]-inm[0]*inm[7];
-	outm[8]=inm[0]*inm[4]-inm[1]*inm[3];
+	float detinm = inm[0]*inm[4]*inm[8] +
+                   inm[1]*inm[5]*inm[6] +
+                   inm[2]*inm[3]*inm[7] -
+    
+                   inm[2]*inm[4]*inm[6] -
+                   inm[1]*inm[3]*inm[8] -
+                   inm[0]*inm[5]*inm[7];
+
+    if (detinm==0)
+        return 0;
+	
+    outm[0] = inm[4]*inm[8]-inm[5]*inm[7];
+	outm[1] = inm[2]*inm[7]-inm[1]*inm[8];
+	outm[2] = inm[1]*inm[5]-inm[2]*inm[4];
+	outm[3] = inm[5]*inm[6]-inm[3]*inm[8];
+	outm[4] = inm[0]*inm[8]-inm[2]*inm[6];
+	outm[5] = inm[2]*inm[3]-inm[0]*inm[5];
+	outm[6] = inm[3]*inm[7]-inm[5]*inm[6];
+	outm[7] = inm[1]*inm[6]-inm[0]*inm[7];
+	outm[8] = inm[0]*inm[4]-inm[1]*inm[3];
 	return 1;
 }
+
+/*
+ * TriCubic - tri-cubic interpolation at point, p.
+ *   inputs:
+ *     p - the interpolation point.
+ *     volume - a pointer to the float volume data, stored in x,
+ *              y, then z order (x index increasing fastest).
+ *     xDim, yDim, zDim - dimensions of the array of volume data.
+ *   returns:
+ *     the interpolated value at p.
+ *   note:
+ *     NO range checking is done in this function.
+ */
 - (float)TriCubic : (float*) p :(float *)volume : (int) xDim : (int) yDim :(int) zDim
 {
-	/*
-	 * TriCubic - tri-cubic interpolation at point, p.
-	 *   inputs:
-	 *     p - the interpolation point.
-	 *     volume - a pointer to the float volume data, stored in x,
-	 *              y, then z order (x index increasing fastest).
-	 *     xDim, yDim, zDim - dimensions of the array of volume data.
-	 *   returns:
-	 *     the interpolated value at p.
-	 *   note:
-	 *     NO range checking is done in this function.
-	 */
-	
 	int x, y, z;
     int i, j, k;
 	float dx, dy, dz;
@@ -2955,19 +2977,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	/* factors for Catmull-Rom interpolation */
 	
 	u[0] = -0.5 * CUBE (dx) + SQR (dx) - 0.5 * dx;
-	u[1] = 1.5 * CUBE (dx) - 2.5 * SQR (dx) + 1;
+	u[1] =  1.5 * CUBE (dx) - 2.5 * SQR (dx) + 1;
 	u[2] = -1.5 * CUBE (dx) + 2 * SQR (dx) + 0.5 * dx;
-	u[3] = 0.5 * CUBE (dx) - 0.5 * SQR (dx);
+	u[3] =  0.5 * CUBE (dx) - 0.5 * SQR (dx);
 	
 	v[0] = -0.5 * CUBE (dy) + SQR (dy) - 0.5 * dy;
-	v[1] = 1.5 * CUBE (dy) - 2.5 * SQR (dy) + 1;
+	v[1] =  1.5 * CUBE (dy) - 2.5 * SQR (dy) + 1;
 	v[2] = -1.5 * CUBE (dy) + 2 * SQR (dy) + 0.5 * dy;
-	v[3] = 0.5 * CUBE (dy) - 0.5 * SQR (dy);
+	v[3] =  0.5 * CUBE (dy) - 0.5 * SQR (dy);
 	
 	w[0] = -0.5 * CUBE (dz) + SQR (dz) - 0.5 * dz;
-	w[1] = 1.5 * CUBE (dz) - 2.5 * SQR (dz) + 1;
+	w[1] =  1.5 * CUBE (dz) - 2.5 * SQR (dz) + 1;
 	w[2] = -1.5 * CUBE (dz) + 2 * SQR (dz) + 0.5 * dz;
-	w[3] = 0.5 * CUBE (dz) - 0.5 * SQR (dz);
+	w[3] =  0.5 * CUBE (dz) - 0.5 * SQR (dz);
 	
 	for (k = 0; k < 4; k++)
 	{
@@ -2983,10 +3005,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			q[k] += v[j] * r[j];
 			pv += xDim - 4;
 		}
-		vox += w[k] * q[k];
+
+        vox += w[k] * q[k];
 		pv += xyDim - 4 * xDim;
 	}
-	return (vox < minValueInSeries ? minValueInSeries : vox);
+
+    return (vox < minValueInSeries ? minValueInSeries : vox);
 }
 
 #pragma mark - 2.2 control CPR views
@@ -3014,10 +3038,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				sPrev[i] = pNext[i] - p[i];
 				sNext[i] = sPrev[i];
 			}
-			if ( vtkMath::Normalize(sNext) == 0.0 )
-            {
+
+            if ( vtkMath::Normalize(sNext) == 0.0 )
 				return 0;
-            }
 
             // the following logic will produce a normal orthogonal
 			// to the first line segment. If we have three points
@@ -3377,7 +3400,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	free(inputpointsxyz);free(inputpointslen);
 }
-- (float*) caculateStraightCPRImage :(int*)pwidth :(int*)pheight 
+- (float*) calculateStraightCPRImage :(int*)pwidth :(int*)pheight 
 {
 	float *im=0L;
 
@@ -3469,7 +3492,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	return im;	
 	
 }
-- (float*) caculateCurvedMPRImage :(int*)pwidth :(int*)pheight
+- (float*) calculateCurvedMPRImage :(int*)pwidth :(int*)pheight
 {
 	
 	float* im=0L;
@@ -3629,11 +3652,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 	if(!isStraightenedCPR)
 	{
-		im = [self caculateCurvedMPRImage :&width :&height];
+		im = [self calculateCurvedMPRImage :&width :&height];
 	}
 	else
 	{
-		im = [self caculateStraightCPRImage :&width :&height];
+		im = [self calculateStraightCPRImage :&width :&height];
 	}
 	
 	if(!im)
@@ -3774,7 +3797,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     [cPRView setIndex: 0 ];
 }
 
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList
+- (void) reCalculateCPRPath:(NSMutableArray*) roiList
                           :(int) width
                           :(int)height
                           :(float)spaceX
@@ -3855,7 +3878,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 }
 
-- (void) recaculateAxViewForStraightenedCPR
+- (void) recalculateAxViewForStraightenedCPR
 {
 	double position[3],direction[3],position1[3],position2[3];
 	int ptId,totalpoint;
@@ -3938,7 +3961,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 }
 
-- (void) recaculateAxViewForCPR
+- (void) recalculateAxViewForCPR
 {
 	NSArray* points2D=[curvedMPR2DPath points];
 	int pointNum=[points2D count];
@@ -6418,7 +6441,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				[[cViewArrowPointsArray objectAtIndex: 1] setPoint:cViewArrowStartPoint];
 			else
 			{
-				// caculate cViewToAxViewZAngle
+				// Calculate cViewToAxViewZAngle
 				
 				NSPoint tempPt=[[cViewArrowPointsArray objectAtIndex: 0] point];
 				float angle;
@@ -7638,7 +7661,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			[cpr3DPaths addObject:reversedcenterline];
 			[centerlinesNameArrays addObject:@"Centerline"];
-			float pathlen=[self caculateLengthOfAPath:[cpr3DPaths lastObject]];
+			float pathlen=[self calculateLengthOfAPath:[cpr3DPaths lastObject]];
 			[centerlinesLengthArrays addObject:[NSNumber numberWithFloat:pathlen]];
 		}		
 		[centerlinesList reloadData];
@@ -7652,7 +7675,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	
 }
--(void) recaculateAllCenterlinesLength
+-(void) recalculateAllCenterlinesLength
 {
 	[centerlinesLengthArrays removeAllObjects];
 	unsigned i;
@@ -7661,13 +7684,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		NSMutableArray* temppath=[NSMutableArray arrayWithArray:[cpr3DPaths objectAtIndex:i]];
 		[self resample3DPath:[resampleRatioSlider floatValue]:temppath];
-		float length=[self caculateLengthOfAPath:temppath];
+		float length=[self calculateLengthOfAPath:temppath];
 		[centerlinesLengthArrays addObject:[NSNumber numberWithFloat:length]];
 	}
 		
 	
 }
--(double)caculateLengthOfAPath:(NSArray*)apath
+-(double)calculateLengthOfAPath:(NSArray*)apath
 {
 	int pointNumber=[apath count];
 	CMIV3DPoint* a3DPoint;
@@ -7774,7 +7797,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			
 			[cpr3DPaths replaceObjectAtIndex:row withObject:reversedcenterline];
-			float length=[self caculateLengthOfAPath:reversedcenterline];
+			float length=[self calculateLengthOfAPath:reversedcenterline];
 			[centerlinesLengthArrays replaceObjectAtIndex:row withObject:[NSNumber numberWithFloat:length]];
 		}
 		
@@ -7799,7 +7822,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			
 			[cpr3DPaths replaceObjectAtIndex:row withObject:reversedcenterline];
-			float length=[self caculateLengthOfAPath:reversedcenterline];
+			float length=[self calculateLengthOfAPath:reversedcenterline];
 			[centerlinesLengthArrays replaceObjectAtIndex:row withObject:[NSNumber numberWithFloat:length]];
 		}
 		
@@ -8406,7 +8429,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[reversedcenterline addObject:[reference3Dpoints objectAtIndex: lastpt-i]];
 				[cpr3DPaths addObject:reversedcenterline];
 				[centerlinesNameArrays addObject:@"Centerline"];
-				float pathlen=[self caculateLengthOfAPath:[cpr3DPaths lastObject]];
+				float pathlen=[self calculateLengthOfAPath:[cpr3DPaths lastObject]];
 				[centerlinesLengthArrays addObject:[NSNumber numberWithFloat:pathlen]];
 				
 				[centerlinesList reloadData];
@@ -9624,13 +9647,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSArray *pixList=[originalViewController pixList];
 	
 	BOOL needAddMin=NO,needAddMax=NO,needAddMean=NO;
-	if ([caculateMinDiameterButton state]==NSControlStateValueOn)
+	if ([calculateMinDiameterButton state]==NSControlStateValueOn)
 		needAddMin=YES;
 	
-    if ([caculateMaxDiameterButton state]==NSControlStateValueOn)
+    if ([calculateMaxDiameterButton state]==NSControlStateValueOn)
 		needAddMax=YES;
 	
-    if ([caculateMeanDiameterButton state]==NSControlStateValueOn)
+    if ([calculateMeanDiameterButton state]==NSControlStateValueOn)
 		needAddMean=YES;
 	
 	for (unsigned int i=0; i<[roiList count]; i++)
@@ -10156,20 +10179,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			meandiameter*=[[pixList objectAtIndex:i] pixelSpacingX]*0.2;
 			
 			
-			if([caculateAreaButton state]==NSControlStateValueOn)
+			if([calculateAreaButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rarea];
-			if([caculateMeanDiameterButton state]==NSControlStateValueOn)
+			if([calculateMeanDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",meandiameter];
-			if([caculateMinDiameterButton state]==NSControlStateValueOn)
+			if([calculateMinDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",mindiamter];
-			if([caculateMaxDiameterButton state]==NSControlStateValueOn)
+			if([calculateMaxDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",maxdiameter];
 			
-			if([caculateMeanHuButton state]==NSControlStateValueOn)
+			if([calculateMeanHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmean];
-			if([caculateMinHuButton state]==NSControlStateValueOn)
+			if([calculateMinHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmin];
-			if([caculateMaxHuButton state]==NSControlStateValueOn)
+			if([calculateMaxHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmax];			
 			exportinfo=[exportinfo stringByAppendingString:@"\n"];	
 			
@@ -10332,7 +10355,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
 	//initilize the out and color buffer
 	memset(colorData,0,size);
-	[segmentCoreFunc caculateColorMapFromPointerMap:colorData:directionData]; 
+	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData]; 
 	[segmentCoreFunc release];
 	if(isInWizardMode==2)
 		[self saveDirectionMap:directionData];
@@ -10468,7 +10491,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	[segmentCoreFunc calculateFuzzynessMap:inputData Out:outputData  withDirection: directionData Minimum:minValueInCurSeries];
 //	//initilize the out and color buffer
 //	memset(colorData,0,size);
-//	[segmentCoreFunc caculateColorMapFromPointerMap:colorData:directionData]; 
+//	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData];
 //	[segmentCoreFunc release];
 //
 //	
@@ -10495,7 +10518,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return seedNumber;
 	}
-	int i=0;
+
+    int i=0;
 	unsigned j;
 	for(i=0;i<uniIndex;i++)
 	{

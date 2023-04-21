@@ -225,8 +225,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) createUnsignedShortVolumDataUnderMask:(unsigned short*)volumeData;
 - (void) Display3DPoint:(NSNotification*) note;
 - (BOOL) prepareForSkeletonizatin;
-- (void) prepareForCaculateLength:(unsigned short*)dismap;
-- (void) prepareForCaculateWightedLength;
+- (void) prepareForCalculateLength:(unsigned short*)dismap;
+- (void) prepareForCalculateWightedLength;
 
 - (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList :(int)endpointindex :(unsigned char*)color;
 - (void) replaceDistanceMap;
@@ -250,7 +250,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void)creatNewResultROI:(int)index;
 - (void)saveNewPlantedSeeds;
 - (void) updateAllCenterlines;
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
+- (void) reCalculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
 - (void) convertCenterlinesToVTKCoordinate:(NSArray*)centerlines;
 
 //only to cheat vrView

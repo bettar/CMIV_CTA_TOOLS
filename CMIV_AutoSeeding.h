@@ -54,8 +54,8 @@
 - (void)saveCurrentSeeds: (unsigned short*)seedData :(int)size;
 - (void) runSegmentationAndSkeletonization:(unsigned short*)seedData :(float*)volumeData1;
 - (void) useSeedDataToInitializeDirectionData:(unsigned short*)seedData :(float*)inputData :(float*)outputData :(unsigned char*)directionData :(int)volumeSize;
-- (void) prepareForCaculateLength:(unsigned short*)dismap :(unsigned char*)directionData;
-- (void) prepareForCaculateWightedLength:(float*)outputData :(unsigned char*)directionData;
+- (void) prepareForCalculateLength:(unsigned short*)dismap :(unsigned char*)directionData;
+- (void) prepareForCalculateWightedLength:(float*)outputData :(unsigned char*)directionData;
 - (int)inverseMatrix:(float*)inm :(float*)outm;
 - (void) saveCenterlinesToPatientCoordinate:(NSArray*)centerlines :(NSArray*)centerlinesNameList;
 - (int) searchBackToCreatCenterlines:(NSMutableArray *)acenterline :(int)endpointindex :(unsigned char*)directionData;

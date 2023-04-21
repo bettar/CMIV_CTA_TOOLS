@@ -389,7 +389,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
 	//initilize the out and color buffer
 	memset(colorData,0,size);
-	[segmentCoreFunc caculateColorMapFromPointerMap:colorData:directionData]; 
+	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData]; 
 	[segmentCoreFunc release];
 
 	*ppInData = inputData;
@@ -1175,7 +1175,7 @@ if( originalViewController == 0L) return 0L;
 		return 1;
 	}
 
-    [self prepareForCaculateLength:pdismap:directData];
+    [self prepareForCalculateLength:pdismap:directData];
 	[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directData :minValueInCurSeries needSmooth:YES];
 	
 	free(pdismap);
@@ -1186,8 +1186,8 @@ if( originalViewController == 0L) return 0L;
 	
 	do
 	{
-		[self prepareForCaculateWeightedLength:outputData:directData];
-		int endindex=[segmentCoreFunc caculatePathLengthWithWeightFunction:inputData:outputData Pointer: directData:weightThreshold:upperThreshold];
+		[self prepareForCalculateWeightedLength:outputData:directData];
+		int endindex=[segmentCoreFunc calculatePathLengthWithWeightFunction:inputData:outputData Pointer: directData:weightThreshold:upperThreshold];
 		pathWeightLength = *(outputData+endindex);
 		if(endindex>0)
 		{
@@ -1360,7 +1360,7 @@ if( originalViewController == 0L) return 0L;
 		}
 	return seedNumber;
 }
-- (void) prepareForCaculateLength:(unsigned short *)distanceMap :(unsigned char *)directData
+- (void) prepareForCalculateLength:(unsigned short *)distanceMap :(unsigned char *)directData
 {
 	int size,i;
 	size=imageAmount*imageWidth*imageHeight;
@@ -1372,7 +1372,7 @@ if( originalViewController == 0L) return 0L;
 			*(distanceMap+i)=0;
 	}
 }
-- (void) prepareForCaculateWeightedLength:(float *)distanceMap :(unsigned char *)directData
+- (void) prepareForCalculateWeightedLength:(float *)distanceMap :(unsigned char *)directData
 {
 	int size,i;
 	size=imageAmount*imageWidth*imageHeight;

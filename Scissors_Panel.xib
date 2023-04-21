@@ -32,13 +32,13 @@
                 <outlet property="cViewCrossShowButton" destination="1534" id="1539"/>
                 <outlet property="cViewRotateYText" destination="326" id="329"/>
                 <outlet property="cYRotateSlider" destination="26" id="70"/>
-                <outlet property="caculateAreaButton" destination="689" id="696"/>
-                <outlet property="caculateMaxDiameterButton" destination="687" id="699"/>
-                <outlet property="caculateMaxHuButton" destination="681" id="702"/>
-                <outlet property="caculateMeanDiameterButton" destination="683" id="697"/>
-                <outlet property="caculateMeanHuButton" destination="677" id="700"/>
-                <outlet property="caculateMinDiameterButton" destination="685" id="698"/>
-                <outlet property="caculateMinHuButton" destination="679" id="701"/>
+                <outlet property="calculateAreaButton" destination="689" id="696"/>
+                <outlet property="calculateMaxDiameterButton" destination="687" id="699"/>
+                <outlet property="calculateMaxHuButton" destination="681" id="702"/>
+                <outlet property="calculateMeanDiameterButton" destination="683" id="697"/>
+                <outlet property="calculateMeanHuButton" destination="677" id="700"/>
+                <outlet property="calculateMinDiameterButton" destination="685" id="698"/>
+                <outlet property="calculateMinHuButton" destination="679" id="701"/>
                 <outlet property="cancelButton" destination="25" id="282"/>
                 <outlet property="cancelSegmentationButton" destination="1558" id="1560"/>
                 <outlet property="captureAxViewButton" destination="796" id="840"/>

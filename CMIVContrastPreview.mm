@@ -103,7 +103,7 @@
 		
 		int size=imageWidth*imageHeight*imageAmount*sizeof(unsigned char);
 		memset(colorData,0,size);
-		[segmentCoreFunc caculateColorMapFromPointerMap:colorData:directionData]; 
+		[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData]; 
 		[segmentCoreFunc release];
 		
 	}
@@ -224,7 +224,7 @@
 	}
 	
 	if ([endPointsArray count])
-			[self reCaculateCPRPath:[MPRROIList objectAtIndex: 0]
+			[self reCalculateCPRPath:[MPRROIList objectAtIndex: 0]
                                    :imExtent[ 1]-imExtent[ 0]+1
                                    :imExtent[ 3]-imExtent[ 2]+1
                                    :space[0]
@@ -2126,7 +2126,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[self resetMPRSliders];	
 	
 }
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY:(float)originZ
+- (void) reCalculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX: (float)spaceY : (float)spaceZ :(float)originX :(float)originY:(float)originZ
 {
 	unsigned i;
 	for(i=0;i<[manualCenterlineROIsArray count];i++)
@@ -2494,22 +2494,22 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	//if([parent loadVesselnessMap:outputData])
 	{
-		[self prepareForCaculateLength:pdismap];
+		[self prepareForCalculateLength:pdismap];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
-		[self prepareForCaculateLength:pdismap];
+		[self prepareForCalculateLength:pdismap];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
-		[self prepareForCaculateLength:pdismap];
+		[self prepareForCalculateLength:pdismap];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
 	/*else
 	{
-		[self prepareForCaculateLength:pdismap];
+		[self prepareForCalculateLength:pdismap];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
 		NSLog( @"optimizing connectedness tree");
-		[self prepareForCaculateLength:pdismap];
+		[self prepareForCalculateLength:pdismap];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 		NSLog( @"optimizing connectedness tree");
-		[self prepareForCaculateLength:pdismap];
+		[self prepareForCalculateLength:pdismap];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
 	NSLog( @"finish optimizing connectedness tree");*/
@@ -2560,8 +2560,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		do
 		{
 			NSLog( @"finding new branches");
-			[self prepareForCaculateWightedLength];
-			int endindex=[segmentCoreFunc caculatePathLengthWithWeightFunction:inputData:outputData Pointer: directionData:weightThreshold:maxValueInCurSeries];
+			[self prepareForCalculateWightedLength];
+			int endindex=[segmentCoreFunc calculatePathLengthWithWeightFunction:inputData:outputData Pointer: directionData:weightThreshold:maxValueInCurSeries];
 			pathWeightLength = *(outputData+endindex);
 			if(endindex>0)
 			{
@@ -2846,7 +2846,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	return seedNumber;
 	
 }
-- (void) prepareForCaculateLength:(unsigned short*)dismap
+- (void) prepareForCalculateLength:(unsigned short*)dismap
 {
 	int size,i;
 	size=imageAmount*imageSize;
@@ -2859,7 +2859,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	
 }
-- (void) prepareForCaculateWightedLength
+- (void) prepareForCalculateWightedLength
 {
 	int size,i;
 	size=imageAmount*imageSize;

@@ -149,13 +149,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	IBOutlet NSButton *ifExportCrossSectionButton;
 	
 	
-	IBOutlet NSButton *caculateAreaButton;	
-	IBOutlet NSButton *caculateMinDiameterButton;
-	IBOutlet NSButton *caculateMaxDiameterButton;	
-	IBOutlet NSButton *caculateMeanDiameterButton;
-	IBOutlet NSButton *caculateMinHuButton;	
-	IBOutlet NSButton *caculateMaxHuButton;
-	IBOutlet NSButton *caculateMeanHuButton;	
+	IBOutlet NSButton *calculateAreaButton;	
+	IBOutlet NSButton *calculateMinDiameterButton;
+	IBOutlet NSButton *calculateMaxDiameterButton;	
+	IBOutlet NSButton *calculateMeanDiameterButton;
+	IBOutlet NSButton *calculateMinHuButton;	
+	IBOutlet NSButton *calculateMaxHuButton;
+	IBOutlet NSButton *calculateMeanHuButton;	
 	
 	IBOutlet NSButton *autoSaveButton;	
 	
@@ -435,8 +435,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) updateCViewAsCurvedMPR;
 - (void) updateCViewAsMPR;
 - (void) updateAxView;
-- (void) recaculateAxViewForCPR;
-- (void) recaculateAxViewForStraightenedCPR;
+- (void) recalculateAxViewForCPR;
+- (void) recalculateAxViewForStraightenedCPR;
 - (void) updatePageSliders;
 - (void) resetSliders;
 - (void) roiChanged: (NSNotification*) note;
@@ -450,7 +450,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) creatROIListFromSlices:(NSMutableArray*) roiList :(int) width :(int)height :(short unsigned int*)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
 - (void) creatCPRROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width :(int)height :(float *)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
 - (void) creatAxROIListFromFuzzyConnectedness:(NSMutableArray*) roiList :(int) width :(int)height :(float *)im :(float)spaceX :(float)spaceY :(float)originX :(float)originY;
-- (void) reCaculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
+- (void) reCalculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
 - (void) changeCurrentTool:(ToolMode) tag;
 - (void) fixHolesInBarrier:(int)minx :(int)maxx :(int)miny :(int)maxy :(int)minz :(int)maxz :(short unsigned int) marker;
 - (NSMutableArray *) create3DPathFromROIs:(NSString*) roiName;
@@ -466,8 +466,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  forTableColumn:(NSTableColumn *)aTableColumn
 			row:(int)rowIndex;
 
-- (float*) caculateCurvedMPRImage :(int*)pwidth :(int*)pheight ;
-- (float*) caculateStraightCPRImage :(int*)pwidth :(int*)pheight ;
+- (float*) calculateCurvedMPRImage :(int*)pwidth :(int*)pheight ;
+- (float*) calculateStraightCPRImage :(int*)pwidth :(int*)pheight ;
 - (void) checkRootSeeds:(NSArray*)roiList;
 - (void) runSegmentation;
 - (int) plantSeeds:(float*)inData :(float*)outData :(unsigned char *)directData;
@@ -511,8 +511,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void)initCenterList;
 - (void)initVesselAnalysis;
 - (float) measureDiameterOfLongitudePolygon:(ROI*)aroi :(float)step :(float)length :(float)xspace :(NSMutableArray*)diameterarray :(NSMutableArray*)centerptarray;
--(void) recaculateAllCenterlinesLength;
--(double)caculateLengthOfAPath:(NSArray*)apath;
+-(void) recalculateAllCenterlinesLength;
+-(double)calculateLengthOfAPath:(NSArray*)apath;
 - (void)loadVesselnessMap;
 -(void)mergeVesselnessAndIntensityMap:(float*)img :(float*)vesselimg :(int)size;
 //- (IBAction)loadSegmentationResult:(id)sender;

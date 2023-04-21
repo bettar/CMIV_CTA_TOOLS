@@ -436,7 +436,7 @@
 	[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
 	//initilize the out and color buffer
 	memset(colorData,0,size);
-	[segmentCoreFunc caculateColorMapFromPointerMap:colorData:directionData]; 
+	[segmentCoreFunc calculateColorMapFromPointerMap:colorData :directionData]; 
 //	for(int i=0;i<size;i++)
 //	{
 //		seedData[i]=colorData[i];
@@ -457,13 +457,13 @@
 	memset(seedData,0,size);
 	unsigned short*pdismap=seedData;
 	{
-		[self prepareForCaculateLength:pdismap:directionData];
+		[self prepareForCalculateLength:pdismap:directionData];
 		size=imageWidth * imageHeight * imageAmount*sizeof(float);
 		memset(outputData,0x00,size);//localOptmizeConnectednessTree using outputData+=mean(inputData)
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
-		[self prepareForCaculateLength:pdismap:directionData];
+		[self prepareForCalculateLength:pdismap:directionData];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
-		[self prepareForCaculateLength:pdismap:directionData];
+		[self prepareForCalculateLength:pdismap:directionData];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
 
@@ -486,8 +486,11 @@
 		do
 		{
 			NSLog( @"finding new branches");
-			[self prepareForCaculateWightedLength:outputData:directionData];
-			int endindex=[segmentCoreFunc caculatePathLengthWithWeightFunction:inputData:outputData Pointer: directionData:weightThreshold:maxValueInCurSeries];
+			[self prepareForCalculateWightedLength:outputData:directionData];
+			int endindex=[segmentCoreFunc calculatePathLengthWithWeightFunction: inputData:outputData
+                                                                       Pointer: directionData
+                                                                              : weightThreshold
+                                                                              : maxValueInCurSeries];
 			pathWeightLength = *(outputData+endindex);
 			if (endindex>0)
 			{
@@ -621,7 +624,7 @@
 	}
 }
 
-- (void) prepareForCaculateLength:(unsigned short*)dismap :(unsigned char*)directionData
+- (void) prepareForCalculateLength:(unsigned short*)dismap :(unsigned char*)directionData
 {
 	int size = imageAmount*imageSize;
 	for(int i=0;i<size;i++)
@@ -633,7 +636,7 @@
 	}
 }
 
-- (void) prepareForCaculateWightedLength:(float*)outputData :(unsigned char*)directionData
+- (void) prepareForCalculateWightedLength:(float*)outputData :(unsigned char*)directionData
 {
 	int size=imageAmount*imageSize;
 	for (int i=0;i<size;i++)
@@ -716,10 +719,10 @@
 			smalloutputVolumeData[i]=0;
 		}
 		
-		err=[coreAlgorithm vesselnessFilter:smallVolumeData:smalloutputVolumeData:newdimension:newspacing:startscale:endscale:scalestep];
-		[self rescaleVolume:smalloutputVolumeData:totalsize:rescaleMax];
+		err=[coreAlgorithm vesselnessFilter:smallVolumeData :smalloutputVolumeData :newdimension :newspacing :startscale :endscale :scalestep];
+		[self rescaleVolume:smalloutputVolumeData :totalsize :rescaleMax];
 		//deal with calcium
-		[self resampleImage:volumeData:smallVolumeData:dimension:newdimension];
+		[self resampleImage:volumeData:smallVolumeData :dimension :newdimension];
 		for (int i=0;i<totalsize;i++)
 		{
 			if(smallVolumeData[i]>skeletonParaCalciumThreshold)
@@ -742,9 +745,9 @@
     [coreAlgorithm release];
 	free(smallVolumeData);
 
-	NSLog( @"Saving Vesselness map");
+	NSLog(@"Saving Vesselness map");
 
-	NSData	*newData = [[NSData alloc] initWithBytesNoCopy:smalloutputVolumeData length: size freeWhenDone:YES];
+	NSData *newData = [[NSData alloc] initWithBytesNoCopy:smalloutputVolumeData length: size freeWhenDone:YES];
 	NSMutableDictionary* dic=[parent dataOfWizard];
 	[dic setObject:newData forKey:@"VesselnessMap"];
 	[dic setObject:[NSNumber numberWithInt:size] forKey:@"VesselnessMapSize"];

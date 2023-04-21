@@ -61,6 +61,7 @@
 #import "spline.h"
 #undef id
 
+// TODO: use vtkMath::RadiansFromDegrees()
 static float deg2rad = M_PI/180.0;
 
 void setNumberOfThreads()
@@ -217,7 +218,6 @@ void setNumberOfThreads()
 								}
 								else
 								{
-
 									index1=connectingmap[index1];
 									index2=connectingmap[index2];
 									if(index1!=index2)
@@ -225,20 +225,17 @@ void setNumberOfThreads()
 										if(connectingmap[k]==index2)
 											connectingmap[k]=index1;
 								}
-								
-	
 							}
 						}
 					}
 				}
-				if(!*(tempimg+j*imageWidth+i))
+
+                if(!*(tempimg+j*imageWidth+i))
 				{
 					*(tempimg+j*imageWidth+i)=labebindex;
 					connectingmap[labebindex]=labebindex;
 					labebindex++;
 				}
-
-				
 			}
 
 	// replace connected map with continuous number.
@@ -257,8 +254,9 @@ void setNumberOfThreads()
 			}
 		}
 	}
-	index1++;
-	//caculate the area of each object
+
+    index1++;
+	// Calculate the area of each object
 	memset(areaList,0x00,index1*4*sizeof(long));
 	for(i=0;i<index1;i++)
 	{
@@ -435,19 +433,19 @@ void setNumberOfThreads()
 			do
 			{
 				tempdiameter++;
-				tempx=centerx+(float)tempdiameter*cos((float)i*deg2rad);
-				tempy=centery+(float)tempdiameter*sin((float)i*deg2rad);
-				if(tempx<0 || tempy<0 || tempx>=imageWidth || tempy>=imageHeight)
+				tempx = centerx+(float)tempdiameter*cos((float)i*deg2rad);
+				tempy = centery+(float)tempdiameter*sin((float)i*deg2rad);
+				if (tempx<0 || tempy<0 || tempx>=imageWidth || tempy>=imageHeight)
 				{
 					curve[i]=10000;
 					break;
 				}
 					
-			} while (*(img2d8bit+tempy*imageWidth+tempx)==0);
-			if (curve[i]==0)
-			{
-				curve[i]=tempdiameter;
 			}
+            while (*(img2d8bit+tempy*imageWidth+tempx)==0);
+			
+            if (curve[i]==0)
+				curve[i]=tempdiameter;
 		}
 
 	/* doesn't help
@@ -1623,7 +1621,7 @@ else
 	origin[1]=acircle.y;
 	origin[2]=(acircle.z-zOrigin)/zSpacing;
 	float radius=acircle.fValue;
-	//float maxHu=[self caculateAortaMaxIntensity:circlesArray];
+	//float maxHu=[self calculateAortaMaxIntensity:circlesArray];
 	[circlesArray removeAllObjects];
 	return radius;
 }
