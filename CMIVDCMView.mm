@@ -6,6 +6,18 @@
 //  Copyright 2007 __MyCompanyName__. All rights reserved.
 //
 
+//#define WITH_OPENGL_32 // core profile
+
+#ifdef WITH_OPENGL_32
+#import <OpenGL/gl3.h>
+#import <OpenGL/gl3ext.h>
+#else
+#import <OpenGL/OpenGL.h>
+#import <OpenGL/CGLCurrent.h>
+#import <OpenGL/CGLMacro.h>
+#import <OpenGL/glu.h> // for gluUnProject, it includes gl.h
+#endif
+
 #import "CMIVDCMView.h"
 
 static float deg2rad = M_PI/180.0;
@@ -334,7 +346,8 @@ static float deg2rad = M_PI/180.0;
 {
     if (displayCrossLines)
     {
-#if 0 // @@@ OGL
+#ifdef WITH_OPENGL_32
+#else // @@@ OGL
         CGLContextObj cgl_ctx = [[NSOpenGLContext currentContext] CGLContextObj];
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glEnable(GL_BLEND);
@@ -345,7 +358,8 @@ static float deg2rad = M_PI/180.0;
         float heighthalf = self.frame.size.height/2;
         float widthhalf = self.frame.size.width/2;
         
-#if 0 // @@@ OGL
+#ifdef WITH_OPENGL_32
+#else // @@@ OGL
         if (widthhalf>800)
         {
             glLineWidth(4.0);
@@ -366,7 +380,8 @@ static float deg2rad = M_PI/180.0;
             crossglY = [self scaleValue] *(crossPoint.y-curDCM.pheight/2.);
         }
         
-#if 0 // @@@ OGL
+#ifdef WITH_OPENGL_32
+#else // @@@ OGL
         glTranslatef(crossglX, crossglY, 0.0);
         glRotatef( crossAngle, 0, 0, 1);
         

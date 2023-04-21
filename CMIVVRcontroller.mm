@@ -607,7 +607,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	colorMapFromFile=(unsigned char*)malloc(size);
 	if(!colorMapFromFile)
 	{
-		NSLog(@"no enough memory for mask map");
+		NSLog(@"Not enough memory for mask map");
 		return 0;
 	}
 	NSArray* seednamearray=[dic objectForKey:@"SeedNameArray"];

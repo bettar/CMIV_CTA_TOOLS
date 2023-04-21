@@ -295,19 +295,19 @@ static float deg2rad = M_PI/180.0;
 		err=1;
 	if(err)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no enough seeds found", nil),
+		NSRunAlertPanel(NSLocalizedString(@"Not enough seeds found", nil),
                         NSLocalizedString(@"We need at least two sets of seeds with different names to start the segmenation algorithm", nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
 
     [self runSegmentation];
-	/* NSArray				*pixList = [originalViewController pixList];
+	/* NSArray *pixList = [originalViewController pixList];
 	unsigned int i;
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];
-	NSMutableArray      *roiList;
+	NSMutableArray *roiList;
 	short unsigned int* im;
-	for(i=0;i<[pixList count];i++)
+	for (i=0;i<[pixList count];i++)
 	{
 		roiList= [[originalViewController roiList] objectAtIndex: i];
 		im=contrastVolumeData+imageSize*i;
@@ -10710,20 +10710,31 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (void)loadVesselnessMap
 {
-	if(!vesselnessMap)
-	vesselnessMap=(float*)malloc(imageWidth*imageHeight*imageAmount*sizeof(float));
-	if(!vesselnessMap)
+	if (!vesselnessMap)
+        vesselnessMap=(float*)malloc(imageWidth*imageHeight*imageAmount*sizeof(float));
+	
+    if (!vesselnessMap)
 	{
-		//NSRunAlertPanel(NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"No enough memory for loading vesselness map, running segmentation withour it!", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		//NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil), NSLocalizedString(@"Not enough memory for loading vesselness map, running segmentation withour it!", nil), NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
 
-    float origin[3],spacing[3];
-	long dimension[3];
-	origin[0]=vtkOriginalX;origin[1]=vtkOriginalY;origin[2]=vtkOriginalZ;
-	spacing[0]=xSpacing;spacing[1]=ySpacing;spacing[2]=zSpacing;
-	dimension[0]=imageWidth;dimension[1]=imageHeight;dimension[2]=imageAmount;
-	if ([parent loadVesselnessMap:vesselnessMap:origin:spacing:dimension])
+    float origin[3];
+	origin[0] = vtkOriginalX;
+    origin[1] = vtkOriginalY;
+    origin[2] = vtkOriginalZ;
+
+    float spacing[3];
+    spacing[0] = xSpacing;
+    spacing[1] = ySpacing;
+    spacing[2] = zSpacing;
+    
+    long dimension[3];
+	dimension[0] = imageWidth;
+    dimension[1] = imageHeight;
+    dimension[2] = imageAmount;
+
+    if ([parent loadVesselnessMap:vesselnessMap:origin:spacing:dimension])
 	{
 		//parentVesselnessMap=[[NSData alloc] initWithBytesNoCopy:vesselnessMap length: imageWidth*imageHeight*imageAmount*sizeof(float) freeWhenDone:YES];	
 	}
@@ -10902,7 +10913,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					continueGrowingCondition=1;
 				else
 				{
-					NSLog(@"no enough cross area");
+					NSLog(@"Not enough cross area");
 					ifneedgoback=1;
 					continueGrowingCondition=0;
 				}

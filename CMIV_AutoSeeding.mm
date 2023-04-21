@@ -96,25 +96,29 @@
 
 	volumeData=volumePtr;
 	unsigned char* markerdata=(unsigned char* )malloc(imageWidth*imageHeight*imageAmount*sizeof(unsigned char));
-	if(markerdata==nil)
+	if (markerdata==nil)
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                        NSLocalizedString(@"OK", nil), nil, nil);
 		
 		return 0;
-	}	
-	memset(markerdata,0x00,imageWidth*imageHeight*imageAmount*sizeof(unsigned char));
+	}
+
+    memset(markerdata,0x00,imageWidth*imageHeight*imageAmount*sizeof(unsigned char));
 //	[self readROIFromViewer:markerdata];
 	id waitWindow;
-	if(originalViewController)
-	 waitWindow=[originalViewController startWaitWindow:@"processing"];
+	if (originalViewController)
+        waitWindow=[originalViewController startWaitWindow:@"processing"];
 	CMIVAutoSeedingCore* coreAlgorithm=[[CMIVAutoSeedingCore alloc] init];
 	float lungthreshold = [curPix minValueOfSeries];
-	if(lungthreshold<-300)
+	if (lungthreshold<-300)
 		lungthreshold=-300;
 	else
 		lungthreshold=700;
-	NSLog( @"heart segment ");
+
+    NSLog(@"heart segment ");
 	if(ribRemoval)
 	{
 		[coreAlgorithm autoCroppingBasedOnLungSegment:volumeData:markerdata:lungthreshold:20:origin:dimension:spacing:1.0];
@@ -123,12 +127,12 @@
 	}	
 	
 	float targetspacing=2.0;
-	 newdimension[0]=dimension[0]*spacing[0]/targetspacing;
-	 newdimension[1]=dimension[1]*spacing[1]/targetspacing;
-	 newdimension[2]=dimension[2]*spacing[2]/targetspacing;
-	float* smallVolumeData=(float*)malloc(newdimension[0]*newdimension[1]*newdimension[2]*sizeof(float));
-	
-	if(smallVolumeData)
+    newdimension[0]=dimension[0]*spacing[0]/targetspacing;
+    newdimension[1]=dimension[1]*spacing[1]/targetspacing;
+    newdimension[2]=dimension[2]*spacing[2]/targetspacing;
+
+    float* smallVolumeData = (float*)malloc(newdimension[0]*newdimension[1]*newdimension[2]*sizeof(float));
+	if (smallVolumeData)
 	{
 		NSLog( @"finding aortat ");
 		
@@ -136,7 +140,7 @@
 		float newspacing[3];
 		newspacing[0]=newspacing[1]=newspacing[2]=targetspacing;
 		float radius=[coreAlgorithm findAorta:smallVolumeData:origin:newdimension:newspacing];
-		if(radius<=0)
+		if (radius<=0)
 			err=1;
 
 		//CMIV3DPoint* aNewCircle=[[CMIV3DPoint alloc] init];
@@ -147,44 +151,54 @@
 		NSMutableDictionary* dic=[parent dataOfWizard];
 
 		[dic setObject:[NSNumber numberWithFloat:origin[0]*targetspacing] forKey:@"AortaPointx"];
-	
 		[dic setObject:[NSNumber numberWithFloat:origin[1]*targetspacing] forKey:@"AortaPointy"];
-
 		[dic setObject:[NSNumber numberWithFloat:origin[2]*targetspacing] forKey:@"AortaPointz"];
-
 		[dic setObject:[NSNumber numberWithFloat:radius*targetspacing] forKey:@"AortaPointr"];
 
 		//[aNewCircle release];
 		free(smallVolumeData);
 		radius=radius/2;
-		aortaMaxHu=[coreAlgorithm caculateAortaMaxIntensity:(volumeData+imageSize*((int)(origin[2]*targetspacing/spacing[2]))):imageWidth:imageHeight:origin[0]*targetspacing/spacing[0]:origin[1]*targetspacing/spacing[1]:radius*targetspacing/spacing[0]];
+		aortaMaxHu=[coreAlgorithm caculateAortaMaxIntensity:(volumeData+imageSize*((int)(origin[2]*targetspacing/spacing[2])))
+                                                           :imageWidth
+                                                           :imageHeight
+                                                           :origin[0]*targetspacing/spacing[0]
+                                                           :origin[1]*targetspacing/spacing[1]
+                                                           :radius*targetspacing/spacing[0]];
 		NSLog( @"tracing aortat ");
 		unsigned short* seedData=(unsigned short*)malloc(dimension[0]*dimension[1]*dimension[2]*sizeof(unsigned short));
 
-		if(seedData)
+		if (seedData)
 		{
 			float aortaStartPt[3];
 			aortaStartPt[0]=(float)origin[0]*targetspacing/spacing[0];
 			aortaStartPt[1]=(float)origin[1]*targetspacing/spacing[1];
 			aortaStartPt[2]=(float)origin[2]*targetspacing/spacing[2];
 			float aortathreshold=150;
-			if(aortaMaxHu>550)
+			if (aortaMaxHu>550)
 				aortathreshold=aortaMaxHu-400;
-			[coreAlgorithm crossectionGrowingWithinVolume:volumeData ToSeedVolume:seedData Dimension:dimension Spacing:spacing StartPt:aortaStartPt Threshold:aortathreshold Diameter:50.0];
+
+            [coreAlgorithm crossectionGrowingWithinVolume: volumeData
+                                             ToSeedVolume: seedData
+                                                Dimension: dimension
+                                                  Spacing: spacing
+                                                  StartPt: aortaStartPt
+                                                Threshold: aortathreshold
+                                                 Diameter: 50.0];
 			[[NSNotificationCenter defaultCenter] postNotificationName: @"CMIVLeveIndicatorStep" object:self userInfo: nil];
-			int lastVoxelIndex=dimension[0]*dimension[1]*dimension[2]-1;
-			int i;
-			for( i=0;i<imageSize;i++)
+			int lastVoxelIndex = dimension[0]*dimension[1]*dimension[2]-1;
+			for (int i=0;i<imageSize;i++)
 			{
 				seedData[i]=TOPOTHERSEEDS;
 				seedData[lastVoxelIndex-i]=BOTTOMOTHERSEEDS;
 			}
 			
-			[self saveCurrentSeeds: seedData:dimension[0]*dimension[1]*dimension[2]*sizeof(short)];
+			[self saveCurrentSeeds:seedData
+                                  :dimension[0]*dimension[1]*dimension[2]*sizeof(short)];
 			
-			if(centerlineTracking||needVesselEnhance)
+			if (centerlineTracking||needVesselEnhance)
 				err=[self createCoronaryVesselnessMap: vc:  owner:1.0:2.5:0.5:1.0:aortaMaxHu:YES];
-			if(centerlineTracking)
+			
+            if (centerlineTracking)
 			{
 				vesselnessMapData=[dic objectForKey:@"VesselnessMap"];
 				[vesselnessMapData retain];
@@ -193,14 +207,16 @@
 				[self deEnhanceVolumeWithVesselness];
 				[vesselnessMapData release];
 			}
-			free(seedData);
-		}
 		
+            free(seedData);
+		}
 	}
 	else
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 		
 	//	return 0;
 	}
@@ -210,9 +226,6 @@
 		[originalViewController endWaitWindow: waitWindow];
 	NSLog( @"finish up");
 	//[self exportResults:markerdata:origin:dimension];
-
-	
-	
 	free(markerdata);
 	
 //	err=[self createCoronaryVesselnessMap: vc:  owner:1.0:2.5:0.5:1.0:aortaMaxHu];
@@ -222,10 +235,8 @@
 //	[parent saveCurrentStep];
 	[parent cleanDataOfWizard];
 	return err;
-	
-	
-	
 }
+
 - (void)saveCurrentSeeds: (unsigned short*)seedData :(int)size
 {
 	[parent cleanDataOfWizard];
@@ -260,7 +271,6 @@
 	[contrastList addObject: contrast];
 	
 	[dic setObject:contrastList forKey:@"ContrastList"];
-
 	
 	NSMutableArray* seedsnamearray=[NSMutableArray arrayWithCapacity:0];
 	NSMutableArray* rootseedsarray=[NSMutableArray arrayWithCapacity:0];
@@ -303,10 +313,9 @@
 	}
 }
 
-
 -(int)resampleImage:(float*)input :(float*)output :(long*)indimesion :(long*)outdimesion
 {
-	vImage_Buffer	srcVimage, dstVimage;
+	vImage_Buffer srcVimage, dstVimage;
 	int outImageWidth,outImageHeight,outImageSize,outImageAmount;
 	int inImageWidth=indimesion[0], inImageHeight=indimesion[1], inImageAmount=indimesion[2];
 	outImageWidth=outdimesion[0];
@@ -314,7 +323,7 @@
 	outImageSize=outImageWidth*outImageHeight;
 	outImageAmount=outdimesion[2];
 	
-	float* tempVolume=(float*)malloc(outImageWidth*outImageHeight*inImageAmount*sizeof(float));
+	float* tempVolume = (float*)malloc(outImageWidth*outImageHeight*inImageAmount*sizeof(float));
 	if (!tempVolume)
 	{
 		if (originalViewController)
@@ -324,9 +333,8 @@
 		return 1;
 	}
 	
-	for (int i=0;i<inImageAmount;i++)
+	for (int i=0; i<inImageAmount; i++)
 	{
-		
 		srcVimage.data = input+inImageWidth*inImageHeight*i;
 		srcVimage.height =  inImageHeight;
 		srcVimage.width = inImageWidth;
@@ -375,7 +383,7 @@
 
     size = sizeof(char) * imageWidth * imageHeight * imageAmount;
 	colorData = (unsigned char*) malloc( size);
-	if ( !colorData)
+	if (!colorData)
 	{
 		if (originalViewController)
             NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
@@ -385,7 +393,7 @@
 		return;
 	}
 
-    directionData= (unsigned char*) malloc( size);
+    directionData = (unsigned char*) malloc( size);
 	if ( !directionData)
 	{
 		if(originalViewController)
@@ -398,7 +406,6 @@
 	}
 	
 	memset(directionData,0,size);
-	int i;
 	size=imageWidth * imageHeight * imageAmount;
 	DCMPix* curPix = [controllersPixList objectAtIndex: 0];
 	float minValueInCurSeries = [curPix minValueOfSeries]-1;
@@ -417,12 +424,12 @@
 	if(minSpacing>spacing[1])minSpacing=spacing[1];
 	if(minSpacing>spacing[2])minSpacing=spacing[2];
 	minSpacing/=2;
-	for(i=0;i<size;i++)
+	for (int i=0;i<size;i++)
 		*(outputData+i)=minValueInCurSeries;
 	
 	[self useSeedDataToInitializeDirectionData:seedData:inputData:outputData:directionData:size];
 
-	//start seed growing	
+	// Start seed growing
 	CMIVSegmentCore *segmentCoreFunc = [[CMIVSegmentCore alloc] init];
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 	
@@ -430,7 +437,7 @@
 	//initilize the out and color buffer
 	memset(colorData,0,size);
 	[segmentCoreFunc caculateColorMapFromPointerMap:colorData:directionData]; 
-//	for(i=0;i<size;i++)
+//	for(int i=0;i<size;i++)
 //	{
 //		seedData[i]=colorData[i];
 //	}
@@ -438,8 +445,8 @@
 //		return;
 	[[NSNotificationCenter defaultCenter] postNotificationName: @"CMIVLeveIndicatorStep" object:self userInfo: nil];
 
-	for(i=0;i<size;i++)
-		if(colorData[i]!=AORTAMARKER)
+	for (int i=0;i<size;i++)
+		if (colorData[i]!=AORTAMARKER)
 		{
 			directionData[i]=0x80|BARRIERMARKER;
 			outputData[i]=minValueInCurSeries;
@@ -459,18 +466,20 @@
 		[self prepareForCaculateLength:pdismap:directionData];
 		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
-	int unknownCenterlineCounter=0;
+
+    int unknownCenterlineCounter=0;
 	NSMutableArray* centerlinesList=[NSMutableArray arrayWithCapacity:0];
 	NSMutableArray* centerlinesNameList=[NSMutableArray arrayWithCapacity:0];
-	
 	
 	float skeletonParaLengthThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterLengthThreshold"];
 	float skeletonParaEndHuThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterBranchEndThreshold"];
 	if(skeletonParaLengthThreshold<5.0)
 		skeletonParaLengthThreshold=10.0;
-	if(skeletonParaEndHuThreshold<=0.0)
+
+    if(skeletonParaEndHuThreshold<=0.0)
 		skeletonParaEndHuThreshold=100.0;
-	float pathWeightLength=0;
+	
+    float pathWeightLength=0;
 	float weightThreshold=skeletonParaEndHuThreshold;
 	float lengthThreshold=skeletonParaLengthThreshold/minSpacing;
 	{
@@ -480,7 +489,7 @@
 			[self prepareForCaculateWightedLength:outputData:directionData];
 			int endindex=[segmentCoreFunc caculatePathLengthWithWeightFunction:inputData:outputData Pointer: directionData:weightThreshold:maxValueInCurSeries];
 			pathWeightLength = *(outputData+endindex);
-			if(endindex>0)
+			if (endindex>0)
 			{
 				NSMutableArray* apath=[NSMutableArray arrayWithCapacity:0];
 				int len=[self searchBackToCreatCenterlines: apath: endindex:directionData];
@@ -493,11 +502,12 @@
 				}
 				else
 					break;
-				
 			}
-		}while( pathWeightLength>0);
+		}
+        while( pathWeightLength>0);
 	}
-	[segmentCoreFunc release];
+
+    [segmentCoreFunc release];
 	free(outputData);
 	free(directionData);
 	[self saveCenterlinesToPatientCoordinate:centerlinesList:centerlinesNameList];
@@ -512,25 +522,25 @@
 	[curPix orientation:vector];
 	[self inverseMatrix:vector:inversedvector];
 	
-	float	vtkOriginalX = ([curPix originX] ) * vector[0] + ([curPix originY]) * vector[1] + ([curPix originZ] )*vector[2];
-	float	vtkOriginalY = ([curPix originX] ) * vector[3] + ([curPix originY]) * vector[4] + ([curPix originZ] )*vector[5];
-	float	vtkOriginalZ = ([curPix originX] ) * vector[6] + ([curPix originY]) * vector[7] + ([curPix originZ] )*vector[8];
+	float vtkOriginalX = ([curPix originX] ) * vector[0] + ([curPix originY]) * vector[1] + ([curPix originZ] )*vector[2];
+	float vtkOriginalY = ([curPix originX] ) * vector[3] + ([curPix originY]) * vector[4] + ([curPix originZ] )*vector[5];
+	float vtkOriginalZ = ([curPix originX] ) * vector[6] + ([curPix originY]) * vector[7] + ([curPix originZ] )*vector[8];
 	float sliceThickness = [curPix sliceInterval];   
-	if( sliceThickness == 0)
+	if (sliceThickness == 0)
 	{
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
 	}
 
-	float	xSpacing=[curPix pixelSpacingX];
-	float	ySpacing=[curPix pixelSpacingY];
-	float	zSpacing=sliceThickness;
+	float xSpacing=[curPix pixelSpacingX];
+	float ySpacing=[curPix pixelSpacingY];
+	float zSpacing=sliceThickness;
 	
 	CMIV3DPoint* temppoint;
 	float x,y,z;
 	unsigned int i,j;
-	for(i=0;i<[centerlines count];i++)
-		for(j=0;j<[[centerlines objectAtIndex: i] count];j++)
+	for (i=0;i<[centerlines count];i++)
+		for (j=0;j<[[centerlines objectAtIndex: i] count];j++)
 		{
 			temppoint=[[centerlines objectAtIndex:i] objectAtIndex: j];
 			x= [temppoint x];
@@ -539,7 +549,6 @@
 			[temppoint setX: vtkOriginalX + x*xSpacing+xSpacing*0.5];
 			[temppoint setY: vtkOriginalY + y*ySpacing+ySpacing*0.5];
 			[temppoint setZ: vtkOriginalZ + z*zSpacing+zSpacing*0.5];
-			
 		}
 	
 	// ////////////////////////////////////////////////////////////
@@ -550,10 +559,10 @@
 	originpat[2]= origin[0] * inversedvector[6] + origin[1] * inversedvector[7] + origin[2]*inversedvector[8];
 
 	NSMutableArray* cpr3DPathsForSave=[NSMutableArray arrayWithCapacity:0];
-	for(i=0;i<[centerlines count];i++)
+	for (i=0;i<[centerlines count];i++)
 	{
 		NSMutableArray* anewcenterline=[NSMutableArray arrayWithCapacity:0];
-		for(j=0;j<[[centerlines objectAtIndex:i] count];j++)
+		for (j=0;j<[[centerlines objectAtIndex:i] count];j++)
 		{
 			CMIV3DPoint* apoint=[[centerlines objectAtIndex:i] objectAtIndex:j];
 			float x,y,z,ptx,pty,ptz;
@@ -600,8 +609,7 @@
                                              :(unsigned char*)directionData
                                              :(int)volumeSize
 {
-	int i;
-	for(i=0;i<volumeSize;i++)
+	for(int i=0;i<volumeSize;i++)
 	{
 		if(seedData[i])
 		{
@@ -615,11 +623,10 @@
 
 - (void) prepareForCaculateLength:(unsigned short*)dismap :(unsigned char*)directionData
 {
-	int size,i;
-	size=imageAmount*imageSize;
-	for(i=0;i<size;i++)
+	int size = imageAmount*imageSize;
+	for(int i=0;i<size;i++)
 	{
-		if((*(directionData+i)) & 0xC0)
+		if ((*(directionData+i)) & 0xC0)
 			*(dismap+i)=1;
 		else
 			*(dismap+i)=0;
@@ -646,13 +653,16 @@
                                  :(float)targetspacing
                                  :(float)rescaleMax
                                  :(BOOL)needSaveVesselnessMap
-{	parent=owner;
+{
+    parent=owner;
 	if(vc)
 		originalViewController=vc;
-	int err=0;
-	if(vc)
+
+    int err=0;
+	if (vc)
 		controllersPixList=[vc pixList];
-	DCMPix* curPix = [controllersPixList objectAtIndex: 0];
+
+    DCMPix* curPix = [controllersPixList objectAtIndex: 0];
 	
 	long origin[3],dimension[3],newdimension[3];
 	float spacing[3];
@@ -668,14 +678,15 @@
 	spacing[0]=[curPix pixelSpacingX];
 	spacing[1]=[curPix pixelSpacingY];
 	float sliceThickness = [curPix sliceInterval];   
-	if( sliceThickness == 0)
+	if (sliceThickness == 0)
 	{
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
 	}
-	spacing[2]=sliceThickness;
+
+    spacing[2]=sliceThickness;
 	
-	if(vc)
+	if (vc)
 		volumeData=[originalViewController volumePtr:0];
 
 	CMIVAutoSeedingCore* coreAlgorithm=[[CMIVAutoSeedingCore alloc] init];
@@ -690,15 +701,15 @@
 	int size=newdimension[0]*newdimension[1]*newdimension[2]*sizeof(float);
 	float* smallVolumeData=(float*)malloc(size);
 	float* smalloutputVolumeData=(float*)malloc(size);
-	if(smallVolumeData&&smalloutputVolumeData)
+	if (smallVolumeData&&smalloutputVolumeData)
 	{
 		float skeletonParaCalciumThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterCalciumThreshold"];
 		if(skeletonParaCalciumThreshold<200.0)
 			skeletonParaCalciumThreshold=650.0;
 		
 		[self resampleImage:volumeData:smallVolumeData:dimension:newdimension];
-		int i,totalsize=newdimension[0]*newdimension[1]*newdimension[2];
-		for(i=0;i<totalsize;i++)
+		int totalsize=newdimension[0]*newdimension[1]*newdimension[2];
+		for (int i=0;i<totalsize;i++)
 		{
 			if(smallVolumeData[i]<0||smallVolumeData[i]>skeletonParaCalciumThreshold)
 				smallVolumeData[i]=0;
@@ -709,7 +720,7 @@
 		[self rescaleVolume:smalloutputVolumeData:totalsize:rescaleMax];
 		//deal with calcium
 		[self resampleImage:volumeData:smallVolumeData:dimension:newdimension];
-		for(i=0;i<totalsize;i++)
+		for (int i=0;i<totalsize;i++)
 		{
 			if(smallVolumeData[i]>skeletonParaCalciumThreshold)
 				smalloutputVolumeData[i]=-1000;
@@ -717,14 +728,18 @@
 	}
 	else
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		if(smallVolumeData)
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
+		
+        if (smallVolumeData)
 			free(smallVolumeData);
-		return 1;
-
+		
+        return 1;
 	}
-	[coreAlgorithm release];
+
+    [coreAlgorithm release];
 	free(smallVolumeData);
 
 	NSLog( @"Saving Vesselness map");
@@ -736,9 +751,9 @@
 	[dic setObject:[NSNumber numberWithFloat:targetspacing] forKey:@"VesselnessMapTargetSpacing"];
 	float vector[9];
 	[curPix orientation:vector];
-	float	vtkOriginalX = ([curPix originX] ) * vector[0] + ([curPix originY]) * vector[1] + ([curPix originZ] )*vector[2];
-	float	vtkOriginalY = ([curPix originX] ) * vector[3] + ([curPix originY]) * vector[4] + ([curPix originZ] )*vector[5];
-	float	vtkOriginalZ = ([curPix originX] ) * vector[6] + ([curPix originY]) * vector[7] + ([curPix originZ] )*vector[8];
+	float vtkOriginalX = ([curPix originX] ) * vector[0] + ([curPix originY]) * vector[1] + ([curPix originZ] )*vector[2];
+	float vtkOriginalY = ([curPix originX] ) * vector[3] + ([curPix originY]) * vector[4] + ([curPix originZ] )*vector[5];
+	float vtkOriginalZ = ([curPix originX] ) * vector[6] + ([curPix originY]) * vector[7] + ([curPix originZ] )*vector[8];
 	NSMutableArray* originAndDimesnion=[NSMutableArray arrayWithCapacity:0];
 	[originAndDimesnion addObject:[NSNumber numberWithFloat:vtkOriginalX]];
 	[originAndDimesnion addObject:[NSNumber numberWithFloat:vtkOriginalY]];
@@ -749,15 +764,15 @@
 	[dic setObject:originAndDimesnion forKey:@"VesselnessMapOriginAndDimension"];
 
 	[newData release];
-	if(needSaveVesselnessMap)
+	if (needSaveVesselnessMap)
 	{
 		NSString* seriesUid=[[[controllersPixList objectAtIndex:0] seriesObj] valueForKey:@"seriesInstanceUID"];
 		[parent saveIntermediateData:seriesUid];
 	}
 
 	return err;
-	
 }
+
 -(void)enhanceVolumeWithVesselness
 {
 	DCMPix* curPix = [controllersPixList objectAtIndex: 0];
@@ -770,7 +785,7 @@
 	spacing[0]=[curPix pixelSpacingX];
 	spacing[1]=[curPix pixelSpacingY];
 	float sliceThickness = [curPix sliceInterval];   
-	if( sliceThickness == 0)
+	if ( sliceThickness == 0)
 	{
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
@@ -783,22 +798,25 @@
 
 	long size=dimension[0]*dimension[1]*dimension[2]*sizeof(float);
 	float* vesselnessMap=(float*)malloc(size);
-	if(!vesselnessMap)
+	if (!vesselnessMap)
 	{
-		if(originalViewController)
-		NSRunAlertPanel(NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"No enough memory for loading vesselness map, running segmentation withour it!", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		if (originalViewController)
+            NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(@"Not enough memory for loading vesselness map, running segmentation withour it!", nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
 
 	float* smallVolumeData=(float*)[ vesselnessMapData bytes];
 
-	if(![self resampleImage:smallVolumeData:vesselnessMap:newdimension:dimension])
+	if (![self resampleImage:smallVolumeData:vesselnessMap:newdimension:dimension])
 	{
 		size=dimension[0]*dimension[1]*dimension[2];
 		int i;
 		for(i=0;i<size;i++)
 			volumeData[i]+=3*vesselnessMap[i];
-	}	
+	}
+    
 	free(vesselnessMap);
 }
 
@@ -825,31 +843,32 @@
 	newdimension[1]=dimension[1]*spacing[1]/vesselnessMapSpacing;
 	newdimension[2]=dimension[2]*spacing[2]/vesselnessMapSpacing;
 	
-	
 	long size=dimension[0]*dimension[1]*dimension[2]*sizeof(float);
 	float* vesselnessMap=(float*)malloc(size);
 	if(!vesselnessMap)
 	{
-		if(originalViewController)
-			NSRunAlertPanel(NSLocalizedString(@"no enough memory", nil), NSLocalizedString(@"No enough memory for loading vesselness map, running segmentation withour it!", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		if (originalViewController)
+			NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
+                            NSLocalizedString(@"Not enough memory for loading vesselness map, running segmentation withour it!", nil),
+                            NSLocalizedString(@"OK", nil), nil, nil);
 		return;
 	}
 	
-	float* smallVolumeData=(float*)[ vesselnessMapData bytes];
+	float* smallVolumeData=(float*)[vesselnessMapData bytes];
 
-	if(![self resampleImage:smallVolumeData:vesselnessMap:newdimension:dimension])
+	if (![self resampleImage:smallVolumeData :vesselnessMap :newdimension :dimension])
 	{
-		size=dimension[0]*dimension[1]*dimension[2];
-		int i;
-		for(i=0;i<size;i++)
+		size = dimension[0]*dimension[1]*dimension[2];
+		for(int i=0;i<size;i++)
 			volumeData[i]-=3*vesselnessMap[i];
 	}	
-	free(vesselnessMap);
+
+    free(vesselnessMap);
 }
 
 -(void)rescaleVolume:(float*)img :(int)size :(float)tagetscale
 {
-	float originmax=-100000;
+	float originmax = -100000.;
 	for (int i=0;i<size;i++)
 		if (img[i]>originmax)
 			originmax=img[i];
@@ -883,92 +902,119 @@
 			branchlen++;
 		pointerToUpper = ((*(directionData + endpointindex))&0x3f);
 		*(directionData + endpointindex)=pointerToUpper|0x40;
-		int itemp=0;
+		long itemp=0;
 		switch(pointerToUpper)
 		{
-			case 1: itemp =  (-imageSize-imageWidth-1);
+			case 1:
+                itemp = (-imageSize-imageWidth-1);
 				x--;y--;z--;
 				break;
-			case 2: itemp =  (-imageSize-imageWidth);
+			case 2:
+                itemp = (-imageSize-imageWidth);
 				y--;z--;
 				break;
-			case 3: itemp = (-imageSize-imageWidth+1);
+			case 3:
+                itemp = (-imageSize-imageWidth+1);
 				x++;y--;z--;
 				break;
-			case 4: itemp = (-imageSize-1);
+			case 4:
+                itemp = (-imageSize-1);
 				x--;z--;
 				break;
-			case 5: itemp = (-imageSize);
+			case 5:
+                itemp = (-imageSize);
 				z--;
 				break;
-			case 6: itemp = (-imageSize+1);
+			case 6:
+                itemp = (-imageSize+1);
 				x++;z--;
 				break;
-			case 7: itemp = (-imageSize+imageWidth-1);
+			case 7:
+                itemp = (-imageSize+imageWidth-1);
 				x--;y++;z--;
 				break;
-			case 8: itemp = (-imageSize+imageWidth);
+			case 8:
+                itemp = (-imageSize+imageWidth);
 				y++;z--;
 				break;
-			case 9: itemp = (-imageSize+imageWidth+1);
+			case 9:
+                itemp = (-imageSize+imageWidth+1);
 				x++;y++;z--;
 				break;
-			case 10: itemp = (-imageWidth-1);
+			case 10:
+                itemp = (-imageWidth-1);
 				x--;y--;
 				break;
-			case 11: itemp = (-imageWidth);
+			case 11:
+                itemp = (-imageWidth);
 				y--;
 				break;
-			case 12: itemp = (-imageWidth+1);
+			case 12:
+                itemp = (-imageWidth+1);
 				x++;y--;
 				break;
-			case 13: itemp = (-1);
+			case 13:
+                itemp = (-1);
 				x--;
 				break;
-			case 14: itemp = 0;
+			case 14:
+                itemp = 0;
 				break;
-			case 15: itemp = 1;
+			case 15:
+                itemp = 1;
 				x++;
 				break;
-			case 16: itemp = imageWidth-1;
+			case 16:
+                itemp = imageWidth-1;
 				x--;y++;
 				break;
-			case 17: itemp = imageWidth;
+			case 17:
+                itemp = imageWidth;
 				y++;
 				break;
-			case 18: itemp = imageWidth+1;
+			case 18:
+                itemp = imageWidth+1;
 				x++;y++;
 				break;
-			case 19: itemp = imageSize-imageWidth-1;
+			case 19:
+                itemp = imageSize-imageWidth-1;
 				x--;y--;z++;
 				break;
-			case 20: itemp = imageSize-imageWidth;
+			case 20:
+                itemp = imageSize-imageWidth;
 				y--;z++;
 				break;
-			case 21: itemp = imageSize-imageWidth+1;
+			case 21:
+                itemp = imageSize-imageWidth+1;
 				x++;y--;z++;
 				break;
-			case 22: itemp = imageSize-1;
+			case 22:
+                itemp = imageSize-1;
 				x--;z++;
 				break;
-			case 23: itemp = imageSize;
+			case 23:
+                itemp = imageSize;
 				z++;
 				break;
-			case 24: itemp = imageSize+1;
+			case 24:
+                itemp = imageSize+1;
 				x++;z++;
 				break;
-			case 25: itemp = imageSize+imageWidth-1;
-				x--;y++;z++;
+			case 25:
+                itemp = imageSize+imageWidth-1;
+				x--; y++; z++;
 				break;
-			case 26: itemp = imageSize+imageWidth;
-				y++;z++;
+			case 26:
+                itemp = imageSize+imageWidth;
+				y++; z++;
 				break;
-			case 27: itemp = imageSize+imageWidth+1;
-				x++;y++;z++;
+			case 27:
+                itemp = imageSize+imageWidth+1;
+				x++; y++; z++;
 				break;
 		}
 		
-		if(x<0||y<0||z<0||x>=imageWidth||y>=imageHeight||z>=imageAmount)
+		if (x<0||y<0||z<0||x>=imageWidth||y>=imageHeight||z>=imageAmount)
 			break;
 		
 		endpointindex+=itemp;
@@ -978,17 +1024,14 @@
 		[new3DPoint setZ: z];
 		[acenterline addObject: new3DPoint];
 		[new3DPoint release];
-
-		
-		
-		
-	}while(!((*(directionData + endpointindex))&0x80));
+	}
+    while (!((*(directionData + endpointindex)) & 0x80));
 	
-	startpointcoloindex=(*(directionData + endpointindex))&0x3f;
+	startpointcoloindex = (*(directionData + endpointindex)) & 0x3f;
 	
 	return branchlen;
-	
 }
+
 -(int)smoothingImages3D:(ViewerController *) vc
                        :(CMIV_CTA_TOOLS*) owner
                        :(int)iteration
@@ -996,16 +1039,14 @@
 	id waitWindow;
 
 	parent=owner;
-	if(vc)
+	if (vc)
 		originalViewController=vc;
-	if(originalViewController)
+	if (originalViewController)
 		waitWindow=[originalViewController startWaitWindow:@"processing"];
 	int err=0;
-	if(vc)
+	if (vc)
 		controllersPixList=[vc pixList];
 	DCMPix* curPix = [controllersPixList objectAtIndex: 0];
-	
-	
 	
 	long origin[3],dimension[3];
 	float spacing[3];
@@ -1030,7 +1071,6 @@
 	
 	if(vc)
 		volumeData=[originalViewController volumePtr:0];
-	
 	
 	CMIVAutoSeedingCore* coreAlgorithm=[[CMIVAutoSeedingCore alloc] init];
 	NSLog( @"vesselness filter start");

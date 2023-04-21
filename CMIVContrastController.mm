@@ -262,7 +262,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		//err=[self CannyEdgeDetection:inputData];
 		if (err)
 		{
-			NSRunAlertPanel(NSLocalizedString(@"no enough to smooth input data", nil),
+			NSRunAlertPanel(NSLocalizedString(@"Not enough to smooth input data", nil),
                             NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                             NSLocalizedString(@"OK", nil), nil, nil);
 			free(inputData);

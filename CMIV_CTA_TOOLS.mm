@@ -354,7 +354,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         [savedData release];
         int nrespond = NSRunAlertPanel(NSLocalizedString(@"Found Previous Results", nil),
-                                       NSLocalizedString(@"Auto seeding processing will delete all seeds and centerlines info created before.  Do you want to continue?", nil), NSLocalizedString(@"Continue", nil),
+                                       NSLocalizedString(@"Auto seeding processing will delete all seeds and centerlines info created before.  Do you want to continue?", nil),
+                                       NSLocalizedString(@"Continue", nil),
                                        NSLocalizedString(@"Cancel", nil), nil);
         
         if (nrespond==1)

@@ -13,6 +13,7 @@
 		4356AA9129EFEF0700E22267 /* CMIVCLUTOpacityView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B98C76530D313003004CBA19 /* CMIVCLUTOpacityView.mm */; };
 		4356AA9229EFF49800E22267 /* CMIVVRcontroller.mm in Sources */ = {isa = PBXBuildFile; fileRef = B96B0F200B10B1B60044D904 /* CMIVVRcontroller.mm */; };
 		4356AA9329F007ED00E22267 /* CMIVExport.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B4195C0B36C8FC00AD244F /* CMIVExport.mm */; };
+		438E3E5A29F27D5200F1966D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438E3E5929F27D5200F1966D /* OpenGL.framework */; };
 		4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */; };
 		4391B69129EFDE55008DBCDA /* CMIVChopperController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */; };
 		4391B69229EFDE61008DBCDA /* CMIVDCMView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */; };
@@ -83,6 +84,8 @@
 		22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = 3DRotate.tiff; sourceTree = "<group>"; };
 		4353EEF729EE665600ECAEE1 /* MieleAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MieleAPI.framework; path = Binaries/MieleAPI.framework; sourceTree = "<group>"; };
 		4353EEF929EE66C000ECAEE1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		438E3E5929F27D5200F1966D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		43B9F26829F27EFA004AEBF9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenGL.framework; sourceTree = "<group>"; };
 		43F257E629F15BA3003D0AB2 /* url2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = url2.h; sourceTree = "<group>"; };
 		43F86FDA29EE7A09003F0102 /* DCM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DCM.framework; path = Binaries/DCM.framework; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -155,6 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				438E3E5A29F27D5200F1966D /* OpenGL.framework in Frameworks */,
 				43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */,
 				4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
@@ -171,6 +175,7 @@
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
 				19C28FB8FE9D52D311CA2CBB /* Products */,
+				438E3E5829F27D5200F1966D /* Frameworks */,
 			);
 			name = Duplicate;
 			sourceTree = "<group>";
@@ -219,6 +224,7 @@
 		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				43B9F26829F27EFA004AEBF9 /* OpenGL.framework */,
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -239,6 +245,14 @@
 				B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		438E3E5829F27D5200F1966D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				438E3E5929F27D5200F1966D /* OpenGL.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		AB2C26750677B0C400A08910 /* CMIV_CTA_TOOLS */ = {
