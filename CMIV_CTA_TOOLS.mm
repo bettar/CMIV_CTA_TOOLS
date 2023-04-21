@@ -724,7 +724,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (IBAction) showAboutDlg:(id)sender
 {
-	[NSApp beginSheet: aboutWindow modalForWindow:[NSApp keyWindow] modalDelegate:self didEndSelector:nil contextInfo:nil];
+#if 0 // TODO: ok 
+    NSBundle *pluginBundle = [NSBundle bundleForClass:[self class]];
+    [credits readRTFDFromFile: [[pluginBundle resourcePath] stringByAppendingPathComponent:@"Credits.rtf"]];
+#endif
+
+    [NSApp beginSheet: aboutWindow
+       modalForWindow:[NSApp keyWindow]
+        modalDelegate:self
+       didEndSelector:nil
+          contextInfo:nil];
 }
 
 - (IBAction)closeAboutDlg:(id)sender

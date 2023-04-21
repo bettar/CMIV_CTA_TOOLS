@@ -588,7 +588,7 @@
 		[[self window]setFrame:screenrect display:NO animate:NO];
 		[super showWindow:parent];
 		[[self window] makeKeyAndOrderFront:parent];
-		[[self window] setLevel:NSFloatingWindowLevel];
+		[[self window] setLevel:NSFloatingWindowLevel]; // Always on top
 		[[self window] display];
 		
 		id waitWindow = [originalViewController startWaitWindow:@"processing"];	

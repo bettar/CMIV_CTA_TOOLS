@@ -490,7 +490,7 @@ static float deg2rad = M_PI/180.0;
 	[[self window]setFrame:screenrect display:NO animate:NO];
 	[super showWindow:parent];
 	[[self window] makeKeyAndOrderFront:parent];
-	[[self window] setLevel:NSFloatingWindowLevel];
+	[[self window] setLevel:NSFloatingWindowLevel]; // Always on top
 	[[self window] display];
 			
 	if (!isInWizardMode)

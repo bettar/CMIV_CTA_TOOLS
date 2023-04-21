@@ -53,7 +53,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	IBOutlet NSWindow	*window;
 	IBOutlet NSWindow	*aboutWindow;
-	IBOutlet NSWindow	*advanceSettingWindow;
+    IBOutlet NSTextView *credits;
+    IBOutlet NSWindow	*advanceSettingWindow;
 	IBOutlet NSLevelIndicator *autoSeedingIndicator;
 	IBOutlet NSButton	*autoRibCageRemovalButton;
 	IBOutlet NSButton	*autoSegmentButton;

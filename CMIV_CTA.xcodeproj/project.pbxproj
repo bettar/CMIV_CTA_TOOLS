@@ -40,6 +40,7 @@
 		4391B6A729EFDFD5008DBCDA /* CMIVContrastController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9FB33540B0A1FD000A5A87A /* CMIVContrastController.mm */; };
 		4391B6A829EFDFE8008DBCDA /* CMIVContrastPreview.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B07E990B67A703008879EF /* CMIVContrastPreview.mm */; };
 		4391B6AA29EFE09A008DBCDA /* CMIV_AutoSeeding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B917308C0D9908C6005A0FF9 /* CMIV_AutoSeeding.mm */; };
+		43B9F26A29F2D259004AEBF9 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 43B9F26929F2D259004AEBF9 /* Credits.rtf */; };
 		43F257E729F15BA3003D0AB2 /* url2.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F257E629F15BA3003D0AB2 /* url2.h */; };
 		43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43F86FDA29EE7A09003F0102 /* DCM.framework */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
@@ -85,6 +86,8 @@
 		4353EEF729EE665600ECAEE1 /* MieleAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MieleAPI.framework; path = Binaries/MieleAPI.framework; sourceTree = "<group>"; };
 		4353EEF929EE66C000ECAEE1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438E3E5929F27D5200F1966D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		43B9F26929F2D259004AEBF9 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		43B9F26B29F2D292004AEBF9 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		43F257E629F15BA3003D0AB2 /* url2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = url2.h; sourceTree = "<group>"; };
 		43F86FDA29EE7A09003F0102 /* DCM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DCM.framework; path = Binaries/DCM.framework; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -170,6 +173,7 @@
 		089C166AFE841209C02AAC07 /* Duplicate */ = {
 			isa = PBXGroup;
 			children = (
+				43B9F26B29F2D292004AEBF9 /* Credits.rtf */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* Frameworks and Libraries */,
@@ -193,6 +197,7 @@
 		089C167CFE841241C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				43B9F26929F2D259004AEBF9 /* Credits.rtf */,
 				B9C3BAB20F5D9BC0001D6931 /* camera.tiff */,
 				B9C3BAB30F5D9BC0001D6931 /* CTAICON.tiff */,
 				B9C3BAB40F5D9BC0001D6931 /* Repulsor.tif */,
@@ -412,6 +417,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43B9F26A29F2D259004AEBF9 /* Credits.rtf in Resources */,
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
 				B9B295F10B0862A100505F84 /* Opened Polygon.tiff in Resources */,
 				B9B295F20B0862A100505F84 /* Oval.tiff in Resources */,

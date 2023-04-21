@@ -19,6 +19,7 @@
                 <outlet property="autoWatchOnReceivingKeyWordTextField" destination="67" id="99"/>
                 <outlet property="autoWatchOnReceivingKeyWordTextField1" destination="67" id="120"/>
                 <outlet property="autoWatchOnReceivingKeyWordTextField2" destination="117" id="121"/>
+                <outlet property="credits" destination="16" id="vpG-bC-wOd"/>
                 <outlet property="window" destination="69" id="83"/>
             </connections>
         </customObject>
@@ -82,10 +83,10 @@ DQ
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="dOI-Cr-x6L">
                             <rect key="frame" x="1" y="1" width="462" height="217"/>
-                            <autoresizingMask key="autoresizingMask"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" usesRuler="YES" spellingCorrection="YES" smartInsertDelete="YES" id="16">
-                                    <rect key="frame" x="0.0" y="-15.763671875" width="462" height="519.763671875"/>
+                                    <rect key="frame" x="0.0" y="-16" width="462" height="520"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
