@@ -299,9 +299,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(@"OK", nil), nil, nil);
-		if(ifUseSmoothFilter)
+		if (ifUseSmoothFilter)
 			free(inputData);
-		free(outputData);
+
+        free(outputData);
 		inputData=0L;
 		outputData=0L;
 		colorData=0L;

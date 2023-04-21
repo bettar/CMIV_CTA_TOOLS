@@ -85,7 +85,6 @@
 		4353EEF729EE665600ECAEE1 /* MieleAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MieleAPI.framework; path = Binaries/MieleAPI.framework; sourceTree = "<group>"; };
 		4353EEF929EE66C000ECAEE1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		438E3E5929F27D5200F1966D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		43B9F26829F27EFA004AEBF9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenGL.framework; sourceTree = "<group>"; };
 		43F257E629F15BA3003D0AB2 /* url2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = url2.h; sourceTree = "<group>"; };
 		43F86FDA29EE7A09003F0102 /* DCM.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DCM.framework; path = Binaries/DCM.framework; sourceTree = "<group>"; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -224,7 +223,6 @@
 		1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				43B9F26829F27EFA004AEBF9 /* OpenGL.framework */,
 				1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
