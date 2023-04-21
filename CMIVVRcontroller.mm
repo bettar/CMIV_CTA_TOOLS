@@ -33,10 +33,14 @@
 
 #import "CMIVVRcontroller.h"
 #import "QuicktimeExport.h"
-#if 0 // @@@
+
+#if 1 // @@@
+#import <AVFoundation/AVFoundation.h>
+#else
 #include "VRMakeObject.h"
 #import <QTKit/QTKit.h>
 #endif
+
 #import "DICOMExport.h"
 #import <MieleAPI/BrowserController.h>
 #import "url2.h" // for OUR_DATA_LOCATION
@@ -52,13 +56,17 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 
 -(NSImage*) imageForFrame:(NSNumber*) cur maxFrame:(NSNumber*) max
 {
-	int curangle=[cur intValue]/maxMovieIndex;
-	int cursegment=[cur intValue]%maxMovieIndex;
-	QTMovie *mMovie = [imagesFor4DQTVR objectAtIndex:0];
-	NSImage* curimage = nil;
-	long long timeValue =60*(cursegment*220+curangle);
+    NSImage* curimage = nil;
+
+    int curangle = [cur intValue] / maxMovieIndex;
+	int cursegment = [cur intValue] % maxMovieIndex;
+#if 1 // @@@ QT todo
+    CMTimeValue timeValue = 60*(cursegment*220+curangle);
+    CMTime frameDuration = CMTimeMake( timeValue, 60); // 60 TBC
+#else
+    QTMovie *mMovie = [imagesFor4DQTVR objectAtIndex:0]; // "As of macOS 10.15 this method always returns nil.
+    long long timeValue = 60*(cursegment*220+curangle);
 	long timeScale = 600;
-#if 0 // @@@ QT
     QTTime curTime = QTMakeTime(timeValue, timeScale);
 	curimage=[mMovie frameImageAtTime:curTime];
 #endif
@@ -136,7 +144,20 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 - (int) prepareImageFor4DQTVR
 {
 	NSString *fileName = [[self hostAppDocumentPath2] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"];
-#if 0 // @@@ QT
+#if 1 // @@@ QT todo
+    NSError *error = nil;
+    AVAssetWriter *writer = [[AVAssetWriter alloc] initWithURL: [NSURL fileURLWithPath: fileName] fileType: AVFileTypeQuickTimeMovie error:&error];
+    
+//    [writer addInput:writerInput];
+//    [writer startWriting];
+//    [writer startSessionAtSourceTime:nextPresentationTimeStamp];
+    
+//    [writerInput markAsFinished];
+//    [writer finishWritingWithCompletionHandler:^{ }];
+    
+//    [writerInput release];
+//    [writer release];
+#else
 	NSDictionary *myDict = [NSDictionary dictionaryWithObjectsAndKeys: @"jpeg", QTAddImageCodecType, [NSNumber numberWithInt: codecHighQuality], QTAddImageCodecQuality, nil];	// qdrw, tiff, jpeg
 	[[QTMovie movie] writeToFile: fileName withAttributes: 0L];
 
