@@ -6,17 +6,23 @@
 //  Copyright 2007 __MyCompanyName__. All rights reserved.
 //
 
-//#define WITH_OPENGL_32 // core profile
+#define WITH_OPENGL_32 // core profile
 
 #ifdef WITH_OPENGL_32
 #import <OpenGL/gl3.h>
 #import <OpenGL/gl3ext.h>
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #else
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/CGLCurrent.h>
 #import <OpenGL/CGLMacro.h>
 #import <OpenGL/glu.h> // for gluUnProject, it includes gl.h
 #endif
+
+#import <MieleAPI/GLRenderer.h>
 
 #import "CMIVDCMView.h"
 
@@ -326,16 +332,19 @@ static float deg2rad = M_PI/180.0;
 {
     crossAngle=vectorMPR;
 }
+
 - (float) angle
 {
     return crossAngle;
 }
+
 - (void) setCrossCoordinates:(float) x :(float) y :(BOOL) update
 {
     crossPoint.x=x;
     crossPoint.y=-y; // to compatible with previous version, here we mimic the old version function
     [self setNeedsDisplay: YES];
 }
+
 - (void) getCrossCoordinates:(float*) x :(float*) y
 {
     *x=crossPoint.x;
@@ -344,32 +353,36 @@ static float deg2rad = M_PI/180.0;
 
 - (void) subDrawRect: (NSRect) r
 {
+    [self setScaleValue:2.3]; // @@@ Added. TBC
+    
     if (displayCrossLines)
     {
-#ifdef WITH_OPENGL_32
-#else // @@@ OGL
+#ifndef WITH_OPENGL_32
         CGLContextObj cgl_ctx = [[NSOpenGLContext currentContext] CGLContextObj];
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glEnable(GL_BLEND);
         glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_LINE_SMOOTH);
 #endif
-        
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glEnable(GL_BLEND);
+        glEnable(GL_LINE_SMOOTH);
+
         float heighthalf = self.frame.size.height/2;
         float widthhalf = self.frame.size.width/2;
         
-#ifdef WITH_OPENGL_32
-#else // @@@ OGL
-        if (widthhalf>800)
+        float lineWidth = 2.0;
+        float pointSize;
+        float backingScaleFactor = self.window.backingScaleFactor;
+        
+        if (widthhalf > 800)
         {
-            glLineWidth(4.0);
-            glPointSize(4.0);
+            lineWidth = pointSize = 4.0;
         }
         else
         {
-            glLineWidth(2.0);
-            glPointSize(2.0);
+            lineWidth = pointSize = 2.0;
         }
+
+#ifndef WITH_OPENGL_32
+        glLineWidth(lineWidth * backingScaleFactor);
 #endif
         
         float crossglX=0.;
@@ -381,48 +394,96 @@ static float deg2rad = M_PI/180.0;
         }
         
 #ifdef WITH_OPENGL_32
+        glm::mat4 MV = glm::mat4(1.0);
+        MV = glm::translate(MV, glm::vec3(crossglX, crossglY, 0.0f));
+        MV = glm::rotate(MV, glm::radians(crossAngle), glm::vec3(0,0,1));
 #else // @@@ OGL
         glTranslatef(crossglX, crossglY, 0.0);
         glRotatef( crossAngle, 0, 0, 1);
-        
+#endif
+
         // Drawing x axis
-        glColor4f (0.0, 0.0, 1.0, 0.5);
-        glBegin(GL_LINES);
-        glVertex2f(  -widthhalf*2, 0);
-        glVertex2f(  -widthhalf*0.2, 0);
-        glVertex2f(  +widthhalf*2, 0);
-        glVertex2f(  +widthhalf*0.2,0);
-        glEnd();
+        {
+            glm::vec2 pA[10];
+            int nPoints=0;
+            
+            pA[ nPoints++] = glm::vec2( -widthhalf*2,   0);
+            pA[ nPoints++] = glm::vec2( -widthhalf*0.2, 0);
+            pA[ nPoints++] = glm::vec2( +widthhalf*2,   0);
+            pA[ nPoints++] = glm::vec2( +widthhalf*0.2, 0);
+            
+            NSMutableArray *pArray = [NSMutableArray array];
+            for (int i=0; i<nPoints; i++)
+            {
+                // Apply local model transformation
+                glm::vec4 pB = MV*glm::vec4(pA[i],0,1);
+                pA[i] = glm::vec2(pB.x, pB.y);
+                [pArray addObject: [NSValue valueWithBytes:&pA[i] objCType:@encode(glm::vec2)]];
+            }
+         
+            [self setShaderProgramForLineWidth: lineWidth * backingScaleFactor];
+            renderer_set_rgba(0.0, 0.0, 1.0, 0.5);
+            renderer_drawLine_xy([pArray copy], GL_LINES);
+        }
         
         // Drawing the center point
-        if (ifLeftButtonDown)
-            glColor4f (0.0, 1.0, 0.0, 1.0);
-        else
-            glColor4f (0.0, 1.0, 0.0, 0.5);
-        
-        glBegin( GL_POINTS);
-        glVertex2f( 0, 0);
-        glEnd();
+        {
+            glm::vec2 a(0, 0);
+            // Apply local model transformation
+            glm::vec4 pB = MV*glm::vec4(a,0,1);
+            a = glm::vec2(pB.x, pB.y);
+            NSMutableArray *pArray = [NSMutableArray array];
+            [pArray addObject: [NSValue valueWithBytes:&a objCType:@encode(glm::vec2)]];
+           
+            [self setShaderProgramOverlay_withMode_Point];
+
+            if (ifLeftButtonDown)
+                renderer_set_rgba(0.0, 1.0, 0.0, 1.0);
+            else
+                renderer_set_rgba(0.0, 1.0, 0.0, 0.5);
+            
+            glPointSize( pointSize * backingScaleFactor);
+            renderer_drawPoints([pArray copy]);
+        }
         
         // Drawing y axis
-        glColor4f (1.0, 0.0, 0.0, 0.5);
-        glBegin(GL_LINES);
-        glVertex2f(  0, -heighthalf*2);
-        glVertex2f(  0, -heighthalf*0.2);
-        glVertex2f(  0, +heighthalf*2);
-        glVertex2f(  0, +heighthalf*0.2);
-        glEnd();
+        {
+            glm::vec2 pA[10];
+            int nPoints=0;
+            
+            pA[ nPoints++] = glm::vec2(  0, -heighthalf*2);
+            pA[ nPoints++] = glm::vec2(  0, -heighthalf*0.2);
+            pA[ nPoints++] = glm::vec2(  0, +heighthalf*2);
+            pA[ nPoints++] = glm::vec2(  0, +heighthalf*0.2);
+            
+            NSMutableArray *pArray = [NSMutableArray array];
+            for (int i=0; i<nPoints; i++)
+            {
+                // Apply local model transformation
+                glm::vec4 pB = MV*glm::vec4(pA[i],0,1);
+                pA[i] = glm::vec2(pB.x, pB.y);
+                [pArray addObject: [NSValue valueWithBytes:&pA[i] objCType:@encode(glm::vec2)]];
+            }
+            
+            [self setShaderProgramForLineWidth: lineWidth * backingScaleFactor];
+            renderer_set_rgba(1.0, 0.0, 0.0, 0.5);            
+            renderer_drawLine_xy([pArray copy], GL_LINES);
+        }
         
+#ifdef WITH_OPENGL_32
+        glDisable(GL_LINE_SMOOTH);
+        glDisable(GL_POLYGON_SMOOTH);
+#else // @@@ OGL
         glLineWidth(2.0);
         glPointSize(2.0);
-        
+
         glRotatef( -crossAngle, 0, 0, 1);
         glTranslatef(-crossglX, -crossglY, 0.0);
         glDisable(GL_LINE_SMOOTH);
         glDisable(GL_POLYGON_SMOOTH);
         glDisable(GL_POINT_SMOOTH);
-        glDisable(GL_BLEND);
 #endif
+        glDisable(GL_BLEND);
     }
 }
 
