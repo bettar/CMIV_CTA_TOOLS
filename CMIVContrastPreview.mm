@@ -36,9 +36,7 @@
 
 #import "url2.h" // for MALLOC_ERROR_MESSAGE2
 
-#if 1 // @@@ VR
 #import "VRView.h"
-#endif
 
 @implementation CMIVContrastPreview
 
@@ -51,29 +49,23 @@
 - (IBAction)chooseATool:(id)sender
 {
     ToolMode tag = (ToolMode)[sender tag];
-	if (tag<tNext && tag>=0)
+	if (tag<tNext && tag>=tWL)
 	{
 		[mprView setCurrentTool:tag];
 		[resultView setCurrentTool:tag];
-#if 1 // @@@ VR
 		[vrView setCurrentTool: tag];
-#endif
 	}
 	else if (tag==tNext)
 	{
 		[mprView setCurrentTool:tPlain];
 		[resultView setCurrentTool:tWL];
-#if 1 // @@@ VR
 		[vrView setCurrentTool: t3DRotate];
-#endif
 	}
-	else if (tag==5)
+	else if (tag==tMeasure)
 	{
 		[mprView setCurrentTool:t2DPoint];
 		[resultView setCurrentTool:tWL];
-#if 1 // @@@ VR
 		[vrView setCurrentTool: t3DRotate];
-#endif
 	}
 }
 
@@ -493,9 +485,7 @@
 -(void) dealloc
 {
 	[super dealloc];
-#if 1 // @@@ VR
 	[vrView prepareForRelease];
-#endif
 }
 
 - (IBAction)onCancel:(id)sender
@@ -634,14 +624,12 @@
         //hide other segments
 		if (err!=2)
 		{
-#if 1 // @@@ VR
 			osirixOffset=[vrView offset] ;
 			osirixValueFactor=[vrView valueFactor] ;
 			renderOfVRView = [vrView renderer];
 			
 			volumeOfVRView = (vtkVolume * )[vrView volume];
-#endif
-			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
+			volumeMapper = (vtkVolumeMapper *)volumeOfVRView->GetMapper() ;
 			//if( volumeMapper) volumeMapper->SetMinimumImageSampleDistance( 2.0);
 			volumeImageData=(vtkImageData *)volumeMapper->GetInput();
 			volumeDataOfVR=(unsigned short*)volumeImageData->GetScalarPointer();
@@ -898,35 +886,27 @@
 	[resultView setOrigin: NSMakePoint(0,0)];
 	[resultView setCurrentTool:tWL];
 
-    int err = 0;
-#if 1 // @@@ VR
 	[vrView setRotate: NO];
-    err = [vrView setPixSource:pixList :inputData];
-#endif
+    int err = [vrView setPixSource:pixList :inputData];
 	NSString *str = @"/" ;
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
-#if 1 // @@@ VR
 	[vrView set3DStateDictionary:dict];
-#endif
 	
 	if (err)
 		[tab2D3DView removeTabViewItem:[tab2D3DView tabViewItemAtIndex:1]];
 	else
 	{
-#if 1 // @@@ VR
 		[vrView setRotate: NO];
 		[vrView setRotate: NO];
 		[vrView setMode: 1];
-#endif
 		
         NSDictionary *aOpacity = [[[NSUserDefaults standardUserDefaults] dictionaryForKey: @"OPACITY"] objectForKey: NSLocalizedString(@"Logarithmic Inverse Table", nil)];
-		if (aOpacity)
+
+        if (aOpacity)
 		{
             NSArray *array = [aOpacity objectForKey:@"Points"];
-#if 1 // @@@ VR
 			[vrView setOpacity:array];
-#endif
 		}
 	}
 
@@ -2123,11 +2103,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     [self createUnsignedShortVolumDataUnderMask:volumeDataOfVR];
 
-#if 1 // @@@ VR
 	float ww,wl;
 	[vrView getWLWW: &wl :&ww];
 	[vrView setWLWW: wl : ww];
-#endif
 }
 
 - (void) Display3DPoint:(NSNotification*) note
@@ -3111,12 +3089,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)changeVRMode:(id)sender
 {
-#if 1 // @@@ VR
 	if ([vrMode selectedRow] == 0)
 		[vrView setMode: 1];
 	else
 		[vrView setMode: 0];
-#endif
 }
 
 - (IBAction)changeVRColor:(id)sender
@@ -3128,7 +3104,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		unsigned char red[256], green[256], blue[256];
 		
 		aCLUT = [[[NSUserDefaults standardUserDefaults] dictionaryForKey: @"CLUT"] objectForKey: @"VR Muscles-Bones"];
-		if ( aCLUT)
+
+        if (aCLUT)
 		{
 			array = [aCLUT objectForKey:@"Red"];
 			for ( long i = 0; i < 256; i++)
@@ -3147,20 +3124,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			{
 				blue[i] = [[array objectAtIndex: i] longValue];
 			}
-#if 1 // @@@ VR
-			[vrView setCLUT:red :green: blue];
-#endif
+
+            [vrView setCLUT:red :green: blue];
 		}
 	}
 	else
     {
-#if 1 // @@@ VR
         [vrView setCLUT: 0L :0L :0L];
-#endif
     }
 }
 
-//just for cheat
+// Just for cheat
 - (float) minimumValue
 {
 	return minValueInCurSeries;
@@ -3191,9 +3165,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 // //////////////////////////////////
 - (IBAction)changeVRDirection:(id)sender
 {
-#if 1 // @@@ VR
-	int tag=[sender tag];
-	if (tag==0)
+    NSInteger tag = [sender tag];
+
+    if (tag==0)
 		[vrView coView:sender];
 	else if (tag==4)
 		[vrView saView: sender];
@@ -3201,7 +3175,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[vrView saViewOpposite:sender];
 	else if (tag==3)
 		[vrView axView:sender];
-#endif
 }
 
 - (IBAction)showSkeletonDialog:(id)sender

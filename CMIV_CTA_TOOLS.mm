@@ -47,23 +47,47 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (void) initPlugin
 {
-#if 1
-    // This version requires OsiriX 4.1 or higher
-    NSString *hostAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey: @"CFBundleShortVersionString"];
-    NSString *hostAppName = [[[NSBundle mainBundle] infoDictionary] objectForKey: @"CFBundleExecutable"];
-    NSLog(@"%s %d, %@ %@", __FUNCTION__, __LINE__, hostAppName, hostAppVersion);
-    
+    NSBundle *appBundle = [NSBundle mainBundle];
+    NSString *hostAppVersion = [[appBundle infoDictionary] objectForKey: @"CFBundleShortVersionString"];
+    NSString *hostAppName = [[appBundle infoDictionary] objectForKey: @"CFBundleExecutable"];
+
+    NSBundle *pluginBundle = [NSBundle bundleForClass:[self class]];
+    NSString *thisBundleName = [[pluginBundle infoDictionary] objectForKey: @"CFBundleName"];
+//    NSLog(@"%s %d, %@ %@", __FUNCTION__, __LINE__, hostAppName, hostAppVersion);
+//    NSLog(@"%s %d, %@ %@", __FUNCTION__, __LINE__,
+//          [[bundle infoDictionary] objectForKey: @"CFBundleExecutable"],
+//          thisBundleName);
+
+    NSString *minVersion = nil;
     if ([hostAppName isEqualToString: @"OsiriX"])
     {
-        if ( [hostAppVersion compare: @"4.1" options: NSNumericSearch] < 0)
-            NSRunCriticalAlertPanel( @"CMIV Plugin", @"This version of CMIV Plugin requires OsiriX 4.1 or higher.", @"OK", nil, nil);
+        minVersion = @"4.1";
     }
     else if ([hostAppName isEqualToString: @"OsiriX MD"])
     {
-        if ([hostAppVersion compare: @"1.4" options: NSNumericSearch] < 0)
-            NSRunCriticalAlertPanel( @"CMIV Plugin", @"This version of CMIV Plugin requires OsiriX MD 1.4 or higher.", @"OK", nil, nil);
+        minVersion = @"1.4";
     }
+    else if ([hostAppName isEqualToString: @"miele-lxiv"])
+    {
+        minVersion = @"9.26.116";
+    }
+
+    if ([hostAppVersion compare: minVersion options: NSNumericSearch] < 0)
+    {
+        NSString *msgFormat = [NSString stringWithFormat: NSLocalizedString(@"This version of plugin %@ requires host app %@ version %@ or higher.", nil), thisBundleName, hostAppName, minVersion];
+#if 1
+        NSAlert *alert = [[NSAlert new] autorelease];
+        alert.alertStyle = NSAlertStyleCritical;
+        alert.messageText = [NSString stringWithFormat: NSLocalizedString(@"%@ Plugin",nil), thisBundleName];
+        alert.informativeText = msgFormat;
+        //[alert setShowsSuppressionButton:YES]; // Do not show this message again
+        [alert runModal];
+#else
+        NSRunCriticalAlertPanel(thisPluginName,
+                                msgFormat,
+                                @"OK", nil, nil);
 #endif
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addedToDB:) name:@"OsirixAddToDBNotification" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoSeedingIndicatorStep:) name:@"CMIVLeveIndicatorStep" object:nil];

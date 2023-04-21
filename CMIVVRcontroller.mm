@@ -41,9 +41,7 @@
 #import <MieleAPI/BrowserController.h>
 #import "url2.h" // for OUR_DATA_LOCATION
 
-#if 1 // @@@ VR
 #import "VRView.h"
-#endif
 
 static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 {
@@ -74,10 +72,8 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		int iteminrow=20,itemincolumn=10;
 		if ( [cur intValue] == 0)
 		{
-#if 1 // @@@ VR
 			[vrViewer Vertical: 45];
 			[vrViewer Vertical: 45];
-#endif
 			verticalAngleForVR=90;
 		}
 		else
@@ -92,19 +88,15 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			}
 			else
 			{
-#if 1 // @@@ VR
 				[vrViewer Vertical: -verticalAngleForVR];
-#endif
 			}
 			
 			if ([cur intValue]%iteminrow==0)
 			{
 				if ( verticalAngleForVR==-90 || verticalAngleForVR==90)
 				{
-#if 1 // @@@ VR
 					[vrViewer Vertical: -45];
 					[vrViewer Vertical: -45];
-#endif
                     aCamera->Azimuth(-360/iteminrow);
 				}
 
@@ -112,14 +104,12 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 				if ( verticalAngleForVR==-90 )
 				{
                     aCamera->Azimuth(360/iteminrow);
-#if 1 // @@@ VR
 					[vrViewer Vertical: -45];
 					[vrViewer Vertical: -45];
-#endif
 				}
 			}
 
-            if ( verticalAngleForVR!=-90 && verticalAngleForVR!=90)
+            if (verticalAngleForVR!=-90 && verticalAngleForVR!=90)
 			{
 				aCamera->Azimuth(360/iteminrow);
 				aCamera->Elevation(verticalAngleForVR);
@@ -127,20 +117,15 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		}
 	}
 
-    NSImage* tempImage = nil;
-#if 1 // @@@ VR
-    tempImage=[vrViewer nsimageQuicktime];
-#endif
+    NSImage* tempImage = [vrViewer nsimageQuicktime];
 	if ([max intValue]==220)
 	{
 		int iteminrow=20;//itemincolumn=10;
 		if ( [cur intValue] == 219)
 		{
 			aCamera->Roll(360/iteminrow);
-#if 1 // @@@ VR
 			[vrViewer Vertical: 45];
 			[vrViewer Vertical: 45];
-#endif
 			verticalAngleForVR=0;
 		}
 	}
@@ -206,24 +191,20 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		[dcmSequence setSeriesDescription:@"4D VR"];
 		[dcmSequence setSourceFile: [firstObject sourceFile]];
 		
-#if 1 // @@@ VR
 		[vrViewer renderImageWithBestQuality: YES waitDialog: NO];
-#endif
-		for (i=0;i<maxMovieIndex;i++)
+
+        for (i=0;i<maxMovieIndex;i++)
 		{
 			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 			float* newVolumeData=[originalViewController volumePtr:i];
-#if 1 // @@@ VR
 			//[vrViewer movieBlendingChangeSource:i];
 			[vrViewer movieChangeSource: newVolumeData];
-#endif
 			[self setBlendVolumeCLUT];
 			
-#if 1 // @@@ VR
 			volumeOfVRView = (vtkVolume * )[vrViewer volume];
-#endif
 			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
-			if ([cutPlaneSwitch state] == NSControlStateValueOn)
+
+            if ([cutPlaneSwitch state] == NSControlStateValueOn)
 				volumeMapper->AddClippingPlane(clipPlane1);
 			
 			[clutViewer setCurves:[mutiplePhaseOpacityCurves objectAtIndex:i ]];
@@ -232,24 +213,18 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			[clutViewer updateView];
 	//		[clutViewer setCLUTtoVRViewWithoutRedraw];
 //			[vrViewer display];
-#if 1 // @@@ VR
 			[vrViewer renderImageWithBestQuality: YES waitDialog: NO display: YES];
-#endif
 			
 			long width, height, spp, bpp, err;
 			
             unsigned char *dataPtr = nullptr;
-#if 1 // @@@ VR
             dataPtr = [vrViewer getRawPixels:&width :&height :&spp :&bpp :YES :NO];
 			[vrViewer endRenderImageWithBestQuality];
-#endif
-			if( dataPtr)
+
+            if( dataPtr)
 			{
-#if 1 // @@@ VR
 				[vrViewer getOrientation: o];
-#endif
 				[dcmSequence setOrientation: o];
-				
 				[dcmSequence setPixelData: dataPtr
                            samplePerPixel: spp
                              bitsPerPixel: bpp
@@ -281,9 +256,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	}
 	else
 	{
-#if 1 // @@@ VR
 		[vrViewer exportDCMCurrentImage];
-#endif
 	}
 }
 
@@ -381,10 +354,8 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 
 - (IBAction)endPanel:(id)sender
 {
-#if 1 // @@@ VR
 	if (clipCallBack)
 		[vrViewer renderWindow]->RemoveObserver(clipCallBack);
-#endif
 	
     if (clipPlaneWidget)
 		clipPlaneWidget->Delete(); 
@@ -462,9 +433,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		clipPlane1->Delete();
 	
 	[super dealloc];
-#if 1 // @@@ VR
 	[vrViewer prepareForRelease];
-#endif
 }
 
 - (IBAction)setColorProtocol:(id)sender
@@ -476,9 +445,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 
 - (IBAction)setBackgroundColor:(id)sender
 {
-#if 1 // @@@ VR
 	[vrViewer changeColorWith:[colorControl color]];
-#endif
 }
 
 - (IBAction)setOpacity:(id)sender
@@ -570,31 +537,27 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	[[self window] setMovableByWindowBackground:NO];
 	
 	//
-#if 1 // @@@ VR
 	volumeOfVRView = (vtkVolume * )[vrViewer volume];
-#endif
 	fixedPointVolumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
 	volumeMapper=fixedPointVolumeMapper;
 	volumeImageData=(vtkImageData *)volumeMapper->GetInput();
 	realVolumedata=(unsigned short*)volumeImageData->GetScalarPointer();
 
-	 // Prepare clipPlane
-	 clipPlane1=vtkPlane::New();
-	 //volumeMapper->AddClippingPlane(clipPlane1);
-	 double* tempcenter;
-	 tempcenter=volumeOfVRView->GetCenter();
+    // Prepare clipPlane
+    clipPlane1=vtkPlane::New();
+    //volumeMapper->AddClippingPlane(clipPlane1);
+    double* tempcenter;
+    tempcenter=volumeOfVRView->GetCenter();
 	 
-	 clipPlane1->SetOrigin(tempcenter);
-	 clipPlane1->SetNormal(1,0,0);
-	 clipCallBack = vtkCallbackCommand::New();
-	 clipCallBack->SetCallback( needAdjustClipPlane);
-	 clipCallBack->SetClientData( self);  
-	 // need vtk graphics library but cause crash for 2d cross section measurement.
+    clipPlane1->SetOrigin(tempcenter);
+    clipPlane1->SetNormal(1,0,0);
+    clipCallBack = vtkCallbackCommand::New();
+    clipCallBack->SetCallback( needAdjustClipPlane);
+    clipCallBack->SetClientData( self);
+    // Need VTK graphics library but cause crash for 2D cross section measurement.
 	 
-#if 1 // @@@ VR
-	 [vrViewer renderWindow]->AddObserver(vtkCommand::StartEvent, clipCallBack);
-#endif
-	// clipPlaneWidget=vtkPlaneWidget::New(); 
+    [vrViewer renderWindow]->AddObserver(vtkCommand::StartEvent, clipCallBack);
+	//clipPlaneWidget=vtkPlaneWidget::New();
 	
 	// Prepare the 16-bit CLUT
 	[self initCLUTView];
@@ -604,18 +567,16 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		[self initTaggedColorList];
 	}
 	
-	
 	return self;
-	
 }
 
 - (void)initTaggedColorList
 {
 	unsigned int i;
-	RGBColor	color;
+	RGBColor color;
 	ROI * tempROI;	
 	
-	for(i=0;i<[inROIArray count];i++)
+	for (i=0;i<[inROIArray count];i++)
 	{
 		tempROI = [inROIArray objectAtIndex: i];	
 		color= [tempROI rgbcolor];
@@ -895,10 +856,9 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	//initilize VR view	
 	
 	originalVolumeData=[originalViewController volumePtr:0];
-#if 1 // @@@ VR
-	err = [vrViewer setPixSource:pixList :originalVolumeData ];
-#endif
-	//clutViewPoints=[colorViewer getPoints];
+	err = [vrViewer setPixSource:pixList :originalVolumeData];
+
+    //clutViewPoints=[colorViewer getPoints];
 	//clutViewColors=[colorViewer getColors];
 	NSString* path=[parent hostAppDocumentPath];
 	NSString *str =  [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
@@ -915,17 +875,14 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		return err;
 	}
     
-#if 1 // @@@ VR
-	[vrViewer set3DStateDictionary:dict];	
+	[vrViewer set3DStateDictionary:dict];
 	
-	// get the control of color and opacity;	
+	// Get the control of color and opacity
 	renderOfVRView = [vrViewer renderer];
-#endif
-	aCamera = renderOfVRView->GetActiveCamera();
+
+    aCamera = renderOfVRView->GetActiveCamera();
 	//volumeCollectionOfVRView = renderOfVRView->GetVolumes();
-#if 1 // @@@ VR
 	volumeOfVRView = (vtkVolume * )[vrViewer volume]; //volumeOfVRView = (vtkVolume * )volumeCollectionOfVRView->GetItemAsObject (0);
-#endif
 	volumePropteryOfVRView = volumeOfVRView->GetProperty();
 	myVolumeProperty = vtkVolumeProperty::New();
 	myColorTransferFunction = vtkColorTransferFunction::New();
@@ -1100,14 +1057,11 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	NSMutableArray *pixList = [originalViewController pixList];
 	
 	originalVolumeData=[originalViewController volumePtr:0];
-#if 1 // @@@ VR
 	err = [vrViewer setPixSource:pixList :originalVolumeData];
-#endif
-	if (blendingController)
+
+    if (blendingController)
 	{
-#if 1 // @@@ VR
         [vrViewer setBlendingPixSource: blendingController];
-#endif
         [self setBlendVolumeCLUT];
 	}
 	
@@ -1124,10 +1078,9 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
 //	if(dict)
 //		[self applyAdvancedCLUT:dict];
-#if 1 // @@@ VR
 	[vrViewer set3DStateDictionary:dict];
-#endif
-	if ( err != 0)
+
+    if ( err != 0)
 	{
 		NSRunCriticalAlertPanel( NSLocalizedString(@"Not Enough Memory",nil),
                                 NSLocalizedString( @"Not enough memory (RAM) to use the 3D engine.",nil),
@@ -1137,10 +1090,9 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	
 	[self SetMusclarCLUT];
 	
-#if 1 // @@@ VR
 	renderOfVRView = [vrViewer renderer];
-#endif
-	aCamera = renderOfVRView->GetActiveCamera();
+
+    aCamera = renderOfVRView->GetActiveCamera();
 	[opacitySlider setEnabled: NO];
 	[wlSlider setEnabled: NO];
 	[wwSlider setEnabled: NO];
@@ -1174,15 +1126,12 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		
 		[[originalViewController imageView] blendingColorTables:&alphaTable :&redTable :&greenTable :&blueTable];
 		
-#if 1 // @@@ VR
 		[vrViewer setBlendingCLUT :redTable :greenTable :blueTable];
-#endif
 		[[blendingController imageView] getWLWW: &iwl :&iww];
-#if 1 // @@@ VR
 		[vrViewer setBlendingWLWW :iwl :iww];
 		renderOfVRView = [vrViewer renderer];
-#endif
-		volumeCollectionOfVRView = renderOfVRView->GetVolumes();
+
+        volumeCollectionOfVRView = renderOfVRView->GetVolumes();
 		volumeOfVRView = (vtkVolume * )volumeCollectionOfVRView->GetItemAsObject (1);
 		fixedPointVolumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
 		blendedVolumeMapper=fixedPointVolumeMapper;
@@ -1216,18 +1165,14 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			blue[i] = [[array objectAtIndex: i] longValue];
 		}
 		
-#if 1 // @@@ VR
         [vrViewer setCLUT:red :green: blue];
-#endif
 	}
 
     aOpacity = [[[NSUserDefaults standardUserDefaults] dictionaryForKey: @"OPACITY"] objectForKey: NSLocalizedString(@"Logarithmic Inverse Table", nil)];
 	if (aOpacity)
 	{
 		array = [aOpacity objectForKey:@"Points"];
-#if 1 // @@@ VR
 		[vrViewer setOpacity:array];
-#endif
 	}
 }
 
@@ -1235,7 +1180,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 {
 	if ([segmentList isEqual:tableView])
 	{
-		if(isSegmentVR)
+		if (isSegmentVR)
 		{
 			return [propertyDictList count];
 		}
@@ -1317,9 +1262,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		err=myOpacityTransferFunction->AddPoint (offset+2047.0, val);
 	}
-#if 1 // @@@ VR
+
     [vrViewer setWLWW: wl :ww];
-#endif
 }
 
 - (void)setAdvancedCLUT:(NSMutableDictionary*)clut lowResolution:(BOOL)lowRes
@@ -1445,9 +1389,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			myColorTransferFunction->AddRGBPoint(x,r,g,b);
 		}
 	}
-#if 1 // @@@ VR
- 	[vrViewer setWLWW: wholeVolumeWL :wholeVolumeWW];
-#endif
+
+    [vrViewer setWLWW: wholeVolumeWL :wholeVolumeWW];
 }
 
 - (IBAction)selectASegment:(id)sender
@@ -1479,17 +1422,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		if (row>=0&&row<maxMovieIndex)
 		{
 			float* newVolumeData=[originalViewController volumePtr:row];
-#if 1 // @@@ VR
 			[vrViewer movieBlendingChangeSource:row];
 			[vrViewer movieChangeSource: newVolumeData];
-#endif
 			[self setBlendVolumeCLUT];
 
-#if 1 // @@@ VR
 			volumeOfVRView = (vtkVolume * )[vrViewer volume];
-#endif
 			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
-			if ([cutPlaneSwitch state] == NSControlStateValueOn)
+
+            if ([cutPlaneSwitch state] == NSControlStateValueOn)
 			{
 				volumeMapper->AddClippingPlane(clipPlane1);
 				//blendedVolumeMapper->AddClippingPlane(clipPlane1);
@@ -1543,9 +1483,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)switchBetweenVRTorMIP:(id)sender
 {
-#if 1 // @@@ VR
 	[vrViewer setMode:[sender selectedRow]];
-#endif
 }
 
 - (IBAction)switchShadingONorOFF:(id)sender
@@ -1559,19 +1497,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	else
 	{
-#if 1 // @@@ VR
 		if ([sender state] == NSControlStateValueOn)
 			[vrViewer activateShading:YES];
 		else
 			[vrViewer activateShading:NO];
-#endif
 	}
 
-#if 1 // @@@ VR
     float savedWl, savedWw;
 	[vrViewer getWLWW: &savedWl :&savedWw];
 	[vrViewer setWLWW: savedWl :savedWw];
-#endif
 }
 
 - (IBAction)switchCutPlanONorOFF:(id)sender
@@ -1587,11 +1521,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		//blendedVolumeMapper->RemoveClippingPlane(clipPlane1);
 	}
 
-#if 1 // @@@ VR
     float savedWl, savedWw;
 	[vrViewer getWLWW: &savedWl :&savedWw];
 	[vrViewer setWLWW: savedWl : savedWw];
-#endif
 }
 
 - (void)restoreCLUTFromPropertyList:(int)index
@@ -1702,9 +1634,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)changeVRDirection:(id)sender
 {
-	int tag=[sender tag];
-#if 1 // @@@ VR
-	if (tag==0)
+	NSInteger tag=[sender tag];
+
+    if (tag==0)
 	{
 		[vrViewer coView:sender];
 	}
@@ -1720,7 +1652,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		[vrViewer axView:sender];
 	}
-#endif
 }
 
 - (void) windowDidBecomeMain:(NSNotification *)aNotification
@@ -1783,9 +1714,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)changeBlendingFactor:(id)sender
 {
-#if 1 // @@@ VR
 	[vrViewer setBlendingFactor: [sender floatValue]];
-#endif
 }
 
 - (IBAction)changeToLinearInterpolation:(id)sender
@@ -1838,16 +1767,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		volumeOfVRView->SetMapper(volumeMapper);
 	}
 
-#if 1 // @@@ VR
     [vrViewer setWLWW: wholeVolumeWL :wholeVolumeWW];
-#endif
 }
 
 - (IBAction)saveDirection:(id)sender
 {
 	NSString* path=[parent hostAppDocumentPath];
 	
-#if 1 // @@@ VR
 	NSMutableDictionary *dict = [vrViewer get3DStateDictionary];
 
 	NSArray *curves = [clutViewer convertCurvesForPlist];
@@ -1858,7 +1784,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString *str = [path stringByAppendingString:@"/CMIVCTACache/VRT.sav"];
 
 	[dict writeToFile:str atomically:YES];
-#endif
 }
 
 -(void)applyAdvancedCLUT:(NSDictionary*)dict

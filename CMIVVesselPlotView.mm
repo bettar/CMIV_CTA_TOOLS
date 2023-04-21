@@ -27,7 +27,6 @@
 		pointDiameter = 8;
 		lineWidth = 1.5;
 
-
 		xUnit=1.0;
 		yUnit=1.0;
 		xLeftLimit=0;
@@ -45,8 +44,10 @@
 
 		currentCurve=nil;
     }
+
     return self;
 }
+
 - (void)dealloc
 {
 	if(globalTransform)

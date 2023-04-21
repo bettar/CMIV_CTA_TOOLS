@@ -7,9 +7,7 @@
 //
 
 #import "CMIVCLUTOpacityView.h"
-#if 1 // @@@ VR
 #import "VRView.h"
-#endif
 #import "CMIVVRcontroller.h"
 
 @implementation CMIVCLUTOpacityView
@@ -2188,23 +2186,21 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 		[clut setObject:curves forKey:@"curves"];
 		[clut setObject:pointColors forKey:@"colors"];
 		
-#if 1 // @@@ VR
 		VRView* aview=(VRView*)vrView;
 		[aview setAdvancedCLUT:clut lowResolution:lowRes];
-#endif
-		if (isInTaggedVRMode&&vrController)
+
+        if (isInTaggedVRMode&&vrController)
 		{
-			CMIVVRcontroller* acmivController=vrController;
+			CMIVVRcontroller* acmivController = vrController;
 			[acmivController setAdvancedCLUT:clut lowResolution:lowRes];
 		}
 
-#if 1 // @@@ VR
         float savedWl, savedWw;
 		[aview getWLWW: &savedWl :&savedWw];
 		[aview setWLWW: savedWl : savedWw];
-#endif
 	}
-	setCLUTtoVRView = NO;
+
+    setCLUTtoVRView = NO;
 }
 
 - (void)setCLUTtoVRViewWithoutRedraw
@@ -2215,10 +2211,8 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 		[clut setObject:curves forKey:@"curves"];
 		[clut setObject:pointColors forKey:@"colors"];
 
-#if 1 // @@@ VR
         VRView* aview=(VRView*)vrView;
 		[aview setAdvancedCLUT:clut lowResolution:YES];
-#endif
 	}
 
     setCLUTtoVRView = NO;
