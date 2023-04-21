@@ -1628,12 +1628,12 @@ else
 	return radius;
 }
 
--(float)caculateAortaMaxIntensity:(float*)img
-                                 :(int)imgwidth
-                                 :(int)imgheight
-                                 :(int)centerx
-                                 :(int)centery
-                                 :(int)radius
+-(float)calculateAortaMaxIntensity:(float*)img
+                                  :(int)imgwidth
+                                  :(int)imgheight
+                                  :(int)centerx
+                                  :(int)centery
+                                  :(int)radius
 {
 //	unsigned int i;
 	int x1,y1,r;

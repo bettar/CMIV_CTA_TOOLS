@@ -134,7 +134,7 @@
     float* smallVolumeData = (float*)malloc(newdimension[0]*newdimension[1]*newdimension[2]*sizeof(float));
 	if (smallVolumeData)
 	{
-		NSLog( @"finding aortat ");
+		NSLog(@"finding aorta");
 		
 		[self resampleImage:volumeData:smallVolumeData:dimension:newdimension];
 		float newspacing[3];
@@ -158,15 +158,15 @@
 		//[aNewCircle release];
 		free(smallVolumeData);
 		radius=radius/2;
-		aortaMaxHu=[coreAlgorithm caculateAortaMaxIntensity:(volumeData+imageSize*((int)(origin[2]*targetspacing/spacing[2])))
-                                                           :imageWidth
-                                                           :imageHeight
-                                                           :origin[0]*targetspacing/spacing[0]
-                                                           :origin[1]*targetspacing/spacing[1]
-                                                           :radius*targetspacing/spacing[0]];
-		NSLog( @"tracing aortat ");
-		unsigned short* seedData=(unsigned short*)malloc(dimension[0]*dimension[1]*dimension[2]*sizeof(unsigned short));
+		aortaMaxHu=[coreAlgorithm calculateAortaMaxIntensity: (volumeData + imageSize * ((int)(origin[2]*targetspacing/spacing[2])))
+                                                            : imageWidth
+                                                            : imageHeight
+                                                            : origin[0]*targetspacing/spacing[0]
+                                                            : origin[1]*targetspacing/spacing[1]
+                                                            : radius*targetspacing/spacing[0]];
+		NSLog(@"tracing aorta");
 
+        unsigned short* seedData = (unsigned short*)malloc(dimension[0]*dimension[1]*dimension[2]*sizeof(unsigned short));
 		if (seedData)
 		{
 			float aortaStartPt[3];

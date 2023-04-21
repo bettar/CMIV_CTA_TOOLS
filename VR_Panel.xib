@@ -41,7 +41,7 @@
                         </connections>
                     </customView>
                     <scrollView fixedFrame="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8">
-                        <rect key="frame" x="20" y="349" width="262" height="280"/>
+                        <rect key="frame" x="19" y="349" width="262" height="280"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <clipView key="contentView" id="gaN-KG-pLb">
                             <rect key="frame" x="1" y="1" width="245" height="263"/>
@@ -111,7 +111,7 @@
                         </tableHeaderView>
                     </scrollView>
                     <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15">
-                        <rect key="frame" x="184" y="317" width="31" height="24"/>
+                        <rect key="frame" x="183" y="317" width="31" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </colorWell>
@@ -138,7 +138,7 @@
                         </connections>
                     </button>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24" customClass="CMIVCLUTOpacityView">
-                        <rect key="frame" x="20" y="222" width="262" height="90"/>
+                        <rect key="frame" x="19" y="222" width="262" height="90"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <connections>
                             <outlet property="vrView" destination="7" id="214"/>
@@ -167,7 +167,7 @@
                         </connections>
                     </button>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" tag="4" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="64">
-                        <rect key="frame" x="110" y="66" width="39" height="38"/>
+                        <rect key="frame" x="109" y="66" width="39" height="38"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="round" title="L" bezelStyle="circular" imagePosition="above" alignment="center" borderStyle="border" tag="4" id="229">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -210,7 +210,7 @@
                         </connections>
                     </slider>
                     <slider hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="374">
-                        <rect key="frame" x="111" y="129" width="147" height="17"/>
+                        <rect key="frame" x="110" y="129" width="147" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="256" doubleValue="51.200000000000003" tickMarkPosition="below" numberOfTickMarks="41" allowsTickMarkValuesOnly="YES" sliderType="linear" id="375">
                             <font key="font" metaFont="smallSystem"/>
@@ -220,7 +220,7 @@
                         </connections>
                     </slider>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="132">
-                        <rect key="frame" x="593" y="603" width="38" height="17"/>
+                        <rect key="frame" x="592" y="603" width="38" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="234">
                             <font key="font" metaFont="system"/>
@@ -229,7 +229,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="241">
-                        <rect key="frame" x="53" y="312" width="134" height="32"/>
+                        <rect key="frame" x="52" y="312" width="134" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Apply Current CLUT to All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="242">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -240,10 +240,10 @@
                         </connections>
                     </button>
                     <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="244">
-                        <rect key="frame" x="20" y="157" width="47" height="38"/>
+                        <rect key="frame" x="19" y="157" width="48" height="38"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        <size key="cellSize" width="47" height="18"/>
+                        <size key="cellSize" width="48" height="18"/>
                         <size key="intercellSpacing" width="4" height="2"/>
                         <buttonCell key="prototype" type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="245">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -277,7 +277,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="255">
-                        <rect key="frame" x="27" y="41" width="126" height="32"/>
+                        <rect key="frame" x="26" y="41" width="127" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="ExportDICOM" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="256">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -323,7 +323,7 @@
                         </buttonCell>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="350">
-                        <rect key="frame" x="13" y="312" width="47" height="32"/>
+                        <rect key="frame" x="12" y="312" width="47" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Hide" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" inset="2" id="351">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
@@ -334,7 +334,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="370">
-                        <rect key="frame" x="20" y="192" width="105" height="32"/>
+                        <rect key="frame" x="20" y="192" width="104" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Add trapezoid" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" tag="1" inset="2" id="371">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -345,7 +345,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="384">
-                        <rect key="frame" x="82" y="100" width="105" height="32"/>
+                        <rect key="frame" x="81" y="100" width="105" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="push" title="Save direction" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" tag="1" inset="2" id="385">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -383,25 +383,25 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="61" height="18"/>
                         <size key="intercellSpacing" width="4" height="2"/>
-                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="leading" alignment="left" imageScaling="proportionallyDown" inset="2" id="380">
+                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="380">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <cells>
                             <column>
-                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" state="on" tag="1" imageScaling="proportionallyDown" inset="2" id="378">
+                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" state="on" tag="1" inset="2" id="378">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" imageScaling="proportionallyDown" inset="2" id="379">
+                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="379">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" imageScaling="proportionallyDown" inset="2" id="381">
+                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="381">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" imageScaling="proportionallyDown" inset="2" id="382">
+                                <buttonCell type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="382">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>

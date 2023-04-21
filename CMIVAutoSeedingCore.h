@@ -78,7 +78,7 @@
 //-(void)dilate2DBinaryImage:(unsigned char*)img:(unsigned char*)imgbuffer:(int)width:(int)height:(unsigned char*)kernel:(int)kernelsize;
 //-(int)closeVesselHoles:(unsigned char*)inData:(int)width:(int)height:(int)amount:(float*)samplespacing:(int)kenelsize;
 - (int) vesselnessFilter:(float *)inputData :(float*)outData :(long*)dimension :(float*)imgspacing :(float)startscale :(float)endscale :(float)scalestep;
--(float)caculateAortaMaxIntensity:(float*)img :(int)imgwidth :(int)imgheight :(int)centerx :(int)centery :(int)radius;
+-(float)calculateAortaMaxIntensity:(float*)img :(int)imgwidth :(int)imgheight :(int)centerx :(int)centery :(int)radius;
 -(int)crossectionGrowingWithinVolume:(float*)volumeData ToSeedVolume:(unsigned short*)seedData Dimension:(long*)dim Spacing:(float*)spacing StartPt:(float*)ptxyz Threshold:(float)threshold Diameter:(float)diameter;
 -(float)compareOverlappedRegion:(unsigned char*)firstRegion :(unsigned char*)secondRegion :(int)regionSize;
 -(float)findingIncirleCenterOfRegion:(unsigned char*)buffer :(int)width :(int)height :(int*)center;

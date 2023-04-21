@@ -794,7 +794,7 @@ extern void setNumberOfThreads();
 			position_j2 = j*ilong;
 			position_j3 = (j+1)*ilong;
 			for(k=1;k<ilong-1;k++)
-				if((!(*(directionOfData + position_i2+position_j2+k)&0x80))&&(*(directionOfData + position_i2+position_j2+k)&0x40))
+				if((!(*(directionOfData + position_i2+position_j2+k)&0x80)) && (*(directionOfData + position_i2+position_j2+k)&0x40))
 				{
 					oldcolorindex=*(directionOfData + position_i2+position_j2+k)&0x3f;
 					
@@ -1096,7 +1096,7 @@ extern void setNumberOfThreads();
 						do
 						{
 							itemp++;
-						}while(itemp<longmarkerlen&&!(*(longmarker+itemp)));
+						}while(itemp<longmarkerlen && !(*(longmarker+itemp)));
 						itemp=itemp<<6;
 						k=itemp-position_i2-position_j2;
 						if(k>ilong-1)
@@ -1125,7 +1125,7 @@ extern void setNumberOfThreads();
 						do
 						{
 							itemp++;
-						}while(itemp<markerlen&&!(*(marker+itemp)));
+						}while(itemp<markerlen && !(*(marker+itemp)));
 						itemp=itemp<<3;
 						k=itemp-position_i2-position_j2;
 						
@@ -1318,14 +1318,14 @@ extern void setNumberOfThreads();
 								
 								else
 								{
-								 if(((*(directionOfData+itemp))&0x3f) != (maxcolorindex&0x3f))
+								 if (((*(directionOfData+itemp)) & 0x3f) != (maxcolorindex & 0x3f))
 								 {
-									 int direction=*(directionOfData+itemp)&0x3f;
+									 long direction = *(directionOfData+itemp) & 0x3f;
 									 switch(direction)
 									 {
-										 case 1: direction =  (-imageSize-imageWidth-1);
+										 case 1: direction = (-imageSize-imageWidth-1);
 											 break;
-										 case 2: direction =  (-imageSize-imageWidth);
+										 case 2: direction = (-imageSize-imageWidth);
 											 break;
 										 case 3: direction = (-imageSize-imageWidth+1);
 											 break;
@@ -1418,7 +1418,7 @@ extern void setNumberOfThreads();
 						{
 							itemp--;
 							
-						}while(itemp>=0&&!(*(longmarker+itemp)));
+						}while(itemp>=0 && !(*(longmarker+itemp)));
 						
 						itemp=(itemp<<6)+63;
 						k=itemp-position_i2-position_j2;
@@ -1449,7 +1449,7 @@ extern void setNumberOfThreads();
 						do
 						{
 							itemp--;
-						}while(itemp>=0&&!(*(marker+itemp)));
+						}while(itemp>=0 && !(*(marker+itemp)));
 						itemp=(itemp<<3)+7;
 						k=itemp-position_i2-position_j2;
 						
@@ -1645,8 +1645,8 @@ extern void setNumberOfThreads();
 								{
 								 if(((*(directionOfData+itemp))&0x3f) != (maxcolorindex&0x3f))
 								 {
-									 int direction=*(directionOfData+itemp)&0x3f;
-									 switch(direction)
+									 long direction=*(directionOfData+itemp) & 0x3f;
+									 switch (direction)
 									 {
 										 case 1: direction =  (-imageSize-imageWidth-1);
 											 break;
@@ -1767,7 +1767,7 @@ extern void setNumberOfThreads();
 				position_j2 = j*ilong;
 				position_j3 = (j+1)*ilong;
 				for(k=1;k<ilong-1;k++)
-					if((!(*(directionOfData + position_i2+position_j2+k)&0x80))&&(*(directionOfData + position_i2+position_j2+k)&0x40))
+					if((!(*(directionOfData + position_i2+position_j2+k)&0x80)) && (*(directionOfData + position_i2+position_j2+k)&0x40))
 					{
 
 						//5
@@ -1874,7 +1874,7 @@ extern void setNumberOfThreads();
 					position_j3 = (j+1)*ilong;
 					
 					for(k=ilong-2;k>0;k--)
-						if(!(*(directionOfData + position_i2+position_j2+k)&0x80)&&(*(directionOfData + position_i2+position_j2+k)&0x40))
+						if(!(*(directionOfData + position_i2+position_j2+k)&0x80) && (*(directionOfData + position_i2+position_j2+k)&0x40))
 						{
 
 							//5
@@ -1982,17 +1982,17 @@ extern void setNumberOfThreads();
 	for(i=imageSize;i<totalvoxel;i++)
 	{
 		
-		if((!((*(directionOfData+i))&0x80))&&(*(distanceMap+i)==0))
+		if((!((*(directionOfData+i))&0x80)) && (*(distanceMap+i)==0))
 		{
 			int direction=*(directionOfData+i)&0x3f;
 			if(direction)
 			{
-				int itemp;
+				long itemp;
 				switch(direction)
 				{
-					case 1: itemp =  (-imageSize-imageWidth-1);
+					case 1: itemp = (-imageSize-imageWidth-1);
 						break;
-					case 2: itemp =  (-imageSize-imageWidth);
+					case 2: itemp = (-imageSize-imageWidth);
 						break;
 					case 3: itemp = (-imageSize-imageWidth+1);
 						break;
@@ -2063,7 +2063,7 @@ extern void setNumberOfThreads();
 		int direction=*(directionOfData+pointer)&0x3f;
 		if(direction)
 		{
-			int itemp;
+			long itemp;
 			switch(direction)
 			{
 				case 1: itemp =  (-imageSize-imageWidth-1);
@@ -2122,38 +2122,41 @@ extern void setNumberOfThreads();
 					break;
 			}
 			
-			itemp+=pointer;
+			itemp += pointer;
 			*(distanceMap+pointer) = [self lengthOfParent:itemp]+1;
-			if((*(distanceMap+pointer))>=0xffff)
+			if ((*(distanceMap+pointer))>=0xffff)
 					*(distanceMap+pointer)=0xfffe;
 		}
 		else
 			return 1;
 	}
-	return(*(distanceMap+pointer));
-	
+
+    return(*(distanceMap+pointer));
 }
-- (int) caculatePathLengthWithWeightFunction:(float *) pIn:(float *) pOut Pointer: (unsigned char*) pPointers:(float) threshold: (float)wholeValue
+
+- (int) caculatePathLengthWithWeightFunction: (float *) pIn
+                                            : (float *) pOut
+                                     Pointer: (unsigned char*) pPointers
+                                            : (float) threshold
+                                            : (float)wholeValue
 {
 	outputData=pOut;
 	directionOfData=pPointers;
 	weightThreshold=threshold;
 	weightWholeValue=1.0/wholeValue;
 	float maxvalue=0;
-	int   maxindex=0;
+	int maxindex=0;
 
 	int totalvoxel=imageSize*(imageAmount-1);
-	int i;
-	for(i=imageSize;i<totalvoxel;i++)
+	for (int i=imageSize;i<totalvoxel;i++)
 	{
-		
 		if(*(outputData+i)==0)
 		{
 			int direction=*(directionOfData+i)&0x3f;
-			if(direction)
+			if (direction)
 			{
-				int itemp;
-				switch(direction)
+				long itemp;
+				switch (direction)
 				{
 					case 1: itemp =  (-imageSize-imageWidth-1);
 						break;
@@ -2220,13 +2223,11 @@ extern void setNumberOfThreads();
 			maxvalue=*(outputData+i);
 			maxindex=i;
 		}
-		
 	}
-	return maxindex;
-				
-				
-				
+
+    return maxindex;
 }
+
 - (float) lengthOfParentWithWeightFunction:(int)pointer
 {
 	if(*(outputData+pointer)==0)
@@ -2234,12 +2235,12 @@ extern void setNumberOfThreads();
 		int direction=*(directionOfData+pointer)&0x3f;
 		if(direction)
 		{
-			int itemp;
+			long itemp;
 			switch(direction)
 			{
-				case 1: itemp =  (-imageSize-imageWidth-1);
+				case 1: itemp = (-imageSize-imageWidth-1);
 					break;
-				case 2: itemp =  (-imageSize-imageWidth);
+				case 2: itemp = (-imageSize-imageWidth);
 					break;
 				case 3: itemp = (-imageSize-imageWidth+1);
 					break;
@@ -2301,23 +2302,23 @@ extern void setNumberOfThreads();
 	}
 	return(*(outputData+pointer));
 }
-- (void) caculateColorMapFromPointerMap: (unsigned char*) pColor: (unsigned char*) pPointers
+
+- (void) caculateColorMapFromPointerMap: (unsigned char*) pColor
+                                       : (unsigned char*) pPointers
 {
 	colorOfData=pColor;
 	directionOfData=pPointers;
 	int totalvoxel=imageSize*(imageAmount-1);
-	int i;
-	for(i=imageSize;i<totalvoxel;i++)
+	for (int i=imageSize; i<totalvoxel; i++)
 	{
-			
-		if(*(colorOfData+i)==0)
+		if (*(colorOfData+i)==0)
 		{
-			if(!((*(directionOfData+i))&0x80))
+			if (!((*(directionOfData+i))&0x80))
 			{
-				int direction=*(directionOfData+i)&0x3f;
-				if(direction)
+				int direction = *(directionOfData+i)&0x3f;
+				if (direction)
 				{
-					int itemp;
+					long itemp;
 					switch(direction)
 					{
 						case 1: itemp =  (-imageSize-imageWidth-1);
@@ -2383,27 +2384,24 @@ extern void setNumberOfThreads();
 			else
 				*(colorOfData+i)=(*(directionOfData+i))&0x3f;
 		}
-			
-			
 	}
-				
 }
+
 - (unsigned char) colorOfParent:(int)pointer
 {
-	if(*(colorOfData+pointer)==0)
+	if (*(colorOfData+pointer)==0)
 	{
-		if(!((*(directionOfData+pointer))&0x80))
+		if (!((*(directionOfData+pointer))&0x80))
 		{
-
 				int direction=*(directionOfData+pointer)&0x3f;
-				if(direction)
+				if (direction)
 				{
-					int itemp;
-					switch(direction)
+					long itemp;
+					switch (direction)
 					{
-						case 1: itemp =  (-imageSize-imageWidth-1);
+						case 1: itemp = (-imageSize-imageWidth-1);
 							break;
-						case 2: itemp =  (-imageSize-imageWidth);
+						case 2: itemp = (-imageSize-imageWidth);
 							break;
 						case 3: itemp = (-imageSize-imageWidth+1);
 							break;
@@ -2472,7 +2470,12 @@ extern void setNumberOfThreads();
 	
 }
 
-- (void) localOptmizeConnectednessTree:(float *)pIn :(float *)pOut:(unsigned short*)pDistanceMap Pointer:(unsigned char*) pPointers :(float)minAtEdge needSmooth:(BOOL)isNeedSmooth
+- (void) localOptmizeConnectednessTree:(float *)pIn
+                                      :(float *)pOut
+                                      :(unsigned short*)pDistanceMap
+                               Pointer:(unsigned char*) pPointers
+                                      :(float)minAtEdge
+                            needSmooth:(BOOL)isNeedSmooth
 {
 	inputData=pIn;
 	float* psmoothed=pOut;
@@ -2482,54 +2485,57 @@ extern void setNumberOfThreads();
 	unsigned char pointerToUpper;
 	float maxUpper;
 	unsigned short currentLength;
-	int itemp;
+	long itemp;
 	float tempfloat;
 	int x,y,z;
 	int needchangedis=0;
 	imageSize=imageWidth*imageHeight;
 	
 	[self caculatePathLength:pDistanceMap Pointer:pPointers];
-	if(isNeedSmooth)
+	if (isNeedSmooth)
 	{
 		itemp=0;
 		
-		for(z=0;z<imageAmount;z++)
-			for(y=0;y<imageHeight;y++)
-				for(x=0;x<imageWidth;x++)
+		for (z=0;z<imageAmount;z++)
+			for (y=0;y<imageHeight;y++)
+				for (x=0;x<imageWidth;x++)
 				{
-					if(!((*(directionOfData + itemp))&0x80))
+					if (!((*(directionOfData + itemp))&0x80))
 					{
 						int ii,jj,kk;
 						float sum=0;
 						int xx,yy,zz;
-						int iitemp=itemp-imageSize-imageWidth-1;
+						long iitemp = itemp-imageSize-imageWidth-1;
 
-						for(ii=-1;ii<2;ii++)
+						for (ii=-1;ii<2;ii++)
 						{
-							for(jj=-1;jj<2;jj++)
+							for (jj=-1;jj<2;jj++)
 							{
-								for(kk=-1;kk<2;kk++)
+								for (kk=-1;kk<2;kk++)
 								{
 									zz=z+ii;
 									yy=y+jj;
 									xx=x+kk;
-									if(xx>=0 && xx<imageWidth && yy>=0 && yy<imageHeight && zz>=0 && zz<imageAmount && (!((*(directionOfData + iitemp))&0x80)))
+									if (xx>=0 && xx<imageWidth && yy>=0 && yy<imageHeight && zz>=0 && zz<imageAmount && (!((*(directionOfData + iitemp))&0x80)))
 										sum+=*(inputData + iitemp);
 									else
 										sum+=minValueInCurSeries;
-									iitemp++;
+
+                                    iitemp++;
 								}
-								iitemp=iitemp-3+imageWidth;
-							}
-							iitemp=iitemp-imageWidth-imageWidth-imageWidth+imageSize;
 							
+                                iitemp=iitemp-3+imageWidth;
+							}
+
+                            iitemp=iitemp-imageWidth-imageWidth-imageWidth+imageSize;
 						}
 								
 						*(psmoothed+itemp)+=sum/27.0;
 					}
 					else
 						*(psmoothed+itemp)+=minValueInCurSeries;
-					itemp++;
+
+                    itemp++;
 				}
 	}
 	/* 
@@ -2541,27 +2547,27 @@ extern void setNumberOfThreads();
 			*(psmoothed+itemp)=-100;
 	[self enhanceInputData:psmoothed];*/
 	
-	itemp=	imageSize+imageWidth+1;
-	for(z=1;z<imageAmount-1;z++)
+	itemp = imageSize+imageWidth+1;
+	for (z=1;z<imageAmount-1;z++)
 	{
-		for(y=1;y<imageHeight-1;y++)
+		for (y=1;y<imageHeight-1;y++)
 		{
-			for(x=1;x<imageWidth-1;x++)
+			for (x=1;x<imageWidth-1;x++)
 			{
-				if(!((*(directionOfData + itemp))&0x80))
+				if (!((*(directionOfData + itemp)) & 0x80))
 				{
-					
-					pointerToUpper = ((*(directionOfData + itemp))&0x3f);
-					
-					
-					int xx,yy,zz,iitemp,ipointer;
-					if(pointerToUpper==0)
+					pointerToUpper = ((*(directionOfData + itemp)) & 0x3f);
+                    
+					int xx, yy, zz, ipointer;
+                    long iitemp;
+					if (pointerToUpper==0)
 						continue;
-					switch(pointerToUpper)
+
+                    switch(pointerToUpper)
 					{
-						case 1: iitemp =  (-imageSize-imageWidth-1);
+						case 1: iitemp = (-imageSize-imageWidth-1);
 							break;
-						case 2: iitemp =  (-imageSize-imageWidth);
+						case 2: iitemp = (-imageSize-imageWidth);
 							break;
 						case 3: iitemp = (-imageSize-imageWidth+1);
 							break;
@@ -2644,10 +2650,10 @@ extern void setNumberOfThreads();
 										}
 									}
 									
-									else if((*(distanceMap+iitemp)==currentLength)&&itemp!=iitemp)
+									else if((*(distanceMap+iitemp)==currentLength) && itemp!=iitemp)
 									{
 										tempfloat=*(psmoothed+iitemp);
-										if(tempfloat>maxUpper&&tempfloat>*(psmoothed+itemp))
+										if(tempfloat>maxUpper && tempfloat>*(psmoothed+itemp))
 										{
 											maxUpper=tempfloat;
 											
@@ -2657,10 +2663,10 @@ extern void setNumberOfThreads();
 										}
 									}
 									/*
-									else if((*(distanceMap+iitemp)==currentLength+1)&&(*(directionOfData+iitemp)+ipointer!=28))
+									else if((*(distanceMap+iitemp)==currentLength+1) && (*(directionOfData+iitemp)+ipointer!=28))
 									{
 										tempfloat=*(psmoothed+iitemp);
-										if(tempfloat>maxUpper&&tempfloat>*(psmoothed+itemp))
+										if(tempfloat>maxUpper && tempfloat>*(psmoothed+itemp))
 										{
 											int deepth=0;
 											if(![self checkForCircle:iitemp:itemp:&deepth])
@@ -2718,7 +2724,7 @@ extern void setNumberOfThreads();
 	typedef float OutputPixelType;
 	
 	typedef itk::Image< InputPixelType, Dimension >   InputImageType;
-	typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
+	typedef itk::Image< OutputPixelType, Dimension >  OutputImageType; // unused ?
 
 	typedef itk::HessianRecursiveGaussianImageFilter<InputImageType >  HessianFilterType;
 	typedef itk::Hessian3DToVesselnessMeasureImageFilter<OutputPixelType > VesselnessMeasureFilterType;
@@ -2757,7 +2763,6 @@ extern void setNumberOfThreads();
 	importFilter->SetImportPointer( inData, itksize[0] * itksize[1] * itksize[2], importImageFilterWillOwnTheBuffer);
 	NSLog(@"ITK Image allocated");
 	
-	
 	HessianFilterType::Pointer hessianFilter = HessianFilterType::New();
 	VesselnessMeasureFilterType::Pointer vesselnessFilter =	VesselnessMeasureFilterType::New();
 	
@@ -2774,24 +2779,24 @@ extern void setNumberOfThreads();
 	{
 		return 1;
 	}
-	float* enhanceOutput=vesselnessFilter->GetOutput()->GetBufferPointer();
+
+    float* enhanceOutput=vesselnessFilter->GetOutput()->GetBufferPointer();
 	memcpy(inData, enhanceOutput, size);
-	
-	
-	return 0;
-	
-	
+	return 0;	
 }
 
--(BOOL)checkForCircle:(int)pointer:(int)targetindex:(int*)deepth
+-(BOOL)checkForCircle:(int)pointer
+                     :(int)targetindex
+                     :(int*)deepth
 {
 	(*deepth)++;
 	if(*deepth>4)
 		return NO;
-	int direction=*(directionOfData+pointer)&0x3f;
-	if(direction)
+
+    int direction=*(directionOfData+pointer)&0x3f;
+	if (direction)
 	{
-		int itemp;
+		long itemp;
 		switch(direction)
 		{
 			case 1: itemp =  (-imageSize-imageWidth-1);
@@ -2861,7 +2866,9 @@ extern void setNumberOfThreads();
 		return NO;
 	
 }
--(int)dungbeetleSearching:(NSMutableArray*)apath:(float*)weightmap Pointer:(unsigned char*) pPointers
+-(int)dungbeetleSearching:(NSMutableArray*)apath
+                         :(float*)weightmap
+                  Pointer:(unsigned char*) pPointers
 {
 
 	CMIV3DPoint* apoint;
@@ -2878,14 +2885,10 @@ extern void setNumberOfThreads();
 	int locmaxindex2=locmaxindex1;
 
 	nextneighbor=itemp;
-	while (locmaxindex2==locmaxindex1&&(!(directionOfData[nextneighbor]&0x80))) 
+	while (locmaxindex2==locmaxindex1 && (!(directionOfData[nextneighbor]&0x80)))
 	{
-		
-
 		nextneighbor=[self findNextUpperNeighborInDirectionMap:nextneighbor];
 		locmaxindex2=[self searchLocalMaximum:nextneighbor];
-		
-		
 	}
 	
 	while (!(directionOfData[nextneighbor]&0x80)) 
@@ -2894,68 +2897,66 @@ extern void setNumberOfThreads();
 		locmaxindex1=locmaxindex2=[self searchLocalMaximum:nextneighbor];
 		while (locmaxindex2==locmaxindex1&&(!(directionOfData[nextneighbor]&0x80))) 
 		{
-			
 			lastpoint=nextneighbor;
 			nextneighbor=[self findNextUpperNeighborInDirectionMap:nextneighbor];
 			locmaxindex2=[self searchLocalMaximum:nextneighbor];
-			
-			
 		}
 		
 		NSMutableArray* firsthalfpath=[self pathToLocalMaximun:firstpoint reverse:NO];
-	
 		NSMutableArray* lasthalfpath=[self pathToLocalMaximun:lastpoint reverse:YES];
-		if([firsthalfpath count])
+
+        if ([firsthalfpath count])
 			[firsthalfpath removeLastObject];
-		NSArray*newpath=[firsthalfpath arrayByAddingObjectsFromArray:lasthalfpath];
-		if([newpath count])
+
+        NSArray*newpath=[firsthalfpath arrayByAddingObjectsFromArray:lasthalfpath];
+		if ([newpath count])
 			[apath addObjectsFromArray:newpath];
-		[firsthalfpath release];
+		
+        [firsthalfpath release];
 		[lasthalfpath release];
-		
-		
 	}
-	unsigned i;
-	for(i=1;i<[apath count]-1;i++)
+
+	for (unsigned i=1;i<[apath count]-1;i++)
 	{
 		apoint=[apath objectAtIndex:i-1];
 		x=[apoint x];
 		y=[apoint y];
 		z=[apoint z];
-		firstpoint=z*imageWidth*imageHeight+y*imageWidth+x;
-		apoint=[apath objectAtIndex:i+1];
+		firstpoint = z*imageWidth*imageHeight + y*imageWidth + x;
+		apoint = [apath objectAtIndex: i+1];
 		x=[apoint x];
 		y=[apoint y];
 		z=[apoint z];
-		lastpoint=z*imageWidth*imageHeight+y*imageWidth+x;
-		if([self ifTwoPointsIsNeighbors:firstpoint:lastpoint])
+		lastpoint = z*imageWidth*imageHeight+y*imageWidth+x;
+		if ([self ifTwoPointsIsNeighbors:firstpoint:lastpoint])
 		{
 			[apath removeObjectAtIndex:i];
 			i--;
 		}
 	}
-	for(i=0;i<[apath count];i++)
+
+    for (unsigned i=0;i<[apath count];i++)
 	{
 		apoint=[apath objectAtIndex:i];
 		x=[apoint x];
 		y=[apoint y];
 		z=[apoint z];
-		lastpoint=z*imageWidth*imageHeight+y*imageWidth+x;
-		if(directionOfData)
-			directionOfData[lastpoint]=(directionOfData[lastpoint]&0x3f)|0x40;
-
+		lastpoint=z*imageWidth*imageHeight + y*imageWidth + x;
+		if (directionOfData)
+			directionOfData[lastpoint] = (directionOfData[lastpoint] & 0x3f) | 0x40;
 	}
 	
 	return lastpoint;
-	
-	
 }
+
 -(int)findNextUpperNeighborInDirectionMap:(int)index
 {
-	index+=[self onedimensionIndexLookUp:(int)(directionOfData[index]&0x3f)];
+	index+=[self onedimensionIndexLookUp:(int)(directionOfData[index] & 0x3f)];
 	return index;
 }
--(void)refineCenterline:(NSMutableArray*)apath:(float*)weightmap
+
+-(void)refineCenterline:(NSMutableArray*)apath
+                       :(float*)weightmap
 {
 	CMIV3DPoint* startpoint;
 	CMIV3DPoint* endpoint;
@@ -2967,13 +2968,12 @@ extern void setNumberOfThreads();
 	y=[startpoint y];
 	z=[startpoint z];
 	int startindex=0,endindex=1;
-	int itemp=z*imageWidth*imageHeight+y*imageWidth+x;
+	int itemp = z*imageWidth*imageHeight+y*imageWidth+x;
 	int locmaxindex1=[self searchLocalMaximum:itemp];
 	int locmaxindex2=locmaxindex1;
 	int isneighbors=0;
-	while (locmaxindex2==locmaxindex1&&endindex<(signed)[apath count]) 
+	while (locmaxindex2==locmaxindex1 && endindex<(signed)[apath count])
 	{
-		
 		endpoint=apoint;
 		apoint=[apath objectAtIndex:endindex];
 		x=[apoint x];
@@ -2982,7 +2982,6 @@ extern void setNumberOfThreads();
 		itemp=z*imageWidth*imageHeight+y*imageWidth+x;
 		locmaxindex2=[self searchLocalMaximum:itemp];
 		endindex++;
-
 	}
 	
 	while(endindex<(signed)[apath count])
@@ -2996,7 +2995,6 @@ extern void setNumberOfThreads();
 		locmaxindex1=locmaxindex2=[self searchLocalMaximum:itemp];
 		while ((isneighbors=[self ifTwoPointsIsNeighbors:locmaxindex1:locmaxindex2])&&(endindex<(signed)[apath count])) 
 		{
-			
 			endpoint=apoint;
 			apoint=[apath objectAtIndex:endindex];
 			x=[apoint x];
@@ -3005,9 +3003,9 @@ extern void setNumberOfThreads();
 			itemp=z*imageWidth*imageHeight+y*imageWidth+x;
 			locmaxindex2=[self searchLocalMaximum:itemp];
 			endindex++;
-			
 		}
-		if(endindex<(signed)[apath count])
+
+        if (endindex < (signed)[apath count])
 		{
 			startindex=[apath indexOfObject:startpoint];
 			x=[startpoint x];
@@ -3032,11 +3030,10 @@ extern void setNumberOfThreads();
 			//[newpath release];
 			[firsthalfpath release];
 			[lasthalfpath release];
-			
 		}
-	
 	}
-	int x1,y1,z1;
+
+    int x1,y1,z1;
 	apoint=[apath objectAtIndex:0];
 	x1=[apoint x];
 	y1=[apoint y];
@@ -3048,18 +3045,18 @@ extern void setNumberOfThreads();
 		x=[apoint x];
 		y=[apoint y];
 		z=[apoint z];
-		if(x==x1&&y==y1&&z==z1)
+		if (x==x1 && y==y1 && z==z1)
 		{
 			[apath removeObjectAtIndex:i];
 			i--;
 		}
-		x1=x;
+
+        x1=x;
 		y1=y;
 		z1=z;
-		
 	}
-
 }
+
 -(int)searchLocalMaximum:(int)index
 {
 	int maxindex;
@@ -3082,11 +3079,12 @@ extern void setNumberOfThreads();
 				maxindex=itemp;
 			}
 		}
-	}while(maxindex!=index);
+	}
+    while(maxindex!=index);
 
 	return maxindex;
-	
 }
+
 -(NSMutableArray*) pathToLocalMaximun:(int)index reverse:(BOOL)needreverse
 {
 	NSMutableArray* path=[[NSMutableArray alloc] initWithCapacity:0];
@@ -3098,7 +3096,7 @@ extern void setNumberOfThreads();
 	do
 	{
 		index=maxindex;
-		int x,y,z;
+		long x,y,z;
 		z=index/imageSize;
 		y=(index-z*imageSize)/imageWidth;
 		x=index-z*imageSize-y*imageWidth;
@@ -3110,34 +3108,35 @@ extern void setNumberOfThreads();
 		[apoint setZ:z];
 		[path addObject:apoint];
 		[apoint release];
-		int i,itemp;
-		for(i=1;i<28;i++)
+		int itemp;
+		for(int i=1;i<28;i++)
 		{
 			itemp=index+[self onedimensionIndexLookUp:i];
-			if(itemp>=imageSize*imageAmount||itemp<imageSize)
+			if (itemp>=imageSize*imageAmount||itemp<imageSize)
 				continue;
-			if(outputData[itemp]>maxweight)
+			if (outputData[itemp]>maxweight)
 			{
 				maxweight=outputData[itemp];
 				maxindex=itemp;
 			}
 		}
-	}while(maxindex!=index);
+	}
+    while (maxindex!=index);
 	
-	if(needreverse)
+	if (needreverse)
 	{
-		unsigned i;
-		for(i=0;i<[path count];i++)
+		for (unsigned i=0;i<[path count];i++)
 		{
 			[path insertObject:[path lastObject] atIndex:i];
 			[path removeLastObject];
 		}
 	}
 	
-	
 	return path;
 }
--(int)ifTwoPointsIsNeighbors:(int)index1:(int)index2
+
+-(int)ifTwoPointsIsNeighbors:(int)index1
+                            :(int)index2
 {
 	int x1,x2,y1,y2,z1,z2;
 	z1=index1/imageSize;
@@ -3147,21 +3146,28 @@ extern void setNumberOfThreads();
 	z2=index2/imageSize;
 	y2=(index2-imageSize*z2)/imageWidth;
 	x2=index2-z2*imageSize-y2*imageWidth;
-	if((x1-x2)==0&&(y1-y2)==0&&(z1-z2)==0)
+
+    if ((x1-x2)==0 && (y1-y2)==0 && (z1-z2)==0)
 		return 1;
-	else if((x1-x2)*(x1-x2)<2&&(y1-y2)*(y1-y2)<2&&(z1-z2)*(z1-z2)<2)
-		return 2;
-	else
-		return 0;
+
+    if ((x1-x2)*(x1-x2)<2 &&
+        (y1-y2)*(y1-y2)<2 &&
+        (z1-z2)*(z1-z2)<2)
+    {
+        return 2;
+    }
+
+    return 0;
 }
+
 -(int)onedimensionIndexLookUp:(int)direction
 {
-	int itemp;
+	long itemp;
 	switch(direction)
 	{
-		case 1: itemp =  (-imageSize-imageWidth-1);
+		case 1: itemp = (-imageSize-imageWidth-1);
 			break;
-		case 2: itemp =  (-imageSize-imageWidth);
+		case 2: itemp = (-imageSize-imageWidth);
 			break;
 		case 3: itemp = (-imageSize-imageWidth+1);
 			break;
