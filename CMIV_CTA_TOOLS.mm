@@ -724,10 +724,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 - (IBAction) showAboutDlg:(id)sender
 {
-#if 0 // TODO: ok 
     NSBundle *pluginBundle = [NSBundle bundleForClass:[self class]];
-    [credits readRTFDFromFile: [[pluginBundle resourcePath] stringByAppendingPathComponent:@"Credits.rtf"]];
-#endif
+    NSString *path = [[pluginBundle resourcePath] stringByAppendingPathComponent:@"Credits.rtf"];
+    NSURL *url = [pluginBundle URLForResource:path withExtension:nil];
+
+    NSError *error = nil;
+    NSString *contents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+
+    NSDictionary<NSAttributedStringDocumentAttributeKey,id> *myDict = nil;;
+    NSMutableAttributedString *attrstr = [[NSMutableAttributedString alloc] initWithRTF: [contents dataUsingEncoding:NSUTF8StringEncoding]
+                                                                     documentAttributes: &myDict]; // nil ok RTF but black
+    //NSLog(@"%s %d, RTF dictionary: <%@>", __FUNCTION__, __LINE__, myDict);
+    
+    [attrstr addAttribute: NSForegroundColorAttributeName
+                     value: [NSColor textColor]
+                    range: NSMakeRange(0, attrstr.length)];
+
+    [[credits textStorage] appendAttributedString:attrstr];
 
     [NSApp beginSheet: aboutWindow
        modalForWindow:[NSApp keyWindow]
