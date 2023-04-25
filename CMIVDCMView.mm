@@ -361,13 +361,7 @@ static float deg2rad = M_PI/180.0;
     
     if (displayCrossLines)
     {
-#ifndef WITH_OPENGL_32
-        CGLContextObj cgl_ctx = [[NSOpenGLContext currentContext] CGLContextObj];
-        glEnable(GL_POINT_SMOOTH);
-#endif
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glEnable(GL_BLEND);
-        glEnable(GL_LINE_SMOOTH);
+        renderer_enable_blend_smooth();
 
         float heighthalf = self.frame.size.height/2;
         float widthhalf = self.frame.size.width/2;
@@ -473,20 +467,15 @@ static float deg2rad = M_PI/180.0;
         // FIXME: do this in host app
         [self setShaderProgramForLineWidth: lineWidth * backingScaleFactor];
         
-#ifdef WITH_OPENGL_32
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_POLYGON_SMOOTH);
-#else // @@@ OGL
+        renderer_disable_blend_smooth();
+        
+#ifndef WITH_OPENGL_32
         glLineWidth(2.0);
         glPointSize(2.0);
 
         glRotatef( -crossAngle, 0, 0, 1);
         glTranslatef(-crossglX, -crossglY, 0.0);
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_POLYGON_SMOOTH);
-        glDisable(GL_POINT_SMOOTH);
 #endif
-        glDisable(GL_BLEND);
     }
 }
 
