@@ -23,7 +23,7 @@
  for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
  =========================================================================*/
 
@@ -61,7 +61,7 @@
 #import "spline.h"
 #undef id
 
-// TODO: use vtkMath::RadiansFromDegrees()
+// TODO: use vtkMath::RadiansFromDegrees() or glm::radians()
 static float deg2rad = M_PI/180.0;
 
 void setNumberOfThreads()
@@ -284,7 +284,8 @@ void setNumberOfThreads()
 					areaList[index1*4+3]=j;
 			}
 		}
-	//try to remove air object in front of the patient and small air area
+	
+    // Try to remove air object in front of the patient and small air area
 	long width,height;
 	index1=1;
 	for(i=1;i<index2;i++)//
@@ -296,13 +297,14 @@ void setNumberOfThreads()
 
 		width=areaList[i*4+2]-areaList[i*4];
 		height=areaList[i*4+3]-areaList[i*4+1];
-		//small air area
-		if((width+height)<(imageWidth)/10)
+		
+        // Small air area
+		if ((width+height)<(imageWidth)/10)
 		{
 			connectingmap[i]=0;
 			index1--;
 		}
-		else if(y==0 && height<imageHeight/2) //check for air area in front of patient on suspicous area.
+		else if (y==0 && height<imageHeight/2) // check for air area in front of patient on suspicious area.
 		{
 			int isconnectedToLung=0;
 			if(preSlice)
@@ -313,7 +315,6 @@ void setNumberOfThreads()
 					{
 						if(*(tempimg+(t+y)*imageWidth+s+x)==connectingmap[i]&&*(preSlice+(t+y)*imageWidth+s+x))
 							isconnectedToLung=1;
-				
 					}
 			}
 
@@ -321,28 +322,23 @@ void setNumberOfThreads()
 			{
 				connectingmap[i]=0;
 				index1--;
-
 			}
 		}
-		
-		
 	}
 
 	for(i=0;i<imageSize;i++)
 	{
-		
 		img2d8bit[i]=connectingmap[tempimg[i]];
-		
 	}
-	
 		
 	return index1;
-	
 }
+
 -(void)closingVesselHoles:(unsigned char*)img2d8bit :(float)diameter
 {
 	
 }
+
 -(int)findingHeart:(float*)inData
                   :(unsigned char*)outData
                   :(long*)origin
@@ -493,7 +489,7 @@ void setNumberOfThreads()
 	int err=0;
 
 	int i=0;
-	//first round check based on lung contour
+	// First round check based on lung contour
 	{
 
 		while (i<360&&curve[i%360]==10000)
@@ -1156,7 +1152,7 @@ else
 								[pirortyQueue update:y*width+x:(*(weightmap +y*width+x))];
 							}
 						}
-						else //not in queue
+						else // not in queue
 						{
 							(*(costmap+y*width+x))=(*(costmap+j*width+i))+(*(weightmap +y*width+x));
 							(*(directormap+y*width+x))=0x20|neighbors;
@@ -1239,7 +1235,7 @@ else
 							[pirortyQueue update:y*width+x:(*(weightmap +y*width+x))];
 						}
 					}
-					else //not in queue
+					else // not in queue
 					{
 						(*(costmap+y*width+x))=(*(costmap+j*width+i))+directioncost+(*(weightmap +y*width+x));
 						(*(directormap+y*width+x))=0x20|neighbors;
@@ -1250,7 +1246,7 @@ else
 				{
 					(*(directormap+y*width+x))=neighbors;
 					[pirortyQueue release];
-					//memcpy(weightmap,costmap,height*width*sizeof(long));//for test//
+					//memcpy(weightmap,costmap,height*width*sizeof(long)); // for test
 
 					return y*width+x;
 				}
@@ -1259,18 +1255,17 @@ else
 			
 		}
 	}
-	[pirortyQueue release];
-				//memcpy(weightmap,costmap,height*width*sizeof(long));//for test//
+
+    [pirortyQueue release];
+    //memcpy(weightmap,costmap,height*width*sizeof(long)); // for test
 	return -1;
-	
 }
 
 -(void)intensityRelatedWeightMap:(long)width
                                 :(long)height
                                 :(long*)weightmap
 {
-
-	if(width*height<=0)
+	if (width*height<=0)
 	{
 		NSLog( @"width*height<");
 		return;
@@ -1883,11 +1878,7 @@ else
 			float centerx,centery,radius;
 			centerx=(*itCircles)->GetObjectToParentTransform()->GetOffset()[0];
 			centery=(*itCircles)->GetObjectToParentTransform()->GetOffset()[1];
-#if 1 // @@@ fixed
             radius=(*itCircles)->GetRadiusInObjectSpace()[0];
-#else // original
-			radius=(*itCircles)->GetRadius()[0];
-#endif
 			CMIV3DPoint* aNewCircle=[[CMIV3DPoint alloc] init];
 			aNewCircle.x=centerx;
 			aNewCircle.y=centery;
@@ -2310,7 +2301,7 @@ else
 	imageAmount=dim[2];
 	imageSize=dim[0]*dim[1];
 
-	// Initilize VTK part
+	// Initialize VTK part
 
 	vtkImageImport* reader = vtkImageImport::New();
 	reader->SetWholeExtent(0, dim[0]-1, 0, dim[1]-1, 0, dim[2]-1);
@@ -2454,8 +2445,8 @@ else
 	const double seedValue = - initialDistance;
 	seeds->Initialize();
 
-	seedPosition[0] = costMapWidth/2;//start from center
-	seedPosition[1] = costMapWidth/2;//start from center	
+	seedPosition[0] = costMapWidth/2; // start from center
+	seedPosition[1] = costMapWidth/2; // start from center
 	
 	node.SetValue( seedValue *costMapSpacing[0] );
 	node.SetIndex( seedPosition );
@@ -2501,14 +2492,14 @@ else
                 }
 			}
 		
-		//get threshold levelset segmentation
+		// Get threshold levelset segmentation
 	
 		try
 		{
 			importFilter->Modified();
 			importFilter->Update();
 			fastMarching->SetOutputSpacing( importFilter->GetOutput()->GetSpacing() );
-			smoothing->SetInput( importFilter->GetOutput() );//should try without this line
+			smoothing->SetInput( importFilter->GetOutput() ); // should try without this line
 			thresholder->Update();
 		}
 		catch( itk::ExceptionObject & excep )
@@ -2519,7 +2510,8 @@ else
 		
 		segmentedRegion=thresholder->GetOutput()->GetBufferPointer();	
 		smoothedInputImg=smoothing->GetOutput()->GetBufferPointer();
-		//compare with last step cross-section, overlap percentage and radius
+
+        // Compare with last step cross-section, overlap percentage and radius
 	//	if (step>2) {
 //			if([self compareOverlappedRegion:segmentedRegion:lastSegmentedRegion:regionSize]<0.7)
 //			{
@@ -2528,7 +2520,7 @@ else
 //			}
 //		}
 		
-		//compare largest incircle center and gravity center (aortic valve have irregular segment results
+		// Compare largest incircle center and gravity center (aortic valve have irregular segment results
 		int incirclecenter[2],gravitycenter[2];
 		float newCenter3D[3];
 		float incircleradius;
@@ -2606,7 +2598,7 @@ else
 					point[1] = curOriginY + j * curYSpacing/3;
 					point[2] = 0;
 					if ((point[0]-x0) * (point[0]-x0) * b + // TODO: check / instead of *
-                        (point[1]-y0) * (point[1]-y0) * a <= a*b) //x^2/a+y^2/b<1
+                        (point[1]-y0) * (point[1]-y0) * a <= a*b) // x^2/a+y^2/b<1
 					{
 						rotationTransform->TransformPoint(point,point);
 						x=lround((point[0])/spacing[0]);
@@ -2777,7 +2769,8 @@ else
 			maxradius += 1/imSliceSpacing[0];
 			int i,j,height,width;
 			int x,y,z;
-			//for test
+			
+            // For test
 //			height=costMapHeight;
 //			width=costMapWidth;
 //	
@@ -2812,7 +2805,8 @@ else
 			maxz=0;
 			height=3*costMapHeight;
 			width=3*costMapWidth;
-			//step=0.3 pixel!	
+			
+            // step=0.3 pixel!	
 			for (j=0;j<height;j++)
 				for (i=0;i<width;i++)
 				{
@@ -3138,7 +3132,7 @@ else
 				for (x=minx;x<=maxx;x++)
 					if (*(contrastVolumeData+z*imageSize+y*imageWidth+x) == marker)
 					{
-						//x,y direction
+						// x,y direction
 						if ((y+1)<=maxy&& (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker))
 						{
 							if ((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) == marker))
@@ -3149,7 +3143,7 @@ else
 								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
 						}
 						
-						//x,z direction
+						// x,z direction
 						if ((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
 							if ((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x-1) == marker))
@@ -3160,7 +3154,7 @@ else
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
 						}		
 						
-						//y,z direction
+						// y,z direction
 						if ((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
 							if ((y-1)>=miny && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x) == marker))
@@ -3169,8 +3163,9 @@ else
 							
 							else if ( (y+1)<=maxy && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
 								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-						}	
-						//x,y,z direction
+						}
+                        
+						// x,y,z direction
 						if ((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
 							if ((y-1)>=miny && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x-1) == marker))

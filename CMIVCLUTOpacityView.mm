@@ -526,7 +526,8 @@
 					selected = YES;
 				}
 			}
-			//border
+
+            // Border
 			NSPoint pt1 = [transform transformPoint:pt];
 			NSRect frame1 = NSMakeRect(pt1.x-pointDiameter*0.5-pointBorder, pt1.y-pointDiameter*0.5-pointBorder, pointDiameter+2*pointBorder, pointDiameter+2*pointBorder);
 			NSBezierPath *dot1 = [NSBezierPath bezierPathWithOvalInRect:frame1];
@@ -536,7 +537,7 @@
 			if(selected || controlPointSelected) [selectedPointColor set];
 			[dot1 fill];
 				
-			//inside
+			// Inside
 			NSPoint pt2 = [transform transformPoint:pt];
 			NSRect frame = NSMakeRect(pt2.x-pointDiameter*0.5, pt2.y-pointDiameter*0.5, pointDiameter, pointDiameter);
 			NSBezierPath *dot = [NSBezierPath bezierPathWithOvalInRect:frame];
@@ -546,11 +547,13 @@
 			[[[pointColors objectAtIndex:i] objectAtIndex:j] set];
 			[dot fill];
 			
-			if(selected) selectedPointForLabel = pt;
+			if (selected)
+                selectedPointForLabel = pt;
 		}
 		
 		// LABEL FOR SELECTED POINT
-		if(selectedPointForLabel.y>=0.0)[self drawPointLabelAtPosition:selectedPointForLabel];
+		if(selectedPointForLabel.y>=0.0)
+            [self drawPointLabelAtPosition:selectedPointForLabel];
 		
 		// LABEL FOR ALL POINTS
 		if(controlPointSelected)

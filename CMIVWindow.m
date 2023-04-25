@@ -13,8 +13,7 @@
 -(void) dealloc
 {
 	NSLog(@"CMIVPluginWindow Dealloc.");
-	[super dealloc];
-	
+	[super dealloc];	
 }
 
 -(void)setHorizontalSlider:(NSSlider*) aSlider

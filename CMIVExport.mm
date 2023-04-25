@@ -27,6 +27,7 @@ PURPOSE.
 #import "url2.h" // for OUR_DATA_LOCATION
 
 @implementation CMIVExport
+
 - (void) setSeriesDescription: (NSString*) desc
 {
     if( desc != exportSeriesDescription)
@@ -38,7 +39,7 @@ PURPOSE.
 
 - (void) setSeriesNumber: (long) no
 {
-    //If no == -1, take the value of source dcm
+    // If no == -1, take the value of source dcm
     exportSeriesNumber = no;
 }
 
@@ -70,7 +71,6 @@ PURPOSE.
         exportSeriesDescription = @"CMIV CTA TOOLs for OsiriX";
         [exportSeriesDescription retain];
         
-        
         spacingX = 0;
         spacingY = 0;
         sliceThickness = 0;
@@ -96,7 +96,7 @@ PURPOSE.
     [exportSeriesDescription release];
     
     [dcmSourcePath release];
-    //	[dcmDst release];
+    //[dcmDst release];
     
     [super dealloc];
 }
@@ -255,7 +255,7 @@ PURPOSE.
         if (spp == 3)
             photometricInterpretation = @"RGB";
         
-        //change attributes
+        // Change attributes
         if( charSet) [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:charSet] forName:@"SpecificCharacterSet"];
         if( studyUID) [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:studyUID] forName:@"StudyInstanceUID"];
         if( exportSeriesUID) [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:[exportSeriesUID stringByAppendingString: [seriesNumber stringValue]]] forName:@"SeriesInstanceUID"];
@@ -305,11 +305,11 @@ PURPOSE.
         {
             vr = @"OW";
             
-            //By default, we use a 1024 rescale intercept !!
+            // By default, we use a 1024 rescale intercept !!
             [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:[NSNumber numberWithInt:-1024]] forName:@"RescaleIntercept"];
             [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:[NSNumber numberWithInt:1]] forName:@"RescaleSlope"];
             
-            if( ww != -1 && ww != -1)
+            if (ww != -1 && ww != -1)
             {
                 [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:[NSNumber numberWithInt:wl]] forName:@"WindowCenter"];
                 [dcmDst setAttributeValues:[NSMutableArray arrayWithObject:[NSNumber numberWithInt:ww]] forName:@"WindowWidth"];
@@ -325,7 +325,7 @@ PURPOSE.
         
         //[dcmDst setAttributeValues:[NSMutableArray arrayWithObject:@"US"] forName:@"RescaleType"];
         
-        //add Pixel data
+        // Add Pixel data
         
         DCMTransferSyntax *ts;
         ts = [DCMTransferSyntax ImplicitVRLittleEndianTransferSyntax];
@@ -359,22 +359,24 @@ PURPOSE.
         }
         else
             tlength=0;
+
         //[[dcmcontainer dicomData] release];
         [dcmcontainer release];
-        
         [[dcmDst attributes] removeAllObjects];
         
         if( squaredata)
         {
             free( squaredata);
         }
+        
         squaredata = 0L;
         //if(dcmDst)
         [dcmDst release];
         
         return 0;
     }
-    else return -1;
+    else
+        return -1;
 }
 
 - (void) exportCurrentSeries:(ViewerController *)originalViewController
@@ -451,7 +453,7 @@ PURPOSE.
             dst8.rowBytes = width * sizeof( short);
             dst8.data = data;
             
-            vImageConvert_FTo16U( &srcf, &dst8, -1024,  1, 0);	//By default, we use a 1024 rescale intercept !!
+            vImageConvert_FTo16U( &srcf, &dst8, -1024,  1, 0);	// By default, we use a 1024 rescale intercept !!
             [self setSourceFile: [[fileList objectAtIndex:ii] valueForKey:@"completePath"]];
             
             [self setPixelSpacing: [curPix pixelSpacingX]:[curPix pixelSpacingY]];
@@ -525,7 +527,7 @@ PURPOSE.
                     if (aROIpath)
                         [addedROIFiles addObject:aROIpath];
                     else
-                        [addedROIFiles addObject:tempdstPath];//sometime aROIpath will be nil but the ROI is all right, donot know why
+                        [addedROIFiles addObject:tempdstPath]; // sometimes aROIpath will be nil but the ROI is all right, do not know why
                 }
             }
             
@@ -574,7 +576,7 @@ PURPOSE.
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
 #ifdef VERBOSEMODE
-        NSLog( @"incoming folder is default type");
+        NSLog(@"%s %d, incoming folder is default type", __FUNCTION__, __LINE__);
 #endif
         return path;// not sure if s is in UTF8 encoding:  What's opposite of -[NSString fileSystemRepresentation]?
     }

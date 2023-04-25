@@ -23,7 +23,7 @@
  for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
  =========================================================================*/
 
@@ -206,7 +206,8 @@
 		tempROIIm->GetOrigin( origin);	
 		
 		isRemoveROIBySelf=1;
-		//to avoid those ROIs remove seeds when autorelease pool
+		
+        // To avoid those ROIs remove seeds when autorelease pool
 
 		ROI* tempROI;
 		NSString* emptystr=@"";
@@ -541,11 +542,15 @@
 	segmentNeighborhood = 26;
 
 	return [self showPreviewPanel:vc :indata :outdata :colordata :directdata];
-	
 }
-- (id) showPreviewPanel:(ViewerController *) vc:(float*)inData:(float*)outData:(unsigned char*)colData:(unsigned char*)direData
+
+- (id) showPreviewPanel:(ViewerController *) vc
+                       :(float*)inData
+                       :(float*)outData
+                       :(unsigned char*)colData
+                       :(unsigned char*)direData
 {
-	//initialize the window
+	// Initialize the window
 	self = [super initWithWindowNibName:@"SegPreview"];
 	[[self window] setDelegate:self];
 
@@ -621,11 +626,11 @@
 
         [seedList setDataSource: self];
 
-        //hide other segments
+        // Hide other segments
 		if (err!=2)
 		{
-			osirixOffset=[vrView offset] ;
-			osirixValueFactor=[vrView valueFactor] ;
+			hostAppOffset=[vrView offset] ;
+			hostAppValueFactor=[vrView valueFactor] ;
 			renderOfVRView = [vrView renderer];
 			
 			volumeOfVRView = (vtkVolume * )[vrView volume];
@@ -681,7 +686,7 @@
 	[mprView mouseDown:virtualMouseDownEvent];
 	[mprView mouseUp:virtualMouseUpEvent];
 #endif
-	//mistery bug above
+	// Mistery bug above
 	
 	return self;
 }
@@ -1305,10 +1310,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 						{
 							
-							if(*(texture+j*[roi textureWidth]+i))
+							if (*(texture+j*[roi textureWidth]+i))
 							{
 								*(newSeedsBuffer+z*imageSize+y*imageWidth+x)=marker;
-								//cover more area with spacing/2, hopeful to reduce holes in 3d plain
+								// Cover more area with spacing/2, hopeful to reduce holes in 3D plain
 								if((i+1)<[roi textureWidth]&&*(texture+j*[roi textureWidth]+i+1))
 								{
 									point[0] = curOriginX + i * curXSpacing+curXSpacing/2;
@@ -1318,11 +1323,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 									x=lround((point[0]-vtkOriginalX)/xSpacing);
 									y=lround((point[1]-vtkOriginalY)/ySpacing);
 									z=lround((point[2]-vtkOriginalZ)/zSpacing);
-									if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
-										*(newSeedsBuffer+z*imageSize+y*imageWidth+x) = marker;
-									
+									if (x>=0 && x<imageWidth &&
+                                        y>=0 && y<imageHeight &&
+                                        z>=0 && z<imageAmount)
+                                    {
+                                        *(newSeedsBuffer+z*imageSize+y*imageWidth+x) = marker;
+                                    }
 								}
-								if((j+1)<[roi textureHeight]&&*(texture+(j+1)*[roi textureWidth]+i))
+								if ((j+1)<[roi textureHeight]&&*(texture+(j+1)*[roi textureWidth]+i))
 								{
 									point[0] = curOriginX + i * curXSpacing;
 									point[1] = curOriginY + j * curYSpacing+curYSpacing/2;
@@ -1335,7 +1343,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 										*(newSeedsBuffer+z*imageSize+y*imageWidth+x) = marker;
 									
 								}
-								if((i+1)<[roi textureWidth] && (j+1)<[roi textureHeight] && *(texture+(j+1)*[roi textureWidth]+i))
+								if ((i+1)<[roi textureWidth] && (j+1)<[roi textureHeight] && *(texture+(j+1)*[roi textureWidth]+i))
 								{
 									point[0] = curOriginX + i * curXSpacing+curXSpacing/2;
 									point[1] = curOriginY + j * curYSpacing+curYSpacing/2;
@@ -2087,7 +2095,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			if(*(choosenColorList+j)==*(colorData+i))
 				isAChoosenColor=1;
 		if(isAChoosenColor&&((*(outputData+i))>=thresholdValue))
-			*(volumeData+i)=(unsigned short)((*(inputData+i)+osirixOffset)*osirixValueFactor);
+			*(volumeData+i)=(unsigned short)((*(inputData+i)+hostAppOffset)*hostAppValueFactor);
 		else
 			*(volumeData+i)=1;
 		
@@ -2353,7 +2361,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (IBAction)createSkeleton:(id)sender
 {
 	NSLog( @"start step 4");
-	//get parameters
+	// Get parameters
 	skeletonParaLengthThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterLengthThreshold"];
 	skeletonParaEndHuThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterBranchEndThreshold"];
 	if(skeletonParaLengthThreshold<5.0)
@@ -2409,7 +2417,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		return;
 	}
 
-    //relase some space for next step
+    // Release some space for next step
 	if (parentColorData)
 		[parentColorData release];
 	else
@@ -2487,7 +2495,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int size=imageWidth*imageHeight*imageAmount;
 	for(jj=0;jj<size;jj++)
 		*(outputData+jj)=(*(outputData+jj))*3;//+(*(inputData+jj));
-	//for test
+	
+    // For test
 	//for(jj=0;jj<size;jj++)
 	//	*(inputData+jj)+=(*(outputData+jj));
 
@@ -2495,26 +2504,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	//if([parent loadVesselnessMap:outputData])
 	{
 		[self prepareForCalculateLength:pdismap];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
 		[self prepareForCalculateLength:pdismap];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 		[self prepareForCalculateLength:pdismap];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
 	/*else
 	{
 		[self prepareForCalculateLength:pdismap];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
 		NSLog( @"optimizing connectedness tree");
 		[self prepareForCalculateLength:pdismap];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 		NSLog( @"optimizing connectedness tree");
 		[self prepareForCalculateLength:pdismap];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
-	NSLog( @"finish optimizing connectedness tree");*/
 
-
+    NSLog( @"finish optimizing connectedness tree");*/
 	
 	int unknownCenterlineCounter=0;
 	int* indexForEachSeeds=(int*)malloc(sizeof(int)*[choosenSeedsArray count]);
@@ -2532,7 +2540,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			y=[apoint y];
 			z=[apoint z];
 			
-			if(x>0&&x<imageWidth-1&&y>0&&y<imageHeight-1&&z>0&&z<imageAmount-1)
+			if (x>0 && x<imageWidth-1 &&
+                y>0 && y<imageHeight-1 &&
+                z>0 && z<imageAmount-1)
 			{
 				NSMutableArray* apath=[NSMutableArray arrayWithCapacity:0];
 				[apath addObject:apoint];
@@ -2590,7 +2600,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}while( pathWeightLength>0);
 	}	
 	//[parent loadVesselnessMap:outputData];
-	/* //trying new method for centerline searching
+	/* // Trying new method for centerline searching
 	for(i=0;i<[centerlinesList count];i++)
 	{
 		NSMutableArray* apath=[NSMutableArray arrayWithCapacity:0];
@@ -2701,11 +2711,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else
 	{
 		[self createROIfrom3DPaths:centerlinesList:centerlinesNameList];
-		[self replaceDistanceMap];//should release memory
+		[self replaceDistanceMap]; // should release memory
 	}
-	
-	
 }
+
 - (BOOL) prepareForSkeletonizatin
 {
 	unsigned char* choosenColorList;
@@ -2736,7 +2745,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			*(directionData+i)=0x00;
 			*(outputData+i)=minValueInCurSeries;
 		}
-		
 	}
 	
 	if([self plantRootSeeds]<1)
@@ -2747,9 +2755,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	free(choosenColorList);
 	return YES;
-	
-	
 }
+
 - (int)plantRootSeeds
 {
 	int seedNumber=0;
@@ -2871,9 +2878,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			*(outputData+i)=0;
 	}
 }
+
 - (void)createROIfrom3DPaths:(NSArray*)pathsList:(NSArray*)namesList
 {
-	//doesn't work anymore after change result view strategy
+	// FIXME: it doesn't work anymore after change result view strategy
 	return;
     
 	RGBColor color;

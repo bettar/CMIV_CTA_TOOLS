@@ -2,7 +2,7 @@
 /*=========================================================================
 CMIVScissorsController
 
-Handle most common 2d image processing task, such as MPR, CPR.
+Handle most common 2D image processing task, such as MPR, CPR.
 Another important job is to create the seeds marker for the 
 segmentation.
 
@@ -30,7 +30,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 #import <Cocoa/Cocoa.h>
@@ -64,11 +64,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	IBOutlet NSPopUpButton *pathListButton;
     IBOutlet CMIVSlider *axImageSlider;
     IBOutlet CMIVSlider *cImageSlider;
-    IBOutlet CMIVDCMView *cPRView;
-    IBOutlet CMIVDCMView *crossAxiasView;
+
+    IBOutlet CMIVDCMView *cprView;
+    IBOutlet CMIVDCMView *crossAxialView;
+    IBOutlet CMIVDCMView *originalView;
+
     IBOutlet CMIVSlider *cYRotateSlider;
     IBOutlet CMIVSlider *oImageSlider;
-    IBOutlet CMIVDCMView *originalView;
     IBOutlet CMIVSlider *oXRotateSlider;
     IBOutlet CMIVSlider *oYRotateSlider;
     IBOutlet NSColorWell *seedColor;
@@ -78,9 +80,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     IBOutlet NSSlider *brushWidthSlider;
     IBOutlet NSSegmentedControl *brushStatSegment;
     IBOutlet NSTextField *brushWidthText;
-	IBOutlet NSButton *oViewCrossShowButton;	
+	
+    IBOutlet NSButton *oViewCrossShowButton;	
 	IBOutlet NSButton *cViewCrossShowButton;
 	IBOutlet NSButton *axViewCrossShowButton;
+    
 	IBOutlet NSButton *showAnnotationButton;
 	IBOutlet NSButton *nextButton;
 	IBOutlet NSButton *previousButton;
@@ -207,7 +211,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	float    sliceThickness;
 	float	 vtkOriginalX,vtkOriginalY,vtkOriginalZ;
 	float    xSpacing,ySpacing,zSpacing,minSpacing;
-	float    centerX,centerY,centerZ; //for lock center , not useful now
+	float    centerX,centerY,centerZ; // for lock center, not useful now
 	float    preOViewXAngle,PreOViewYAngle,preOViewPosition;
 	float    oViewRotateAngleX,oViewRotateAngleY,cViewRotateAngleY;
 	float    axViewLowerThresholdFloat,axViewUpperThresholdFloat;
@@ -333,7 +337,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	NSMutableArray   *reference3Dpoints;
 	ROI *referenceCurvedMPR2DPath;
 	
-	float lastLevelsetDiameter;//not useful at all but further test should be done
+	float lastLevelsetDiameter; // TODO: not useful at all but further test should be done
 	NSRect axViewLevelsetRect;
 	
 	BOOL cViewMeasureNeedToUpdate;
@@ -456,7 +460,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (NSMutableArray *) create3DPathFromROIs:(NSString*) roiName;
 - (void) resample3DPath:(float)step :(NSMutableArray*)apath;
 - (void)changAmongMPRCPRAndAnalysis:(int)modeindex;
-	//for tableview
+	
+// For tableview
 - (int)numberOfRowsInTableView:(NSTableView *)tableView;
 - (id)tableView:(NSTableView *)tableView
     objectValueForTableColumn:(NSTableColumn *)tableColumn

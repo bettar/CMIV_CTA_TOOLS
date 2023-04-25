@@ -284,7 +284,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="capureImage:" target="-2" id="257"/>
+                            <action selector="captureImage:" target="-2" id="257"/>
                         </connections>
                     </button>
                     <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="259">

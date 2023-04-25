@@ -23,7 +23,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 
@@ -111,7 +111,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	// Display a waiting window
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
 	[self runSegmentation:&inputData :&outputData:&colorData:&directionData];
-	//export result and release memory
+	
+    // Export result and release memory
 	if (inputData&&outputData&&colorData&&directionData)
 	{
 		if ([exportCenterlineChechBox state] != NSControlStateValueOn)
@@ -149,24 +150,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			free(directionData);
 		}
 		else
-			free( colorData );//clean the  color matrix
+			free( colorData ); // clean the  color matrix
 	}
 	
 	[originalViewController endWaitWindow: waitWindow];
 	[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(onCancel:)  userInfo:0L repeats:NO];
-	
-	
-	
 }
 
 - (IBAction)onPreview:(id)sender
 {
-	float               *inputData=0L, *outputData=0L;
-	unsigned char       *colorData=0L, *directionData=0L;
+	float *inputData=0L, *outputData=0L;
+	unsigned char *colorData=0L, *directionData=0L;
 	unsigned short int* seedVolume;
 	int size= sizeof(unsigned short int)*imageWidth*imageHeight*imageAmount;	
 	seedVolume=(unsigned short int*)malloc(size);
-	if(!seedVolume)
+	
+    if (!seedVolume)
 	{
 		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
@@ -175,7 +174,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	}
     
 	memset(seedVolume, 0, size);
-	// Display a waiting window
+	
+    // Display a waiting window
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
 	NSLog( @"start step 3");
 	[self runSegmentation:&inputData:&outputData:&colorData:&directionData];
@@ -342,13 +342,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					*(directionData+ imageWidth * imageHeight*z + imageWidth*y + x) = 0x00;
 			}
     
-	//planting seed in color matrix
+	// Planting seed in color matrix
 				
 	int seednumber = [self seedPlantingfloat:inputData:outputData:directionData];
 	if (seednumber < 1)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"no seed", nil), NSLocalizedString(@"no seeds are found, draw ROI first.", nil), NSLocalizedString(@"OK", nil), nil, nil);
-		if(ifUseSmoothFilter)
+		NSRunAlertPanel(NSLocalizedString(@"no seed", nil),
+                        NSLocalizedString(@"no seeds are found, draw ROI first.", nil),
+                        NSLocalizedString(@"OK", nil),
+                        nil, nil);
+		if (ifUseSmoothFilter)
 			free(inputData);
 		free( outputData );	
 		free( colorData );
@@ -361,13 +364,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		return;
 	}			
 
-    // create ouput color list
+    // Create output color list
 	unsigned int rowIndex;
 	outputColorList= [[NSMutableArray alloc] initWithCapacity: 0];
 	for(rowIndex=0;rowIndex<[outROIArray count];rowIndex++)
 		if([[outROIArray objectAtIndex:rowIndex] ROImode]== ROI_selected)
 			[outputColorList addObject: [NSNumber numberWithInt:rowIndex+1]];
-	//get spacing
+	
+    // Get spacing
 	float sliceThickness = [curPix sliceInterval];   
 	if( sliceThickness == 0)
 	{
@@ -380,14 +384,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	spacing[1]=[curPix pixelSpacingY];
 	spacing[2]=sliceThickness;
 	
-	//start seed growing	
+	// Start seed growing	
 	CMIVSegmentCore *segmentCoreFunc = [[CMIVSegmentCore alloc] init];
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 	if([neighborhoodModeMatrix selectedRow])
 		[segmentCoreFunc startShortestPathSearchAsFloatWith6Neighborhood:inputData Out:outputData Direction: directionData];
 	else
 		[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
-	//initilize the out and color buffer
+	
+    // Initialize the out and color buffer
 	memset(colorData,0,size);
 	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData]; 
 	[segmentCoreFunc release];
@@ -395,8 +400,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	*ppInData = inputData;
 	*ppOutData = outputData;
 	*ppColorData = colorData;
-	*ppDirectionData = directionData;
-	
+	*ppDirectionData = directionData;	
 }
 
 - (IBAction)removeFromRight:(id)sender
@@ -818,7 +822,7 @@ if( originalViewController == 0L) return 0L;
 		}
 	}
 	
-	//create a new series
+	// Create a new series
 	float* tempinput=[originalViewController volumePtr:0];
 	memcpy(outputData,tempinput,size);
 	
@@ -1148,7 +1152,7 @@ if( originalViewController == 0L) return 0L;
 		return 1;
 	}
 
-	//get spacing
+	// Get spacing
 	float spacing[3];
 	spacing[0]=[curPix pixelSpacingX];
 	spacing[1]=[curPix pixelSpacingY];
@@ -1176,7 +1180,7 @@ if( originalViewController == 0L) return 0L;
 	}
 
     [self prepareForCalculateLength:pdismap:directData];
-	[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directData :minValueInCurSeries needSmooth:YES];
+	[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directData :minValueInCurSeries needSmooth:YES];
 	
 	free(pdismap);
 	

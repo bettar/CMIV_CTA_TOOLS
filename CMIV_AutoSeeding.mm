@@ -23,7 +23,7 @@
  for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
  =========================================================================*/
 
@@ -434,7 +434,7 @@
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 	
 	[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
-	//initilize the out and color buffer
+	// Initialize the out and color buffer
 	memset(colorData,0,size);
 	[segmentCoreFunc calculateColorMapFromPointerMap:colorData :directionData]; 
 //	for(int i=0;i<size;i++)
@@ -459,12 +459,12 @@
 	{
 		[self prepareForCalculateLength:pdismap:directionData];
 		size=imageWidth * imageHeight * imageAmount*sizeof(float);
-		memset(outputData,0x00,size);//localOptmizeConnectednessTree using outputData+=mean(inputData)
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
+		memset(outputData,0x00,size); //localOptimizeConnectednessTree using outputData+=mean(inputData)
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:YES];
 		[self prepareForCalculateLength:pdismap:directionData];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 		[self prepareForCalculateLength:pdismap:directionData];
-		[segmentCoreFunc localOptmizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
+		[segmentCoreFunc localOptimizeConnectednessTree:inputData :outputData :pdismap Pointer: directionData :minValueInCurSeries needSmooth:NO];
 	}
 
     int unknownCenterlineCounter=0;
@@ -721,7 +721,8 @@
 		
 		err=[coreAlgorithm vesselnessFilter:smallVolumeData :smalloutputVolumeData :newdimension :newspacing :startscale :endscale :scalestep];
 		[self rescaleVolume:smalloutputVolumeData :totalsize :rescaleMax];
-		//deal with calcium
+		
+        // Deal with calcium
 		[self resampleImage:volumeData:smallVolumeData :dimension :newdimension];
 		for (int i=0;i<totalsize;i++)
 		{
@@ -1094,151 +1095,143 @@
 }
 - (NSData*)loadImageFromSeries:(NSManagedObject*)series To:(NSMutableArray*)pixList
 {
-	unsigned long memsize=0, mem = 0;
-	BOOL multiFrame=NO;
-	
-	NSManagedObject*  curFile;
-	NSData*volumeNSData;
-	NSArray	*fileList = [[series valueForKey:@"images"] allObjects] ;
-	
-	if(!fileList||[fileList count]<1||!pixList)
-		return nil;
-	
-	@try
-	{
-		// Sort images with "instanceNumber"
-		NSSortDescriptor * sort = [[NSSortDescriptor alloc] initWithKey:@"instanceNumber" ascending:YES];
-		NSArray * sortDescriptors = [NSArray arrayWithObject: sort];
-		[sort release];
-		
-		fileList = [fileList sortedArrayUsingDescriptors: sortDescriptors];
-	}
-	
-	@catch (NSException * e)
-	{
-		NSLog( @"%@", [e description]);
-	}
-	
-	
-	
-	for( curFile in fileList )
-	{
-		long h = [[curFile valueForKey:@"height"] intValue];
-		long w = [[curFile valueForKey:@"width"] intValue];
-		
-		w += 2;
-		
-		if( w*h < 256*256)
-		{
-			w = 256;
-			h = 256;
-		}
-		
-		memsize += w * h;
-		
-	}
-	float* fVolumePtr = (float*)malloc( memsize * sizeof(float));
-	
-	
-	if( fVolumePtr )
-	{
-		volumeNSData = [[NSData alloc] initWithBytesNoCopy:fVolumePtr length:memsize*sizeof( float) freeWhenDone:YES];
-		NSArray *loadList = fileList;
-		{
-			//multiframe==NO
-			unsigned long i;
-			for(i = 0; i < [loadList count]; i++ )
-			{
-				NSManagedObject*  curFile = [loadList objectAtIndex: i];
-				DCMPix* dcmPix = [[DCMPix alloc] myinit: [curFile valueForKey:@"completePath"] :i :[loadList count] :fVolumePtr+mem :0 :[[curFile valueForKeyPath:@"series.id"] intValue] isBonjour:NO imageObj:curFile];
-				
-				if( dcmPix )
-				{
-					mem += [[curFile valueForKey:@"width"] intValue] * [[curFile valueForKey:@"height"] intValue];
-					
-					[pixList addObject: dcmPix];
-					
-					[dcmPix release];
-				}
-				else
-				{
-					NSLog( @"not readable: %@", [curFile valueForKey:@"completePath"] );
-				}
-			}
-		}
-		
-		if( [pixList count] != [loadList count] && multiFrame == NO )
-		{
-			[volumeNSData release];
-			return nil;
-			
-		}
-		//opening images refered to in viewerPix[0] in the adequate viewer
-		
-		if( [pixList count] > 0 && multiFrame == NO)
-		{
-			NSAutoreleasePool   *pool = [[NSAutoreleasePool alloc] init];
-			long				i;
-			
-			
-			for( i = 0 ; i < [pixList count]; i++)
-			{
-				
-				
-				{
-					if ([fileList count] == [pixList count]) // I'm not quite sure what this line does, but I'm afraid to take it out. 
-						[[BrowserController currentBrowser] getLocalDCMPath:[fileList objectAtIndex: i] : 5]; // Anyway, we are not guarantied to have as many files as pixs, so that is why I put in the if() - Joel
-					else
-						[[BrowserController currentBrowser] getLocalDCMPath:[fileList objectAtIndex: 0] : 5]; 
-					
-					
-					DCMPix* pix = [pixList objectAtIndex: i];
-					
-					[pix CheckLoad];
-				}
-				
-							}
-			
-			
-			
-			//if( stopThreadLoadImage == NO)	 
-			{	
-				float maxValueOfSeries = -100000;
-				float minValueOfSeries = 100000;
-				
-				
-				for( i = 0 ; i < [pixList count]; i++)	 
-				{
-					DCMPix* pix = [pixList objectAtIndex: i];
-					
-					if( maxValueOfSeries < [pix fullwl] + [pix fullww]/2) maxValueOfSeries = [pix fullwl] + [pix fullww]/2;
-					if( minValueOfSeries > [pix fullwl] - [pix fullww]/2) minValueOfSeries = [pix fullwl] - [pix fullww]/2;
-				}
-				
-				
-				
-				for( i = 0 ; i < [pixList count]; i++)	 
-				{
-					[[pixList objectAtIndex: i] setMaxValueOfSeries: maxValueOfSeries];
-					[[pixList objectAtIndex: i] setMinValueOfSeries: minValueOfSeries];
-				}
-				
-			}
-			[self computeIntervalAndFlipIfNeeded:  pixList];
+    unsigned long memsize=0, mem = 0;
+    BOOL multiFrame=NO;
+    
+    NSManagedObject*  curFile;
+    NSData*volumeNSData;
+    NSArray	*fileList = [[series valueForKey:@"images"] allObjects] ;
+    
+    if (!fileList||[fileList count]<1||!pixList)
+        return nil;
+    
+    @try
+    {
+        // Sort images with "instanceNumber"
+        NSSortDescriptor * sort = [[NSSortDescriptor alloc] initWithKey:@"instanceNumber" ascending:YES];
+        NSArray * sortDescriptors = [NSArray arrayWithObject: sort];
+        [sort release];
+        
+        fileList = [fileList sortedArrayUsingDescriptors: sortDescriptors];
+    }
+    
+    @catch (NSException * e)
+    {
+        NSLog( @"%@", [e description]);
+    }
+    
+    for ( curFile in fileList )
+    {
+        long h = [[curFile valueForKey:@"height"] intValue];
+        long w = [[curFile valueForKey:@"width"] intValue];
+        
+        w += 2;
+        
+        if( w*h < 256*256)
+        {
+            w = 256;
+            h = 256;
+        }
+        
+        memsize += w * h;
+        
+    }
+    
+    float* fVolumePtr = (float*)malloc( memsize * sizeof(float));
+    if ( !fVolumePtr )
+        return nil;
 
-			
-			[pool release];
-		}
-		else
-		{
-			[volumeNSData release];
-			volumeNSData=nil;
-		}
-		return volumeNSData;
-	}
-	else
-		return nil;
-	
+    volumeNSData = [[NSData alloc] initWithBytesNoCopy:fVolumePtr
+                                                length:memsize*sizeof( float)
+                                          freeWhenDone:YES];
+    NSArray *loadList = fileList;
+    {
+        //multiframe==NO
+        unsigned long i;
+        for (i = 0; i < [loadList count]; i++ )
+        {
+            NSManagedObject*  curFile = [loadList objectAtIndex: i];
+            DCMPix* dcmPix = [[DCMPix alloc] myinit: [curFile valueForKey:@"completePath"]
+                                                   : i
+                                                   : [loadList count]
+                                                   : fVolumePtr+mem
+                                                   : 0
+                                                   : [[curFile valueForKeyPath:@"series.id"] intValue]
+                                          isBonjour: NO
+                                           imageObj: curFile];
+            if ( dcmPix )
+            {
+                mem += [[curFile valueForKey:@"width"] intValue] * [[curFile valueForKey:@"height"] intValue];
+                
+                [pixList addObject: dcmPix];
+                
+                [dcmPix release];
+            }
+            else
+            {
+                NSLog( @"not readable: %@", [curFile valueForKey:@"completePath"] );
+            }
+        }
+    }
+    
+    if ([pixList count] != [loadList count] &&
+        multiFrame == NO )
+    {
+        [volumeNSData release];
+        return nil;        
+    }
+    
+    // Opening images refered to in viewerPix[0] in the adequate viewer
+    
+    if ([pixList count] > 0 && multiFrame == NO)
+    {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        long i;
+        for( i = 0 ; i < [pixList count]; i++)
+        {
+            {
+                if ([fileList count] == [pixList count]) // I'm not quite sure what this line does, but I'm afraid to take it out.
+                    [[BrowserController currentBrowser] getLocalDCMPath:[fileList objectAtIndex: i] : 5]; // Anyway, we are not guarantied to have as many files as pixs, so that is why I put in the if() - Joel
+                else
+                    [[BrowserController currentBrowser] getLocalDCMPath:[fileList objectAtIndex: 0] : 5];
+                
+                
+                DCMPix* pix = [pixList objectAtIndex: i];
+                
+                [pix CheckLoad];
+            }
+        }
+        
+        //if( stopThreadLoadImage == NO)
+        {
+            float maxValueOfSeries = -100000.;
+            float minValueOfSeries = 100000.;
+            
+            for( i = 0 ; i < [pixList count]; i++)
+            {
+                DCMPix* pix = [pixList objectAtIndex: i];
+                
+                if( maxValueOfSeries < [pix fullwl] + [pix fullww]/2) maxValueOfSeries = [pix fullwl] + [pix fullww]/2;
+                if( minValueOfSeries > [pix fullwl] - [pix fullww]/2) minValueOfSeries = [pix fullwl] - [pix fullww]/2;
+            }
+            
+            for( i = 0 ; i < [pixList count]; i++)
+            {
+                [[pixList objectAtIndex: i] setMaxValueOfSeries: maxValueOfSeries];
+                [[pixList objectAtIndex: i] setMinValueOfSeries: minValueOfSeries];
+            }
+        }
+        
+        [self computeIntervalAndFlipIfNeeded:  pixList];
+        [pool release];
+    }
+    else
+    {
+        [volumeNSData release];
+        volumeNSData=nil;
+    }
+
+    return volumeNSData;
 }
 
 -(void) computeIntervalAndFlipIfNeeded: (NSMutableArray*) pixList

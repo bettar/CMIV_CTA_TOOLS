@@ -80,11 +80,11 @@
 
 - (void)drawAxesInRect:(NSRect)rect
 {
-	//background
+	// background
 	[backgroundColor set];
 	NSRectFill(rect);
 	
-	//y axis
+	// y axis
 	[axesColor set];
 	
 	NSAffineTransform *transform = [self transform:rect];
@@ -100,16 +100,14 @@
 	[line moveToPoint:p1];
 	[line lineToPoint:p2];
 	
-
-	//handle of y axis
+	// Handle of y axis
 	NSRect hanlerect;
 	hanlerect.origin.x=p1.x-handleSize/2;
 	hanlerect.origin.y=p1.y+handleSize/2;
 	hanlerect.size.width=handleSize;
 	hanlerect.size.height=handleSize;	
-
 	
-	//x axis
+	// x axis
 	p1 = NSMakePoint(xLeftLimit-handleSize*2, yBottomLimit);
 	p2 = NSMakePoint(xRightLimit, yBottomLimit);	
 	p1 = [transform transformPoint:p1];
@@ -117,7 +115,7 @@
 	[line moveToPoint:p1];
 	[line lineToPoint:p2];
 	
-	//handle of x axis
+	// Handle of x axis
 	hanlerect.origin.x=p1.x+handleSize/2;
 	hanlerect.origin.y=p1.y-handleSize/2;
 	hanlerect.size.width=handleSize;
@@ -134,9 +132,8 @@
 		[line moveToPoint:p1];
 		[line lineToPoint:p2];
 	}
-	[line stroke];
-	
 
+    [line stroke];
 }
 
 - (void)drawCurveInRect:(NSRect)rect
@@ -164,7 +161,7 @@
 
 - (void)drawSelectedBoxInRect:(NSRect)rect
 {
-	//draw box borders
+	// Draw box borders
 	if (!currentCurve||[currentCurve count]==0||(endPtX==0 && startPtX==0))
 		return;
     
@@ -194,7 +191,7 @@
 	
 	line = [NSBezierPath bezierPath];
 	
-	//draw reference Lines
+	// Draw reference lines
 	[referenceLineColor set];
 	p1 = NSMakePoint(startPtX, 0);
 	unsigned int xindex;

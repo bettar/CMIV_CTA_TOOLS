@@ -30,7 +30,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 #import <Cocoa/Cocoa.h>
@@ -113,8 +113,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	float    sliceThickness;
 	float	 vtkOriginalX,vtkOriginalY,vtkOriginalZ;
 	float    xSpacing,ySpacing,zSpacing,minSpacing;
-	float    centerX,centerY,centerZ; //for lock center , not useful now
-	unsigned short int*   newSeedsBuffer;
+	float    centerX,centerY,centerZ; // for lock center, not useful now
+	unsigned short int* newSeedsBuffer;
 	float    mprViewRotateAngleX,mprViewRotateAngleY;
 	int      centerIsLocked;
 	double	 mprViewSpace[3], mprViewOrigin[3];
@@ -150,23 +150,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	int  lastResultSliderPos;
 	int interpolationMode;
-	
 
-	float osirixOffset;
-	float osirixValueFactor;
+	float hostAppOffset;
+	float hostAppValueFactor;
 	CMIV_CTA_TOOLS* parent;
 	BOOL isInWizardMode;
 	NSRect screenrect;
-	NSData*            parentSeedData;
-	NSData*            parentInputData;
-	NSData*            parentOutputData;
-	NSData*            parentColorData;
-	NSData*            parentDirectionData;
+	NSData* parentSeedData;
+	NSData* parentInputData;
+	NSData* parentOutputData;
+	NSData* parentColorData;
+	NSData* parentDirectionData;
 	NSMutableArray* endPointsArray;
 	NSMutableArray* endPointROIsArray;
 	NSMutableArray* manualCenterlinesArray;
 	NSMutableArray* manualCenterlineROIsArray;
-	float               defaultROIThickness;
+	float defaultROIThickness;
 	float  maxHuofRootSeeds;
 	float skeletonParaLengthThreshold,skeletonParaEndHuThreshold,skeletonParaCalThreshold;
 	
@@ -253,7 +252,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (void) reCalculateCPRPath:(NSMutableArray*) roiList :(int) width :(int)height :(float)spaceX : (float)spaceY : (float)spaceZ :(float)originX :(float)originY :(float)originZ;
 - (void) convertCenterlinesToVTKCoordinate:(NSArray*)centerlines;
 
-//only to cheat vrView
+// Only to cheat vrView
 - (float) minimumValue;
 - (float) maximumValue;
 - (ViewerController*) viewer2D;

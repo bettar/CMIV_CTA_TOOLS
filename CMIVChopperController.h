@@ -28,7 +28,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 #import <Cocoa/Cocoa.h>
@@ -51,10 +51,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     IBOutlet NSSlider *imageToSlider;
     IBOutlet NSTextField *leftTopX;
     IBOutlet NSTextField *leftTopY;
-    IBOutlet CMIVDCMView *originalView;
+
+    IBOutlet CMIVDCMView *originalView; // left panel
     IBOutlet NSSlider *originalViewSlider;
-    IBOutlet CMIVDCMView *reformView;
+
+    IBOutlet CMIVDCMView *reformView; // right panel
     IBOutlet NSSlider *reformViewSlider;
+
     IBOutlet NSSegmentedControl *reformViewState;
     IBOutlet NSTextField *rightBottomX;
     IBOutlet NSTextField *rightBottomY;

@@ -1,7 +1,7 @@
 /*=========================================================================
 CMIV3DPoint
 
-a structure to represent 3d point.
+a structure to represent 3D point.
 
 Author: Chunliang Wang (chunliang.wang@imv.liu.se)
 
@@ -27,18 +27,18 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 
 #import <Cocoa/Cocoa.h>
-
 
 @interface CMIV3DPoint : NSObject<NSCopying>
 {
 	float x,y,z,fValue;
 
 }
+
 @property float x,y,z,fValue;
 - (id) copyWithZone:(NSZone *)zone;
 @end

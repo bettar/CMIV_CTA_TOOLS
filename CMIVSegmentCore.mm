@@ -23,7 +23,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 
@@ -133,9 +133,9 @@ extern void setNumberOfThreads();
 							continue;
 					}
 						
-					if ((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07)))//if this point need to be check again
+					if ((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07))) // if this point needs to be checked again
 					{
-						if (*(directionOfData + itemp)&0xc0)//if this is a seed point or saturated point
+						if (*(directionOfData + itemp)&0xc0) // if this is a seed point or saturated point
 							*(marker+(itemp>>3))=*(marker+(itemp>>3))&(~(0x01<<(itemp&0x07)));
 						else
 						{
@@ -229,7 +229,7 @@ extern void setNumberOfThreads();
 								maxvalue=*(outputData+itemp);
 								maxcolorindex=13;
 							}
-		//update g
+		// Update g
 	
 							itemp=position_i2+position_j2+k;
 							if(maxvalue>*(outputData+itemp))
@@ -271,18 +271,16 @@ extern void setNumberOfThreads();
 							
 								else
 									*(marker+(itemp>>3))&=(~(0x01<<(itemp&0x07)));
-									
 							}
 							else 
 								*(marker+(itemp>>3))&=(~(0x01<<(itemp&0x07)));
-
 						}
 					}
 				}
 			}
 		}
 				
-//*******************************negitive direction*************************
+//****************************** negative direction ************************
 		for(i=iheight-2;i>0;i--)
 		{
 			position_i1 = (i+1)*imageSize;
@@ -329,9 +327,10 @@ extern void setNumberOfThreads();
 							continue;
 						
 					}
-					if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07)))//if this point need to be check again
+
+                    if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07))) // if this point needs to be checked again
 					{
-						if(*(directionOfData + itemp)&0xc0)//if this is a seed point or saturated point
+						if(*(directionOfData + itemp)&0xc0) // if this is a seed point or saturated point
 							*(marker+(itemp>>3))=*(marker+(itemp>>3))&(~(0x01<<(itemp&0x07)));
 						else
 						{
@@ -424,7 +423,7 @@ extern void setNumberOfThreads();
 										maxvalue=*(outputData+itemp);
 										maxcolorindex=15;
 									}
-				//update g
+				// Update g
 			
 									itemp=position_i2+position_j2+k;
 									if(maxvalue>*(outputData+itemp))
@@ -465,19 +464,16 @@ extern void setNumberOfThreads();
 										}
 										else
 											*(marker+(itemp>>3))&=(~(0x01<<(itemp&0x07)));
-							
-
 									}
 									else 
 										*(marker+(itemp>>3))&=(~(0x01<<(itemp&0x07)));
-
 							}
 					}
 				}
 			}
 		}
-
-	}while(changed);
+	}
+    while(changed);
 	
 	[self checkSaturatedPoints];
 	
@@ -609,7 +605,8 @@ extern void setNumberOfThreads();
 						maxvalue=*(outputData+itemp);
 						maxcolorindex=13;
 					}
-					//update g
+
+                    // Update g
 					itemp=position_i2+position_j2+k;
 					if(maxvalue>*(outputData+itemp))
 					{
@@ -637,7 +634,7 @@ extern void setNumberOfThreads();
 	}
 		countNum=0;
 		
-	//*******************************negitive direction*************************
+	//****************************** negative direction ************************
 	for(i=iheight-2;i>0;i--)
 	{
 		position_i1 = (i+1)*imageSize;
@@ -742,7 +739,8 @@ extern void setNumberOfThreads();
 						maxvalue=*(outputData+itemp);
 						maxcolorindex=15;
 					}
-					//update g
+                    
+					// Update g
 					
 					itemp=position_i2+position_j2+k;
 					if(maxvalue>*(outputData+itemp))
@@ -1028,39 +1026,35 @@ extern void setNumberOfThreads();
 					}	
 					if(oldcolorindex==27)
 						oldmaxvalue=*(outputData+itemp);
-					//update direction
+					
+                    // Update direction
 					itemp=position_i2+position_j2+k;
 					if(maxvalue>oldmaxvalue)
 						*(directionOfData+itemp)=maxcolorindex;
 					else
 						*(directionOfData+itemp)=oldcolorindex;
-						
-		
-						
 				}
 		}
 	}
-		
-	
 }
-- (void) optimizedContinueLoop:(float *) pIn Out:(float *) pOut :(unsigned char*) pMarker Direction: (unsigned char*) pPointers
+
+- (void) optimizedContinueLoop:(float *) pIn
+                           Out:(float *) pOut
+                              :(unsigned char*) pMarker
+                     Direction:(unsigned char*) pPointers
 {
-	
 	long i,j,k;
 	int changed;
 	float maxvalue;
 	unsigned char maxcolorindex;
 	
-	
 	long itemp;
 	long ilong,iwidth,iheight;
 	long position_i1,position_i2,position_j1,position_j2,position_j3;
 	
-	
 	ilong=imageWidth;
 	iwidth=imageHeight;
 	iheight=imageAmount;
-	
 	
 	inputData=pIn;
 	outputData=pOut;
@@ -1180,9 +1174,9 @@ extern void setNumberOfThreads();
 						
 					}*/
 					
-					if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07)))//if this point need to be check again
+					if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07))) // if this point need to be check again
 					{
-						if(*(directionOfData + itemp)&0x80)//if this is a seed point 
+						if(*(directionOfData + itemp)&0x80) // if this is a seed point
 							*(marker+(itemp>>3))=*(marker+(itemp>>3))&(~(0x01<<(itemp&0x07)));
 						else
 						{
@@ -1276,7 +1270,8 @@ extern void setNumberOfThreads();
 								maxvalue=*(outputData+itemp);
 								maxcolorindex=13;
 							}
-							//update g
+
+                            // Update g
 							
 							itemp=position_i2+position_j2+k;
 							if(maxvalue>*(outputData+itemp))
@@ -1395,7 +1390,7 @@ extern void setNumberOfThreads();
 			}
 		}
 		
-		//*******************************negitive direction*************************
+		//****************************** negative direction ************************
 		for(i=iheight-2;i>0;i--)
 		{
 			position_i1 = (i+1)*imageSize;
@@ -1507,9 +1502,9 @@ extern void setNumberOfThreads();
 							continue;
 						
 					}*/
-					if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07)))//if this point need to be check again
+					if((*(marker+(itemp>>3)))&(0x01<<(itemp&0x07))) // if this point need to be check again
 					{
-						if(*(directionOfData + itemp)&0x80)//if this is a seed point 
+						if(*(directionOfData + itemp)&0x80) // if this is a seed point 
 							*(marker+(itemp>>3))=*(marker+(itemp>>3))&(~(0x01<<(itemp&0x07)));
 						else
 						{
@@ -1602,7 +1597,8 @@ extern void setNumberOfThreads();
 								maxvalue=*(outputData+itemp);
 								maxcolorindex=15;
 							}
-							//update g
+                            
+							// Update g
 							
 							itemp=position_i2+position_j2+k;
 							if(maxvalue>*(outputData+itemp))
@@ -1790,8 +1786,10 @@ extern void setNumberOfThreads();
 							maxvalue=*(outputData+itemp);
 							maxcolorindex=13;
 						}
-						//update g
-						//((*(inputData+itemp)>*(outputData+itemp))||(((*(directionOfData+maxcolorindex))&0x3f) != ((*(directionOfData+itemp))&0x3f)))
+                        
+						// Update g
+
+                        //((*(inputData+itemp)>*(outputData+itemp))||(((*(directionOfData+maxcolorindex))&0x3f) != ((*(directionOfData+itemp))&0x3f)))
 						itemp=position_i2+position_j2+k;
 						if(maxvalue>*(outputData+itemp))
 						{
@@ -1838,17 +1836,19 @@ extern void setNumberOfThreads();
 									recheckmax=ftemp;
 									recheckmaxindex=23;
 								}
-											//there is difference between maxcolorindex and recheckmaxindex
-											//maxcolorindex is the first maxinium of forward 13 neighbors
-											//recheckmaxindex is the last maxinium of backward 13 neighbors
-											//recheckmaxindex will not be 14!
-								if(recheckmaxindex<14 ) 
+                                
+                                // there is difference between maxcolorindex and recheckmaxindex
+                                // maxcolorindex is the first maxinium of forward 13 neighbors
+                                // recheckmaxindex is the last maxinium of backward 13 neighbors
+                                // recheckmaxindex will not be 14!
+
+                                if(recheckmaxindex<14 )
 									*(directionOfData+itemp)=maxcolorindex&0x3f;
 						
 								else 
 									*(directionOfData+itemp)=(recheckmaxindex&0x3f);
 									
-								//above sentence also change the "change" status marker to "no change"			
+								// above sentence also change the "change" status marker to "no change"
 							}
 							else
 								*(directionOfData+itemp) = (*(directionOfData+itemp))&0x3f;
@@ -1861,7 +1861,7 @@ extern void setNumberOfThreads();
 			}
 		}
 			
-			//*******************************negitive direction*************************
+			//****************************** negative direction ************************
 			for(i=iheight-2;i>0;i--)
 			{
 				position_i1 = (i+1)*imageSize;
@@ -1897,7 +1897,9 @@ extern void setNumberOfThreads();
 								maxvalue=*(outputData+itemp);
 								maxcolorindex=15;
 							}
-							//update g
+                            
+							// Update g
+                            
 							//((*(inputData+itemp)>*(outputData+itemp))||(((*(directionOfData+maxcolorindex))&0x3f) != ((*(directionOfData+itemp))&0x3f)))
 							itemp=position_i2+position_j2+k;
 							if(maxvalue>*(outputData+itemp))
@@ -1947,11 +1949,12 @@ extern void setNumberOfThreads();
 										recheckmaxindex=5;
 									}
 						
-									//there is difference between maxcolorindex and recheckmaxindex
-									//maxcolorindex is the lase maxinium of backward 13 neighbors
-									//recheckmaxindex is the first maxinium of forward 13 neighbors
-									//recheckmaxindex will not be 14!
-									if(recheckmaxindex>14 ) 
+									// there is difference between maxcolorindex and recheckmaxindex
+									// maxcolorindex is the lase maxinium of backward 13 neighbors
+									// recheckmaxindex is the first maxinium of forward 13 neighbors
+									// recheckmaxindex will not be 14!
+									
+                                    if (recheckmaxindex>14)
 										*(directionOfData+itemp)=maxcolorindex&0x3f;
 									else 
 										*(directionOfData+itemp)=(recheckmaxindex&0x3f);
@@ -2467,10 +2470,9 @@ extern void setNumberOfThreads();
 	}
 
 	return(*(colorOfData+pointer));
-	
 }
 
-- (void) localOptmizeConnectednessTree:(float *)pIn
+- (void) localOptimizeConnectednessTree:(float *)pIn
                                       :(float *)pOut
                                       :(unsigned short*)pDistanceMap
                                Pointer:(unsigned char*) pPointers
@@ -2644,7 +2646,7 @@ extern void setNumberOfThreads();
 										{
 											maxUpper=tempfloat;
 
-											//optmize the local pointer
+											// Optimize the local pointer
 											pointerToUpper=ipointer;
 											needchangedis=0;
 										}
@@ -2657,7 +2659,7 @@ extern void setNumberOfThreads();
 										{
 											maxUpper=tempfloat;
 											
-											//optmize the local pointer
+											// Optimize the local pointer
 											pointerToUpper=ipointer;
 											needchangedis=1;
 										}
@@ -2673,38 +2675,36 @@ extern void setNumberOfThreads();
 											{
 												maxUpper=tempfloat;
 												
-												//optmize the local pointer
+												// Optimize the local pointer
 												pointerToUpper=ipointer;
 												needchangedis=2;
 											}
 										}
 									}*/
-									
-									
 								}
-								iitemp++;
-								ipointer++;
 
+                                iitemp++;
+								ipointer++;
 							}
-							iitemp=iitemp-3+imageWidth;
-						}
-						iitemp=iitemp-imageWidth-imageWidth-imageWidth+imageSize;
 						
+                            iitemp=iitemp-3+imageWidth;
+						}
+
+                        iitemp=iitemp-imageWidth-imageWidth-imageWidth+imageSize;
 					}
-					*(distanceMap + itemp)=currentLength+needchangedis;		
+
+                    *(distanceMap + itemp)=currentLength+needchangedis;
 					*(directionOfData + itemp)=pointerToUpper;					
 				}
-				itemp++;
-				
+
+                itemp++;
 			}
-			itemp=itemp+2;
-			
-					
+
+            itemp=itemp+2;
 		}
-		itemp=itemp+imageWidth+imageWidth;
-		
-	}
-	
+
+        itemp=itemp+imageWidth+imageWidth;
+	}	
 }
 
 - (int) enhanceInputData:(float *)inData

@@ -23,7 +23,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 #import "CMIVScissorsController.h"
@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 extern void setNumberOfThreads();
 
-// TODO: use vtkMath::RadiansFromDegrees()
+// TODO: use vtkMath::RadiansFromDegrees() or glm::radians()
 static float deg2rad = M_PI/180.0;
 
 @implementation CMIVScissorsController
@@ -95,8 +95,8 @@ static float deg2rad = M_PI/180.0;
 {
 	NSLog(@"CMIV 2D view will close");
 	[originalView setDrawing: NO];
-	[cPRView setDrawing: NO];
-	[crossAxiasView setDrawing: NO];
+	[cprView setDrawing: NO];
+	[crossAxialView setDrawing: NO];
 	
 	if ([[seedToolTipsTabView tabViewItemAtIndex:0] identifier] &&
        [@"Basket" isEqualToString:[[seedToolTipsTabView tabViewItemAtIndex:0] identifier]] )
@@ -109,12 +109,12 @@ static float deg2rad = M_PI/180.0;
 	[[self window] setHorizontalSlider:nil];
 	[[self window] setVerticalSlider:nil];
 	[[self window] setTranlateSlider:nil];
-	[cPRView setHorizontalSlider:nil];
-	[cPRView setTranlateSlider:nil];	
-	[crossAxiasView setTranlateSlider:nil];
+	[cprView setHorizontalSlider:nil];
+	[cprView setTranlateSlider:nil];
+	[crossAxialView setTranlateSlider:nil];
 	[originalView setDrawing: NO];
-	[cPRView setDrawing: NO];
-	[crossAxiasView setDrawing: NO];
+	[cprView setDrawing: NO];
+	[crossAxialView setDrawing: NO];
 	if (!isInWizardMode)
 	{
 		[centerlinesList setDataSource:nil];
@@ -238,7 +238,7 @@ static float deg2rad = M_PI/180.0;
 -(void) dealloc
 {
 	[super dealloc];
-	NSLog(@"cmiv 2d view dealloced");
+	NSLog(@"CMIV 2D view dealloced");
 }
 
 - (IBAction)onCancel:(id)sender
@@ -325,6 +325,8 @@ static float deg2rad = M_PI/180.0;
 - (id) showScissorsPanel:(ViewerController *) vc
                         :(CMIV_CTA_TOOLS*) owner
 {
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+    
 	// Initialize the window
 	self = [super initWithWindowNibName:@"Scissors_Panel"];
 	[[self window] setDelegate:self];
@@ -381,7 +383,7 @@ static float deg2rad = M_PI/180.0;
 	
 	minValueInSeries = [curPix minValueOfSeries]; 
 	
-	// Initilize original view CPRView and Axial View;
+	// Initialize original view CPRView (bottom right) and Axial View (top right)
 	err = [self initViews];
 	if (err)
 		return nil;
@@ -419,11 +421,10 @@ static float deg2rad = M_PI/180.0;
 		[seedToolTipsTabView selectTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:2]];
 		[plotView removeFromSuperviewWithoutNeedingDisplay];
 		[vesselAnalysisPanel removeFromSuperviewWithoutNeedingDisplay];
-		[seedToolTipsTabView removeTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:4]];		//tabViewItemAtIndex:4->1 is necessary, otherwise index will change after remove
+		[seedToolTipsTabView removeTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:4]]; // tabViewItemAtIndex:4->1 is necessary, otherwise index will change after remove
 		[seedToolTipsTabView removeTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:3]];
 		[seedToolTipsTabView removeTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:1]];
 		[seedToolTipsTabView removeTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:0]];
-
 		
 		[captureOViewButton setHidden:YES];
 		[captureCViewButton setHidden:YES];
@@ -467,8 +468,8 @@ static float deg2rad = M_PI/180.0;
 		[[self window] setVerticalSlider:oXRotateSlider];
 		[[self window] setTranlateSlider:oImageSlider];
 		
-		[cPRView setHorizontalSlider:cYRotateSlider];
-		[cPRView setTranlateSlider:cImageSlider];
+		[cprView setHorizontalSlider:cYRotateSlider];
+		[cprView setTranlateSlider:cImageSlider];
 	}
 	else
 	{
@@ -476,19 +477,19 @@ static float deg2rad = M_PI/180.0;
 		[[self window] setVerticalSlider:oImageSlider];
 		[[self window] setTranlateSlider:oYRotateSlider];
 		
-		[cPRView setHorizontalSlider:cImageSlider];
-		[cPRView setTranlateSlider:cYRotateSlider ];
+		[cprView setHorizontalSlider:cImageSlider];
+		[cprView setTranlateSlider:cYRotateSlider ];
 	}
 
     [originalView setHorizontalSlider:nil];
 	[originalView setTranlateSlider:nil];
 	
-	[crossAxiasView setTranlateSlider:axImageSlider];
-	[crossAxiasView setHorizontalSlider:nil];
+	[crossAxialView setTranlateSlider:axImageSlider];
+	[crossAxialView setHorizontalSlider:nil];
 	
-	// show the window
-	screenrect=[[[originalViewController window] screen] visibleFrame];
-	[[self window]setFrame:screenrect display:NO animate:NO];
+	// Show the window
+	screenrect = [[[originalViewController window] screen] visibleFrame];
+	[[self window] setFrame:screenrect display:NO animate:NO];
 	[super showWindow:parent];
 	[[self window] makeKeyAndOrderFront:parent];
 	[[self window] setLevel:NSFloatingWindowLevel]; // Always on top
@@ -502,8 +503,9 @@ static float deg2rad = M_PI/180.0;
 		//[exportView addTrackingRect:arect owner:self userData:[NSNumber numberWithInt:1] assumeInside:NO];
 		//exportViewIsClosed=1;
 		//[seedToolTipsTabView addTrackingRect:[seedToolTipsTabView visibleRect] owner:self userData:[NSNumber numberWithInt:2] assumeInside:NO];
-	}		
-		//[self selectAContrast:seedsList];
+	}
+
+    //[self selectAContrast:seedsList];
 	NSMutableDictionary* dic=[parent dataOfWizard];
 
 	if ([dic objectForKey:@"SeedMap"])
@@ -520,9 +522,10 @@ static float deg2rad = M_PI/180.0;
 	}
 	
 #ifdef VERBOSEMODE
-	NSLog( @"******************************CMIV_CTA_PLUGIN 2D View established!*************************************");
+	NSLog( @"************************* %@ 2D View established! ********************************", NSStringFromClass([self class]));
 #endif
-	//mistery bug happens when DCMView.h is not updated, scaleValue will be 0, without following code.
+    
+	// FIXME: mistery bug happens when DCMView.h is not updated, scaleValue will be 0, without following code.
 	NSGraphicsContext *context = [NSGraphicsContext currentContext];
 	NSPoint apoint;
 	apoint.x=1;
@@ -553,7 +556,7 @@ static float deg2rad = M_PI/180.0;
 	[cPRView mouseUp:virtualMouseUpEvent];
 	[crossAxiasView mouseDown:virtualMouseDownEvent];
 	[crossAxiasView mouseUp:virtualMouseUpEvent];
-	//mistery bug above
+	// Mistery bug above
 #endif
 	
 	return self;
@@ -880,8 +883,8 @@ static float deg2rad = M_PI/180.0;
 	[[self window] setHorizontalSlider:oXRotateSlider];
 	[[self window] setVerticalSlider:oImageSlider];
 	[[self window] setTranlateSlider:oYRotateSlider];
-	[cPRView setHorizontalSlider:cImageSlider];
-	[cPRView setTranlateSlider:cYRotateSlider];
+	[cprView setHorizontalSlider:cImageSlider];
+	[cprView setTranlateSlider:cYRotateSlider];
 	
 	
 	if (modeindex==0)
@@ -894,22 +897,22 @@ static float deg2rad = M_PI/180.0;
 		[[self window] setVerticalSlider:oXRotateSlider];
 		[[self window] setTranlateSlider:oImageSlider];
 		
-		[cPRView setHorizontalSlider:cYRotateSlider];
-		[cPRView setTranlateSlider:cImageSlider];
+		[cprView setHorizontalSlider:cYRotateSlider];
+		[cprView setTranlateSlider:cImageSlider];
 		[repulsorButton setEnabled:NO];
-		int showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
-		if (showcross==1)
+		BOOL showcross = [[NSUserDefaults standardUserDefaults] boolForKey:@"CMIV2DViewShowAxViewCrossHair"];
+		if (showcross==TRUE)
 		{
 			[axViewCrossShowButton setState:NSControlStateValueOn];
-			[crossAxiasView showCrossHair];
+			[crossAxialView showCrossHair];
 			[self updateAxView];
 		}
 
-        showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
-		if (showcross==1)
+        showcross = [[NSUserDefaults standardUserDefaults] boolForKey:@"CMIV2DViewShowCViewCrossHair"];
+		if (showcross==TRUE)
 		{
 			[cViewCrossShowButton setState: NSControlStateValueOn];
-			[cPRView showCrossHair];
+			[cprView showCrossHair];
 			[self updateCView];
 		}
         
@@ -919,11 +922,11 @@ static float deg2rad = M_PI/180.0;
 	{
 		axViewROIMode=0;
 		cViewMPRorCPRMode=1;
-		[cPRView setCrossCoordinates:-9999 :-9999 :YES];
-		[cPRView hideCrossHair];
+		[cprView setCrossCoordinates:-9999 :-9999 :YES];
+		[cprView hideCrossHair];
 		[cViewCrossShowButton setState: NSControlStateValueOff];
-		[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
-		[crossAxiasView hideCrossHair];
+		[crossAxialView setCrossCoordinates:-9999 :-9999 :YES];
+		[crossAxialView hideCrossHair];
 		[axViewCrossShowButton setState: NSControlStateValueOff];
 
 		[repulsorButton setEnabled:NO];
@@ -949,11 +952,11 @@ static float deg2rad = M_PI/180.0;
 		}
 
         [repulsorButton setEnabled:YES];
-		[cPRView setCrossCoordinates:-9999 :-9999 :YES];
-		[cPRView hideCrossHair];
+		[cprView setCrossCoordinates:-9999 :-9999 :YES];
+		[cprView hideCrossHair];
 		[cViewCrossShowButton setState: NSControlStateValueOff];
-		[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
-		[crossAxiasView hideCrossHair];
+		[crossAxialView setCrossCoordinates:-9999 :-9999 :YES];
+		[crossAxialView hideCrossHair];
 		[axViewCrossShowButton setState: NSControlStateValueOff];
 		
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ROITEXTIFSELECTED"];
@@ -995,6 +998,7 @@ static float deg2rad = M_PI/180.0;
 
 - (int) initViews
 {
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
 	//long size;
 	NSArray *pixList = [originalViewController pixList];
 	
@@ -1016,7 +1020,8 @@ static float deg2rad = M_PI/180.0;
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
 	}
-	centerX=0;
+
+    centerX=0;
 	centerY=0;
 	centerZ=0;
 	
@@ -1064,7 +1069,7 @@ static float deg2rad = M_PI/180.0;
     axViewCostMapWidth=100/xSpacing;
 	axViewCostMapHeight=100/ySpacing;
 	axViewConnectednessCostMapMaxSize=4*imageWidth*imageHeight*sizeof(float);
-	axViewConnectednessCostMap=(float*)malloc(axViewConnectednessCostMapMaxSize);//maximum
+	axViewConnectednessCostMap=(float*)malloc(axViewConnectednessCostMapMaxSize); // maximum
 
 	connectednessROIBufferMaxSize=2*imageWidth*imageHeight*sizeof(char);
 	connectednessROIBuffer=(unsigned char*)malloc(connectednessROIBufferMaxSize);
@@ -1195,7 +1200,7 @@ static float deg2rad = M_PI/180.0;
 	[originalView setIndexWithReset: 0 :YES];
 	[originalView setOrigin: NSMakePoint(0,0)];
 	[originalView setCurrentTool:tWL];
-	[originalView  scaleToFit];
+	[originalView scaleToFit];
 	
 	//[originalView discretelySetWLWW:iwl :iww];
 	float crossX,crossY;
@@ -1225,7 +1230,7 @@ static float deg2rad = M_PI/180.0;
 	cViewSlice->SetOutputDimensionality( 2);
 	cViewSlice->SetBackgroundLevel( -1024);
 	
-	maxWidthofCPR=40;//used by straighten CPR
+	maxWidthofCPR=40; // used by straighten CPR
 	
 	tempIm = cViewSlice->GetOutput();
     tempIm->GetExtent( imExtent);
@@ -1235,7 +1240,15 @@ static float deg2rad = M_PI/180.0;
 	tempIm->GetOrigin( cViewOrigin);
 	
 	im = (float*) tempIm->GetScalarPointer();
-	mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :space[0] :space[1] :origin[0] :origin[1] :origin[2]];
+	mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                        :32
+                                        :imExtent[ 1]-imExtent[ 0]+1
+                                        :imExtent[ 3]-imExtent[ 2]+1
+                                        :space[0]
+                                        :space[1]
+                                        :origin[0]
+                                        :origin[1]
+                                        :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	[mypix changeWLWW:iwl :iww];
 	
@@ -1248,16 +1261,16 @@ static float deg2rad = M_PI/180.0;
 	
 	viewName = @"Original";
 	
-	[cPRView setDCM:cViewPixList :fileList :cViewROIList :0 :'i' :YES];
+	[cprView setDCM:cViewPixList :fileList :cViewROIList :0 :'i' :YES];
 	//	viewName = @"Original";
-	[cPRView setStringID: viewName];
-	[cPRView setMPRAngle: 0.0];
-	[cPRView showCrossHair];
+	[cprView setStringID: viewName];
+	[cprView setMPRAngle: 0.0];
+	[cprView showCrossHair];
 	
-	[cPRView setIndexWithReset: 0 :YES];
-	[cPRView setOrigin: NSMakePoint(0,0)];
-	[cPRView setCurrentTool:tWL];
-	[cPRView scaleToFit];
+	[cprView setIndexWithReset: 0 :YES];
+	[cprView setOrigin: NSMakePoint(0,0)];
+	[cprView setCurrentTool:tWL];
+	[cprView scaleToFit];
 	//[cPRView discretelySetWLWW:iwl :iww];	
 	crossX=-origin[0]/space[0];
 	crossY=origin[1]/space[1];
@@ -1272,7 +1285,7 @@ static float deg2rad = M_PI/180.0;
 	else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 		crossY=-(imExtent[ 3]-imExtent[ 2] );
 	
-    [cPRView setCrossCoordinates:crossX:crossY :YES];
+    [cprView setCrossCoordinates:crossX:crossY :YES];
 	
 	axViewSlice = vtkImageReslice::New();
 	axViewSlice->SetAutoCropOutput( true);
@@ -1327,16 +1340,16 @@ static float deg2rad = M_PI/180.0;
 	axViewROIList = [[NSMutableArray alloc] initWithCapacity:0];
 	[axViewROIList addObject:[NSMutableArray arrayWithCapacity:0]];
 	
-	[crossAxiasView setDCM:axViewPixList :fileList :axViewROIList :0 :'i' :YES];
+	[crossAxialView setDCM:axViewPixList :fileList :axViewROIList :0 :'i' :YES];
 	viewName = @"Original";
-	[crossAxiasView setStringID: viewName];
-	[crossAxiasView setMPRAngle: 0.0];
-	[crossAxiasView showCrossHair];
+	[crossAxialView setStringID: viewName];
+	[crossAxialView setMPRAngle: 0.0];
+	[crossAxialView showCrossHair];
 	
-	[crossAxiasView setIndexWithReset: 0 :YES];
-	[crossAxiasView setOrigin: NSMakePoint(0,0)];
-	[crossAxiasView setCurrentTool:tWL];
-	[crossAxiasView setScaleValue: 1.5*[originalView scaleValue]];
+	[crossAxialView setIndexWithReset: 0 :YES];
+	[crossAxialView setOrigin: NSMakePoint(0,0)];
+	[crossAxialView setCurrentTool:tWL];
+	[crossAxialView setScaleValue: 1.5*[originalView scaleValue]];
 	//[crossAxiasView discretelySetWLWW:iwl :iww];	
 	
 	cprImageBuffer=0L;
@@ -1353,46 +1366,45 @@ static float deg2rad = M_PI/180.0;
 	else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 		crossY=-(imExtent[ 3]-imExtent[ 2] );
 
-    [crossAxiasView setCrossCoordinates:crossX :crossY :YES];
+    [crossAxialView setCrossCoordinates:crossX :crossY :YES];
 
 	{
-		int showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
-		if (showcross==0)
+        // Cross axial view (top-right panel)
+        BOOL showcross=[[NSUserDefaults standardUserDefaults] boolForKey:@"CMIV2DViewShowAxViewCrossHair"];
+        if (showcross==FALSE)
 		{
-			showcross=1;
-			[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
+			showcross=TRUE;
+			[[NSUserDefaults standardUserDefaults] setBool:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
 		}
-
-        if (showcross!=1)
+        if (showcross==FALSE)  // TBC: never execute since refactoring ?
 		{
-			[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
-			[crossAxiasView hideCrossHair];
+			[crossAxialView setCrossCoordinates:-9999 :-9999 :YES];
+			[crossAxialView hideCrossHair];
 			[axViewCrossShowButton setState: NSControlStateValueOff];
 		}
 
-        showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowCViewCrossHair"];
-		
-        if (showcross==0)
+        // CPR view (bottom-right panel)
+        showcross = [[NSUserDefaults standardUserDefaults] boolForKey:@"CMIV2DViewShowCViewCrossHair"];
+        if (showcross==FALSE)
 		{
-			showcross=1;
-			[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowCViewCrossHair"];
+			showcross=TRUE;
+			[[NSUserDefaults standardUserDefaults] setBool:showcross forKey:@"CMIV2DViewShowCViewCrossHair"];
 		}
-
-        if (showcross!=1)
+        if (showcross==FALSE) // TBC: never execute since refactoring ?
 		{
-			[cPRView setCrossCoordinates:-9999 :-9999 :YES];
-			[cPRView hideCrossHair];
+			[cprView setCrossCoordinates:-9999 :-9999 :YES];
+			[cprView hideCrossHair];
 			[cViewCrossShowButton setState: NSControlStateValueOff];
 		}
 
-        showcross = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowOViewCrossHair"];
-		if (showcross==0)
+        // Original view (bottom-left panel)
+        showcross = [[NSUserDefaults standardUserDefaults] boolForKey:@"CMIV2DViewShowOViewCrossHair"];
+		if (showcross==FALSE)
 		{
-			showcross=1;
-			[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowOViewCrossHair"];
+			showcross=TRUE;
+			[[NSUserDefaults standardUserDefaults] setBool:showcross forKey:@"CMIV2DViewShowOViewCrossHair"];
 		}
-
-        if (showcross!=1)
+        if (showcross==FALSE) // TBC: never execute since refactoring ?
 		{
 			[originalView setCrossCoordinates:-9999 :-9999 :YES];
 			[originalView hideCrossHair];
@@ -1406,7 +1418,7 @@ static float deg2rad = M_PI/180.0;
 - (void) updateOView
 {
 #ifdef VERBOSEMODE
-	NSLog( @"updating Oview");
+    NSLog(@"Original view update start");
 #endif
 
 	int imExtent[ 6];
@@ -1423,7 +1435,8 @@ static float deg2rad = M_PI/180.0;
 	
 	float *im = (float*) tempIm->GetScalarPointer();
 	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
-                                                :32 :imExtent[ 1]-imExtent[ 0]+1
+                                                :32
+                                                :imExtent[ 1]-imExtent[ 0]+1
                                                 :imExtent[ 3]-imExtent[ 2]+1
                                                 :oViewSpace[0]
                                                 :oViewSpace[1]
@@ -1433,7 +1446,8 @@ static float deg2rad = M_PI/180.0;
 	[mypix copySUVfrom: curPix];	
 	
 	isRemoveROIBySelf=1;
-	//to avoid ROIs release seeds when autoreleased
+	
+    // To avoid ROIs release seeds when autoreleased
 
 	NSString* emptystr = @"";
 	for(unsigned int i=0; i<[[oViewROIList objectAtIndex: 0] count]; i++)
@@ -1521,7 +1535,7 @@ static float deg2rad = M_PI/180.0;
     tempIm->GetSpacing( oViewSpace);
 	tempIm->GetOrigin( oViewOrigin);	
 #ifdef VERBOSEMODE
-	NSLog( @"Oview Updated");
+    NSLog(@"Original view update end");
 #endif
 }
 
@@ -1619,20 +1633,16 @@ static float deg2rad = M_PI/180.0;
 		
 	}
 
-	
 	[oImageSlider setMaxValue: max[2]];
 	[oImageSlider setMinValue: min[2]];
 	[oImageSlider setIntValue:0];
 	lastOViewTranslate=0;
-	
-	
-	
-	
 }
+
 - (void) updateCView
 {
 #ifdef VERBOSEMODE
-	NSLog( @"updating Cview");
+	NSLog(@"CPR view start");
 #endif
 	if (cViewMPRorCPRMode)
 		[self updateCViewAsCurvedMPR];
@@ -1640,14 +1650,14 @@ static float deg2rad = M_PI/180.0;
 		[self updateCViewAsMPR];
 	
 #ifdef VERBOSEMODE
-	NSLog( @"Cview Updated");
+	NSLog(@"CPR view end");
 #endif
 }
 
 - (void) updateAxView
 {
 #ifdef VERBOSEMODE
-	NSLog( @"updating Axview");
+	NSLog(@"Axial view update start");
 #endif
 	if (cViewMPRorCPRMode)
 	{
@@ -1669,18 +1679,26 @@ static float deg2rad = M_PI/180.0;
 	tempIm->GetOrigin( axViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :imExtent[ 1]-imExtent[ 0]+1 :imExtent[ 3]-imExtent[ 2]+1 :axViewSpace[0] :axViewSpace[1] :axViewOrigin[0] :axViewOrigin[1] :axViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                                :32
+                                                :imExtent[ 1]-imExtent[ 0]+1
+                                                :imExtent[ 3]-imExtent[ 2]+1
+                                                :axViewSpace[0]
+                                                :axViewSpace[1]
+                                                :axViewOrigin[0]
+                                                :axViewOrigin[1]
+                                                :axViewOrigin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	[axViewPixList removeAllObjects];
 	[axViewPixList addObject: mypix];
 	[mypix release];
-	float scale=[crossAxiasView scaleValue];
+	float scale=[crossAxialView scaleValue];
 	NSPoint newOrigin;
 	newOrigin.x = scale*round(axViewOrigin[0]/axViewSpace[0]+(imExtent[ 1]-imExtent[ 0]+1)/2);
 	newOrigin.y = scale*(-(round(axViewOrigin[1]/axViewSpace[1]+(imExtent[ 3]-imExtent[ 2]+1)/2)));
 	
-	[crossAxiasView setOrigin: newOrigin];
+	[crossAxialView setOrigin: newOrigin];
 	
 	if ([[axViewROIList objectAtIndex: 0] count])
 	{
@@ -1709,7 +1727,7 @@ static float deg2rad = M_PI/180.0;
 			[[axViewROIList objectAtIndex: 0] removeAllObjects];
 	}
 
-	if (axViewROIMode==2) //use fuzzy connectedness segment results
+	if (axViewROIMode==2) // use fuzzy connectedness segment results
 	{
 		if (interpolationMode)
 			axViewROISlice->SetInterpolationModeToCubic();
@@ -1732,7 +1750,7 @@ static float deg2rad = M_PI/180.0;
                                                   :axROIOrigin[0]
                                                   :axROIOrigin[1]];
 	}	
-	else if (axViewROIMode==1) //use only intensity
+	else if (axViewROIMode==1) // use only intensity
 	{
 		[self creatAxROIListFromFuzzyConnectedness:[axViewROIList objectAtIndex: 0]
                                                   :imExtent[ 1]-imExtent[ 0]+1
@@ -1760,16 +1778,16 @@ static float deg2rad = M_PI/180.0;
 		else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
 
-        [crossAxiasView setCrossCoordinates:crossX:crossY :YES];
+        [crossAxialView setCrossCoordinates:crossX:crossY :YES];
 	}
 	else
 	{
-		[crossAxiasView setCrossCoordinates:-9999 :-9999 :YES];
+		[crossAxialView setCrossCoordinates:-9999 :-9999 :YES];
 	}
 	
-	[crossAxiasView setIndex: 0 ];
+	[crossAxialView setIndex: 0 ];
 #ifdef VERBOSEMODE
-	NSLog( @"AXview Updated");
+    NSLog(@"Axial view update end");
 #endif
 }
 
@@ -1857,7 +1875,7 @@ static float deg2rad = M_PI/180.0;
 		if ([axViewCrossShowButton state]==NSControlStateValueOn)
 		{
 			[axViewCrossShowButton setState:NSControlStateValueOff];
-			[crossAxiasView hideCrossHair];
+			[crossAxialView hideCrossHair];
 			[self updateAxView];
 		}
 
@@ -1872,11 +1890,11 @@ static float deg2rad = M_PI/180.0;
 	}
 	else
 	{
-		int showcross=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIV2DViewShowAxViewCrossHair"];
+		BOOL showcross=[[NSUserDefaults standardUserDefaults] boolForKey:@"CMIV2DViewShowAxViewCrossHair"];
 		if (showcross==1)
 		{
 			[axViewCrossShowButton setState:NSControlStateValueOn];
-			[crossAxiasView showCrossHair];
+			[crossAxialView showCrossHair];
 			[self updateAxView];
 		}
 	}
@@ -1884,22 +1902,22 @@ static float deg2rad = M_PI/180.0;
     if (tag>=tWL && tag<tNext)
 	{
 		[originalView setCurrentTool: tag];
-		[cPRView setCurrentTool: tag];
-		[crossAxiasView setCurrentTool:tag];
+		[cprView setCurrentTool: tag];
+		[crossAxialView setCurrentTool:tag];
 	}
 	else if (tag==tNext)
 	{
 		[originalView setCurrentTool: tMeasure];
-		[cPRView setCurrentTool: tMeasure];
-		[crossAxiasView setCurrentTool:tMeasure];
+		[cprView setCurrentTool: tMeasure];
+		[crossAxialView setCurrentTool:tMeasure];
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey: @"ROITEXTNAMEONLY"];
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ROITEXTIFSELECTED"];
 	}
 	else if (tag==tMeasure)
 	{
 		[originalView setCurrentTool: tOpenPolygon];
-		[cPRView setCurrentTool: tTranslate];
-		[crossAxiasView setCurrentTool: tWL];
+		[cprView setCurrentTool: tTranslate];
+		[crossAxialView setCurrentTool: tWL];
 		currentTool=tag;
 		[self updateOView];
 		[self cAndAxViewReset];
@@ -1908,8 +1926,8 @@ static float deg2rad = M_PI/180.0;
 	else if (tag==tROI)
 	{
 		[originalView setCurrentTool: tMeasure];
-		[cPRView setCurrentTool: tROI];
-		[crossAxiasView setCurrentTool: tWL];
+		[cprView setCurrentTool: tROI];
+		[crossAxialView setCurrentTool: tWL];
 		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
@@ -1939,8 +1957,8 @@ static float deg2rad = M_PI/180.0;
 	else if (tag==t3DRotate)
 	{
 		[originalView setCurrentTool: tArrow];
-		[cPRView setCurrentTool: tArrow];
-		[crossAxiasView setCurrentTool: tOval];	
+		[cprView setCurrentTool: tArrow];
+		[crossAxialView setCurrentTool: tOval];
 		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
@@ -1992,8 +2010,8 @@ static float deg2rad = M_PI/180.0;
             [[NSUserDefaults standardUserDefaults] setFloat:[brushWidthSlider floatValue] forKey:@"ROIRegionThickness"];
 		}
 
-		[cPRView setCurrentTool: tWL];
-		[crossAxiasView setCurrentTool: tWL];
+		[cprView setCurrentTool: tWL];
+		[crossAxialView setCurrentTool: tWL];
 		if (currentTool==tROI ||
             currentTool==t3DRotate ||
             currentTool==tMeasure)
@@ -2007,8 +2025,8 @@ static float deg2rad = M_PI/180.0;
 	else if (tag==tOval)
 	{
 		[originalView setCurrentTool: tWL];
-		[cPRView setCurrentTool: tRepulsor];
-		[crossAxiasView setCurrentTool: tRepulsor];	
+		[cprView setCurrentTool: tRepulsor];
+		[crossAxialView setCurrentTool: tRepulsor];
 	}
 	else
 		return;
@@ -2203,7 +2221,7 @@ static float deg2rad = M_PI/180.0;
 	else
 		interpolationMode=1;
 
-	float locate=round([sender floatValue]/minSpacing);//to get Seeds ROI but not working well
+	float locate=round([sender floatValue]/minSpacing); // to get Seeds ROI but not working well
 	float step=locate-lastOViewTranslate;
 	step*=minSpacing;
 	lastOViewTranslate = locate;
@@ -2455,8 +2473,8 @@ static float deg2rad = M_PI/180.0;
 		else
 		{
 			[originalView setCurrentTool: tag];
-			[cPRView setCurrentTool: tag];
-			[crossAxiasView setCurrentTool:tag];
+			[cprView setCurrentTool: tag];
+			[crossAxialView setCurrentTool:tag];
 		}
 	}
 }
@@ -2479,27 +2497,27 @@ static float deg2rad = M_PI/180.0;
 			{
 				//if (iww != [originalView curWW] || iwl != [originalView curWL])
 				[originalView setIndex: 0 ];
-				if (iww != [cPRView curWW] || iwl != [cPRView curWL])
-					[cPRView setWLWW:iwl :iww];
+				if (iww != [cprView curWW] || iwl != [cprView curWL])
+					[cprView setWLWW:iwl :iww];
 
-                if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
-					[crossAxiasView setWLWW:iwl :iww];
+                if (iww != [crossAxialView curWW] || iwl != [crossAxialView curWL])
+					[crossAxialView setWLWW:iwl :iww];
 			}
 			else if ([cViewPixList containsObject: otherPix])
 			{
 				if (iww != [originalView curWW] || iwl != [originalView curWL])
 					[originalView setWLWW:iwl :iww];				
 				
-                if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
-					[crossAxiasView setWLWW:iwl :iww];	
+                if (iww != [crossAxialView curWW] || iwl != [crossAxialView curWL])
+					[crossAxialView setWLWW:iwl :iww];
 			}
 			else if ([axViewPixList containsObject: otherPix])
 			{
 				if (iww != [originalView curWW] || iwl != [originalView curWL])
 					[originalView setWLWW:iwl :iww];				
 				
-                if (iww != [cPRView curWW] || iwl != [cPRView curWL])
-					[cPRView setWLWW:iwl :iww];		
+                if (iww != [cprView curWW] || iwl != [cprView curWL])
+					[cprView setWLWW:iwl :iww];
 			}
 
             isChangingWWWLBySelf=0;
@@ -2569,7 +2587,7 @@ static float deg2rad = M_PI/180.0;
 //			else
 //			{
 				interpolationMode=1;
-				[self updateOView];//update oViewSpace and oViewOrigin for other operation , such as root seeds planting
+				[self updateOView]; // update oViewSpace and oViewOrigin for other operation, such as root seeds planting
 				[self cAndAxViewReset];
 				[self updatePageSliders];
 //			}
@@ -2578,12 +2596,12 @@ static float deg2rad = M_PI/180.0;
 			activeView=nil;
 		}
 	}
-	else if (activeView==cPRView)
+	else if (activeView==cprView)
 	{
 		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
-			if ([cPRView angle]==0)
+			if ([cprView angle]==0)
 			{
 				
 				if (interpolationMode)
@@ -2599,7 +2617,7 @@ static float deg2rad = M_PI/180.0;
 				tempIm->GetSpacing( space);
 				tempIm->GetOrigin( origin);	
 				
-				[cPRView getCrossCoordinates: &oZ  :&oY];
+				[cprView getCrossCoordinates: &oZ  :&oY];
 				oY = -oY;
 				oZ = oZ*space[0]+origin[0];
 				oY = oY*space[1]+origin[1];
@@ -2621,11 +2639,11 @@ static float deg2rad = M_PI/180.0;
 			}
 			else
 			{
-				float angle= [cPRView angle]-lastCViewZAngle;
+				float angle= [cprView angle]-lastCViewZAngle;
 				oViewUserTransform->RotateX(-angle);
 				[self updateOView];
 				[self updateAxView];
-				lastCViewZAngle=[cPRView angle];
+				lastCViewZAngle=[cprView angle];
 			}
 		}
 
@@ -2638,21 +2656,21 @@ static float deg2rad = M_PI/180.0;
 //			else
 //			{
 				interpolationMode=1;
-				[self updateOView];//update oViewSpace and oViewOrigin for other operation , such as root seeds planting
+				[self updateOView]; // update oViewSpace and oViewOrigin for other operation, such as root seeds planting
 				[self cAndAxViewReset];
 				[self updatePageSliders];
 //			}
-			[cPRView setMPRAngle: 0.0];
+			[cprView setMPRAngle: 0.0];
 			lastCViewZAngle=0;
 			activeView=nil;
 		}
 	}
-	else if (activeView==crossAxiasView)
+	else if (activeView==crossAxialView)
 	{
 		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
-			if ([crossAxiasView angle]==0)
+			if ([crossAxialView angle]==0)
 			{
 				if (interpolationMode)
 					axViewSlice->SetInterpolationModeToCubic();
@@ -2667,7 +2685,7 @@ static float deg2rad = M_PI/180.0;
 				tempIm->GetSpacing( space);
 				tempIm->GetOrigin( origin);	
 				
-				[crossAxiasView getCrossCoordinates: &oX  :&oZ];
+				[crossAxialView getCrossCoordinates: &oX  :&oZ];
 				oZ = -oZ;
 				oX = oX*space[0]+origin[0];
 				oZ = oZ*space[1]+origin[1];
@@ -2689,11 +2707,11 @@ static float deg2rad = M_PI/180.0;
 			}
 			else
 			{
-				float angle= [crossAxiasView angle]-lastAxViewZAngle;
+				float angle= [crossAxialView angle]-lastAxViewZAngle;
 				oViewUserTransform->RotateY(-angle);;
 				[self updateOView];
 				[self updateCView];
-				lastAxViewZAngle=[crossAxiasView angle];
+				lastAxViewZAngle=[crossAxialView angle];
 			}
 		}
 
@@ -2706,11 +2724,11 @@ static float deg2rad = M_PI/180.0;
 //			else
 //			{
 				interpolationMode=1;
-				[self updateOView];//update oViewSpace and oViewOrigin for other operation , such as root seeds planting
+				[self updateOView]; // update oViewSpace and oViewOrigin for other operation, such as root seeds planting
 				[self cAndAxViewReset];
 				[self updatePageSliders];
 //			}
-			[crossAxiasView setMPRAngle: 0.0];
+			[crossAxialView setMPRAngle: 0.0];
 			lastAxViewZAngle=0;
 			activeView=nil;
 		}
@@ -2729,58 +2747,61 @@ static float deg2rad = M_PI/180.0;
 		[[NSUserDefaults standardUserDefaults] setInteger: -1 forKey: @"CMIV2DViewANNOTATIONS"];
 		[[NSUserDefaults standardUserDefaults] setInteger: 1 forKey: @"ANNOTATIONS"];
 	}
-	[self updateOView];
+
+    [self updateOView];
 	[self updateCView];
 	[self updateAxView];
-	
-	
 }
+
 - (IBAction)crossShow:(id)sender
 {
-	int showcross;
+	BOOL showcross;
 	if (sender==axViewCrossShowButton)
 	{
 		if ([sender state]==NSControlStateValueOn)
 		{
-			showcross=1;
-			[crossAxiasView showCrossHair];
+			showcross=TRUE;
+			[crossAxialView showCrossHair];
 		}
 		else
 		{
-			showcross=-1;
-			[crossAxiasView hideCrossHair];
+			showcross=FALSE;
+			[crossAxialView hideCrossHair];
 		}
-		[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
+
+        [[NSUserDefaults standardUserDefaults] setBool:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
 	}
 
     if (sender==cViewCrossShowButton)
 	{
 		if ([sender state]==NSControlStateValueOn)
 		{
-			showcross=1;
-			[cPRView showCrossHair];
+			showcross=TRUE;
+			[cprView showCrossHair];
 		}
 		else
 		{
-			showcross=-1;
-			[cPRView hideCrossHair];
+			showcross=FALSE;
+			[cprView hideCrossHair];
 		}
-		[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowCViewCrossHair"];	
+
+        [[NSUserDefaults standardUserDefaults] setBool:showcross forKey:@"CMIV2DViewShowCViewCrossHair"];
 	}
 
     if (sender==oViewCrossShowButton)
 	{
 		if ([sender state]==NSControlStateValueOn)
 		{
-			showcross=1;
+			showcross=TRUE;
 			[originalView showCrossHair];
 		}
 		else
 		{
-			showcross=-1;
+			showcross=FALSE;
 			[originalView hideCrossHair];
 		}
-		[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowOViewCrossHair"];	
+
+        [[NSUserDefaults standardUserDefaults] setBool:showcross forKey:@"CMIV2DViewShowOViewCrossHair"];
 	}
 	
 	oViewUserTransform->Translate(0,0,0.5);
@@ -2823,7 +2844,8 @@ static float deg2rad = M_PI/180.0;
 	{
 		return [contrastList count];
 	}
-	else if ([centerlinesList isEqual: tableView ])
+	
+    if ([centerlinesList isEqual: tableView ])
 	{
 		return [cpr3DPaths count];
 	}
@@ -2840,7 +2862,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
     if ([seedsList isEqual:tableView])
 	{
-		
 		if ([[tableColumn identifier] isEqualToString:@"Index"])
 		{
 			return [NSString stringWithFormat:@"%d", row+1];
@@ -2852,7 +2873,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	else if ([centerlinesList isEqual:tableView])
 	{
-		
 		if ([[tableColumn identifier] isEqualToString:@"Length"])
 		{
 			if (!centerlinesLengthArrays)
@@ -2887,12 +2907,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			if ([anObject length]>0)
 			{
-				NSString* newname, *oldname;
-				newname=anObject;
-				oldname=[[contrastList objectAtIndex:rowIndex] objectForKey:@"Name"];
-				unsigned i;
+                NSString* newname=anObject;
+                NSString* oldname=[[contrastList objectAtIndex:rowIndex] objectForKey:@"Name"];
 				ROI* temproi;
-				for(i=0;i<[totalROIList count];i++)
+				for (unsigned i=0;i<[totalROIList count];i++)
 				{
 					temproi=[totalROIList objectAtIndex: i];
 					if ([[temproi name]isEqualToString:oldname])
@@ -2908,7 +2926,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			if ([anObject length]>0)
 			{
-				
 				[centerlinesNameArrays removeObjectAtIndex:rowIndex];
 				[centerlinesNameArrays insertObject:anObject atIndex:rowIndex];
 			}
@@ -2916,7 +2933,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 }
 
-// TODO: ise glm
+// TODO: use glm or vtkMath::
 - (int)inverseMatrix:(float*)inm
                     :(float*)outm
 {
@@ -2955,7 +2972,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
  *   note:
  *     NO range checking is done in this function.
  */
-- (float)TriCubic : (float*) p :(float *)volume : (int) xDim : (int) yDim :(int) zDim
+- (float)TriCubic : (float*) p
+                  : (float *)volume
+                  : (int) xDim
+                  : (int) yDim
+                  : (int) zDim
 {
 	int x, y, z;
     int i, j, k;
@@ -3041,7 +3062,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     for (j=0; j<npts; j++)
 	{
-		if ( j == 0 ) //first point
+		if ( j == 0 ) // first point
 		{
 			for (i=0; i<3; i++)
 			{
@@ -3067,7 +3088,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				// until a pair which meets the following criteria
 				// is found: ||(0,1)x(ipt-1,ipt)|| > 1.0E-3.
 				// This is used to eliminate nearly parallel cases.
-				for(ipt=2; ipt < npts; ipt++)
+				for (ipt=2; ipt < npts; ipt++)
 				{
 					double ftmp[3];
 					
@@ -3135,14 +3156,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				return 0;
             }
 			
-			//compute rotation vector
+			// Compute rotation vector
 			vtkMath::Cross(sPrev,normal,w);
 			if ( vtkMath::Normalize(w) == 0.0 ) 
             {
 				return 0;
             }
 			
-			//see whether we rotate greater than 90 degrees.
+			// See whether we rotate greater than 90 degrees.
 			if ( vtkMath::Dot(sPrev,sNext) < 0.0 )
             {
 				largeRotation = 1;
@@ -3152,16 +3173,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				largeRotation = 0;
             }
 			
-			//compute rotation of line segment
+			// Compute rotation of line segment
 			vtkMath::Cross (sNext, sPrev, q);
 			if ( (theta=asin((double)vtkMath::Normalize(q))) == 0.0 ) 
-            { //no rotation, use previous normal
+            { // no rotation, use previous normal
 				
 				for(i=0;i<3;i++)
 					*(ptnormals+j*3+i)=normal[i];
 				continue;
             }
-			if ( largeRotation )
+
+            if ( largeRotation )
             {
 				if ( theta > 0.0 )
 				{
@@ -3173,12 +3195,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
             }
 			
-			// new method
+			// New method
 			for (i=0; i<3; i++)
             {
 				c[i] = sNext[i] + sPrev[i];
             }
-			vtkMath::Normalize(c);
+
+            vtkMath::Normalize(c);
 			f1 = vtkMath::Dot(q,normal);
 			f2 = 1.0 - f1*f1;
 			if (f2 > 0.0)
@@ -3202,11 +3225,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			for(i=0;i<3;i++)
 				*(ptnormals+j*3+i)=normal[i];
-		}//for this point
+		} // for this point
 	}
 	return 1;
 }
-- (int) generateUnitRobbin:(int)npts :(double*)inputpointsxyz :(double*)ptnormals :(double*)outputpointsxyz :(double)angle :(double)width
+
+- (int) generateUnitRobbin:(int)npts
+                          :(double*)inputpointsxyz
+                          :(double*)ptnormals
+                          :(double*)outputpointsxyz
+                          :(double)angle
+                          :(double)width
 {
 	/*
 	 if ( !this->GeneratePoints(offset,npts,pts,inPts,newPts,pd,outPD,
@@ -3219,7 +3248,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	 vtkFloatArray *newNormals,
 	 vtkDataArray *inScalars, double range[2],
 	 vtkDataArray *inNormals)*/
-	int i,j;
+
+    int i;
 	double p[3];
 	double pNext[3];
 	double sNext[3];
@@ -3231,13 +3261,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	double nP[3];
 	double sFactor=1.0;
 	
-	
 	// Use "averaged" segment to create beveled effect. 
 	// Watch out for first and last points.
 	//
-	for (j=0; j < npts; j++)
+	for (int j=0; j < npts; j++)
     {
-		if ( j == 0 ) //first point
+		if ( j == 0 ) // first point
 		{
 			
 			for (i=0; i<3; i++) 
@@ -3248,7 +3277,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				sPrev[i] = sNext[i];
 			}
 		}
-		else if ( j == (npts-1) ) //last point
+		else if ( j == (npts-1) ) // last point
 		{
 			for (i=0; i<3; i++)
 			{
@@ -3271,16 +3300,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			n[i]=*(ptnormals+j*3+i);
 		
 		if ( vtkMath::Normalize(sNext) == 0.0 )
-		{
-			
 			return 0;
-		}
 		
 		for (i=0; i<3; i++)
 		{
 			s[i] = (sPrev[i] + sNext[i]) / 2.0; //average vector
 		}
-		// if s is zero then just use sPrev cross n
+
+        // if s is zero then just use sPrev cross n
 		if (vtkMath::Normalize(s) == 0.0)
 		{
 			vtkMath::Cross(sPrev,n,s);
@@ -3289,7 +3316,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				// vtkWarningMacro(<< "Using alternate bevel vector");
 			}
 		}
-		vtkMath::Cross(s,n,w);
+
+        vtkMath::Cross(s,n,w);
 		if ( vtkMath::Normalize(w) == 0.0)
 		{
 			return 0;
@@ -3297,7 +3325,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		vtkMath::Cross(w,s,nP); //create orthogonal coordinate system
 		vtkMath::Normalize(nP);
-		
 		
 		for (i=0; i<3; i++) 
 		{
@@ -3307,13 +3334,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			*(outputpointsxyz+j*3+i)= width * sFactor * v[i];
 		}
 		
-	}//for all points in polyline
+	} // for all points in polyline
 	
 	return 1;
 }
-- (void) createEven3DPathForCPR:(int*)pwidth :(int*)pheight 
-{	
-	
+
+- (void) createEven3DPathForCPR:(int*)pwidth :(int*)pheight
+{
 	int i,ii;
 	double position[3];
 	int width,height;
@@ -3346,13 +3373,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 	}
 	
-	//width and height
-	*pwidth=width=40/cViewSpace[0];//here we use fixed width( 40mm )
+	// width and height
+	*pwidth=width=40/cViewSpace[0]; // here we use fixed width( 40mm )
 	*pheight=height=(int)(path3DLength/cViewSpace[1]);
-	
-
-	
-	// update axview's slider
+		
+	// Update axview's slider
 	
 	[axImageSlider setMinValue: 0];
 	[axImageSlider setMaxValue: path3DLength-1];
@@ -3361,7 +3386,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else if ([axImageSlider floatValue]<0)
 		[axImageSlider setFloatValue: 0];
 	
-	//resample to get even spacing
+	// Resample to get even spacing
 	double* outputcenterlinexyz;
 	outputcenterlinexyz=(double*)malloc(sizeof(double)*height*3);
 	for(ii=0;ii<3;ii++)
@@ -3371,7 +3396,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int curpointindex=0;
 	double curpointdis=0;
 	double interpolfactor=1;
-	for(i=1;i<height;i++)
+	for (i=1;i<height;i++)
 	{
 		while(curpointdis-path3DLength<cViewSpace[1]&&curpointindex<pointNumber)
 		{
@@ -3379,7 +3404,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			curpointdis+=*(inputpointslen+curpointindex);
 			
 		}
-		if (curpointindex>=pointNumber)
+
+        if (curpointindex>=pointNumber)
 		{
 			for(ii=0;ii<3;ii++)
 				*(outputcenterlinexyz+i*3+ii)=(*(inputpointsxyz+curpointindex*3-3+ii))*interpolfactor;
@@ -3390,9 +3416,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			interpolfactor=(curpointdis-path3DLength-cViewSpace[1])/(*(inputpointslen+curpointindex));
 		else
 			interpolfactor=1;
-		for(ii=0;ii<3;ii++)
+
+        for(ii=0;ii<3;ii++)
 			*(outputcenterlinexyz+i*3+ii)=(*(inputpointsxyz+curpointindex*3+ii))*(1.0-interpolfactor)+(*(inputpointsxyz+curpointindex*3-3+ii))*interpolfactor;	
-		if (*(outputcenterlinexyz+i*3)>1000)
+		
+        if (*(outputcenterlinexyz+i*3)>1000)
 			*(outputcenterlinexyz+i*3+ii)=1000;
 		
 		path3DLength+=cViewSpace[1];
@@ -3409,13 +3437,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[new3DPoint release];
 	}
 	
-	
 	free(inputpointsxyz);free(inputpointslen);
 }
-- (float*) calculateStraightCPRImage :(int*)pwidth :(int*)pheight 
-{
-	float *im=0L;
 
+- (float*) calculateStraightCPRImage: (int*)pwidth
+                                    : (int*)pheight
+{
 	int width=0,height=0;
 	int i,ii;
 	double position[3];
@@ -3426,7 +3453,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[self createEven3DPathForCPR:pwidth :pheight ];
 	else
 	{
-		*pwidth=width=maxWidthofCPR/cViewSpace[0];//here we use fixed width( 40mm )
+		*pwidth=width=maxWidthofCPR/cViewSpace[0]; // here we use fixed width( 40mm )
 		*pheight=height=[curvedMPREven3DPath count];
 		outputcenterlinexyz=(double*)malloc(sizeof(double)*height*3);
 		CMIV3DPoint* a3DPoint;
@@ -3438,12 +3465,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			*(outputcenterlinexyz+i*3+2)=[a3DPoint z];
 		}
 	}
-	//create minimum rotate normals 
+
+    // Create minimum rotate normals
 	double* outputcenterlinenormals=(double*)malloc(sizeof(double)*height*3);
 	if ([self generateSlidingNormals:height:outputcenterlinexyz:outputcenterlinenormals]==0)
 		return nil;
 	
-	// Create a narrow 3D ribbon from the centerline and use this ribbon to get cross-section line from each pair of point along this ribbon
+	// Create a narrow 3D ribbon from the centerline
+    // and use this ribbon to get cross-section line from each pair of points along this ribbon
 	double* unitribbonxyz=(double*)malloc(sizeof(double)*height*3);
 	float rotateangle=[cYRotateSlider floatValue];
 	if (rotateangle<0)
@@ -3455,16 +3484,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         return nil;
     }
 	
-	im=(float*)malloc(sizeof(float)*width*height);
+    float *im = (float*)malloc(sizeof(float)*width*height);
 	if (!im)
 		return 0L;
 	
 	int x,y,z;
-	int j;
 	int pixelindex=0;
 	float fposition[3];
 	
-	for(j=0;j<height;j++)
+	for (int j=0;j<height;j++)
 	{
 		for(ii=0;ii<3;ii++)
 			position[ii]=*(outputcenterlinexyz+j*3+ii)-width/2*(*(unitribbonxyz+j*3+ii));
@@ -3507,7 +3535,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int i,ii;
 	int pointNumber;
 	double position[3];
-	//cacluate parameters for CPR image (width, height, translateLeftX-Z,translateRightX-Z)
+	// Calculate parameters for CPR image (width, height, translateLeftX-Z,translateRightX-Z)
 	int width, height;
 	float path2DLength;	
 	NSMutableArray  *path2DPoints=[curvedMPR2DPath points] ;
@@ -3544,11 +3572,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			*(inputpointsxyz+i*3+ii)=position[ii];
 	}
 	
-	//width and height
+	// width and height
 	*pwidth=width=(int)(([oImageSlider maxValue]-[oImageSlider minValue])/cViewSpace[0]);
 	*pheight=height=(int)(path2DLength/cViewSpace[1]);
 	
-	// update axview's slider
+	// Update axview's slider
 	[axImageSlider setMinValue: 0];
 	[axImageSlider setMaxValue: path2DLength];
 	if ([axImageSlider floatValue]>path2DLength)
@@ -3556,7 +3584,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else if ([axImageSlider floatValue]<0)
 		[axImageSlider setFloatValue: 0];
 	
-	//resample to get even spacing
+	// Resample to get even spacing
 	float* outputcenterlinexyz=(float*)malloc(sizeof(float)*height*3);
 	for(ii=0;ii<3;ii++)
 		*(outputcenterlinexyz+ii)=*(inputpointsxyz+ii);
@@ -3591,8 +3619,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	for(ii=0;ii<3;ii++)
 		traslateunit[ii]=traslateunit[ii]-position[ii];
 	
-	
-	//create a curved surface from projected centerline
+	// Create a curved surface from projected centerline
 	im=(float*)malloc(sizeof(float)*width*height);
 	if (!im)
 	{
@@ -3707,8 +3734,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	[curvedMPRReferenceLineOfAxis setROIMode:ROI_sleep];
 	[cViewMeasurePolygon setROIMode:ROI_sleep];
-	[cPRView setCrossCoordinates:-9999 :-9999 :YES];
-	[cPRView setIndex: 0 ];
+	[cprView setCrossCoordinates:-9999 :-9999 :YES];
+	[cprView setIndex: 0 ];
 	
 }
 - (void) updateCViewAsMPR
@@ -3802,14 +3829,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
 		
-        [cPRView setCrossCoordinates:crossX:crossY :YES];
+        [cprView setCrossCoordinates:crossX:crossY :YES];
 	}
 	else
 	{
-		[cPRView setCrossCoordinates:-9999 :-9999 :YES];
+		[cprView setCrossCoordinates:-9999 :-9999 :YES];
 	}
 
-    [cPRView setIndex: 0 ];
+    [cprView setIndex: 0 ];
 }
 
 - (void) reCalculateCPRPath:(NSMutableArray*) roiList
@@ -3954,8 +3981,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[self updateOView];
 	if (isNeedShowReferenceLine)
 	{
-		//draw reference line
-		
+		// Draw reference line
 		if (curvedMPRReferenceLineOfAxis)
 		{
 			
@@ -3972,7 +3998,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 		}
 		
-		[cPRView setIndex: 0 ];
+		[cprView setIndex: 0 ];
 	}
 }
 
@@ -4047,8 +4073,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			if (isNeedShowReferenceLine)
 			{
-				//draw reference line
-				
+				// Draw reference line
 				oViewUserTransform->Translate(curPoint.x,curPoint.y,z1);
 				[self updateOView];
 				
@@ -4067,7 +4092,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					}
 				}
 				
-				[cPRView setIndex: 0 ];
+				[cprView setIndex: 0 ];
 			}
 			else
 			{
@@ -4446,7 +4471,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
                 for( i = 0 ; i < imageNumber; i ++)
 				{
-					//copy data
+					// Copy data
 					int width,height;
 					int x,y;
 					int offsetx;
@@ -4566,9 +4591,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	startfromdistance=start;
 	currentdistance = [axImageSlider floatValue];
 	distanceofstep = step;
-	NSRect viewsize = [crossAxiasView frame];
-	maxwidth=viewsize.size.width/[crossAxiasView scaleValue];
-	maxheight=viewsize.size.height/[crossAxiasView scaleValue];
+	NSRect viewsize = [crossAxialView frame];
+	maxwidth=viewsize.size.width/[crossAxialView scaleValue];
+	maxheight=viewsize.size.height/[crossAxialView scaleValue];
 	float* newVolumeData=nil;
 	long size= sizeof(float)*maxwidth*maxheight*imageNumber;
 	newVolumeData=(float*) malloc(size);
@@ -4647,9 +4672,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	currentdistance = [cImageSlider floatValue];
 	distanceofstep = step;
 	
-	NSRect viewsize = [cPRView frame];
-	maxwidth=viewsize.size.width/[cPRView scaleValue];
-	maxheight=viewsize.size.height/[cPRView scaleValue];
+	NSRect viewsize = [cprView frame];
+	maxwidth=viewsize.size.width/[cprView scaleValue];
+	maxheight=viewsize.size.height/[cprView scaleValue];
 	
 	float* newVolumeData=nil;
 	long size= sizeof(float)*maxwidth*maxheight*imageNumber;
@@ -4942,26 +4967,26 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			break;
 
         case 2:
-			viewsize = [cPRView frame];
-			imgwidth=viewsize.size.width/[cPRView scaleValue];
-			imgheight=viewsize.size.height/[cPRView scaleValue];
+			viewsize = [cprView frame];
+			imgwidth=viewsize.size.width/[cprView scaleValue];
+			imgheight=viewsize.size.height/[cprView scaleValue];
 			imgdata=(float*)malloc(imgwidth*imgheight*sizeof(float));
 			if (imgdata)
 			{
 				newPix=[self getCurPixFromCView:imgdata:imgwidth:imgheight:imgRoiList];
-				newCellICONForBasket=[cPRView nsimage];
+				newCellICONForBasket=[cprView nsimage];
 			}			
 			break;
 
         case 3:
-			viewsize = [crossAxiasView frame];
-			imgwidth=viewsize.size.width/[crossAxiasView scaleValue];
-			imgheight=viewsize.size.height/[crossAxiasView scaleValue];
+			viewsize = [crossAxialView frame];
+			imgwidth=viewsize.size.width/[crossAxialView scaleValue];
+			imgheight=viewsize.size.height/[crossAxialView scaleValue];
 			imgdata=(float*)malloc(imgwidth*imgheight*sizeof(float));
 			if (imgdata)
 			{
 				newPix=[self getCurPixFromAxView:imgdata:imgwidth:imgheight:imgRoiList];
-				newCellICONForBasket=[crossAxiasView nsimage];
+				newCellICONForBasket=[crossAxialView nsimage];
 			}			
 			break;
 	}
@@ -5204,7 +5229,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float vector[ 9], origin[3];
 	//double doublevector[3];
 	
-	//copy data
+	// Copy data
 	int x,y;
 	int offsetx,offsety;
 	int minx,miny,maxx,maxy;
@@ -5212,11 +5237,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float* tempfloat;
 	temppix=[cViewPixList objectAtIndex: 0];
 	
-	
 	width = [temppix pwidth];
 	height = [temppix pheight];
 	tempfloat = [temppix fImage];
-	NSRect viewsize = [cPRView frame];
+	NSRect viewsize = [cprView frame];
 	point[0].x=0;
 	point[1].x=viewsize.size.width;
 	point[2].x=0;
@@ -5227,10 +5251,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	point[2].y=viewsize.size.height;
 	point[3].y=viewsize.size.height;
 	
-	point[0]=[cPRView ConvertFromUpLeftView2GL:point[0]];//ConvertFromUpLeftView2GL for 3.1
-	point[1]=[cPRView ConvertFromUpLeftView2GL:point[1]];//ConvertFromUpLeftView2GL for 3.1
-	point[2]=[cPRView ConvertFromUpLeftView2GL:point[2]];//ConvertFromUpLeftView2GL for 3.1
-	point[3]=[cPRView ConvertFromUpLeftView2GL:point[3]];//ConvertFromUpLeftView2GL for 3.1
+	point[0]=[cprView ConvertFromUpLeftView2GL:point[0]];//ConvertFromUpLeftView2GL for 3.1
+	point[1]=[cprView ConvertFromUpLeftView2GL:point[1]];//ConvertFromUpLeftView2GL for 3.1
+	point[2]=[cprView ConvertFromUpLeftView2GL:point[2]];//ConvertFromUpLeftView2GL for 3.1
+	point[3]=[cprView ConvertFromUpLeftView2GL:point[3]];//ConvertFromUpLeftView2GL for 3.1
 	
 	minx=maxx=point[0].x;
 	miny=maxy=point[0].y;
@@ -5421,7 +5445,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (DCMPix*)getCurPixFromAxView:(float*)imgdata :(int)imgwidth :(int)imgheight :(NSMutableArray*)imgROIs
 {
-	//crop the origin Image to fit current view size
+	// Crop the origin Image to fit current view size
 	NSPoint point[4];
 	NSArray *pixList = [originalViewController pixList];
 	DCMPix	*firstPix=[pixList objectAtIndex: 0];
@@ -5445,7 +5469,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	width = [temppix pwidth];
 	height = [temppix pheight];
 	tempfloat = [temppix fImage];
-	NSRect viewsize = [crossAxiasView frame];
+	NSRect viewsize = [crossAxialView frame];
 	point[0].x=0;
 	point[1].x=viewsize.size.width;
 	point[2].x=0;
@@ -5456,10 +5480,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	point[2].y=viewsize.size.height;
 	point[3].y=viewsize.size.height;
 	
-	point[0]=[crossAxiasView ConvertFromUpLeftView2GL:point[0]];
-	point[1]=[crossAxiasView ConvertFromUpLeftView2GL:point[1]];
-	point[2]=[crossAxiasView ConvertFromUpLeftView2GL:point[2]];
-	point[3]=[crossAxiasView ConvertFromUpLeftView2GL:point[3]];
+	point[0]=[crossAxialView ConvertFromUpLeftView2GL:point[0]];
+	point[1]=[crossAxialView ConvertFromUpLeftView2GL:point[1]];
+	point[2]=[crossAxialView ConvertFromUpLeftView2GL:point[2]];
+	point[3]=[crossAxialView ConvertFromUpLeftView2GL:point[3]];
 	
 	minx=maxx=point[0].x;
 	miny=maxy=point[0].y;
@@ -5890,7 +5914,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (int) initSeedsList
 {
-	//initilize contrast list
+	// Initialize contrast list
 	contrastList= [[NSMutableArray alloc] initWithCapacity: 0];
 	NSMutableDictionary *contrast;
 	if (!isInWizardMode)
@@ -6518,11 +6542,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		ROI* roi=(ROI*)sender;
 		
-		if (roi==cViewMeasurePolygon && [cPRView mouseDragging])
+		if (roi==cViewMeasurePolygon && [cprView mouseDragging])
 		{
 			cViewMeasureNeedToUpdate=YES;
 		}
-		else if (roi==axViewMeasurePolygon && [crossAxiasView mouseDragging])
+		else if (roi==axViewMeasurePolygon && [crossAxialView mouseDragging])
 		{
 			axViewMeasureNeedToUpdate=YES;
 		}
@@ -6560,7 +6584,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				[new3DPoint release];
 				
 			}
-			else if ([[curvedMPR2DPath points] count]<[curvedMPR3DPath count])//remove the end
+			else if ([[curvedMPR2DPath points] count]<[curvedMPR3DPath count]) // remove the end
 			{
 				[curvedMPR3DPath removeLastObject];
 			}
@@ -6574,7 +6598,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 		else
 		{
-			if ([[curvedMPR2DPath points] count]>[curvedMPR3DPath count])//user add new end
+			if ([[curvedMPR2DPath points] count]>[curvedMPR3DPath count]) // user add new end
 			{
 				[[curvedMPR2DPath points] removeLastObject];
 			}
@@ -6731,7 +6755,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 #ifdef VERBOSEMODE
 					NSLog( @"ROI added");
 #endif
-					//delete other
+					// Delete other
 					unsigned int i;
 					isRemoveROIBySelf=1;
 					oViewArrow=nil;
@@ -6752,7 +6776,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[[axViewROIList objectAtIndex: 0] removeAllObjects];
 					
 					isRemoveROIBySelf=0;
-					//change start and end
+					
+                    // Change start and end
 					MyPoint *lastPoint=[[MyPoint alloc] initWithPoint:[[[roi points] objectAtIndex:0] point] ];
 					arrowPointsArray = [roi points] ;
 					[arrowPointsArray addObject:lastPoint];
@@ -6797,7 +6822,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 			}
 		}
-		else if ([sender isEqual:cPRView]&&currentTool == 7 )
+		else if ([sender isEqual:cprView]&&currentTool == 7 )
 		{
 			ROI * roi = [[note userInfo] objectForKey:@"ROI"];
 			if (roi&&cViewArrow)
@@ -6877,9 +6902,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					oViewMeasureLine=nil;
 					isRemoveROIBySelf=1;
 					[[cViewROIList objectAtIndex:0] removeAllObjects];
-					[cPRView setIndex: 0];
+					[cprView setIndex: 0];
 					[[axViewROIList objectAtIndex: 0] removeAllObjects];
-					[crossAxiasView setIndex: 0];
+					[crossAxialView setIndex: 0];
 					isRemoveROIBySelf=0;
 				}
 				
@@ -6893,12 +6918,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					cViewArrow=nil;
 					isRemoveROIBySelf=1;
 					[[cViewROIList objectAtIndex:0] removeAllObjects];
-					[cPRView setIndex: 0];
+					[cprView setIndex: 0];
 					[[axViewROIList objectAtIndex: 0] removeAllObjects];
-					[crossAxiasView setIndex: 0];
+					[crossAxialView setIndex: 0];
 					isRemoveROIBySelf=0;
 				}
-				else if (!isRemoveROIBySelf&&[cPRView isEqual:[roi curView]])
+				else if (!isRemoveROIBySelf&&[cprView isEqual:[roi curView]])
 				{
 					oViewArrow=nil;
 					cViewArrow=nil;
@@ -6915,14 +6940,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					}		
 					[originalView setIndex: 0];
 					[[axViewROIList objectAtIndex: 0] removeAllObjects];
-					[crossAxiasView setIndex: 0];
+					[crossAxialView setIndex: 0];
 					isRemoveROIBySelf=0;
 				}
 			}
 			
 			else if (!isRemoveROIBySelf && [roi type]==tROI)
 			{
-				if ([cPRView isEqual:[roi curView]])
+				if ([cprView isEqual:[roi curView]])
 				{
 					isRemoveROIBySelf=1;
 					oViewMeasureLine=nil;
@@ -6964,9 +6989,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (currentTool==tOval)
 	{
 		id sender = [note object];
-		if (sender==cPRView)
+		if (sender==cprView)
 			[[cViewROIList objectAtIndex:0] removeObject:curvedMPRReferenceLineOfAxis] ;
-		else if (sender==crossAxiasView)
+		else if (sender==crossAxialView)
 		{
 			for (unsigned i=0;i<[[axViewROIList objectAtIndex:0] count];i++) {
 				if ([[axViewROIList objectAtIndex:0] objectAtIndex:i]!=axViewMeasurePolygon) {
@@ -6984,13 +7009,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (currentTool==tOval)
 	{
 		id sender = [note object];
-		if (sender==cPRView && cViewMeasureNeedToUpdate)
+		if (sender==cprView && cViewMeasureNeedToUpdate)
 		{
 			[self updateCViewMeasureAfterROIChanged];
 			[[cViewROIList objectAtIndex:0] addObject:curvedMPRReferenceLineOfAxis];
 			cViewMeasureNeedToUpdate=NO;
 		}
-		else if (sender==crossAxiasView&&axViewMeasureNeedToUpdate)
+		else if (sender==crossAxialView&&axViewMeasureNeedToUpdate)
 		{
 			[self updateAxViewMeasureAfterROIChanged];
 			axViewMeasureNeedToUpdate=NO;
@@ -7014,14 +7039,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		color =[[contrastList objectAtIndex: row] objectForKey:@"Color"] ;
 		currentSeedColor=color;
 		[seedColor setColor:color];
-		//load brush
+		
+        // Load brush
 		number=[[contrastList objectAtIndex: row] objectForKey:@"BrushWidth"] ;
 		[brushWidthText setIntValue:[number intValue]];
 		[brushWidthSlider setFloatValue: [number floatValue]];
 		[[NSUserDefaults standardUserDefaults] setFloat:[number floatValue] forKey:@"ROIRegionThickness"];
 		[brushStatSegment setSelectedSegment:0];
 		[originalView setEraserFlag:0];
-		// Change current tool
+		
+        // Change current tool
 		number=[[contrastList objectAtIndex: row] objectForKey:@"CurrentTool"] ;
 		[seedingToolMatrix selectCellAtRow:0 column: 8-[number intValue]];
 		[self changeCurrentTool: (ToolMode)[number intValue]];
@@ -7101,7 +7128,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			maxz=0;
 			height=3*abs((int)tempRect.size.height);
 			width=3*abs((int)tempRect.size.width );
-			//step=0.3 pixel!	
+			
+            // step=0.3 pixel!
 			for(j=0;j<height;j++)
 				for(i=0;i<width;i++)
 				{
@@ -7145,7 +7173,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		ROI* roi=[[axViewROIList objectAtIndex: 0] objectAtIndex: 0];
 		if (roi && [roi type]== tOval)
 		{
-			//create normal seeds with current kind
+			// Create normal seeds with current kind
 			NSRect tempRect=[roi rect];
 			tempRect.origin.x-=tempRect.size.width/2;
 			tempRect.origin.y-=tempRect.size.height/2;
@@ -7224,10 +7252,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					}
 					
 				}				
-			
-			
-			
-			//create barrier seeds
+
+			// Create barrier seeds
 			tempRect=[roi rect];
 			tempRect.origin.x-=tempRect.size.width;
 			tempRect.origin.y-=tempRect.size.height;
@@ -7979,8 +8005,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				[new3DPoint release];
 				[tempRoiList removeObjectAtIndex:j];
 				j=[tempRoiList count];
-				
-				
 			}
 		}
 
@@ -8906,7 +8930,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	
 	[self creatCPRROIListFromFuzzyConnectedness:[cViewROIList objectAtIndex: 0] :[curCViewPix pwidth] :[curCViewPix pheight] :im : cViewSpace[0]:cViewSpace[1]:cViewOrigin[0]:cViewOrigin[1]];
-	[cPRView setIndex: 0 ];
+	[cprView setIndex: 0 ];
 	float distanceofstep=1;
 	vesselAnalysisMaxLongitudeDiameter=[self measureDiameterOfLongitudePolygon:cViewMeasurePolygon:distanceofstep:[curCViewPix pheight]:cViewSpace[0]:vesselAnalysisLongDiameter:vesselAnalysisCentersInLongtitudeSection];
 	vesselAnalysisLongitudeStep=distanceofstep*cViewSpace[1];
@@ -9016,7 +9040,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		initdiameter=2.0;
 	if (![self thresholdLeveLSetAlgorithm:axViewConnectednessCostMap :axViewCostMapWidth :axViewCostMapHeight :x1 :y1 :spaceX :spaceY :levelsetCurvatureScaling :axViewLowerThresholdFloat :axViewUpperThresholdFloat :initdiameter :connectednessROIBuffer :axViewMeasurePolygon:0])
 	{
-		/* Do not show brush roi of segment area
+		/* Do not show brush ROI of segment area
 		if (connectednessROIBuffer)
 		{
 			unsigned char* textureBuffer= connectednessROIBuffer;
@@ -9026,7 +9050,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[roiList addObject:newROI];
 			[newROI release];
 		}*/
-		float roiarea=[axViewMeasurePolygon  roiArea]*100;
+
+        float roiarea=[axViewMeasurePolygon roiArea]*100;
 		[axViewMeasurePolygon setName:[NSString stringWithFormat:@"Area:%.1fmm^2",roiarea]];
 		[axViewMeasurePolygon setComments:[axImageSlider stringValue]];
 		[roiList addObject:axViewMeasurePolygon];
@@ -9105,7 +9130,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
                                          :cViewMeasurePolygon
                                          :1])
 	{
-		/*do not show brush roi of segment area
+		/* Do not show brush ROI of segment area
 		if (connectednessROIBuffer)
 		{
 			unsigned char* textureBuffer= connectednessROIBuffer;
@@ -9120,7 +9145,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[roiList addObject:cViewMeasurePolygon];
 				
 	}
-	[cViewMeasurePolygon setComments: @"done"];
+
+    [cViewMeasurePolygon setComments: @"done"];
 }
 
 -(int) thresholdLeveLSetAlgorithm:(float*)imgdata
@@ -9233,8 +9259,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int ii;
 	if (seedmode==0)
 	{
-		seedPosition[0] = imgwidth/2;//start from center
-		seedPosition[1] = imgheight/2;//start from center	
+		seedPosition[0] = imgwidth/2; // start from center
+		seedPosition[1] = imgheight/2; // start from center
 		
 		node.SetValue( seedValue * spaceX);
 		node.SetIndex( seedPosition );
@@ -9245,8 +9271,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		for(ii=1;ii<imgheight/3;ii++)
 		{
-			seedPosition[0] = imgwidth/2;//start from center
-			seedPosition[1] = ii*3;//start from center	
+			seedPosition[0] = imgwidth/2; // start from center
+			seedPosition[1] = ii*3; // start from center
 			
 			node.SetValue( seedValue * spaceX);
 			node.SetIndex( seedPosition );
@@ -10199,17 +10225,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
         meandiameter+=diameter;
 		if (maxdiameter<diameter)
 			maxdiameter=diameter;
-		if (diameterarray)
-		{
+
+        if (diameterarray)
 			[diameterarray addObject:[NSNumber numberWithFloat:diameter*xspace]];
-		}
-		if (centerptarray)
-		{
+		
+        if (centerptarray)
 			[centerptarray addObject:[NSNumber numberWithFloat:centerx]];
-		}
-		
-		
-		
 	}
 
     meandiameter/=buffersize;
@@ -10445,19 +10466,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	spacing[1]=ySpacing;
 	spacing[2]=zSpacing;
 	
-	//start seed growing	
+	// Start seed growing
 	CMIVSegmentCore *segmentCoreFunc = [[CMIVSegmentCore alloc] init];
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 	
 	[segmentCoreFunc startShortestPathSearchAsFloat:inputData Out:outputData :colorData Direction: directionData];
-	//initilize the out and color buffer
+	
+    // Initialize the out and color buffer
 	memset(colorData,0,size);
 	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData]; 
 	[segmentCoreFunc release];
 	if (isInWizardMode==2)
 		[self saveDirectionMap:directionData];
-	[originalViewController endWaitWindow: waitWindow];
 	
+    [originalViewController endWaitWindow: waitWindow];
 	[self showPreviewResult:inputData:outputData:directionData:colorData];
 }
 
@@ -10517,7 +10539,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	
 //	id waitWindow = [originalViewController startWaitWindow:@"processing"];	
 //	[self loadDirectionData:directionData];
-//	//create ROI edit history
+//	// Create ROI edit history
 //	[totalROIList removeAllObjects];
 //	unsigned j;
 //	int barrierindex=0;
@@ -10581,12 +10603,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	spacing[1]=ySpacing;
 //	spacing[2]=zSpacing;
 //	
-//	//start seed growing	
+//	// Start seed growing
 //	CMIVSegmentCore *segmentCoreFunc = [[CMIVSegmentCore alloc] init];
 //	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 //	
 //	[segmentCoreFunc calculateFuzzynessMap:inputData Out:outputData  withDirection: directionData Minimum:minValueInCurSeries];
-//	//initilize the out and color buffer
+//
+//	// Initialize the out and color buffer
 //	memset(colorData,0,size);
 //	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData];
 //	[segmentCoreFunc release];
@@ -10785,22 +10808,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	if (step>=0 && step<(signed)[contrastList count])
 	{
-		
 		currentStep=step;
-		//load name
+		
+        // Load name
 		tempstr = [[contrastList objectAtIndex: step] objectForKey:@"Name"] ;
 		currentSeedName=tempstr;
-		//load color
+		
+        // Load color
 		color =[[contrastList objectAtIndex: step] objectForKey:@"Color"] ;
 		currentSeedColor=color;
-		//load brush
+		
+        // Load brush
 		number=[[contrastList objectAtIndex: step] objectForKey:@"BrushWidth"] ;
 		[[NSUserDefaults standardUserDefaults] setFloat:[number floatValue] forKey:@"ROIRegionThickness"];
 		
-		//chang current tool
+		// Change current tool
 		number=[[contrastList objectAtIndex: step] objectForKey:@"CurrentTool"] ;
 		[self changeCurrentTool: (ToolMode)[number intValue]];
-		//load tips
+		
+        // Load tips
 		tempstr = [[contrastList objectAtIndex: step] objectForKey:@"Tips"] ;
 		[currentTips setStringValue:tempstr];
 	}	
@@ -10814,7 +10840,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[nextButton setEnabled: YES];
 	if (currentStep>0)
 		[previousButton setEnabled: YES];
-	[self goSubStep:currentStep:NO];
+	
+    [self goSubStep:currentStep:NO];
 	[continuePlantingButton setHidden: YES];
 }
 
@@ -10822,9 +10849,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
                                      :(float*)vesselimg
                                      :(int)size
 {
-	for(int i=0;i<size;i++)
-			*(img+i)=*(img+i)+3*(*(vesselimg+i));
-	parent.ifVesselEnhanced=YES;
+	for (int i=0;i<size;i++)
+        *(img+i)=*(img+i)+3*(*(vesselimg+i));
+	
+    parent.ifVesselEnhanced=YES;
 }
 
 - (void)loadVesselnessMap
@@ -11353,7 +11381,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //								*(contrastVolumeData+zz*imageSize+yy*imageWidth+xx)=0;
 //							
 //						}
-//			//now plant the seeds
+//			// Now plant the seeds
 //			[self goSubStep:0:NO];
 //			[[axViewROIList objectAtIndex: 0] removeAllObjects];
 //			ROI* aortaSeedROI=[[ROI alloc] initWithType: tOval :axViewSpace[0] :axViewSpace[1] : NSMakePoint( axViewOrigin[0], axViewOrigin[1])];
@@ -11470,7 +11498,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			a=a*a;
 //			b=b*b;
 //
-//			//step=0.3 pixel!	
+//			// step=0.3 pixel!
 //			for(j=0;j<height;j++)
 //				for(i=0;i<width;i++)
 //				{

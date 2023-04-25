@@ -30,7 +30,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 #import <Cocoa/Cocoa.h>
@@ -120,7 +120,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	vtkVolumeRayCastCompositeFunction* myCompositionFunction;
 #endif
 	float verticalAngleForVR;
-	float osirixOffset;
+	float hostAppOffset2;
 	unsigned short* realVolumedata;
 	long maxMovieIndex;
 	int  isSegmentVR;
@@ -131,7 +131,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	unsigned char* colorMapFromFile;
 }
 
-- (IBAction)capureImage:(id)sender;
+- (IBAction)captureImage:(id)sender;
 - (IBAction)exportQTVR:(id)sender;
 - (IBAction)setColorProtocol:(id)sender;
 - (IBAction)setOpacity:(id)sender;
@@ -181,7 +181,7 @@ objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
 - (int)loadMaskFromTempFolder;			
 - (void)applyAdvancedCLUT:(NSDictionary*)dict;
 
-//to cheat VRView
+// To cheat VRView
 - (float) minimumValue;
 - (float) maximumValue;
 - (float) blendingMinimumValue;

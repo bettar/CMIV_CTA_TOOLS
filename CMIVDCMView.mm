@@ -26,7 +26,7 @@
 
 #import "CMIVDCMView.h"
 
-// TODO: use vtkMath::RadiansFromDegrees()
+// TODO: use vtkMath::RadiansFromDegrees() or glm::radians()
 static float deg2rad = M_PI/180.0;
 
 @implementation CMIVDCMView
@@ -235,7 +235,8 @@ static float deg2rad = M_PI/180.0;
         mousetocenterx=-mousetocenterx;
     if(mousetocentery<0)
         mousetocentery=-mousetocentery;
-    //in center move
+    
+    // In center move
     if(mousetocenterx<centerwidth&&mousetocentery<centerheight)
     {
         if(mousetocenterx<10&&mousetocentery<10)
@@ -247,8 +248,10 @@ static float deg2rad = M_PI/180.0;
         mouseOnLines=1;
     else
         mouseOnLines=0;
+
     return mouseOnLines;
 }
+
 -(float) angleToCrossXFromPt:(NSPoint)pt
 {
     float x,y,angle;
@@ -354,7 +357,7 @@ static float deg2rad = M_PI/180.0;
 
 - (void) subDrawRect: (NSRect) r
 {
-    //[self setScaleValue:2.3]; // @@@ Added. TBC
+    [self setScaleValue:2.3]; // @@@ FIXME: otherwise the zoom level is 10000%
     
     if (displayCrossLines)
     {
@@ -369,18 +372,14 @@ static float deg2rad = M_PI/180.0;
         float heighthalf = self.frame.size.height/2;
         float widthhalf = self.frame.size.width/2;
         
-        float lineWidth = 2.0;
+        float lineWidth;
         float pointSize;
         float backingScaleFactor = self.window.backingScaleFactor;
         
         if (widthhalf > 800)
-        {
             lineWidth = pointSize = 4.0;
-        }
         else
-        {
             lineWidth = pointSize = 2.0;
-        }
 
 #ifndef WITH_OPENGL_32
         glLineWidth(lineWidth * backingScaleFactor);
@@ -427,26 +426,6 @@ static float deg2rad = M_PI/180.0;
             renderer_drawLine_xy([pArray copy], GL_LINES);
         }
         
-        // Drawing the center point
-        {
-            glm::vec2 a(0, 0);
-            // Apply local model transformation
-            glm::vec4 pB = MV*glm::vec4(a,0,1);
-            a = glm::vec2(pB.x, pB.y);
-            NSMutableArray *pArray = [NSMutableArray array];
-            [pArray addObject: [NSValue valueWithBytes:&a objCType:@encode(glm::vec2)]];
-           
-            [self setShaderProgramOverlay_withMode_Point];
-
-            if (ifLeftButtonDown)
-                renderer_set_rgba(0.0, 1.0, 0.0, 1.0);
-            else
-                renderer_set_rgba(0.0, 1.0, 0.0, 0.5);
-            
-            glPointSize( pointSize * backingScaleFactor);
-            renderer_drawPoints([pArray copy]);
-        }
-        
         // Drawing y axis
         {
             glm::vec2 pA[10];
@@ -467,9 +446,32 @@ static float deg2rad = M_PI/180.0;
             }
             
             [self setShaderProgramForLineWidth: lineWidth * backingScaleFactor];
-            renderer_set_rgba(1.0, 0.0, 0.0, 0.5);            
+            renderer_set_rgba(1.0, 0.0, 0.0, 0.5);
             renderer_drawLine_xy([pArray copy], GL_LINES);
         }
+        
+        // Drawing the center point
+        {
+            glm::vec2 a(0, 0);
+            // Apply local model transformation
+            glm::vec4 pB = MV*glm::vec4(a,0,1);
+            a = glm::vec2(pB.x, pB.y);
+            NSMutableArray *pArray = [NSMutableArray array];
+            [pArray addObject: [NSValue valueWithBytes:&a objCType:@encode(glm::vec2)]];
+           
+            [self setShaderProgramOverlay_withMode_Point];
+
+            if (ifLeftButtonDown)
+                renderer_set_rgba(0.0, 1.0, 0.0, 1.0);
+            else
+                renderer_set_rgba(0.0, 1.0, 0.0, 0.5);
+            
+            glPointSize( pointSize * backingScaleFactor);
+            renderer_drawPoints([pArray copy]);
+        }
+        
+        // FIXME: do this in host app
+        [self setShaderProgramForLineWidth: lineWidth * backingScaleFactor];
         
 #ifdef WITH_OPENGL_32
         glDisable(GL_LINE_SMOOTH);

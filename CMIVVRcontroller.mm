@@ -23,7 +23,7 @@
  for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
  =========================================================================*/
 #define id Id
@@ -128,7 +128,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
     NSImage* tempImage = [vrViewer nsimageQuicktime];
 	if ([max intValue]==220)
 	{
-		int iteminrow=20;//itemincolumn=10;
+		int iteminrow=20; //itemincolumn=10;
 		if ( [cur intValue] == 219)
 		{
 			aCamera->Roll(360/iteminrow);
@@ -197,7 +197,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	return [imagesFor4DQTVR count];
 }
 
-- (IBAction)capureImage:(id)sender
+- (IBAction)captureImage:(id)sender
 {
 	if(!isSegmentVR)
 	{
@@ -269,10 +269,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			[pool release];
 		}
 
-#if 0 // @@@
 		[vrViewer endRenderImageWithBestQuality];
-#endif
-		
 		[dcmSequence release];
 	}
 	else
@@ -336,13 +333,13 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	[qtvrsettingwin orderOut:sender];
     [NSApp endSheet:qtvrsettingwin returnCode:tag];
 }
+
 - (IBAction)exportQTVR:(id)sender
 {
-	
-	//FSRef				fsref;
-	//FSSpec				spec, newspec;
+	//FSRef fsref;
+	//FSSpec spec, newspec;
 	//	[vrViewer renderImageWithBestQuality: YES waitDialog: NO];
-	if(!isSegmentVR)
+	if (!isSegmentVR)
 	{
 		//	[vrViewer renderImageWithBestQuality: YES waitDialog: NO];
 		[self closeQTVRExportDlg:sender];
@@ -410,14 +407,15 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 				free(colorMapFromFile);
 		}
 		unsigned int i,j;
-		for(i=0;i<[mutiplePhaseOpacityCurves count];i++)//evever segment or volume
+		for(i=0;i<[mutiplePhaseOpacityCurves count];i++) // every segment or volume
 		{
-			for(j=0;j<[[mutiplePhaseOpacityCurves objectAtIndex:i] count];j++)//ever curve for each segment or volume
+			for(j=0;j<[[mutiplePhaseOpacityCurves objectAtIndex:i] count];j++) // every curve for each segment or volume
 			{
 				[[[mutiplePhaseOpacityCurves objectAtIndex:i] objectAtIndex:j] removeAllObjects];
 				[[[mutiplePhaseColorCurves objectAtIndex:i] objectAtIndex:j] removeAllObjects];
 			}
-			[[mutiplePhaseOpacityCurves objectAtIndex:i] removeAllObjects];
+
+            [[mutiplePhaseOpacityCurves objectAtIndex:i] removeAllObjects];
 			[[mutiplePhaseColorCurves objectAtIndex:i] removeAllObjects];
 		}
 		
@@ -434,15 +432,13 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		[originalViewVolumeData release];
 		[originalViewPixList release];
 		[self autorelease];
-		
 	}	
 }
+
 -(void) dealloc
 {
-#if 0 // @@@
 	if (clipCallBack)
 		[vrViewer renderWindow]->RemoveObserver(clipCallBack);
-#endif
 	
     if (clipPlaneWidget)
 		clipPlaneWidget->Delete(); 
@@ -513,7 +509,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 - (id) showVRPanel:(ViewerController *) vc
                   :(CMIV_CTA_TOOLS*) owner
 {
-	//initialize the window
+	// Initialize the window
 	self = [super initWithWindowNibName:@"VR_Panel"];
 	[[self window] setDelegate:self];
 	
@@ -716,19 +712,19 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	//if(![view advancedCLUT])[self setCurCLUTMenu:NSLocalizedString(@"16-bit CLUT", nil)];
 	//[OpacityPopup setEnabled:NO];
 }
+
 - (int) initVRViewForSegmentalVR
 {
 	int err=0;
-	DCMPix*				curPix = [[originalViewController pixList] objectAtIndex: [[originalViewController imageView] curImage]];;
-	NSMutableArray				*pixList = [originalViewController pixList];
-	
+	DCMPix* curPix = [[originalViewController pixList] objectAtIndex: [[originalViewController imageView] curImage]];;
+	NSMutableArray *pixList = [originalViewController pixList];
 	
 	maxInSeries = [curPix maxValueOfSeries];
 	minInSeries = [curPix minValueOfSeries];
 	imageWidth = [curPix pwidth];
 	imageHeight = [curPix pheight];
 	imageAmount = [pixList count];
-	//initilize proptery list
+	// Initialize proptery list
 	propertyDictList = [[NSMutableArray alloc] initWithCapacity: 0];
 	
 	inROIArray = [[NSMutableArray alloc] initWithCapacity: 0];
@@ -756,7 +752,6 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 						[inROIArray addObject:tempROI];
 					}	
 				}
-				
 			}
 	}
 	
@@ -882,7 +877,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		return 0;
 	}
 	
-	//initilize VR view	
+	// Initialize VR view	
 	
 	originalVolumeData=[originalViewController volumePtr:0];
 	err = [vrViewer setPixSource:pixList :originalVolumeData];
@@ -977,7 +972,8 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	else
 	{
 		unsigned short segOffset;
-		//set segment value
+		
+        // Set segment value
 		int x,y,x1,x2,y1,y2,textureWidth;
 		unsigned char * texture;
 		for(i=0;i<[curRoiList count];i++)
@@ -1001,28 +997,21 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 								{
 									if(*(texture+(y-y1)*textureWidth+x-x1))
 										*(realVolumedata+imageWidth*imageHeight*i+imageWidth*y+x)+=segOffset;
-									
 								}
-							
-							
-							
 						}
-				
-				
 			}
 	}
 
-	
-	osirixOffset=0;//[vrViewer offset];
-	//osirixOffset-=100;
-	float osirixValueFactor;
-	osirixValueFactor =1.0;// [vrViewer valueFactor];
+	hostAppOffset2=0;//[vrViewer offset];
+	//hostAppOffset2-=100;
+	float osirixValueFactor = 1.0;// [vrViewer valueFactor];
 	//	[vrViewer setShadingValues: 0:0 :0:0];
 	//	[vrViewer setEngine: 0];
 	//	[vrViewer setMode: 0];
 	[self applyOpacity];	
 	[self applyCLUT];
-	// show the window
+	
+    // Show the window
 	screenrect=[[[originalViewController window] screen] visibleFrame];
 	//[[self window]setFrame:screenrect display:NO animate:NO];
 	[super showWindow:parent];
@@ -1039,7 +1028,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		*(realVolumedata+i)=(unsigned short)tempfloat;
 	}
 
-    //set segment value
+    // Set segment value
 	if(colorMapFromFile)
 	{
 		for(i=0;i<size;i++)
@@ -1279,7 +1268,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	for (unsigned int i=0; i<[propertyDictList count]; i++)
 	{
 		offset = [[[propertyDictList objectAtIndex:i] objectForKey:@"RangeFrom"] floatValue];
-		offset += osirixOffset;
+		offset += hostAppOffset2;
 		val = 0.0;
 		err=myOpacityTransferFunction->AddPoint (offset, val);
 		ww = [[[propertyDictList objectAtIndex:i]objectForKey:@"WW"]floatValue];
@@ -1317,7 +1306,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			continue;
 		
 		offset = [[[propertyDictList objectAtIndex:row] objectForKey:@"RangeFrom"] floatValue];
-		offset += osirixOffset;
+		offset += hostAppOffset2;
 		maxx=offset;
 		val = 0.0;
 		myOpacityTransferFunction->AddPoint (offset, val);
@@ -1396,7 +1385,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	for(i=0;i<[propertyDictList count];i++)
 	{
-		offset = [[[propertyDictList objectAtIndex:i] objectForKey:@"RangeFrom"] floatValue] + osirixOffset;
+		offset = [[[propertyDictList objectAtIndex:i] objectForKey:@"RangeFrom"] floatValue] + hostAppOffset2;
 		rArray = [[propertyDictList objectAtIndex:i] objectForKey:@"RedTable"];
 		gArray = [[propertyDictList objectAtIndex:i] objectForKey:@"GreenTable"];		
 		bArray = [[propertyDictList objectAtIndex:i] objectForKey:@"BlueTable"];
@@ -1482,7 +1471,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSArray* tempcurve;
 	NSArray* tempcolor;
 	
-	for (int i=0; i<[mutiplePhaseOpacityCurves count]; i++)//evever segment or volume
+	for (int i=0; i<[mutiplePhaseOpacityCurves count]; i++) // every segment or volume
 	{
 		if (i!=row)
 		{

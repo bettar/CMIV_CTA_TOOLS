@@ -23,7 +23,7 @@
  for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
  =========================================================================*/
 
@@ -38,20 +38,15 @@
 
 - (IBAction)changeReformView:(id)sender
 {
-	if([reformViewState selectedSegment])
-	{
-		[reformViewSlider setMaxValue: imageHeight];
-		[reformViewSlider setIntValue: imageHeight/2];
+    [reformViewSlider setMaxValue: imageHeight];
+    [reformViewSlider setIntValue: imageHeight/2];
+
+    if ([reformViewState selectedSegment])
 		[curReformROI setROIRect:sagittalROIRect];
-	}
 	else
-	{
-		[reformViewSlider setMaxValue: imageHeight];
-		[reformViewSlider setIntValue: imageHeight/2];
 		[curReformROI setROIRect:coronalROIRect];
-	}
-	[self setReformViewIndex:reformViewSlider ];
-	
+    
+	[self setReformViewIndex:reformViewSlider];
 }
 
 - (IBAction)setImageFromTo:(id)sender
@@ -77,13 +72,14 @@
 	[self updateAllTextField];
 	[self updateALLROIs];
 }
+
 - (IBAction)setCurrentToImageFromTo:(id)sender
 {
-	
 	if([sender tag])
 		iImageTo= imageAmount - [ originalView curImage ];
 	else
 	    iImageFrom = imageAmount - [ originalView curImage ];
+    
 	coronalROIRect.origin.y = (iImageFrom-1) / ratioYtoThick ;	
 	coronalROIRect.size.height = (iImageTo-iImageFrom-1)/ ratioYtoThick;
 	sagittalROIRect.origin.y = (iImageFrom-1)/ ratioYtoThick ;
@@ -93,6 +89,7 @@
 	[self updateImageFromToSliders];
 	
 }
+
 - (IBAction)setROIRect:(id)sender
 {
 	roiRect.origin.x = [leftTopX intValue];
@@ -101,9 +98,7 @@
 	roiRect.size.height  = [rightBottomY intValue] - [leftTopY intValue];
 	
 	coronalROIRect.origin.x = roiRect.origin.x;
-	
 	coronalROIRect.size.width = roiRect.size.width ;
-	
 	
 	sagittalROIRect.origin.x = roiRect.origin.y / ratioXtoY ;
 	sagittalROIRect.size.width = roiRect.size.height / ratioXtoY;
@@ -113,21 +108,19 @@
 
 - (void)windowWillClose:(NSNotification *)notification
 {
-
-	if(reader)
+	if (reader)
 	{
 		reader->Delete() ;
 		sliceTransform->Delete();
 		rotate->Delete();
-		
 	}
 
-	unsigned int i;
-	for( i = 0; i < [[originalViewController pixList] count]; i++)
+	for (unsigned int i = 0; i < [[originalViewController pixList] count]; i++)
 	{
 		[[roiListAxial objectAtIndex:i] removeAllObjects];
 	}
-	[originalView setDrawing: NO];
+
+    [originalView setDrawing: NO];
 	[reformView setDrawing: NO];
 	[roiListAxial removeAllObjects];
 	[roiListAxial release];
@@ -147,15 +140,14 @@
 	[originalViewVolumeData release];
 	[originalViewPixList release];
 	[self autorelease];
-	
 }
+
 - (int)reduceTheVolume:(NSArray*)bordersArray:(ViewerController *) vc
 {
-	
-	float				*srcImage, *dstImage;
-	int                 x,y,z;
-	long                size;
-	NSArray				*pixList = [vc pixList];
+	float *srcImage, *dstImage;
+	int x,y,z;
+	long size;
+	NSArray *pixList = [vc pixList];
 	curPix = [pixList objectAtIndex: 0];
 	float vectors[9];
 	[curPix orientation:vectors];			
@@ -250,7 +242,7 @@
 }
 - (IBAction)endPanel:(id)sender
 {	
-    if( [sender tag]&&!isSelectAll)   //User clicks OK Button
+    if( [sender tag]&&!isSelectAll) // User clicks OK Button
 	{	
 		int x1 = [leftTopX intValue];
 		int x2 = [rightBottomX intValue];
@@ -344,10 +336,13 @@
                                  : owner];
 	
 }
+
 - (id) showChopperPanel:(ViewerController *) vc
                        :(CMIV_CTA_TOOLS*) owner
 {
-	//initialize the window
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+    
+	// Initialize the window
 	self = [super initWithWindowNibName:@"Chopper_Panel"];
 	[[self window] setDelegate:self];
 	int err=0;
@@ -364,9 +359,7 @@
 	curPix = [[originalViewController pixList] objectAtIndex: [[originalViewController imageView] curImage]];;
 	NSMutableArray *pixList = [originalViewController pixList];
 	NSArray *fileList =[originalViewController fileList ];
-	
-    NSLog(@"%s %d", __FUNCTION__, __LINE__);
-    
+
 	if ([curPix isRGB])
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil),
@@ -407,8 +400,7 @@
 	[curAxialROI setColor:color];
 	
 	roiListAxial = [[NSMutableArray alloc] initWithCapacity: 0];
-	unsigned int i;
-	for( i = 0; i < [pixList count]; i++)
+	for (unsigned int i = 0; i < [pixList count]; i++)
 	{
 		[roiListAxial addObject:[NSMutableArray arrayWithCapacity:0]];
 		[[roiListAxial objectAtIndex:i] addObject:curAxialROI];
@@ -419,6 +411,9 @@
 	[originalView setIndexWithReset: [pixList count]/2 :YES];
 	[originalView setOrigin: NSMakePoint(0,0)];
 	[originalView setCurrentTool:tROI];
+#if 0 // @@@ zoom level
+    [reformView setScaleValue:2.3];
+#endif
 	[originalView scaleToFit];	
 	[curAxialROI setROIMode:ROI_selected]; 
 	
@@ -643,12 +638,13 @@
 
 - (int) initReformView
 {
+    NSLog(@"%s %d", __FUNCTION__, __LINE__);
+    
 	long size;
 	
 	NSArray *pixList = [originalViewController pixList];
 	size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	outputVolumeData=[originalViewController volumePtr:0];
-	
 	
 	curPix = [pixList objectAtIndex: 0];
 	
@@ -677,7 +673,6 @@
 	reader->SetDataExtentToWholeExtent();
 	reader->SetImportVoidPointer(outputVolumeData);
 	reader->SetDataScalarTypeToFloat();
-	
 	
 	sliceTransform = vtkTransform::New();
 	sliceTransform->RotateX( -90);
@@ -755,10 +750,13 @@
 	[reformView setIndexWithReset: 0 :YES];
 	[reformView setOrigin: NSMakePoint(0,0)];
 	[reformView setCurrentTool:tROI];
-	[reformView  scaleToFit];
-	float iwl, iww;
-	iww = [originalView curWW];
-	iwl = [originalView curWL];
+#if 0 // @@@ FIXME: zoom level
+    [reformView setScaleValue:2.3];
+#endif
+	[reformView scaleToFit];
+
+    float iww = [originalView curWW];
+	float iwl = [originalView curWL];
 	[reformView setWLWW:iwl :iww];
 	
 	[mypix release];
@@ -780,6 +778,7 @@
 
 - (IBAction)setReformViewIndex:(id)sender
 {
+    NSLog(@"%s %d, segment:%ld", __FUNCTION__, __LINE__, (long)[reformViewState selectedSegment]);
 	int i = [sender intValue];
 	sliceTransform->Identity();
 	if ([reformViewState selectedSegment])
@@ -814,7 +813,7 @@
                                                 :origin[2]];
 	[mypix copySUVfrom: curPix];	
 	
-	//	finalPixList = [[NSMutableArray alloc] initWithCapacity:0];
+	//finalPixList = [[NSMutableArray alloc] initWithCapacity:0];
 	[reformPixList removeAllObjects];
 	[reformPixList addObject: mypix];
 	[mypix release];

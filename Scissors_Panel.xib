@@ -28,7 +28,6 @@
                 <outlet property="brushWidthSlider" destination="224" id="231"/>
                 <outlet property="brushWidthText" destination="226" id="230"/>
                 <outlet property="cImageSlider" destination="1473" id="1515"/>
-                <outlet property="cPRView" destination="10" id="64"/>
                 <outlet property="cViewCrossShowButton" destination="1534" id="1539"/>
                 <outlet property="cViewRotateYText" destination="326" id="329"/>
                 <outlet property="cYRotateSlider" destination="26" id="70"/>
@@ -49,8 +48,9 @@
                 <outlet property="centerlinesList" destination="259" id="281"/>
                 <outlet property="continuePlantingButton" destination="249" id="252"/>
                 <outlet property="convertToSeedButton" destination="778" id="818"/>
+                <outlet property="cprView" destination="10" id="64"/>
                 <outlet property="creatCenterlineButton" destination="851" id="1426"/>
-                <outlet property="crossAxiasView" destination="11" id="65"/>
+                <outlet property="crossAxialView" destination="11" id="65"/>
                 <outlet property="currentTips" destination="250" id="251"/>
                 <outlet property="exportAxViewAllButton" destination="466" id="572"/>
                 <outlet property="exportAxViewAmountText" destination="442" id="559"/>
@@ -1357,7 +1357,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="32" id="tvW-u9-j4q"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="round" bezelStyle="circular" image="Cross" imagePosition="only" alignment="center" state="on" borderStyle="border" id="1537">
+                                                        <buttonCell key="cell" type="round" bezelStyle="circular" image="Cross" imagePosition="only" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" id="1537">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                                             <font key="font" metaFont="label"/>
                                                             <connections>
@@ -1468,7 +1468,7 @@
                                                     </slider>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="144">
                                                         <rect key="frame" x="458" y="13" width="38" height="40"/>
-                                                        <buttonCell key="cell" type="round" bezelStyle="circular" image="Cross" imagePosition="only" alignment="center" state="on" borderStyle="border" id="375">
+                                                        <buttonCell key="cell" type="round" bezelStyle="circular" image="Cross" imagePosition="only" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" id="375">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                                             <font key="font" metaFont="label"/>
                                                             <connections>
@@ -1617,7 +1617,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="32" id="d8N-RL-EoI"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="round" bezelStyle="circular" image="Cross" imagePosition="only" alignment="center" state="on" borderStyle="border" id="1535">
+                                                        <buttonCell key="cell" type="round" bezelStyle="circular" image="Cross" imagePosition="only" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" id="1535">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                                             <font key="font" metaFont="label"/>
                                                             <connections>
@@ -2644,7 +2644,7 @@
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="677">
-                        <rect key="frame" x="53" y="172" width="113" height="18"/>
+                        <rect key="frame" x="53" y="172" width="114" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Mean Intensity" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="678">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2692,7 +2692,7 @@
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="689">
-                        <rect key="frame" x="53" y="213" width="73" height="18"/>
+                        <rect key="frame" x="53" y="213" width="74" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Area" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="690">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

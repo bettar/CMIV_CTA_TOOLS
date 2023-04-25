@@ -2,7 +2,7 @@
 CMIVExport
 
 modified from DICOMExport of OsiriX. Keep most tag unchanged when
-store the 2d images into the OsiriX.
+store the 2D images into the OsiriX.
 
 Modified by: Chunliang Wang (chunliang.wang@imv.liu.se)
 

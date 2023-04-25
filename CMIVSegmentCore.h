@@ -41,7 +41,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 
@@ -69,7 +69,7 @@ float xSpacing,ySpacing,zSpacing;
 - (float) lengthOfParentWithWeightFunction:(int)pointer;
 - (void) calculateColorMapFromPointerMap: (unsigned char*) pColor :(unsigned char*) pPointers;
 - (unsigned char) colorOfParent:(int)pointer;
-- (void) localOptmizeConnectednessTree:(float *)pIn :(float *)pOut :(unsigned short*)pDistanceMap Pointer:(unsigned char*) pPointers :(float)minAtEdge needSmooth:(BOOL)isNeedSmooth;
+- (void) localOptimizeConnectednessTree:(float *)pIn :(float *)pOut :(unsigned short*)pDistanceMap Pointer:(unsigned char*) pPointers :(float)minAtEdge needSmooth:(BOOL)isNeedSmooth;
 - (void) runFirstRoundFasterWith26Neigbhorhood;
 - (void) checkSaturatedPoints;
 - (int) enhanceInputData:(float *)inputData;

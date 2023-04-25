@@ -27,7 +27,7 @@
  for more details.
  
  You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
  
  =========================================================================*/
 
@@ -61,7 +61,7 @@
 -(void)fillAreaInsideCircle:(long*)pcenterx :(long*)pcentery :(unsigned char*)img2d8bit :(float*)curve :(float*)precurve;
 //-(int)relabelConnectedArea2D:(unsigned char)binaryimg;
 -(int)finding2DMinimiumCostPath:(long)centerx :(long)centery :(float*)curve :(float*)precurve :(unsigned char*)img2d8bit :(float*)image :(long)startangle :(long)endangle;
--(long)dijkstraAlgorithm:(long)width :(long)height :(long)costrange :(long*)weightmap :(unsigned char*)directormap;//return the bridge point between two seeds
+-(long)dijkstraAlgorithm:(long)width :(long)height :(long)costrange :(long*)weightmap :(unsigned char*)directormap; // return the bridge point between two seeds
 -(void)intensityRelatedWeightMap:(long)width :(long)height :(long*)weightmap;
 -(void)distanceReleatedWeightMap:(long)startangle :(long)minradius :(long)width :(long)height :(float*)precurve :(float*)weightmap;
 -(int)connectedComponetsLabeling2D:(unsigned char*)img2d8bit :(unsigned char*)preSlice :(long*)buffer;

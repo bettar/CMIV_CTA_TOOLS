@@ -23,7 +23,7 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 =========================================================================*/
 
@@ -98,7 +98,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         minimumImagesForEachSeriesToAutoSeeding=175;
         [[NSUserDefaults standardUserDefaults] setInteger:minimumImagesForEachSeriesToAutoSeeding forKey:@"CMIVAutoSeedingMinimumImagesForEachSeries"];
-        //correct history problem disable autoseeding first
+
+        // Correct history problem disable autoseeding first
         ifAutoSeedingOnReceive=NO;
         [[NSUserDefaults standardUserDefaults] setBool:ifAutoSeedingOnReceive forKey:@"CMIVAutoSeedingOnReceive"];
     }
@@ -109,7 +110,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     isAutoSeeding=NO;
     performRibCageRemoval = [[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVAutoRibRemoval"];
     
-    if (performRibCageRemoval==0)//if key not found
+    if (performRibCageRemoval==0) // if key not found
     {
         performRibCageRemoval=1;
         [[NSUserDefaults standardUserDefaults] setInteger:performRibCageRemoval forKey:@"CMIVAutoRibRemoval"];
@@ -508,7 +509,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 [[[temparray objectAtIndex: i] window] setTitle:[tempnamearray objectAtIndex: i]];
         }
         
-        [dataOfWizard removeAllObjects];//list in list shoule be clean separatedly
+        [dataOfWizard removeAllObjects]; // list in list should be cleaned separatedly
     }
 }
 
@@ -791,7 +792,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             return path;
         
 #ifdef VERBOSEMODE
-        NSLog( @"incoming folder is url type");
+        NSLog(@"%s %d, incoming folder is URL type", __FUNCTION__, __LINE__);
 #endif
     }
     
@@ -804,7 +805,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
 #ifdef VERBOSEMODE
-        NSLog( @"incoming folder is default type");
+        NSLog(@"%s %d, incoming folder is default type", __FUNCTION__, __LINE__);
 #endif
         return path;// not sure if s is in UTF8 encoding:  What's opposite of -[NSString fileSystemRepresentation]?
     }
@@ -906,25 +907,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     if (!savedData) {
         savedData=[[NSMutableDictionary alloc] initWithCapacity: 0];
     }
-    //check the validation of each parameter
+
+    // Check the validation of each parameter
     
-    //heart region
+    // Heart region
     if([dataOfWizard objectForKey:@"HeartRegionArrays"])
         [savedData setObject:[dataOfWizard objectForKey:@"HeartRegionArrays"] forKey:@"HeartRegionArrays"];
-    //Heart volume dimensions
+    
+    // Heart volume dimensions
     if([dataOfWizard objectForKey:@"SubvolumesDimension"])
         [savedData setObject:[dataOfWizard objectForKey:@"SubvolumesDimension"] forKey:@"SubvolumesDimension"];
-    //vesselness map data
+    
+    // vesselness map data
     if([dataOfWizard objectForKey:@"VesselnessMap"])
     {
         [savedData setObject:[dataOfWizard objectForKey:@"VesselnessMap"] forKey:@"VesselnessMap"];
         [savedData setObject:[dataOfWizard objectForKey:@"VesselnessMapTargetSpacing"] forKey:@"VesselnessMapTargetSpacing"];
         [savedData setObject:[dataOfWizard objectForKey:@"VesselnessMapOriginAndDimension"] forKey:@"VesselnessMapOriginAndDimension"];
     }
-    //compress seeds data
+
+    // Compress seeds data
     NSData* seedsData=[dataOfWizard objectForKey:@"SeedMap"];
     NSArray* contrastlist=[dataOfWizard objectForKey:@"ContrastList"];
-    if(seedsData&&contrastlist)
+    if (seedsData&&contrastlist)
     {
         NSMutableArray* seedsDataCompressedArray=[NSMutableArray arrayWithCapacity:0];
         [self compressSeedsData:seedsData:seedsDataCompressedArray];
@@ -972,12 +977,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
     }
     
-    //save centerline data
+    // Save centerline data
     if([dataOfWizard objectForKey:@"CenterlineArrays"])
     {
         [savedData setObject:[dataOfWizard objectForKey:@"CenterlineArrays"] forKey:@"CenterlineArrays"];
         [savedData setObject:[dataOfWizard objectForKey:@"CenterlinesNames"] forKey:@"CenterlinesNames"];
     }
+
     [savedData setObject:[NSDate date] forKey:@"LastSavedDate"];
     if([savedData writeToFile:file atomically:YES])
     {
@@ -1128,7 +1134,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {
 	//if([savedData objectForKey:@"HeartRegionArrays"])
 	//	[savedData setObject:[dataOfWizard objectForKey:@"HeartRegionArrays"] forKey:@"HeartRegionArrays"];
-	//Heart volume dimensions
+
+    // Heart volume dimensions
 
 	int err=0;
 	NSMutableArray *pixList = [viewerController pixList];
@@ -1167,7 +1174,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                  neworigin[1]==(int)([curPix originY]*100.0) &&
                  neworigin[2]==(int)([curPix originZ]*100.0))
 		{
-			NSLog(@"volume is already chopped");//do nothing
+			NSLog(@"volume is already chopped"); // do nothing
 		}
 		else
 		{
@@ -1186,7 +1193,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 - (int) loadIntermediateDataForSeedPlanting:(NSMutableDictionary*)savedData
 {
     int err=0;
-    //caclulate the imageSize
+    // Calculate the imageSize
     NSMutableArray		*pixList = [viewerController pixList];
     DCMPix* curPix = [pixList objectAtIndex: 0];
     int imageWidth = [curPix pwidth];
