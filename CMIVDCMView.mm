@@ -38,7 +38,7 @@ static float deg2rad = M_PI/180.0;
 
 - (BOOL) is2DViewer
 {
-    //	[super is2DViewer];
+//	[super is2DViewer];
     return NO;
 }
 

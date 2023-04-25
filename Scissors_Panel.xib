@@ -498,7 +498,7 @@
                                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                                             <clipView key="contentView" id="lVo-yk-DeX">
                                                                                 <rect key="frame" x="1" y="1" width="280" height="154"/>
-                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
                                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="432" id="203">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="280" height="129"/>
@@ -2644,7 +2644,7 @@
                         </connections>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="677">
-                        <rect key="frame" x="53" y="172" width="114" height="18"/>
+                        <rect key="frame" x="53" y="172" width="113" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Mean Intensity" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="678">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2692,7 +2692,7 @@
                         </buttonCell>
                     </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="689">
-                        <rect key="frame" x="53" y="213" width="74" height="18"/>
+                        <rect key="frame" x="53" y="213" width="73" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Area" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="690">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

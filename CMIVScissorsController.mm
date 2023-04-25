@@ -65,13 +65,13 @@ static float deg2rad = M_PI/180.0;
 
 - (BOOL)windowShouldClose:(id)window
 {
-	if([cpr3DPaths count]&&needSaveCenterlines)
+	if ([cpr3DPaths count]&&needSaveCenterlines)
 	{
 		id waitWindow = [originalViewController startWaitWindow:@"Saving Centerlines"];	
 		[self saveCenterlinesInPatientsCoordination];
 		[originalViewController endWaitWindow: waitWindow];
 	}
-	if(needSaveSeeds&&contrastVolumeData)
+	if (needSaveSeeds && contrastVolumeData)
 	{
 		int nrespond=NSRunAlertPanel(NSLocalizedString(@"Save Seeds?", nil),
                                      NSLocalizedString(@"Do you want to save current seeds?", nil),
@@ -85,7 +85,7 @@ static float deg2rad = M_PI/180.0;
 			return NO;
 	}
 
-    if([basketImageArray count])
+    if ([basketImageArray count])
 		[self saveImagesInBasket:self];
 	
 	return YES;
@@ -98,7 +98,8 @@ static float deg2rad = M_PI/180.0;
 	[cPRView setDrawing: NO];
 	[crossAxiasView setDrawing: NO];
 	
-	if([[seedToolTipsTabView tabViewItemAtIndex:0] identifier] && [@"Basket" isEqualToString:[[seedToolTipsTabView tabViewItemAtIndex:0] identifier]] )
+	if ([[seedToolTipsTabView tabViewItemAtIndex:0] identifier] &&
+       [@"Basket" isEqualToString:[[seedToolTipsTabView tabViewItemAtIndex:0] identifier]] )
 	{
 		[self emptyImageInBasket:self];
 		[basketImageArray release];
@@ -114,16 +115,16 @@ static float deg2rad = M_PI/180.0;
 	[originalView setDrawing: NO];
 	[cPRView setDrawing: NO];
 	[crossAxiasView setDrawing: NO];
-	if(!isInWizardMode)
+	if (!isInWizardMode)
 	{
 		[centerlinesList setDataSource:nil];
 		[seedsList setDataSource:nil];	
 	}
 	[[NSNotificationCenter defaultCenter] removeObserver: self];
 	[[NSUserDefaults standardUserDefaults] setInteger: annotations forKey: @"ANNOTATIONS"];
-	if(!roiShowNameOnly)
+	if (!roiShowNameOnly)
 		[[NSUserDefaults standardUserDefaults] setBool:roiShowNameOnly forKey: @"ROITEXTNAMEONLY"];
-	if(!roiShowTextOnlyWhenSeleted)
+	if (!roiShowTextOnlyWhenSeleted)
 		[[NSUserDefaults standardUserDefaults] setBool:roiShowTextOnlyWhenSeleted forKey:@"ROITEXTIFSELECTED"];
 	[[NSUserDefaults standardUserDefaults] setFloat:defaultROIThickness forKey:@"ROIThickness"];
 	unsigned i;
@@ -168,22 +169,22 @@ static float deg2rad = M_PI/180.0;
 	[vesselAnalysisShortDiameter release];
 	[vesselAnalysisCentersInLongtitudeSection release];
 	
-	if(curvedMPRReferenceLineOfAxis)
+	if (curvedMPRReferenceLineOfAxis)
 		[curvedMPRReferenceLineOfAxis release];
 	[curvedMPR2DPath release];
-	if(curvedMPREven3DPath)
+	if (curvedMPREven3DPath)
 		[curvedMPREven3DPath release];
-	if(axViewNOResultROI)
+	if (axViewNOResultROI)
 		[axViewNOResultROI release];
-	if(axViewMeasurePolygon)
+	if (axViewMeasurePolygon)
 		[axViewMeasurePolygon release];
-	if(cViewMeasurePolygon)
+	if (cViewMeasurePolygon)
 		[cViewMeasurePolygon release];
 	
-	if(contrastVolumeData)
+	if (contrastVolumeData)
 		free(contrastVolumeData);
 	
-	if(reader)
+	if (reader)
 	{
 		reader->Delete();
 		
@@ -199,35 +200,35 @@ static float deg2rad = M_PI/180.0;
 		roiReader->Delete();
 		oViewROISlice->Delete();
 
-		if(fuzzyConectednessMap)
+		if (fuzzyConectednessMap)
 		{
 			axROIReader->Delete();
 			axViewROISlice->Delete();
 		}
 	}
 
-    if(axViewConnectednessCostMap)
+    if (axViewConnectednessCostMap)
 		free(axViewConnectednessCostMap);
 	
-    if(connectednessROIBuffer)
+    if (connectednessROIBuffer)
 		free(connectednessROIBuffer);
 
-	if(howToContinueTip)
+	if (howToContinueTip)
 		[howToContinueTip release];
 	
 	[[self window] setDelegate:nil];
 	[originalViewController release];
 	[originalViewVolumeData release];
 	[originalViewPixList release];
-	if(parentVesselnessMap)
+	if (parentVesselnessMap)
 		[parentVesselnessMap release];
-	if(parentFuzzyConectednessData)
+	if (parentFuzzyConectednessData)
 		[parentFuzzyConectednessData release];
-	if(cpr3DPaths)
+	if (cpr3DPaths)
 		[cpr3DPaths release];
-	if(centerlinesNameArrays)
+	if (centerlinesNameArrays)
 		[centerlinesNameArrays release];
-	if(centerlinesLengthArrays)
+	if (centerlinesLengthArrays)
 		[centerlinesLengthArrays release];
 	[seedToolTipsTabView setDelegate:nil];
 
@@ -264,7 +265,7 @@ static float deg2rad = M_PI/180.0;
 - (IBAction)onOK:(id)sender
 {
 	int err=0;
-	if(autoSegmentTimer)
+	if (autoSegmentTimer)
 	{
 		[autoSegmentTimer invalidate];
 		[autoSegmentTimer release];
@@ -281,7 +282,7 @@ static float deg2rad = M_PI/180.0;
 		for(i=1;i<uniIndex;i++)
 		{
 			temproi=[totalROIList objectAtIndex: i];
-			if(![roiname isEqualToString:[temproi name]])
+			if (![roiname isEqualToString:[temproi name]])
 			{
 				err=0;
 				break;
@@ -510,7 +511,7 @@ static float deg2rad = M_PI/180.0;
         [self loadSavedSeeds];
         [seedToolTipsTabView selectTabViewItem:[seedToolTipsTabView tabViewItemAtIndex:1]];
         [self changAmongMPRCPRAndAnalysis:0];
-        if(!isInWizardMode)
+        if (!isInWizardMode)
         {
             [seedsList reloadData];
         }
@@ -564,7 +565,7 @@ static float deg2rad = M_PI/180.0;
 	isInWizardMode=1;
 	[self showScissorsPanel: vc:owner];
 	NSMutableDictionary* dic=[parent dataOfWizard];	
-	if([dic objectForKey:@"SeedMap"])
+	if ([dic objectForKey:@"SeedMap"])
 	{
 		[self goSubStep:2:NO];
 		//[self performSelector:@selector(goNextStep:) withObject:nil afterDelay:1];
@@ -614,13 +615,13 @@ static float deg2rad = M_PI/180.0;
 //	NSMutableDictionary* dic=[parent dataOfWizard];
 //	
 //	NSString* stepstr=[dic objectForKey:@"Step"];
-//	 if([stepstr isEqualToString:@"Step3"])
+//	 if ([stepstr isEqualToString:@"Step3"])
 //	{
 //		NSNumber* lastUniIndex=[dic objectForKey:@"UniIndex"];
 //		//NSNumber* startPointr=[dic objectForKey:@"AortaPointr"];
 //		
 //		[self loadVesselnessMap];	
-//		if(lastUniIndex)
+//		if (lastUniIndex)
 //		{
 //			[self loadSavedSeeds];
 //			[self goSubStep:2:NO];
@@ -630,13 +631,13 @@ static float deg2rad = M_PI/180.0;
 //		
 //		//[self performSelector:@selector(loadSegmentationResult:) withObject:nil afterDelay:1];	
 //	}
-//	else if([stepstr isEqualToString:@"Step2"])
+//	else if ([stepstr isEqualToString:@"Step2"])
 //	{
 //		NSNumber* lastUniIndex=[dic objectForKey:@"UniIndex"];
 //		//NSNumber* startPointr=[dic objectForKey:@"AortaPointr"];
 //		
 //		[self loadVesselnessMap];	
-//		if(lastUniIndex)
+//		if (lastUniIndex)
 //		{
 //			[self loadSavedSeeds];
 //			[self goSubStep:2:NO];
@@ -644,13 +645,13 @@ static float deg2rad = M_PI/180.0;
 //		 
 //		[self performSelector:@selector(goNextStep:) withObject:nil afterDelay:1];	
 //	}
-//	else if([stepstr isEqualToString:@"Step1"])
+//	else if ([stepstr isEqualToString:@"Step1"])
 //	{
 //		NSNumber* startPointx=[dic objectForKey:@"AortaPointx"];
 //		NSNumber* startPointy=[dic objectForKey:@"AortaPointy"];
 //		NSNumber* startPointz=[dic objectForKey:@"AortaPointz"];
 //		[self loadVesselnessMap];
-//		if(startPointx)
+//		if (startPointx)
 //		{
 //			double position[3];
 //			position[0]=[startPointx floatValue]+vtkOriginalX;
@@ -673,7 +674,7 @@ static float deg2rad = M_PI/180.0;
 //			[self setAxViewThreshold:axViewLowerThresholdSlider];
 //			[self changLeveSetSigema:axViewSigemaSlider];
 //			[self changAxViewROIArea:axViewAreaSlider];
-//			//if(!startPointx)
+//			//if (!startPointx)
 //			//	return self;
 //			axViewROIMode=1;
 //			isNeedSmoothImgBeforeSegment=YES;
@@ -701,13 +702,13 @@ static float deg2rad = M_PI/180.0;
 	
 	cpr3DPaths=[[parent dataOfWizard] objectForKey:@"CenterlinesList"];
 	centerlinesNameArrays=[[parent dataOfWizard] objectForKey:@"CenterlinesNameList"];
-	if(parentFuzzyConectednessData)
+	if (parentFuzzyConectednessData)
 	{
 		[parentFuzzyConectednessData retain];
 		fuzzyConectednessMap=(float *)[parentFuzzyConectednessData bytes];
 	}
 	
-	if(cpr3DPaths&&centerlinesNameArrays)
+	if (cpr3DPaths&&centerlinesNameArrays)
 	{
 		[cpr3DPaths retain];
 		[centerlinesNameArrays retain];
@@ -750,7 +751,7 @@ static float deg2rad = M_PI/180.0;
 		for(j=0;j<[[curRoiList objectAtIndex:i] count];j++)
 		{
 			tempROI = [[curRoiList objectAtIndex: i] objectAtIndex:j];
-			if([tempROI type]==tPlain)
+			if ([tempROI type]==tPlain)
 			{
 				thereIsSameName=0;
 				for(k=0;k<[existedMaskList count];k++)
@@ -758,7 +759,7 @@ static float deg2rad = M_PI/180.0;
 					if ([[tempROI name] isEqualToString:[existedMaskList objectAtIndex: k] ]==YES)
 						thereIsSameName=1;
 				}
-				if(!thereIsSameName)
+				if (!thereIsSameName)
 				{
 					[existedMaskList addObject:[tempROI name]];
 					[pathListButton addItemWithTitle: [tempROI name]];
@@ -766,12 +767,13 @@ static float deg2rad = M_PI/180.0;
 			}
 			
 		}
-	if([existedMaskList count]>0)
+
+    if ([existedMaskList count]>0)
 	{
 		for(i=0;i<[existedMaskList count];i++)
 		{
 			NSMutableArray *temp3DPath=[self create3DPathFromROIs:[existedMaskList objectAtIndex:i]];
-			if(temp3DPath!=nil)
+			if (temp3DPath!=nil)
 				[temppathlist addObject:temp3DPath];
 			else
 			{
@@ -784,7 +786,7 @@ static float deg2rad = M_PI/180.0;
 	}
 	cpr3DPaths=temppathlist;
 	centerlinesNameArrays=existedMaskList;
-	if([temppathlist count]>0)
+	if ([temppathlist count]>0)
 	{	
 		isInitialWithCPRMode=YES;
 		[self showScissorsPanel: vc:owner];
@@ -845,19 +847,19 @@ static float deg2rad = M_PI/180.0;
 {
 	NSString* tabidstr=[tabViewItem identifier];
 	int indextab=0;
-	if(tabidstr)
+	if (tabidstr)
 	{
-		if([@"SeedTools" isEqualToString:tabidstr])
+		if ([@"SeedTools" isEqualToString:tabidstr])
 		{
 			indextab=0;
 			[self changAmongMPRCPRAndAnalysis:indextab];
 		}
-		else if([@"Centerlines" isEqualToString:tabidstr])
+		else if ([@"Centerlines" isEqualToString:tabidstr])
 		{
 			indextab=1;
 			[self changAmongMPRCPRAndAnalysis:indextab];
 		}
-		else if([@"VesselAnalysis" isEqualToString:tabidstr])
+		else if ([@"VesselAnalysis" isEqualToString:tabidstr])
 		{
 			indextab=2;
 			
@@ -882,9 +884,9 @@ static float deg2rad = M_PI/180.0;
 	[cPRView setTranlateSlider:cYRotateSlider];
 	
 	
-	if(modeindex==0)
+	if (modeindex==0)
 	{
-		if(isStraightenedCPR)
+		if (isStraightenedCPR)
 			[self switchStraightenedCPR:self];
 		axViewROIMode=0;
 		cViewMPRorCPRMode=0;
@@ -955,15 +957,15 @@ static float deg2rad = M_PI/180.0;
 		[axViewCrossShowButton setState: NSControlStateValueOff];
 		
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ROITEXTIFSELECTED"];
-		if([vesselAnalysisLongDiameter count]==0)
+		if ([vesselAnalysisLongDiameter count]==0)
 		{
 			[vesselAnalysisPlotSourceButton selectItemAtIndex:0];
 			[self vesselAnalysisStart:self];
-			if(2*vesselAnalysisMaxLongitudeDiameter>10)
+			if (2*vesselAnalysisMaxLongitudeDiameter>10)
 				[axViewAreathText setFloatValue: 2*vesselAnalysisMaxLongitudeDiameter];
 			else
 				[axViewAreathText setFloatValue: 10];
-			if(vesselAnalysisMaxLongitudeDiameter/3<1.0)
+			if (vesselAnalysisMaxLongitudeDiameter/3<1.0)
 			{
 				[vesselAnalysisParaStepText setFloatValue:1.0];
 				[vesselAnalysisParaStepSlider setFloatValue:1.0];
@@ -1343,12 +1345,12 @@ static float deg2rad = M_PI/180.0;
 	
 	if (crossX<0)
 		crossX=0;
-	else if(crossX>imExtent[ 1]-imExtent[ 0])
+	else if (crossX>imExtent[ 1]-imExtent[ 0])
 		crossX=imExtent[ 1]-imExtent[ 0];
 	
     if (crossY>0)
 		crossY=0;
-	else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
+	else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 		crossY=-(imExtent[ 3]-imExtent[ 2] );
 
     [crossAxiasView setCrossCoordinates:crossX :crossY :YES];
@@ -1438,7 +1440,7 @@ static float deg2rad = M_PI/180.0;
 		[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] setComments:emptystr];
 
 	[[oViewROIList objectAtIndex: 0] removeAllObjects];
-//	if(curvedMPR2DPath)
+//	if (curvedMPR2DPath)
 //	{
 //		
 //		[[oViewROIList objectAtIndex: 1] removeAllObjects];
@@ -1495,12 +1497,12 @@ static float deg2rad = M_PI/180.0;
 		crossY=oViewOrigin[1]/oViewSpace[1];
 		if (crossX<0)
 			crossX=0;
-		else if(crossX>imExtent[ 1]-imExtent[ 0])
+		else if (crossX>imExtent[ 1]-imExtent[ 0])
 			crossX=imExtent[ 1]-imExtent[ 0];
 
         if (crossY>0)
 			crossY=0;
-		else if(crossY<-(imExtent[ 3]-imExtent[ 2] ))
+		else if (crossY<-(imExtent[ 3]-imExtent[ 2] ))
 			crossY=-(imExtent[ 3]-imExtent[ 2] );
 
         [originalView setCrossCoordinates:crossX:crossY :YES];
@@ -1570,14 +1572,14 @@ static float deg2rad = M_PI/180.0;
 		for(i=1;i<8;i++)
 		{
 			inverseTransform->TransformPoint(point[i],pointout);
-			if(pointout[j]<min[j])
+			if (pointout[j]<min[j])
 				min[j]=pointout[j];
-			if(pointout[j]>max[j])
+			if (pointout[j]>max[j])
 				max[j]=pointout[j];
 			
 		}
 	}	
-	if(!cViewMPRorCPRMode)
+	if (!cViewMPRorCPRMode)
 	{
 		
 		[cImageSlider setMaxValue: max[0]];
@@ -1599,11 +1601,11 @@ static float deg2rad = M_PI/180.0;
 		float cprheight=[[cViewPixList objectAtIndex:0] pheight]*cViewSpace[1];
 		[axImageSlider setMaxValue:cprheight];
 		[axImageSlider setMinValue:0];
-		if([axImageSlider floatValue]>cprheight)
+		if ([axImageSlider floatValue]>cprheight)
 			[axImageSlider setFloatValue: cprheight];
-		else if([axImageSlider floatValue]<0)
+		else if ([axImageSlider floatValue]<0)
 			[axImageSlider setFloatValue: 0];
-		if(isStraightenedCPR)
+		if (isStraightenedCPR)
 		{
 			[cImageSlider setEnabled: NO];
 			//[cYRotateSlider setEnabled: YES];
@@ -1632,7 +1634,7 @@ static float deg2rad = M_PI/180.0;
 #ifdef VERBOSEMODE
 	NSLog( @"updating Cview");
 #endif
-	if(cViewMPRorCPRMode)
+	if (cViewMPRorCPRMode)
 		[self updateCViewAsCurvedMPR];
 	else 
 		[self updateCViewAsMPR];
@@ -1689,13 +1691,14 @@ static float deg2rad = M_PI/180.0;
 			float crossX,crossY;
 			crossX=-axViewOrigin[0]/axViewSpace[0];
 			crossY=-axViewOrigin[1]/axViewSpace[1];
-			if(crossX<0)
+			if (crossX<0)
 				crossX=0;
-			else if(crossX>imExtent[ 1]-imExtent[ 0])
+			else if (crossX>imExtent[ 1]-imExtent[ 0])
 				crossX=imExtent[ 1]-imExtent[ 0];
-			if(crossY<0)
+
+            if (crossY<0)
 				crossY=0;
-			else if(crossY>(imExtent[ 3]-imExtent[ 2] ))
+			else if (crossY>(imExtent[ 3]-imExtent[ 2] ))
 				crossY=-(imExtent[ 3]-imExtent[ 2] );
 			
 			axCircleRect.origin.x = crossX;
@@ -1832,7 +1835,7 @@ static float deg2rad = M_PI/180.0;
 		if (!isInWizardMode)
 		{
 			NSString* tabidstr=[[seedToolTipsTabView tabViewItemAtIndex:1] identifier];
-			if(tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
+			if (tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
 			{
 				[convertToSeedButton setHidden:YES];
 				[brushStatSegment setHidden:YES];
@@ -2042,10 +2045,11 @@ static float deg2rad = M_PI/180.0;
 	[self cAndAxViewReset];
 	[self resetSliders];	
 }
+
 - (IBAction)lockCenter:(id)sender
 {
 	
-	if([centerLock state]== NSControlStateValueOn)
+	if ([centerLock state]== NSControlStateValueOn)
 	{
 		NSMutableArray* matrixArray=[NSMutableArray arrayWithCapacity:16];
 		vtkMatrix4x4 * aMatrix = oViewUserTransform->GetMatrix();
@@ -2062,7 +2066,7 @@ static float deg2rad = M_PI/180.0;
 		
 		NSMutableDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: str];
 		
-		if(!dict)
+		if (!dict)
 			dict=[NSMutableDictionary dictionary];
 
         [dict setObject:matrixArray forKey:@"MPRTranformMatrix"];
@@ -2138,14 +2142,14 @@ static float deg2rad = M_PI/180.0;
 		locate=[sender floatValue];
 		locate-=lastAxViewTranslate;
 		lastAxViewTranslate = [sender floatValue];
-		if(locate!=0||interpolationMode)
+		if (locate!=0||interpolationMode)
 		{
 			oViewUserTransform->Translate(0,-locate,0);
 			[self updateAxView];
 			[self updateOView];
 			[self updateCView];
 		}
-//		if(interpolationMode)
+//		if (interpolationMode)
 //			[self updatePageSliders];
 		[axViewLengthText setFloatValue:0.0];
 	}
@@ -2167,16 +2171,16 @@ static float deg2rad = M_PI/180.0;
 
 - (IBAction)pageCView:(id)sender
 {
-	if(!cViewMPRorCPRMode)
+	if (!cViewMPRorCPRMode)
 	{
-		if([sender isMouseLeftKeyDown])
+		if ([sender isMouseLeftKeyDown])
 			interpolationMode=0;
 		else
 			interpolationMode=1;
 		float locate;
 		locate=[sender floatValue] - lastCViewTranslate;
 		lastCViewTranslate = [sender floatValue];
-		if(locate!=0||interpolationMode)
+		if (locate!=0||interpolationMode)
 		{
 			oViewUserTransform->Translate(locate,0,0);
 			[self updateCView];
@@ -2185,7 +2189,7 @@ static float deg2rad = M_PI/180.0;
 				
 			
 		}
-//		if(interpolationMode)
+//		if (interpolationMode)
 //			[self updatePageSliders];
 	}
 	//	[self updateCViewAsCurvedMPR];
@@ -2194,20 +2198,20 @@ static float deg2rad = M_PI/180.0;
 
 - (IBAction)pageOView:(id)sender
 {
-	if([sender isMouseLeftKeyDown])
+	if ([sender isMouseLeftKeyDown])
 		interpolationMode=0;
 	else
 		interpolationMode=1;
-	float locate,step;
-	locate=round([sender floatValue]/minSpacing);//to get Seeds ROI but not working well
-	step=locate-lastOViewTranslate;
+
+	float locate=round([sender floatValue]/minSpacing);//to get Seeds ROI but not working well
+	float step=locate-lastOViewTranslate;
 	step*=minSpacing;
 	lastOViewTranslate = locate;
 	oViewUserTransform->Translate(0,0,step);
-	if(step!=0||interpolationMode)
+	if (step!=0||interpolationMode)
 	{
 		[self updateOView];
-		if(!cViewMPRorCPRMode)
+		if (!cViewMPRorCPRMode)
 		{
 			[self updateCView];
 			[self updateAxView];
@@ -2241,7 +2245,7 @@ static float deg2rad = M_PI/180.0;
 	locate=[sender floatValue] - lastCViewTranslate;
 	lastCViewTranslate = [sender floatValue];
 	cViewTransform->Translate(0,0,locate);
-	if(locate!=0)
+	if (locate!=0)
 		[self updateCView];
 	
 }
@@ -2250,12 +2254,12 @@ static float deg2rad = M_PI/180.0;
 	
 	float angle;
 	angle=[sender floatValue];
-	if([sender isMouseLeftKeyDown])
+	if ([sender isMouseLeftKeyDown])
 		interpolationMode=0;
 	else
 		interpolationMode=1;
 	
-	if(angle-lastCViewYAngle!=0||interpolationMode)
+	if (angle-lastCViewYAngle!=0||interpolationMode)
 	{
 		cViewTransform->Identity();
 		cViewTransform->Translate(cPRViewCenter.x,cPRViewCenter.y,0 );
@@ -2263,7 +2267,7 @@ static float deg2rad = M_PI/180.0;
 		cViewTransform->RotateY(-90);
 		
 		cViewTransform->RotateY(angle);	
-		if(currentViewMode==1&&!isStraightenedCPR)
+		if (currentViewMode==1&&!isStraightenedCPR)
 		{
 			[oYRotateSlider setFloatValue:[oYRotateSlider floatValue]+angle-lastCViewYAngle];
 			[oYRotateSlider performClick:sender];
@@ -2274,10 +2278,10 @@ static float deg2rad = M_PI/180.0;
 		[cImageSlider setFloatValue:0];
 		lastCViewTranslate=0;
 		[cViewRotateYText setFloatValue: [sender floatValue]];
-		if(currentViewMode==2&&interpolationMode==1)
+		if (currentViewMode==2&&interpolationMode==1)
 		{
 			[self performLongitudeSectionAnalysis];
-			if([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
+			if ([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
 			{
 				[plotView setViewControllor:self];
 				[self vesselAnalysisSetNewSource:self];
@@ -2295,12 +2299,12 @@ static float deg2rad = M_PI/180.0;
 	
 	float angle;
 	angle=[sender floatValue];
-	if([sender isMouseLeftKeyDown])
+	if ([sender isMouseLeftKeyDown])
 		interpolationMode=0;
 	else
 		interpolationMode=1;
 	
-	if(angle!=0||interpolationMode)
+	if (angle!=0||interpolationMode)
 	{
 		cViewTransform->Identity();
 		cViewTransform->Translate(cPRViewCenter.x,cPRViewCenter.y,0 );
@@ -2314,10 +2318,10 @@ static float deg2rad = M_PI/180.0;
 		[cImageSlider setFloatValue:0];
 		lastCViewTranslate=0;
 		[cViewRotateYText setFloatValue: [sender floatValue]];
-		if(currentViewMode==2&&interpolationMode==1)
+		if (currentViewMode==2&&interpolationMode==1)
 		{
 			[self performLongitudeSectionAnalysis];
-			if([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
+			if ([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
 			{
 				[plotView setViewControllor:self];
 				[self vesselAnalysisSetNewSource:self];
@@ -2329,45 +2333,48 @@ static float deg2rad = M_PI/180.0;
 	
 	
 }
+
 - (void)rotateZCView:(float)angle
 {
-	if(angle!=0)
+	if (angle!=0)
 	{
 		
 		oViewUserTransform->RotateX(-angle);	
 		
 		[self updateOView];
-		if(!(cViewMPRorCPRMode&&isStraightenedCPR))
+		if (!(cViewMPRorCPRMode&&isStraightenedCPR))
 			[self cAndAxViewReset];
 		[self updatePageSliders];		
 	}	
 	
 }
+
 - (void)rotateZAxView:(float)angle
 {
-	if(angle!=0)
+	if (angle!=0)
 	{
 		
 		oViewUserTransform->RotateY(-angle);	
 		
 		[self updateOView];
-		if(!(cViewMPRorCPRMode&&isStraightenedCPR))
+		if (!(cViewMPRorCPRMode&&isStraightenedCPR))
 			[self cAndAxViewReset];
 		[self updatePageSliders];		
 	}	
 	
 }
+
 - (IBAction)rotateXOView:(id)sender
 {
 	
 	float angle;
 	angle=[sender floatValue] - lastOViewXAngle;
-	if([sender isMouseLeftKeyDown])
+	if ([sender isMouseLeftKeyDown])
 		interpolationMode=0;
 	else
 		interpolationMode=1;
 	
-	if(angle!=0||interpolationMode)
+	if (angle!=0||interpolationMode)
 	{
 		
 		
@@ -2375,42 +2382,42 @@ static float deg2rad = M_PI/180.0;
 		oViewUserTransform->RotateX(angle);	
 		
 		[self updateOView];
-		if(!(cViewMPRorCPRMode&&isStraightenedCPR))
+		if (!(cViewMPRorCPRMode&&isStraightenedCPR))
 			[self cAndAxViewReset];
 		[self updatePageSliders];
 		[oViewRotateXText setFloatValue: [sender floatValue]];
 	}	
 	
 }
-- (void)    rotateZOView:(float)angle
+
+- (void)rotateZOView:(float)angle
 {
-	if(angle!=0)
+	if (angle!=0)
 	{
 		
 		oViewUserTransform->RotateZ(angle);	
 		
 		[self updateOView];
-		if(!(cViewMPRorCPRMode&&isStraightenedCPR))
+		if (!(cViewMPRorCPRMode&&isStraightenedCPR))
 			[self cAndAxViewReset];
 		[self updatePageSliders];		
 	}	
 }
+
 - (IBAction)rotateYOView:(id)sender
 {
-	
-	float angle;
-	angle=[sender floatValue] - lastOViewYAngle;
-	if([sender isMouseLeftKeyDown])
+	float angle = [sender floatValue] - lastOViewYAngle;
+	if ([sender isMouseLeftKeyDown])
 		interpolationMode=0;
 	else
 		interpolationMode=1;
 	
-	if(angle!=0||interpolationMode)
+	if (angle!=0||interpolationMode)
 	{
 		lastOViewYAngle = [sender floatValue];
 		oViewUserTransform->RotateY(angle);
 		[self updateOView];
-		if(!(cViewMPRorCPRMode&&isStraightenedCPR))
+		if (!(cViewMPRorCPRMode&&isStraightenedCPR))
 			[self cAndAxViewReset];
 		[self updatePageSliders];	
 		[oViewRotateYText setFloatValue: [sender floatValue]];
@@ -2460,11 +2467,12 @@ static float deg2rad = M_PI/180.0;
 	if ([sender isKindOfClass:[DCMPix class]]&&(!isChangingWWWLBySelf))
 	{
 		DCMPix	*otherPix = sender;
-		float iwl, iww;
 		
-		iww = [otherPix ww];
-		iwl = [otherPix wl];
-		if([oViewPixList containsObject: otherPix]||[cViewPixList containsObject: otherPix]||[axViewPixList containsObject: otherPix])
+		float iww = [otherPix ww];
+		float iwl = [otherPix wl];
+		if ([oViewPixList containsObject: otherPix] ||
+            [cViewPixList containsObject: otherPix] ||
+            [axViewPixList containsObject: otherPix])
 		{
 			isChangingWWWLBySelf=1;
 			if ([oViewPixList containsObject: otherPix])
@@ -2472,25 +2480,29 @@ static float deg2rad = M_PI/180.0;
 				//if (iww != [originalView curWW] || iwl != [originalView curWL])
 				[originalView setIndex: 0 ];
 				if (iww != [cPRView curWW] || iwl != [cPRView curWL])
-					[cPRView setWLWW:iwl :iww];					
-				if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
+					[cPRView setWLWW:iwl :iww];
+
+                if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
 					[crossAxiasView setWLWW:iwl :iww];
 			}
 			else if ([cViewPixList containsObject: otherPix])
 			{
 				if (iww != [originalView curWW] || iwl != [originalView curWL])
 					[originalView setWLWW:iwl :iww];				
-				if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
+				
+                if (iww != [crossAxiasView curWW] || iwl != [crossAxiasView curWL])
 					[crossAxiasView setWLWW:iwl :iww];	
 			}
 			else if ([axViewPixList containsObject: otherPix])
 			{
 				if (iww != [originalView curWW] || iwl != [originalView curWL])
 					[originalView setWLWW:iwl :iww];				
-				if (iww != [cPRView curWW] || iwl != [cPRView curWL])
+				
+                if (iww != [cPRView curWW] || iwl != [cPRView curWL])
 					[cPRView setWLWW:iwl :iww];		
 			}
-			isChangingWWWLBySelf=0;
+
+            isChangingWWWLBySelf=0;
 		}
 	}
 }
@@ -2504,7 +2516,6 @@ static float deg2rad = M_PI/180.0;
 			interpolationMode=0;
 			if ([originalView angle]==0)
 			{
-				
 				if (interpolationMode)
 					oViewSlice->SetInterpolationModeToCubic();
 				else
@@ -2553,7 +2564,7 @@ static float deg2rad = M_PI/180.0;
 		{	
 //			float angle= [originalView angle];
 //			
-//			if(angle!=0)
+//			if (angle!=0)
 //				[self rotateZOView:angle];
 //			else
 //			{
@@ -2567,15 +2578,15 @@ static float deg2rad = M_PI/180.0;
 			activeView=nil;
 		}
 	}
-	else if(activeView==cPRView)
+	else if (activeView==cPRView)
 	{
 		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
-			if([cPRView angle]==0)
+			if ([cPRView angle]==0)
 			{
 				
-				if(interpolationMode)
+				if (interpolationMode)
 					cViewSlice->SetInterpolationModeToCubic();
 				else
 					cViewSlice->SetInterpolationModeToNearestNeighbor();
@@ -2622,7 +2633,7 @@ static float deg2rad = M_PI/180.0;
 		{	
 //			float angle= [cPRView angle];
 //			
-//			if(angle!=0)
+//			if (angle!=0)
 //				[self rotateZCView:angle];
 //			else
 //			{
@@ -2641,9 +2652,9 @@ static float deg2rad = M_PI/180.0;
 		if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"dragged"])
 		{
 			interpolationMode=0;
-			if([crossAxiasView angle]==0)
+			if ([crossAxiasView angle]==0)
 			{
-				if(interpolationMode)
+				if (interpolationMode)
 					axViewSlice->SetInterpolationModeToCubic();
 				else
 					axViewSlice->SetInterpolationModeToNearestNeighbor();
@@ -2690,7 +2701,7 @@ static float deg2rad = M_PI/180.0;
 		{	
 //			float angle= [crossAxiasView angle];
 //			
-//			if(angle!=0)
+//			if (angle!=0)
 //				[self rotateZAxView:angle];
 //			else
 //			{
@@ -2727,9 +2738,9 @@ static float deg2rad = M_PI/180.0;
 - (IBAction)crossShow:(id)sender
 {
 	int showcross;
-	if(sender==axViewCrossShowButton)
+	if (sender==axViewCrossShowButton)
 	{
-		if([sender state]==NSControlStateValueOn)
+		if ([sender state]==NSControlStateValueOn)
 		{
 			showcross=1;
 			[crossAxiasView showCrossHair];
@@ -2742,9 +2753,9 @@ static float deg2rad = M_PI/180.0;
 		[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowAxViewCrossHair"];
 	}
 
-    if(sender==cViewCrossShowButton)
+    if (sender==cViewCrossShowButton)
 	{
-		if([sender state]==NSControlStateValueOn)
+		if ([sender state]==NSControlStateValueOn)
 		{
 			showcross=1;
 			[cPRView showCrossHair];
@@ -2756,9 +2767,10 @@ static float deg2rad = M_PI/180.0;
 		}
 		[[NSUserDefaults standardUserDefaults] setInteger:showcross forKey:@"CMIV2DViewShowCViewCrossHair"];	
 	}
-	if(sender==oViewCrossShowButton)
+
+    if (sender==oViewCrossShowButton)
 	{
-		if([sender state]==NSControlStateValueOn)
+		if ([sender state]==NSControlStateValueOn)
 		{
 			showcross=1;
 			[originalView showCrossHair];
@@ -2782,7 +2794,7 @@ static float deg2rad = M_PI/180.0;
 {
 	axViewTransform->Identity();
 	axViewTransform->RotateX(90);
-	if(!cViewMPRorCPRMode)
+	if (!cViewMPRorCPRMode)
 	{
 		[axImageSlider setFloatValue: 0];
 		lastAxViewTranslate=0;
@@ -2791,7 +2803,7 @@ static float deg2rad = M_PI/180.0;
     cViewTransform->Identity();
 	cViewTransform->RotateY(-90);
 	[cImageSlider setFloatValue: 0];
-	if(currentViewMode==0)
+	if (currentViewMode==0)
 	{
 		[cYRotateSlider setFloatValue:0];
 		lastCViewYAngle=0;
@@ -2838,15 +2850,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			return [[contrastList objectAtIndex:row] objectForKey:@"Name"];
 		}
 	}
-	else if([centerlinesList isEqual:tableView])
+	else if ([centerlinesList isEqual:tableView])
 	{
 		
 		if ([[tableColumn identifier] isEqualToString:@"Length"])
 		{
-			if(!centerlinesLengthArrays)
+			if (!centerlinesLengthArrays)
 				centerlinesLengthArrays=[[NSMutableArray alloc] initWithCapacity:0];
 			
-            if([centerlinesLengthArrays count]!=[cpr3DPaths count])
+            if ([centerlinesLengthArrays count]!=[cpr3DPaths count])
 				[self recalculateAllCenterlinesLength];
 
             return [NSString stringWithFormat:@"%d", [[centerlinesLengthArrays objectAtIndex: row] intValue]];
@@ -2873,7 +2885,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		if ([[aTableColumn identifier] isEqualToString:@"Name"])
 		{
-			if([anObject length]>0)
+			if ([anObject length]>0)
 			{
 				NSString* newname, *oldname;
 				newname=anObject;
@@ -2883,7 +2895,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				for(i=0;i<[totalROIList count];i++)
 				{
 					temproi=[totalROIList objectAtIndex: i];
-					if([[temproi name]isEqualToString:oldname])
+					if ([[temproi name]isEqualToString:oldname])
 						[temproi setName: newname];
 				}
 				[[contrastList objectAtIndex:rowIndex] setValue:newname forKey:@"Name"];
@@ -2894,7 +2906,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		if ([[aTableColumn identifier] isEqualToString:@"Name"])
 		{
-			if([anObject length]>0)
+			if ([anObject length]>0)
 			{
 				
 				[centerlinesNameArrays removeObjectAtIndex:rowIndex];
@@ -3344,9 +3356,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	[axImageSlider setMinValue: 0];
 	[axImageSlider setMaxValue: path3DLength-1];
-	if([axImageSlider floatValue]>path3DLength-1)
+	if ([axImageSlider floatValue]>path3DLength-1)
 		[axImageSlider setFloatValue: path3DLength-1];
-	else if([axImageSlider floatValue]<0)
+	else if ([axImageSlider floatValue]<0)
 		[axImageSlider setFloatValue: 0];
 	
 	//resample to get even spacing
@@ -3367,20 +3379,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			curpointdis+=*(inputpointslen+curpointindex);
 			
 		}
-		if(curpointindex>=pointNumber)
+		if (curpointindex>=pointNumber)
 		{
 			for(ii=0;ii<3;ii++)
 				*(outputcenterlinexyz+i*3+ii)=(*(inputpointsxyz+curpointindex*3-3+ii))*interpolfactor;
 			continue;
 		}
 		
-		if((*(inputpointslen+curpointindex))>0)
+		if ((*(inputpointslen+curpointindex))>0)
 			interpolfactor=(curpointdis-path3DLength-cViewSpace[1])/(*(inputpointslen+curpointindex));
 		else
 			interpolfactor=1;
 		for(ii=0;ii<3;ii++)
 			*(outputcenterlinexyz+i*3+ii)=(*(inputpointsxyz+curpointindex*3+ii))*(1.0-interpolfactor)+(*(inputpointsxyz+curpointindex*3-3+ii))*interpolfactor;	
-		if(*(outputcenterlinexyz+i*3)>1000)
+		if (*(outputcenterlinexyz+i*3)>1000)
 			*(outputcenterlinexyz+i*3+ii)=1000;
 		
 		path3DLength+=cViewSpace[1];
@@ -3410,7 +3422,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	double* outputcenterlinexyz=nil;
 	cViewSpace[0]=cViewSpace[1]=xSpacing;
 	
-	if(curvedMPREven3DPath==nil)
+	if (curvedMPREven3DPath==nil)
 		[self createEven3DPathForCPR:pwidth :pheight ];
 	else
 	{
@@ -3428,25 +3440,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	//create minimum rotate normals 
 	double* outputcenterlinenormals=(double*)malloc(sizeof(double)*height*3);
-	if([self generateSlidingNormals:height:outputcenterlinexyz:outputcenterlinenormals]==0)
+	if ([self generateSlidingNormals:height:outputcenterlinexyz:outputcenterlinenormals]==0)
 		return nil;
 	
-	// create a narrow 3d ribbon from the centerline and use this ribbon to get cross-section line from each pair of point along this ribbon 
+	// Create a narrow 3D ribbon from the centerline and use this ribbon to get cross-section line from each pair of point along this ribbon
 	double* unitribbonxyz=(double*)malloc(sizeof(double)*height*3);
 	float rotateangle=[cYRotateSlider floatValue];
-	if(rotateangle<0)
+	if (rotateangle<0)
 		rotateangle+=360;
-	rotateangle=rotateangle*deg2rad;
-	if([self generateUnitRobbin:height:outputcenterlinexyz:outputcenterlinenormals:unitribbonxyz:rotateangle:cViewSpace[0]]==0)
-		return nil;
-	
-	
+
+    rotateangle=rotateangle*deg2rad;
+	if ([self generateUnitRobbin:height :outputcenterlinexyz :outputcenterlinenormals :unitribbonxyz :rotateangle :cViewSpace[0]] == 0)
+    {
+        return nil;
+    }
 	
 	im=(float*)malloc(sizeof(float)*width*height);
-	if(!im)
+	if (!im)
 		return 0L;
-	
-	
 	
 	int x,y,z;
 	int j;
@@ -3458,13 +3469,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(ii=0;ii<3;ii++)
 			position[ii]=*(outputcenterlinexyz+j*3+ii)-width/2*(*(unitribbonxyz+j*3+ii));
 		
-		
 		for(i=0;i<width;i++)
 		{
-			
 			for(ii=0;ii<3;ii++)
 				position[ii]+=(*(unitribbonxyz+j*3+ii));
-			if(interpolationMode)
+
+            if (interpolationMode)
 			{
 				fposition[0]=(position[0]-vtkOriginalX)/xSpacing;
 				fposition[1]=(position[1]-vtkOriginalY)/ySpacing;
@@ -3476,7 +3486,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				x = lround((position[0]-vtkOriginalX)/xSpacing);
 				y = lround((position[1]-vtkOriginalY)/ySpacing);
 				z = lround((position[2]-vtkOriginalZ)/zSpacing);
-				if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)		  
+				if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 					*(im+pixelindex)=*(volumeData + imageSize*z + imageWidth*y+x);
 				else
 					*(im+pixelindex)=minValueInSeries;
@@ -3484,14 +3494,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			pixelindex++;
 		}
-		
 	}
 	
-	
 	free(outputcenterlinexyz);free(outputcenterlinenormals);free(unitribbonxyz);
-	return im;	
-	
+	return im;
 }
+
 - (float*) calculateCurvedMPRImage :(int*)pwidth :(int*)pheight
 {
 	
@@ -3543,9 +3551,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	// update axview's slider
 	[axImageSlider setMinValue: 0];
 	[axImageSlider setMaxValue: path2DLength];
-	if([axImageSlider floatValue]>path2DLength)
+	if ([axImageSlider floatValue]>path2DLength)
 		[axImageSlider setFloatValue: path2DLength-cViewSpace[1]];
-	else if([axImageSlider floatValue]<0)
+	else if ([axImageSlider floatValue]<0)
 		[axImageSlider setFloatValue: 0];
 	
 	//resample to get even spacing
@@ -3586,14 +3594,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 	//create a curved surface from projected centerline
 	im=(float*)malloc(sizeof(float)*width*height);
-	if(!im)
+	if (!im)
 	{
 		*pwidth=0;
 		*pheight=0;
 		return 0L;
 	}
 	
-	//////////////////////////////////////////////
+	// ////////////////////////////////////////////
 	
 	int x,y,z;
 	float fposition[3];
@@ -3610,14 +3618,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			fposition[0]=(position[0]-vtkOriginalX)/xSpacing;
 			fposition[1]=(position[1]-vtkOriginalY)/ySpacing;
 			fposition[2]=(position[2]-vtkOriginalZ)/zSpacing;
-			if(interpolationMode)
+			if (interpolationMode)
 				*(im+i*width+j)=[self TriCubic:fposition: volumeData: imageWidth: imageHeight: imageAmount];
 			else
 			{
 				x = lround(fposition[0]);
 				y = lround(fposition[1]);
 				z = lround(fposition[2]);
-				if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)		  
+				if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 					*(im+i*width+j)=*(volumeData + imageSize*z + imageWidth*y+x);
 				else
 					*(im+i*width+j)=minValueInSeries;
@@ -3625,17 +3633,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		}
 		
 	}
-	free(inputpointsxyz);free(inputpointslen);free(outputcenterlinexyz);
-	
-	
+
+    free(inputpointsxyz);free(inputpointslen);free(outputcenterlinexyz);
 	return im;
-	
 }
 
 - (void) updateCViewAsCurvedMPR
 {
-	
-	if(!curvedMPR2DPath)
+	if (!curvedMPR2DPath)
 	{
 		[self updateCViewAsMPR]; 
 		return;
@@ -3644,13 +3649,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	float *im=0L;
 	int width, height;
 	
-	if([curvedMPR3DPath count]<2)
+	if ([curvedMPR3DPath count]<2)
 	{
 		[self updateCViewAsMPR]; 
 		return;
 	}
     
-	if(!isStraightenedCPR)
+	if (!isStraightenedCPR)
 	{
 		im = [self calculateCurvedMPRImage :&width :&height];
 	}
@@ -3659,20 +3664,30 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		im = [self calculateStraightCPRImage :&width :&height];
 	}
 	
-	if(!im)
+	if (!im)
 		return;
     
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im :32 :width :height :cViewSpace[0] :cViewSpace[1] :cViewOrigin[0] :cViewOrigin[1] :cViewOrigin[2]];
+	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+                                                :32
+                                                :width
+                                                :height
+                                                :cViewSpace[0]
+                                                :cViewSpace[1]
+                                                :cViewOrigin[0]
+                                                :cViewOrigin[1]
+                                                :cViewOrigin[2]];
 	[mypix copySUVfrom: curPix];	
 	
 	[cViewPixList removeAllObjects];
 	[cViewPixList addObject: mypix];
 	[mypix release];
 	
-	if(cprImageBuffer) free(cprImageBuffer);//maybe not necessary (the memory should be release when cViewPixList removeAllObjects, but I am confused here)
-	cprImageBuffer=im;
+	if (cprImageBuffer)
+        free(cprImageBuffer); // maybe not necessary (the memory should be release when cViewPixList removeAllObjects, but I am confused here)
+	
+    cprImageBuffer=im;
 	[[cViewROIList objectAtIndex: 0] removeAllObjects];
-	if(curvedMPRReferenceLineOfAxis)
+	if (curvedMPRReferenceLineOfAxis)
 	{
 		
 		NSArray* points=[curvedMPRReferenceLineOfAxis points];
@@ -3764,7 +3779,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			cViewArrowStartPoint=start;
 			drawingArrawTool=YES;
 		}
-		else if([roi type]==tMeasure)
+		else if ([roi type]==tMeasure)
 		{
 			isRemoveROIBySelf=1;
 			[[cViewROIList objectAtIndex: 0] removeAllObjects];
@@ -3884,7 +3899,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int ptId,totalpoint;
 	ptId=[axImageSlider floatValue]/cViewSpace[1];
 	totalpoint=[curvedMPREven3DPath count];
-	if(ptId>=totalpoint-1)
+	if (ptId>=totalpoint-1)
 		ptId=totalpoint-2;
 
     CMIV3DPoint* a3DPoint;
@@ -3921,7 +3936,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	else
 	{
 		anglex = atan(direction[1]/direction[2]) / deg2rad;
-		if(direction[2]<0)
+		if (direction[2]<0)
 			anglex+=180;
 	}
 	
@@ -3979,7 +3994,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		steplength = [curvedMPR2DPath Length:[[points2D objectAtIndex:i] point] :[[points2D objectAtIndex:i+1] point]];
 		
-		if(path2DLength+steplength >= curLocation)
+		if (path2DLength+steplength >= curLocation)
 		{
 			NSPoint startPoint=[[points2D objectAtIndex: i] point];
 			NSPoint tempPt=[[points2D objectAtIndex: i+1] point];
@@ -4956,7 +4971,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[basketScrollView setPostsBoundsChangedNotifications:YES];
 		[basketImageArray addObject:newPix];
 		[basketImageROIArray addObject:imgRoiList];
-		if([basketMatrix numberOfColumns]<(signed)[basketImageArray count])
+		if ([basketMatrix numberOfColumns]<(signed)[basketImageArray count])
 			[basketMatrix addColumn];
 		[basketMatrix sizeToCells];
 		
@@ -5016,25 +5031,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	unsigned j;
 	for (j=1;j<4;j++)
 	{
-		if(point[j].x<minx)
+		if (point[j].x<minx)
 			minx=point[j].x;
-		if(point[j].y<miny)
+		if (point[j].y<miny)
 			miny=point[j].y;
-		if(point[j].x>maxx)
+		if (point[j].x>maxx)
 			maxx=point[j].x;
-		if(point[j].y>maxy)
+		if (point[j].y>maxy)
 			maxy=point[j].y;
 	}
 	
 	offsetx=minx;
 	offsety=miny;
-	if(minx<0)
+	if (minx<0)
 		minx=0;
-	if(miny<0)
+	if (miny<0)
 		miny=0;
-	if(maxx>width)
+	if (maxx>width)
 		maxx=width;
-	if(maxy>height)
+	if (maxy>height)
 		maxy=height;
 	
 	for (y=0;y<imgheight;y++)
@@ -5130,26 +5145,29 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[newPix setSliceThickness: 0];
 	[newPix setSliceInterval: 0];
 	
-	
 	// Create new ROIs using the new origin
 		
-	if(cViewMPRorCPRMode&&[oViewCrossShowButton state]== NSControlStateValueOn)
+	if (cViewMPRorCPRMode&&[oViewCrossShowButton state]== NSControlStateValueOn)
 	{
 		NSRect roiRect;
 		roiRect.origin.x=-oViewOrigin[0]/oViewSpace[0]-offsetx;
 		roiRect.origin.y=-oViewOrigin[1]/oViewSpace[1]-offsety;
 		roiRect.size.width=roiRect.size.height=15;
-		ROI *aCircleROI = [[ROI alloc] initWithType: tOval :oViewSpace[0] :oViewSpace[1] : NSMakePoint( origin[0],origin[1])];
+		ROI *aCircleROI = [[ROI alloc] initWithType: tOval
+                                                   : oViewSpace[0]
+                                                   : oViewSpace[1]
+                                                   : NSMakePoint( origin[0],origin[1])];
 		[aCircleROI setName:[axImageSlider stringValue]];
 		[aCircleROI setComments:@"reference center"];
 		[aCircleROI setROIRect:roiRect];
 		[imgROIs addObject:aCircleROI];
 	}
+    
 	for(j=0;j<[[oViewROIList objectAtIndex: 0] count];j++)
 	{
 		ROI *temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: j];
 		
-		if([temproi type] == tMeasure && [temproi valid])
+		if ([temproi type] == tMeasure && [temproi valid])
 		{
 			ROI* anewroi=[[ROI alloc] initWithType: tMeasure :oViewSpace[0]  :oViewSpace[1] : NSMakePoint( origin[0],  origin[1])];
 			
@@ -5219,32 +5237,31 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	unsigned j;
 	for(j=1;j<4;j++)
 	{
-		if(point[j].x<minx)
+		if (point[j].x<minx)
 			minx=point[j].x;
-		if(point[j].y<miny)
+		if (point[j].y<miny)
 			miny=point[j].y;
-		if(point[j].x>maxx)
+		if (point[j].x>maxx)
 			maxx=point[j].x;
-		if(point[j].y>maxy)
+		if (point[j].y>maxy)
 			maxy=point[j].y;
-		
 	}
 	
 	offsetx=minx;
 	offsety=miny;
-	if(minx<0)
+	if (minx<0)
 		minx=0;
-	if(miny<0)
+	if (miny<0)
 		miny=0;
-	if(maxx>width)
+	if (maxx>width)
 		maxx=width;
-	if(maxy>height)
+	if (maxy>height)
 		maxy=height;
 	
 	for(y=0;y<imgheight;y++)
 		for(x=0;x<imgwidth;x++)
 		{
-			if(x+offsetx>=minx&&x+offsetx<maxx&&y+offsety>=miny&&y+offsety<maxy)
+			if (x+offsetx>=minx&&x+offsetx<maxx&&y+offsety>=miny&&y+offsety<maxy)
 				*(imgdata+y*imgwidth+x)=*(tempfloat+(y+offsety)*width+x+offsetx);
 			else
 				*(imgdata+y*imgwidth+x) = minValueInSeries;
@@ -5449,31 +5466,31 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	unsigned j;
 	for(j=1;j<4;j++)
 	{
-		if(point[j].x<minx)
+		if (point[j].x<minx)
 			minx=point[j].x;
-		if(point[j].y<miny)
+		if (point[j].y<miny)
 			miny=point[j].y;
-		if(point[j].x>maxx)
+		if (point[j].x>maxx)
 			maxx=point[j].x;
-		if(point[j].y>maxy)
+		if (point[j].y>maxy)
 			maxy=point[j].y;
 	}
 	
 	offsetx=minx;
 	offsety=miny;
-	if(minx<0)
+	if (minx<0)
 		minx=0;
-	if(miny<0)
+	if (miny<0)
 		miny=0;
-	if(maxx>width)
+	if (maxx>width)
 		maxx=width;
-	if(maxy>height)
+	if (maxy>height)
 		maxy=height;
 	
 	for(y=0;y<imgheight;y++)
 		for(x=0;x<imgwidth;x++)
 		{
-			if(x+offsetx>=minx&&x+offsetx<maxx&&y+offsety>=miny&&y+offsety<maxy)
+			if (x+offsetx>=minx&&x+offsetx<maxx&&y+offsety>=miny&&y+offsety<maxy)
 				*(imgdata+y*imgwidth+x)=*(tempfloat+(y+offsety)*width+x+offsetx);
 			else
 				*(imgdata+y*imgwidth+x) = minValueInSeries;
@@ -5611,7 +5628,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[imgROIs addObject:anewroi];
 			[anewroi release];
 		}
-		else if ([temproi type] == tClosedPolygon && [temproi valid] )
+		else if ([temproi type] == tClosedPolygon &&
+                 [temproi valid] )
 		{
 			ROI* anewroi=[[ROI alloc] initWithType: tClosedPolygon
                                                   : axViewSpace[0]
@@ -5641,7 +5659,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			ifpolygonfound=1;
 			
 		}
-		else if ([temproi type] == tMeasure && [temproi valid])
+		else if ([temproi type] == tMeasure &&
+                 [temproi valid])
 		{
 			ROI* anewroi=[[ROI alloc] initWithType: tMeasure
                                                   : axViewSpace[0]
@@ -5690,14 +5709,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (IBAction)deleteImageInBasket:(id)sender
 {
 	unsigned int index=[basketMatrix selectedColumn];
-	if(index<[basketImageArray count])
+	if (index<[basketImageArray count])
 	{
 		[basketImageArray removeObjectAtIndex:index];
 		[basketImageROIArray removeObjectAtIndex:index];
-		if([basketMatrix numberOfColumns]>1)
+		if ([basketMatrix numberOfColumns]>1)
 		{
 			[basketMatrix removeColumn:index];
-			if(index<[basketImageArray count])
+			if (index<[basketImageArray count])
 			{
 				[basketMatrix selectCellAtRow:0 column:index];
 			}
@@ -5752,7 +5771,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 
 	newVolumeData=(float*) malloc(size);
-	if(!newVolumeData)
+	if (!newVolumeData)
 	{
 		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
@@ -5967,7 +5986,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrastList addObject: contrast];
 		needSaveSeeds=YES;
 	}
-	else if(isInWizardMode==2)
+	else if (isInWizardMode==2)
 	{		
 		
 		contrast = [NSMutableDictionary dictionary];
@@ -6051,7 +6070,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			{
 				roi=[totalROIList objectAtIndex:marker-1];
 				rect=[roi rect];
-				if(rect.origin.x<0)
+				if (rect.origin.x<0)
 				{
 					rect.origin.x=x;
 					rect.origin.y=y;
@@ -6060,19 +6079,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				else
 				{
-					if(rect.origin.x>x)
+					if (rect.origin.x>x)
 					{
 						rect.size.width+=(rect.origin.x-x);
 						rect.origin.x=x;
 					}
-					else if(rect.origin.x+rect.size.width <x)
+					else if (rect.origin.x+rect.size.width <x)
 						rect.size.width = x-rect.origin.x;
-					if(rect.origin.y>y)
+                    
+					if (rect.origin.y>y)
 					{
 						rect.size.height+=(rect.origin.y-y);
 						rect.origin.y=y;
 					}
-					else if(rect.origin.y+rect.size.height <y)
+					else if (rect.origin.y+rect.size.height <y)
 						rect.size.height = y-rect.origin.y;
 				}
 				[roi setROIRect: rect];
@@ -6128,31 +6148,31 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (void) roiChanged: (NSNotification*) note
 {
 	id sender = [note object];
-	if(currentTool==4)
+	if (currentTool==4)
 	{
 		ROI* roi=(ROI*)sender;
 		int roitype =[roi type];
-		if(roitype!=tMeasure)
+		if (roitype!=tMeasure)
 		{
 			[roi setROIMode:ROI_sleep];
 		}
 	}
-	else if(currentTool==8)
+	else if (currentTool==8)
 	{
-		if([[oViewROIList objectAtIndex: 0] containsObject: sender] )
+		if ([[oViewROIList objectAtIndex: 0] containsObject: sender] )
 		{
 			ROI* roi=(ROI*)sender;
 			int roitype =[roi type];
-			if(roitype==tPlain)
+			if (roitype==tPlain)
 			{
 				short unsigned int marker=(short unsigned int)[[roi comments] intValue];
 				int i,j;
 				float point[3];
 				unsigned char *texture=[roi textureBuffer];
-				//if creating new roiList by self marker is 0
-				if(texture&&marker)
+				// If creating new roiList by self marker is 0
+				if (texture&&marker)
 				{
-					if(!contrastVolumeData)
+					if (!contrastVolumeData)
 					{
 						int size = sizeof(short unsigned int) * imageWidth * imageHeight * imageAmount;
 						contrastVolumeData = (unsigned short int*) malloc( size);
@@ -6175,13 +6195,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 							x=lround((point[0]-vtkOriginalX)/xSpacing);
 							y=lround((point[1]-vtkOriginalY)/ySpacing);
 							z=lround((point[2]-vtkOriginalZ)/zSpacing);
-							if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+							if (x>=0 && x<imageWidth &&
+                                y>=0 && y<imageHeight &&
+                                z>=0 && z<imageAmount)
 							{
-								
-								if(*(texture+j*[roi textureWidth]+i))
+								if (*(texture+j*[roi textureWidth]+i))
 								{
 									*(contrastVolumeData+z*imageSize+y*imageWidth+x)=marker;
-									if((i+1)<[roi textureWidth]&&*(texture+j*[roi textureWidth]+i+1))
+									if ((i+1)<[roi textureWidth] &&
+                                        *(texture+j*[roi textureWidth]+i+1))
 									{
 										point[0] = curOriginX + i * curXSpacing+curXSpacing/2;
 										point[1] = curOriginY + j * curYSpacing;
@@ -6190,11 +6212,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 										x=lround((point[0]-vtkOriginalX)/xSpacing);
 										y=lround((point[1]-vtkOriginalY)/ySpacing);
 										z=lround((point[2]-vtkOriginalZ)/zSpacing);
-										if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
-											*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
-										
+										if (x>=0 && x<imageWidth &&
+                                           y>=0 && y<imageHeight &&
+                                           z>=0 && z<imageAmount)
+                                        {
+                                            *(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
+                                        }
 									}
-									if((j+1)<[roi textureHeight]&&*(texture+(j+1)*[roi textureWidth]+i))
+
+                                    if ((j+1)<[roi textureHeight] &&
+                                        *(texture+(j+1)*[roi textureWidth]+i))
 									{
 										point[0] = curOriginX + i * curXSpacing;
 										point[1] = curOriginY + j * curYSpacing+curYSpacing/2;
@@ -6203,11 +6230,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 										x=lround((point[0]-vtkOriginalX)/xSpacing);
 										y=lround((point[1]-vtkOriginalY)/ySpacing);
 										z=lround((point[2]-vtkOriginalZ)/zSpacing);
-										if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
-											*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
+										if (x>=0 && x<imageWidth &&
+                                           y>=0 && y<imageHeight &&
+                                           z>=0 && z<imageAmount)
+                                        {
+                                            *(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
+                                        }
 										
 									}
-									if((i+1)<[roi textureWidth] && (j+1)<[roi textureHeight] && *(texture+(j+1)*[roi textureWidth]+i))
+
+                                    if ((i+1)<[roi textureWidth] &&
+                                        (j+1)<[roi textureHeight] &&
+                                        *(texture+(j+1)*[roi textureWidth]+i))
 									{
 										point[0] = curOriginX + i * curXSpacing+curXSpacing/2;
 										point[1] = curOriginY + j * curYSpacing+curYSpacing/2;
@@ -6216,11 +6250,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 										x=lround((point[0]-vtkOriginalX)/xSpacing);
 										y=lround((point[1]-vtkOriginalY)/ySpacing);
 										z=lround((point[2]-vtkOriginalZ)/zSpacing);
-										if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+										if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 											*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
 										
 									}
-									if((i-1)>0&&(j+1)<[roi textureHeight]&&*(texture+(j+1)*[roi textureWidth]+i))
+									if ((i-1)>0&&(j+1)<[roi textureHeight]&&*(texture+(j+1)*[roi textureWidth]+i))
 									{
 										point[0] = curOriginX + i * curXSpacing-curXSpacing/2;
 										point[1] = curOriginY + j * curYSpacing+curYSpacing/2;
@@ -6229,12 +6263,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 										x=lround((point[0]-vtkOriginalX)/xSpacing);
 										y=lround((point[1]-vtkOriginalY)/ySpacing);
 										z=lround((point[2]-vtkOriginalZ)/zSpacing);
-										if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+										if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 											*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
 										
 									}
 								}
-								else if(*(contrastVolumeData+z*imageSize+y*imageWidth+x)==marker)
+								else if (*(contrastVolumeData+z*imageSize+y*imageWidth+x)==marker)
 									*(contrastVolumeData+z*imageSize+y*imageWidth+x)=0;
 								
 								
@@ -6244,13 +6278,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 		}
 	}
-	else if(currentTool==6)
+	else if (currentTool==6)
 	{
-		if([[oViewROIList objectAtIndex: 0] containsObject: sender] )
+		if ([[oViewROIList objectAtIndex: 0] containsObject: sender] )
 		{
 			ROI* roi=(ROI*)sender;
 			
-			if([roi isEqual:oViewMeasureLine] )
+			if ([roi isEqual:oViewMeasureLine] )
 			{
 				cPRViewCenter=[[measureLinePointsArray objectAtIndex: 0] point];
 				NSPoint tempPt=[[measureLinePointsArray objectAtIndex: 1] point];
@@ -6261,11 +6295,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				tempPt.x*=oViewSpace[0];
 				tempPt.y*=oViewSpace[1];
 				
-				if(tempPt.y == 0)
+				if (tempPt.y == 0)
 				{
-					if(tempPt.x > 0)
+					if (tempPt.x > 0)
 						angle=90;
-					else if(tempPt.x < 0)
+					else if (tempPt.x < 0)
 						angle=-90;
 					else 
 						angle=0;
@@ -6301,11 +6335,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				
 			}
 		}
-		else if([[cViewROIList objectAtIndex:0] containsObject: sender])
+		else if ([[cViewROIList objectAtIndex:0] containsObject: sender])
 		{
 			ROI* roi=(ROI*)sender;
 			int roitype =[roi type];
-			if(roitype==tROI)
+			if (roitype==tROI)
 			{
 				NSRect tempRect=[roi rect];
 				cPRROIRect.origin.x = cPRROIRect.origin.x+cPRROIRect.size.width/2-tempRect.size.width/2;
@@ -6328,7 +6362,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				{
 					if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 					{
-						if([[roi points] count]==3)
+						if ([[roi points] count]==3)
 							[[roi points] removeLastObject];
 #ifdef VERBOSEMODE
 						NSLog( @"ROI drawing finished");
@@ -6337,7 +6371,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					else
 					{
 						MyPoint *oViewEndPoint=[arrowPointsArray objectAtIndex:2];
-						if(oViewEndPoint)
+						if (oViewEndPoint)
 						{
 							[[arrowPointsArray objectAtIndex:0] setPoint: [oViewEndPoint point]];
 						}
@@ -6356,11 +6390,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				tempPt.x*=oViewSpace[0];
 				tempPt.y*=oViewSpace[1];
 				
-				if(tempPt.y == 0)
+				if (tempPt.y == 0)
 				{
-					if(tempPt.x > 0)
+					if (tempPt.x > 0)
 						angle=90;
-					else if(tempPt.x < 0)
+					else if (tempPt.x < 0)
 						angle=-90;
 					else 
 						angle=0;
@@ -6404,7 +6438,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 #ifdef VERBOSEMODE
 				NSLog( @"updating CView Arrow");
 #endif
-				if(cViewArrow)
+				if (cViewArrow)
 				{
 					
 					NSPoint startPoint,endPoint;
@@ -6434,10 +6468,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			//[cPRView setIndex:0];
 			
 		}
-		else if([sender isEqual:cViewArrow])
+		else if ([sender isEqual:cViewArrow])
 		{
 			NSPoint start=[[cViewArrowPointsArray objectAtIndex: 1] point];
-			if(start.x!= cViewArrowStartPoint.x||start.y!=cViewArrowStartPoint.y)
+			if (start.x!= cViewArrowStartPoint.x||start.y!=cViewArrowStartPoint.y)
 				[[cViewArrowPointsArray objectAtIndex: 1] setPoint:cViewArrowStartPoint];
 			else
 			{
@@ -6451,11 +6485,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				tempPt.x*=cViewSpace[0];
 				tempPt.y*=cViewSpace[1];
 				
-				if(tempPt.y == 0)
+				if (tempPt.y == 0)
 				{
-					if(tempPt.x > 0)
+					if (tempPt.x > 0)
 						angle=90;
-					else if(tempPt.x < 0)
+					else if (tempPt.x < 0)
 						angle=-90;
 					else 
 						angle=0;
@@ -6480,7 +6514,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 		}
 	}
-	else if(currentTool==9)
+	else if (currentTool==9)
 	{
 		ROI* roi=(ROI*)sender;
 		
@@ -6493,7 +6527,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			axViewMeasureNeedToUpdate=YES;
 		}
 	}
-	else if(cViewMPRorCPRMode && curvedMPR2DPath &&[[oViewROIList objectAtIndex: 0] containsObject: sender])
+	else if (cViewMPRorCPRMode && curvedMPR2DPath &&[[oViewROIList objectAtIndex: 0] containsObject: sender])
 	{
 		ROI* roi=(ROI*)sender;
 		int roitype =[roi type];
@@ -6526,7 +6560,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				[new3DPoint release];
 				
 			}
-			else if([[curvedMPR2DPath points] count]<[curvedMPR3DPath count])//remove the end
+			else if ([[curvedMPR2DPath points] count]<[curvedMPR3DPath count])//remove the end
 			{
 				[curvedMPR3DPath removeLastObject];
 			}
@@ -6561,22 +6595,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		if ([sender isEqual:originalView])
 		{
-			
 			ROI * roi = [[note userInfo] objectForKey:@"ROI"];
-			if(roi)
+			if (roi)
 			{
-				int roitype =[roi type];
+                ToolMode roitype = [roi type];
 				RGBColor c;
-				if(roitype!=tOpenPolygon)
+				if (roitype!=tOpenPolygon)
 				{
-					
 					[roi setName: currentSeedName];
 					
 					CGFloat r, g, b;
 					
 					[currentSeedColor getRed:&r green:&g blue:&b alpha:0L];
-					
-					
 					
 					c.red =(short unsigned int) (r * 65535.);
 					c.green =(short unsigned int)( g * 65535.);
@@ -6586,10 +6616,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				else
 				{
-
 					[roi setName: @"centerline"];
-									
-
 					
 					c.red =(short unsigned int) ( 65535.);
 					c.blue =(short unsigned int)( 65535.);
@@ -6598,16 +6625,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[roi setColor:c];
 				}
 				
-				if(cViewMPRorCPRMode&&roitype==tOpenPolygon)
+				if (cViewMPRorCPRMode && roitype==tOpenPolygon)
 				{
-					if(curvedMPR2DPath)
+					if (curvedMPR2DPath)
 					{
 						MyPoint* endPoint = 0L;
 						endPoint = [[roi points] objectAtIndex:0];
 						[endPoint retain];
 						[[roi points] removeAllObjects];
 						[roi setPoints: [curvedMPR2DPath points]];
-						if(endPoint && currentPathMode==ROI_drawing)
+						if (endPoint && currentPathMode==ROI_drawing)
 							[[roi points] addObject: endPoint];
 						isRemoveROIBySelf=1;
 						[curvedMPR2DPath release];
@@ -6633,9 +6660,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tOpenPolygon)
+						if ([temproi type] == tOpenPolygon)
 						{
-							if([temproi isEqual:roi]==NO)
+							if ([temproi isEqual:roi]==NO)
 							{
 								[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 								i--;
@@ -6643,19 +6670,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						}
 					}
 					
-					isRemoveROIBySelf=0;						
-					
+					isRemoveROIBySelf=0;
 				}
-				else if(currentTool == 8)
+				else if (currentTool == tCross)
 				{
 					uniIndex++;
 					
 					NSString *indexstr=[NSString stringWithFormat:@"%d",uniIndex];
 					[roi setComments:indexstr];	
-					unsigned int i;
-					for(i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
+					for (unsigned int i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
-						[[roi pix] retain];// to avoid a bug. pix seems not retain by the ROI, but will be release
+						[[roi pix] retain]; // to avoid a bug. pix seems not retain by the ROI, but will be release
 					}
 
                     DCMPix * curImage= [cViewPixList objectAtIndex:0];
@@ -6668,18 +6693,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[newROI setColor:c];
 					[totalROIList addObject:newROI];
 				}
-				else if(currentTool == 6)
+				else if (currentTool == tROI)
 				{
-					//delete other
+					// Delete other
 					unsigned int i;
 					isRemoveROIBySelf=1;
 					oViewMeasureLine=nil;
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tMeasure)
+						if ([temproi type] == tMeasure)
 						{
-							if([temproi isEqual:roi]==NO)
+							if ([temproi isEqual:roi]==NO)
 							{
 								[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 								i--;
@@ -6701,7 +6726,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[newROI release];
 					//[newROI setROIRect:roiRect];
 				}
-				else if(currentTool == 7)
+				else if (currentTool == t3DRotate)
 				{
 #ifdef VERBOSEMODE
 					NSLog( @"ROI added");
@@ -6714,9 +6739,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tArrow)
+						if ([temproi type] == tArrow)
 						{
-							if([temproi isEqual:roi]==NO)
+							if ([temproi isEqual:roi]==NO)
 							{
 								[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 								i--;
@@ -6770,17 +6795,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					
 					
 				}
-				
 			}
-			
-			
 		}
 		else if ([sender isEqual:cPRView]&&currentTool == 7 )
 		{
 			ROI * roi = [[note userInfo] objectForKey:@"ROI"];
-			if(roi&&cViewArrow)
+			if (roi&&cViewArrow)
 			{
-				if(![roi isEqual:cViewArrow])
+				if (![roi isEqual:cViewArrow])
 				{
 					isRemoveROIBySelf=1;
 					[[cViewROIList objectAtIndex:0] removeObject:cViewArrow];
@@ -6802,14 +6824,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	id sender = [note object];
 	
-	if(sender)
+	if (sender)
 	{
 		if ([sender isKindOfClass:[ROI class]])
 		{
 			ROI* roi=(ROI*)sender;
-			if([roi type]==tPlain)
+			if ([roi type]==tPlain)
 			{
-				if(!isRemoveROIBySelf)
+				if (!isRemoveROIBySelf)
 				{
 					
 					NSString * commentstr=[sender comments];
@@ -6825,9 +6847,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						{ 
 							commentstr=[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] comments];
 							short unsigned int tempmarker=(short unsigned int)[commentstr intValue];
-							if(tempmarker>marker)
+							if (tempmarker>marker)
 								[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] setComments: [NSString stringWithFormat:@"%d",tempmarker-1]];
-							if(tempmarker==marker)
+							if (tempmarker==marker)
 								[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] setComments: [NSString stringWithFormat:@"%d",0]];
 						}
 						
@@ -6837,7 +6859,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 						size =imageWidth * imageHeight * imageAmount;
 						for(j=0;j<size;j++)
 						{
-							if(*(contrastVolumeData + j)==marker)
+							if (*(contrastVolumeData + j)==marker)
 								*(contrastVolumeData + j)=0;
 							else if (*(contrastVolumeData + j)>marker)
 								*(contrastVolumeData + j)=*(contrastVolumeData + j)-1;
@@ -6850,7 +6872,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 			else if ([roi type]==tMeasure)
 			{
-				if([originalView isEqual:[roi curView]])
+				if ([originalView isEqual:[roi curView]])
 				{
 					oViewMeasureLine=nil;
 					isRemoveROIBySelf=1;
@@ -6865,7 +6887,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 			else if ([roi type]==tArrow)
 			{
-				if([originalView isEqual:[roi curView]])
+				if ([originalView isEqual:[roi curView]])
 				{
 					oViewArrow=nil;
 					cViewArrow=nil;
@@ -6876,7 +6898,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[crossAxiasView setIndex: 0];
 					isRemoveROIBySelf=0;
 				}
-				else if(!isRemoveROIBySelf&&[cPRView isEqual:[roi curView]])
+				else if (!isRemoveROIBySelf&&[cPRView isEqual:[roi curView]])
 				{
 					oViewArrow=nil;
 					cViewArrow=nil;
@@ -6885,7 +6907,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tArrow)
+						if ([temproi type] == tArrow)
 						{
 							[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 							i--;
@@ -6895,26 +6917,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					[[axViewROIList objectAtIndex: 0] removeAllObjects];
 					[crossAxiasView setIndex: 0];
 					isRemoveROIBySelf=0;
-					
 				}
-				
-				
-				
 			}
 			
-			else if (!isRemoveROIBySelf&&[roi type]==tROI)
+			else if (!isRemoveROIBySelf && [roi type]==tROI)
 			{
-				
-				if([cPRView isEqual:[roi curView]])
+				if ([cPRView isEqual:[roi curView]])
 				{
-					
 					isRemoveROIBySelf=1;
 					oViewMeasureLine=nil;
 					unsigned int i;
 					for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 					{
 						ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
-						if([temproi type] == tMeasure)
+						if ([temproi type] == tMeasure)
 						{
 							[[oViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 							i--;
@@ -6925,12 +6941,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				}
 				
 			}		
-			else if (!isRemoveROIBySelf&&[roi type]==tOpenPolygon)
+			else if (!isRemoveROIBySelf && [roi type]==tOpenPolygon)
 			{
-				
-				if([originalView isEqual:[roi curView]])
+				if ([originalView isEqual:[roi curView]])
 				{
-//					if(roi!=curvedMPR2DPath)
+//					if (roi!=curvedMPR2DPath)
 //					{
 //						[curvedMPR2DPath release];
 //						curvedMPR2DPath=0L;
@@ -6941,20 +6956,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}			
 		}
 	}
-	
 }
+
 - (void) dcmViewMouseDown: (NSNotification*) note
 {
 	activeView=[note object];
-	if(currentTool==9)
+	if (currentTool==tOval)
 	{
 		id sender = [note object];
-		if(sender==cPRView)
+		if (sender==cPRView)
 			[[cViewROIList objectAtIndex:0] removeObject:curvedMPRReferenceLineOfAxis] ;
-		else if(sender==crossAxiasView)
+		else if (sender==crossAxiasView)
 		{
-			unsigned i;
-			for (i=0;i<[[axViewROIList objectAtIndex:0] count];i++) {
+			for (unsigned i=0;i<[[axViewROIList objectAtIndex:0] count];i++) {
 				if ([[axViewROIList objectAtIndex:0] objectAtIndex:i]!=axViewMeasurePolygon) {
 					[[axViewROIList objectAtIndex:0] removeObjectAtIndex:i];
 					i--;
@@ -6963,21 +6977,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			}
 		}
 	}
-	
 }
+
 -(void) dcmViewMouseUp: (NSNotification*) note
 {
-
-	if(currentTool==9)
+	if (currentTool==tOval)
 	{
 		id sender = [note object];
-		if(sender==cPRView&&cViewMeasureNeedToUpdate)
+		if (sender==cPRView && cViewMeasureNeedToUpdate)
 		{
 			[self updateCViewMeasureAfterROIChanged];
 			[[cViewROIList objectAtIndex:0] addObject:curvedMPRReferenceLineOfAxis];
 			cViewMeasureNeedToUpdate=NO;
 		}
-		else if(sender==crossAxiasView&&axViewMeasureNeedToUpdate)
+		else if (sender==crossAxiasView&&axViewMeasureNeedToUpdate)
 		{
 			[self updateAxViewMeasureAfterROIChanged];
 			axViewMeasureNeedToUpdate=NO;
@@ -6992,7 +7005,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSColor *color;
 	NSNumber *number;
 	
-	if(row>=0&&row<[contrastList count])
+	if (row>=0 && row<[contrastList count])
 	{
 		currentStep = row;
 		name = [[contrastList objectAtIndex: row] objectForKey:@"Name"] ;
@@ -7008,7 +7021,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[[NSUserDefaults standardUserDefaults] setFloat:[number floatValue] forKey:@"ROIRegionThickness"];
 		[brushStatSegment setSelectedSegment:0];
 		[originalView setEraserFlag:0];
-		//chang current tool
+		// Change current tool
 		number=[[contrastList objectAtIndex: row] objectForKey:@"CurrentTool"] ;
 		[seedingToolMatrix selectCellAtRow:0 column: 8-[number intValue]];
 		[self changeCurrentTool: (ToolMode)[number intValue]];
@@ -7022,7 +7035,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[[NSUserDefaults standardUserDefaults] setFloat:[sender floatValue] forKey:@"ROIRegionThickness"];
 	unsigned int row = [seedsList selectedRow];
 	
-	if(row>=0 && row<[contrastList count])
+	if (row>=0 && row<[contrastList count])
 	{
 		[[contrastList objectAtIndex: row] setObject: [NSNumber numberWithFloat:[sender floatValue]] forKey:@"BrushWidth"];
 	}
@@ -7050,7 +7063,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     if (currentTool==tROI)
 	{
 		ROI* roi=[[cViewROIList objectAtIndex: 0] objectAtIndex: 0];
-		if(roi&&[roi type]== tROI)
+		if (roi && [roi type]== tROI)
 		{
 			NSRect tempRect=[roi rect];
 			uniIndex++;
@@ -7066,16 +7079,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			curYSpacing=cViewSpace[1];
 			curOriginX= cViewOrigin[0];
 			curOriginY= cViewOrigin[1];
-			if(tempRect.size.width<0)
+			if (tempRect.size.width<0)
 				curOriginX = (tempRect.origin.x+tempRect.size.width)*curXSpacing+curOriginX;		
 			
 			else
 				curOriginX = tempRect.origin.x*curXSpacing+curOriginX;
 			
-			if(tempRect.size.height<0)
+			if (tempRect.size.height<0)
 				curOriginY = (tempRect.origin.y+tempRect.size.height)*curYSpacing+curOriginY;				
 			else
-				curOriginY = tempRect.origin.y*curYSpacing+curOriginY;	
+				curOriginY = tempRect.origin.y*curYSpacing+curOriginY;
+            
 			int i,j,height,width;
 			float point[3];
 			int minx,maxx,miny,maxy,minz,maxz;
@@ -7098,25 +7112,24 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					x=lround((point[0]-vtkOriginalX)/xSpacing);
 					y=lround((point[1]-vtkOriginalY)/ySpacing);
 					z=lround((point[2]-vtkOriginalZ)/zSpacing);
-					if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+					if (x>=0 && x<imageWidth &&
+                        y>=0 && y<imageHeight &&
+                        z>=0 && z<imageAmount)
 					{
 						*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
-						if(minx>x)
+						if (minx>x)
 							minx=x;
-						if(maxx<x)
+						if (maxx<x)
 							maxx=x;
-						if(miny>y)
+						if (miny>y)
 							miny=y;
-						if(maxy<y)
+						if (maxy<y)
 							maxy=y;
-						if(minz>z)
+						if (minz>z)
 							minz=z;
-						if(maxz<z)
+						if (maxz<z)
 							maxz=z;
-						
-						
 					}
-					
 				}
 			
 			[self fixHolesInBarrier: minx :maxx :miny :maxy :minz :maxz :marker];
@@ -7124,14 +7137,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			oViewUserTransform->Translate(0,0,0.5);
 			oViewUserTransform->Translate(0,0,-0.5);
 			[self updateOView];
-			
 		}
 	}
-	else if(currentTool==7&&[[axViewROIList objectAtIndex: 0] count])
+	else if (currentTool==t3DRotate &&
+             [[axViewROIList objectAtIndex: 0] count])
 	{
-		
 		ROI* roi=[[axViewROIList objectAtIndex: 0] objectAtIndex: 0];
-		if(roi&&[roi type]== tOval)
+		if (roi && [roi type]== tOval)
 		{
 			//create normal seeds with current kind
 			NSRect tempRect=[roi rect];
@@ -7163,13 +7175,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			curOriginX= axViewOrigin[0];
 			curOriginY= axViewOrigin[1];
 			
-			if(tempRect.size.width<0)
-				curOriginX = (tempRect.origin.x+tempRect.size.width)*curXSpacing+curOriginX;		
-			
+			if (tempRect.size.width<0)
+				curOriginX = (tempRect.origin.x+tempRect.size.width)*curXSpacing+curOriginX;
 			else
 				curOriginX = tempRect.origin.x*curXSpacing+curOriginX;
 			
-			if(tempRect.size.height<0)
+			if (tempRect.size.height<0)
 				curOriginY = (tempRect.origin.y+tempRect.size.height)*curYSpacing+curOriginY;				
 			else
 				curOriginY = tempRect.origin.y*curYSpacing+curOriginY;	
@@ -7183,26 +7194,28 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			float x0,y0,a,b;
 			a=curXSpacing*fabs(tempRect.size.width)/2;
 			b=curYSpacing*fabs(tempRect.size.height)/2;	
-			x0= curOriginX+a;
-			y0= curOriginY+b;
+			x0 = curOriginX+a;
+			y0 = curOriginY+b;
 			a=a*a;
 			b=b*b;
-			if(maxSpacing==0)
+			if (maxSpacing==0)
 				maxSpacing=sqrt(xSpacing*xSpacing+ySpacing*ySpacing+zSpacing*zSpacing);
-			//step=0.3 pixel!	
+			
+            // step=0.3 pixel!
 			for(j=0;j<height;j++)
 				for(i=0;i<width;i++)
 				{
 					point[0] = curOriginX + i * curXSpacing/3;
 					point[1] = curOriginY + j * curYSpacing/3;
 					point[2] = -maxSpacing;
-					if((point[0]-x0)*(point[0]-x0)*b+(point[1]-y0)*(point[1]-y0)*a<=a*b)
+					if ((point[0]-x0)*(point[0]-x0)*b +
+                        (point[1]-y0)*(point[1]-y0)*a <= a*b)
 					{
 						axViewTransform->TransformPoint(point,point);
 						x=lround((point[0]-vtkOriginalX)/xSpacing);
 						y=lround((point[1]-vtkOriginalY)/ySpacing);
 						z=lround((point[2]-vtkOriginalZ)/zSpacing);
-						if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+						if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 						{
 							*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
 							
@@ -7224,10 +7237,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			NSColor *color=0L;
 			for(ii=0;ii<[contrastList count];ii++)
 			{
-				if([[[contrastList objectAtIndex: ii] objectForKey:@"Name"] isEqualToString:@"barrier"])
+				if ([[[contrastList objectAtIndex: ii] objectForKey:@"Name"] isEqualToString:@"barrier"])
 					color=[[contrastList objectAtIndex: ii] objectForKey:@"Color"] ;	
 			}
-			if(color)
+			if (color)
 				[color getRed:&rv green:&gv blue:&bv alpha:0L];
 			else
 			{
@@ -7254,13 +7267,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			curYSpacing=axViewSpace[1];
 			curOriginX= axViewOrigin[0];
 			curOriginY= axViewOrigin[1];
-			if(tempRect.size.width<0)
-				curOriginX = (tempRect.origin.x+tempRect.size.width)*curXSpacing+curOriginX;		
-			
+			if (tempRect.size.width<0)
+				curOriginX = (tempRect.origin.x+tempRect.size.width)*curXSpacing+curOriginX;
 			else
 				curOriginX = tempRect.origin.x*curXSpacing+curOriginX;
 			
-			if(tempRect.size.height<0)
+			if (tempRect.size.height<0)
 				curOriginY = (tempRect.origin.y+tempRect.size.height)*curYSpacing+curOriginY;				
 			else
 				curOriginY = tempRect.origin.y*curYSpacing+curOriginY;	
@@ -7283,39 +7295,37 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			a=a*a;
 			b=b*b;
 			
-			//step=0.3 pixel!	
+			// step=0.3 pixel!
 			for(j=0;j<height;j++)
 				for(i=0;i<width;i++)
 				{
 					point[0] = curOriginX + i * curXSpacing/3;
 					point[1] = curOriginY + j * curYSpacing/3;
 					point[2] = 0;
-					if((point[0]-x0)*(point[0]-x0)*b+(point[1]-y0)*(point[1]-y0)*a<=a*b)
+					if ((point[0]-x0)*(point[0]-x0)*b +
+                        (point[1]-y0)*(point[1]-y0)*a <= a*b)
 					{
 						axViewTransform->TransformPoint(point,point);
 						x=lround((point[0]-vtkOriginalX)/xSpacing);
 						y=lround((point[1]-vtkOriginalY)/ySpacing);
 						z=lround((point[2]-vtkOriginalZ)/zSpacing);
-						if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+						if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 						{
 							*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
-							if(minx>x)
+							if (minx>x)
 								minx=x;
-							if(maxx<x)
+							if (maxx<x)
 								maxx=x;
-							if(miny>y)
+							if (miny>y)
 								miny=y;
-							if(maxy<y)
+							if (maxy<y)
 								maxy=y;
-							if(minz>z)
+							if (minz>z)
 								minz=z;
-							if(maxz<z)
+							if (maxz<z)
 								maxz=z;
-							
-							
 						}
 					}
-					
 				}
 			
 			[self fixHolesInBarrier: minx :maxx :miny :maxy :minz :maxz :marker];
@@ -7332,112 +7342,189 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSLog( @"converted ROI to seeds");
 #endif
 }
+
 - (void) fixHolesInBarrier:(int)minx :(int)maxx :(int)miny :(int)maxy :(int)minz :(int)maxz :(short unsigned int) marker
 {
 	int x,y,z;
-	if(minx<maxx&&miny<maxy&&minz<maxz)
+	if (minx<maxx && miny<maxy && minz<maxz)
 	{
 		for(z=minz;z<=maxz;z++)
 			for(y=miny;y<=maxy;y++)
 				for(x=minx;x<=maxx;x++)
-					if(*(contrastVolumeData+z*imageSize+y*imageWidth+x) == marker)
+					if (*(contrastVolumeData+z*imageSize+y*imageWidth+x) == marker)
 					{
-						//x,y direction
-						if((y+1)<=maxy&& (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker))
+						// x,y direction
+						if ((y+1)<=maxy &&
+                            (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker))
 						{
-							if((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) == marker))
-								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
-							
-							
-							else if ((x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) == marker))
-								*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
+							if ((x-1)>=minx &&
+                                (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) &&
+                                (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) == marker))
+                            {
+                                *(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
+                            }
+							else if ((x+1)<=maxx &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) == marker))
+                            {
+                                *(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) = marker;
+                            }
 						}
 						
-						//x,z direction
-						if((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
+						// x,z direction
+						if ((z+1)<=maxz &&
+                            (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((x-1)>=minx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x-1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-							
-							else if ((x+1)<=maxx && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x+1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+							if ((x-1)>=minx &&
+                                (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) &&
+                                (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x-1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x+1)<=maxx &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) &&
+                                     (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x+1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
 						}		
 						
-						//y,z direction
-						if((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
+						// y,z direction
+						if ((z+1)<=maxz &&
+                            (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((y-1)>=miny && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-							
-							else if ((y+1)<=maxy && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-						}	
-						//x,y,z direction
-						if((z+1)<=maxz&& (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
+							if ((y-1)>=miny &&
+                               (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) &&
+                               (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((y+1)<=maxy &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) &&
+                                     (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+						}
+
+                        // x,y,z direction
+						if ((z+1)<=maxz &&
+                            (*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((y-1)>=miny && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x-1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-							
-							else if ((y+1)<=maxy && (x-1)>minx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x-1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							else if((y-1)>=miny && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker)  && (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x+1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
-							
-							else if ((y+1)<=maxy && (x+1)<maxx && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) && (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x+1) == marker))
-								*(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
-							
+							if ((y-1) >= miny &&
+                                (x-1) > minx &&
+                                (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) &&
+                                (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) &&
+                                (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x-1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((y+1) <= maxy &&
+                                     (x-1) > minx &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) != marker) &&
+                                     (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x-1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((y-1) >= miny &&
+                                     (x+1) < maxx &&
+                                     (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) != marker) &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) &&
+                                     (*(contrastVolumeData+(z+1)*imageSize+(y-1)*imageWidth+x+1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((y+1) <= maxy &&
+                                     (x+1) < maxx &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) != marker) &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) != marker) &&
+                                     (*(contrastVolumeData+(z+1)*imageSize+(y+1)*imageWidth+x+1) == marker))
+                            {
+                                *(contrastVolumeData+(z+1)*imageSize+y*imageWidth+x) = marker;
+                            }
 						}	
-						//leak from vertex connection
-						if((z-1)>=minz&& (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) != marker))
+
+                        // Leak from vertex connection
+						if ((z-1)>=minz &&
+                            (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) != marker))
 						{
-							if((x-1)>=minx && (y-1)>=miny &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							else if((x+1)<=maxx && (y-1)>=miny &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							else if((x-1)>=minx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							else if((x+1)<=maxx && (y+1)<=maxy &&  (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) && (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) != marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) && (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
-								*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
-							
-							
-						}	
-						
-						
+							if ((x-1)>=minx &&
+                                (y-1)>=miny &&
+                                (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) &&
+                                (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) &&
+                                (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x-1) != marker) &&
+                                (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x-1) == marker) &&
+                                (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) &&
+                                (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x+1)<=maxx &&
+                                     (y-1)>=miny &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x) == marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y-1)*imageWidth+x+1) != marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x+1) == marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+(y-1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x-1)>=minx &&
+                                     (y+1)<=maxy &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x-1) == marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x-1) != marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x-1) == marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x-1) == marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+							else if ((x+1)<=maxx &&
+                                     (y+1)<=maxy &&
+                                     (*(contrastVolumeData+z*imageSize+y*imageWidth+x+1) == marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x) == marker) &&
+                                     (*(contrastVolumeData+z*imageSize+(y+1)*imageWidth+x+1) != marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x+1) == marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x+1) == marker) &&
+                                     (*(contrastVolumeData+(z-1)*imageSize+(y+1)*imageWidth+x) == marker))
+                            {
+                                *(contrastVolumeData+(z-1)*imageSize+y*imageWidth+x) = marker;
+                            }
+						}
 					}
 	}
 }
+
 - (void) checkRootSeeds:(NSArray*)roiList
 {
-	unsigned int i,j,k;
 	ROI* tempROI1,*tempROI2;
 	NSString* comments;
 	NSString* newComments=@"root";
-	for(k=0;k<[totalROIList count];k++)
+	for(int k=0;k<[totalROIList count];k++)
 	{
 		tempROI1=[totalROIList objectAtIndex: k];
-		if([tempROI1 type]==tOval&&![[tempROI1 name] isEqualToString: @"barrier"])
+		if ([tempROI1 type]==tOval && ![[tempROI1 name] isEqualToString: @"barrier"])
 		{
 			
 			comments=[tempROI1 comments];
-			for(i=0;i<[roiList count];i++)
-				for(j=0;j<[[roiList objectAtIndex:i] count];j++)
+			for(int i=0;i<[roiList count];i++)
+				for(int j=0;j<[[roiList objectAtIndex:i] count];j++)
 				{
 					tempROI2=[[roiList objectAtIndex: i] objectAtIndex: j];
-					if([[tempROI2 comments] isEqualToString: comments])
+					if ([[tempROI2 comments] isEqualToString: comments])
 						[tempROI2 setComments:newComments];
 					
 				}
 		}
 	}
-
 }
+
 - (void)saveCurrentSeeds
 {
-	if(!contrastVolumeData)
+	if (!contrastVolumeData)
 		return;
     
 	[parent cleanDataOfWizard];
@@ -7454,7 +7541,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		ROI* temproi=[totalROIList objectAtIndex:i];
 		[seedsnamearray addObject:[temproi name]];
-		if([temproi type]==tOval)
+		if ([temproi type]==tOval)
 			[rootseedsarray addObject:[NSNumber numberWithInt:i]];
 		
 	}
@@ -7465,6 +7552,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[newData release];
 	[parent cleanDataOfWizard];
 }
+
 - (void)loadSavedSeeds
 {
 	NSMutableDictionary* dic=[parent dataOfWizard];
@@ -7472,7 +7560,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSData* seedsData=[dic objectForKey:@"SeedMap"];
 	NSArray* seednamearray=[dic objectForKey:@"SeedNameArray"];
 	NSArray* rootseedarray=[dic objectForKey:@"RootSeedArray"];
-	if(contrastVolumeData)
+	if (contrastVolumeData)
 		free(contrastVolumeData);
 	contrastVolumeData=(unsigned short*)[seedsData bytes];
 	roiReader->SetImportVoidPointer(contrastVolumeData);
@@ -7481,7 +7569,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[contrastList release];
 	contrastList=[dic objectForKey:@"ContrastList"];
 	[contrastList retain];
-
 	
 	[totalROIList removeAllObjects];
 	unsigned int i,j;
@@ -7491,17 +7578,28 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		isarootseed=0;
 		for(j=0;j<[rootseedarray count];j++)
 		{
-			if([[rootseedarray objectAtIndex:j] intValue]==(signed)i)
+			if ([[rootseedarray objectAtIndex:j] intValue]==(signed)i)
 				isarootseed=1;
 		}
 		
 		unsigned char textureBuffer[16];
 		ROI *newROI;
-		if(!isarootseed)
-			newROI=[[ROI alloc] initWithTexture:textureBuffer textWidth:4 textHeight:4 textName:[seednamearray objectAtIndex:i] positionX:0 positionY:0 spacingX:xSpacing spacingY:ySpacing imageOrigin:NSMakePoint( 0,  0)];
+		if (!isarootseed)
+			newROI=[[ROI alloc] initWithTexture:textureBuffer
+                                      textWidth:4
+                                     textHeight:4
+                                       textName:[seednamearray objectAtIndex:i]
+                                      positionX:0
+                                      positionY:0
+                                       spacingX:xSpacing
+                                       spacingY:ySpacing
+                                    imageOrigin:NSMakePoint( 0,  0)];
 		else
 		{
-			newROI=[[ROI alloc] initWithType: tOval :xSpacing :ySpacing : NSMakePoint( 0, 0)];
+			newROI=[[ROI alloc] initWithType: tOval
+                                            : xSpacing
+                                            : ySpacing
+                                            : NSMakePoint( 0, 0)];
 			[newROI setName:[seednamearray objectAtIndex:i]];
 		}
 		
@@ -7509,15 +7607,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(j=0;j<[contrastList count];j++)
 		{
 			NSString* namestr=[[contrastList objectAtIndex:j] objectForKey:@"Name"];
-			if([namestr isEqualToString:[seednamearray objectAtIndex:i]])
+			if ([namestr isEqualToString:[seednamearray objectAtIndex:i]])
 			{
 				CGFloat r, g, b;
 				
 				[[[contrastList objectAtIndex:j] objectForKey:@"Color"] getRed:&r green:&g blue:&b alpha:0L];
-				
-				
-				
-				c.red =(short unsigned int) (r * 65535.);
+
+                c.red =(short unsigned int) (r * 65535.);
 				c.green =(short unsigned int)( g * 65535.);
 				c.blue = (short unsigned int)(b * 65535.);
 				break;
@@ -7530,10 +7626,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[newROI setColor:c];
 		[totalROIList addObject:newROI];
 		[newROI release];
-		
 	}
-	
-	
 }
 
 #pragma mark - 4. Centerlines functions
@@ -7542,7 +7635,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	NSMutableDictionary* dic=[parent dataOfWizard];
 	if (!cpr3DPaths)
-		if([dic objectForKey:@"CenterlinesNames"]&&[dic objectForKey:@"CenterlineArrays"])
+		if ([dic objectForKey:@"CenterlinesNames"]&&[dic objectForKey:@"CenterlineArrays"])
 			[self loadCenterlinesInPatientsCoordination];
     
 	if (!cpr3DPaths)
@@ -7595,7 +7688,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[centerlineTapTips setStringValue:@"Draw a open polygon on the left window while scrolling and rotating. The centerline can be refined using vessel analysis tools later."];
 		isDrawingACenterline=1;
 		currentPathMode=ROI_drawing;
-		if(curvedMPR2DPath)
+		if (curvedMPR2DPath)
 		{
 			[[oViewROIList objectAtIndex:0]	removeAllObjects];		
 		}
@@ -7603,7 +7696,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[curvedMPR2DPath release];
 		curvedMPR2DPath=nil;
 		isRemoveROIBySelf=0;
-		if(curvedMPR3DPath)
+		if (curvedMPR3DPath)
 			[curvedMPR3DPath removeAllObjects];
 		
 		[self changeCurrentTool:tMeasure];
@@ -7643,9 +7736,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		meanz=[[reversedcenterline objectAtIndex:0] z]-[[reversedcenterline objectAtIndex:1] z];
 		float firststeplen=sqrt(meanx*meanx+meany*meany+meanz*meanz);
 		float resamplesteplen=[resampleRatioSlider floatValue];
-		if(firststeplen>resamplesteplen&&[reversedcenterline count]>2)
+		if (firststeplen>resamplesteplen&&[reversedcenterline count]>2)
 		{
-			
 			resamplesteplen+=0.1;
 			meanx=((firststeplen-resamplesteplen)*[[reversedcenterline objectAtIndex:0] x]+resamplesteplen*[[reversedcenterline objectAtIndex:1] x])/firststeplen;
 			meany=((firststeplen-resamplesteplen)*[[reversedcenterline objectAtIndex:0] y]+resamplesteplen*[[reversedcenterline objectAtIndex:1] y])/firststeplen;
@@ -7657,24 +7749,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[reversedcenterline insertObject:anewpoint atIndex:1];
 			[anewpoint release];
 		}
-		if([reversedcenterline count]>=2)
+
+        if ([reversedcenterline count]>=2)
 		{
 			[cpr3DPaths addObject:reversedcenterline];
 			[centerlinesNameArrays addObject:@"Centerline"];
 			float pathlen=[self calculateLengthOfAPath:[cpr3DPaths lastObject]];
 			[centerlinesLengthArrays addObject:[NSNumber numberWithFloat:pathlen]];
 		}		
-		[centerlinesList reloadData];
-
+		
+        [centerlinesList reloadData];
 		[centerlinesList selectRow:([cpr3DPaths count]-1) byExtendingSelection: YES];
 		[self selectANewCenterline:centerlinesList];
-
-
-		
-	}	
-	
-	
+	}
 }
+
 -(void) recalculateAllCenterlinesLength
 {
 	[centerlinesLengthArrays removeAllObjects];
@@ -7728,7 +7817,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	needSaveCenterlines=YES;
 	int i;
 
-	if(!isStraightenedCPR)
+	if (!isStraightenedCPR)
 	{
 		float path2DLength=0;
 		float steplength=0;
@@ -7740,13 +7829,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			steplength = [curvedMPR2DPath Length:[[points2D objectAtIndex:i] point] :[[points2D objectAtIndex:i+1] point]];
 			
-			if(path2DLength+steplength >= curLocation)
+			if (path2DLength+steplength >= curLocation)
 				break;
 			
 			path2DLength += steplength;		
 		}
-		
-		
 	}
 	else
 	{
@@ -7772,20 +7859,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			{
 				prepoint[ii]=position[ii];
 			}
-			if(path3DLength>[axImageSlider floatValue])
+
+            if (path3DLength>[axImageSlider floatValue])
 				break;
-			
 		}
-		
 	}
-	pointNumber=[curvedMPR3DPath count];
-	if(tag==0)
+
+    pointNumber=[curvedMPR3DPath count];
+	if (tag==0)
 	{
 		int j;
 		i--;
 		for(j=0;j<i;j++)
 			[curvedMPR3DPath removeObjectAtIndex:0];
-		
 		
 		int lastpt=[curvedMPR3DPath count]-1;
 		for(j=0;j<lastpt+1;j++)
@@ -7793,7 +7879,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 
 		unsigned int row = [centerlinesList selectedRow];
-		if(row>=0&&row<[cpr3DPaths count])
+		if (row>=0&&row<[cpr3DPaths count])
 		{
 			
 			[cpr3DPaths replaceObjectAtIndex:row withObject:reversedcenterline];
@@ -7804,12 +7890,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[centerlinesList reloadData];
 		[centerlinesList selectRow:row byExtendingSelection: YES];
 		[self selectANewCenterline:centerlinesList];
-		
-		
 	}
-	else if(tag==1)
+	else if (tag==1)
 	{
-		
 		int j;
 		for(j=i+1;j<pointNumber;j++)
 			[curvedMPR3DPath removeLastObject];
@@ -7818,7 +7901,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(j=0;j<lastpt+1;j++)
 			[reversedcenterline addObject:[curvedMPR3DPath objectAtIndex:lastpt-j]];	
 		unsigned int row = [centerlinesList selectedRow];
-		if(row>=0&&row<[cpr3DPaths count])
+		if (row>=0 && row<[cpr3DPaths count])
 		{
 			
 			[cpr3DPaths replaceObjectAtIndex:row withObject:reversedcenterline];
@@ -7849,39 +7932,37 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(j=0;j<[[curRoiList objectAtIndex:i] count];j++)
 		{
 			tempROI = [[curRoiList objectAtIndex: i] objectAtIndex:j];
-			if([tempROI type]==tPlain && [[tempROI name] isEqualToString: roiName])
+			if ([tempROI type]==tPlain && [[tempROI name] isEqualToString: roiName])
 			{
 				[tempRoiList addObject: tempROI];
 				
 			}
-			if([tempROI type]==t2DPoint && [[tempROI name] isEqualToString: roiName])
+			if ([tempROI type]==t2DPoint && [[tempROI name] isEqualToString: roiName])
 			{
 				err=0;
-				
 			}
 		}
-	if(err)
+
+    if (err)
 	{
 		[tempRoiList removeAllObjects];
 		[temp3DPath release];
 		return nil;	
 	}
 	
-	
 	pointNum=[tempRoiList count];
-	
 	
 	for(i=0;i<pointNum;i++)
 	{
 		for(j=0;j<[tempRoiList count];j++)
 		{
 			tempROI=[tempRoiList objectAtIndex: j];
-			if([[tempROI comments] intValue]==(signed)i)
+			if ([[tempROI comments] intValue]==(signed)i)
 			{
 				x = [tempROI textureUpLeftCornerX];
 				y = [tempROI textureUpLeftCornerY];
 				for(k=0;k<[curRoiList count];k++)
-					if([[curRoiList objectAtIndex:k] containsObject:tempROI])
+					if ([[curRoiList objectAtIndex:k] containsObject:tempROI])
 					{
 						z=k;
 						k=[curRoiList count];
@@ -7902,21 +7983,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				
 			}
 		}
-		if([temp3DPath count]<=i)
+
+        if ([temp3DPath count]<=i)
 		{
 			err=1;
 			i=pointNum;
 		}
-		
-		
 	}
 	
 	[tempRoiList removeAllObjects];
-	if(!err)
+	if (!err)
 	{
-		
 		return temp3DPath;
-		
 	}
 	else
 	{
@@ -7924,18 +8002,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[temp3DPath release];
 		return nil;	
 	}
-	
 }
-- (void) setCurrentCPRPathWithPath:(NSArray*)path:(float)resampelrate
+
+- (void) setCurrentCPRPathWithPath:(NSArray*)path
+                                  :(float)resampelrate
 {
 	[curvedMPR3DPath removeAllObjects];
 	int pointNum=[path count]-1;
 	unsigned int i;
 	for(i=0;i<[path count];i++)
 		[curvedMPR3DPath addObject: [path objectAtIndex: pointNum - i]];
-	if(resampelrate>0)
+
+    if (resampelrate>0)
 		[self resample3DPath:resampelrate:curvedMPR3DPath];
-	if(!curvedMPR2DPath)
+    
+	if (!curvedMPR2DPath)
 	{
 		DCMPix * curImage= [oViewPixList objectAtIndex:0];
 		curvedMPR2DPath=[[ROI alloc] initWithType: tOpenPolygon :[curImage pixelSpacingX] :[curImage pixelSpacingY] : NSMakePoint( [curImage originX], [curImage originY])];
@@ -7986,12 +8067,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (void) resample3DPath:(float)step:(NSMutableArray*)apath
 {
 	
-	if(step<0)
+	if (step<0)
 		return;
     
 	int i,origincount;
 	origincount=(int)[apath count];
-	if(origincount==2)
+	if (origincount==2)
 		return;
     
 	float resamplestep=(step*step);//*4*(xSpacing*xSpacing+ySpacing*ySpacing+zSpacing*xSpacing);
@@ -8010,21 +8091,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		nexty=[a3DPoint y];
 		nextz=[a3DPoint z];
 		distance3d=(nextx-prex)*(nextx-prex)+(nexty-prey)*(nexty-prey)+(nextz-prez)*(nextz-prez);
-		if(distance3d<resamplestep)
+		if (distance3d<resamplestep)
 		{
-			[apath removeObjectAtIndex:i ];
-			
+			[apath removeObjectAtIndex:i];
 		}
 		else
 		{
 			prex=nextx;	prey=nexty;	prez=nextz;
 			totallength+=sqrt(distance3d);
 		}
-		
 	}
-
-	
-	
 	
 	int controlnodenum=(int)[apath count];
 	
@@ -8035,9 +8111,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	originpathy=originpath+controlnodenum;
 	originpathz=originpath+2*controlnodenum;
 	soomthedpathlen=4*totallength/xSpacing;
-	if(soomthedpath)
+	if (soomthedpath)
 		free(soomthedpath);
-	soomthedpath=(double*)malloc(soomthedpathlen*sizeof(double)*3);
+
+    soomthedpath=(double*)malloc(soomthedpathlen*sizeof(double)*3);
 	for(i=0;i<controlnodenum;i++)
 	{
 		a3DPoint=[apath objectAtIndex: i];
@@ -8070,7 +8147,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (IBAction)selectANewCenterline:(id)sender
 {
 	unsigned int row = [centerlinesList selectedRow];
-	if(row>=0&&row<[cpr3DPaths count])
+	if (row>=0 && row<[cpr3DPaths count])
 	{
 		[curvedMPREven3DPath removeAllObjects];
 		[curvedMPREven3DPath release];
@@ -8078,7 +8155,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		[self setCurrentCPRPathWithPath:[cpr3DPaths objectAtIndex:row]:[resampleRatioSlider floatValue]];
 	}
-	
 }
 
 - (void) convertCenterlinesToVTKCoordinate:(NSArray*)centerlines
@@ -8096,18 +8172,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[temppoint setX: vtkOriginalX + x*xSpacing+xSpacing*0.5];
 			[temppoint setY: vtkOriginalY + y*ySpacing+ySpacing*0.5];
 			[temppoint setZ: vtkOriginalZ + z*zSpacing+zSpacing*0.5];
-			
 		}
-	
 }
+
 - (IBAction)setResampleRatio:(id)sender
 {
 	[resampleRatioText setFloatValue: [sender floatValue]];
 	
 	unsigned int row = [centerlinesList selectedRow];
 	
-	
-	if(row>=0&&row<[cpr3DPaths count])
+	if (row>=0 && row<[cpr3DPaths count])
 	{
 		[curvedMPREven3DPath removeAllObjects];
 		[curvedMPREven3DPath release];
@@ -8116,17 +8190,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	
 }
+
 - (IBAction)exportCenterlines:(id)sender
 {
 	NSArray* pathsList=cpr3DPaths;
 	NSArray* namesList=centerlinesNameArrays;
 	
-	NSArray				*pixList = [originalViewController pixList];
+	NSArray *pixList = [originalViewController pixList];
 	curPix = [pixList objectAtIndex: 0];
 	id waitWindow = [originalViewController startWaitWindow:@"processing"];		
 	long size=sizeof(float)*imageWidth*imageHeight*imageAmount;
 	float* newVolumeData=(float*)malloc(size);
-	if(!newVolumeData)
+	if (!newVolumeData)
 	{
 		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
@@ -8160,7 +8235,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				   :newData];  
 	if (new2DViewer)
 	{
-		NSMutableArray      *newROIList= [new2DViewer roiList];
+		NSMutableArray *newROIList= [new2DViewer roiList];
 		curPix = [pixList objectAtIndex: 0];
 		for(i=0;i<[pathsList count];i++)
 			[self creatROIfrom3DPath:[pathsList objectAtIndex: i]:[namesList objectAtIndex:i]:newROIList];
@@ -8169,15 +8244,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[originalViewController endWaitWindow: waitWindow];
 	if (parent)
 	{
-		NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
-		if(!temparray)
+		NSMutableArray *temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
+		if (!temparray)
 		{
 			temparray=[NSMutableArray arrayWithCapacity:0];
 			[[parent dataOfWizard] setObject:temparray forKey:@"VCList"];
 		}
 		[temparray addObject:new2DViewer];
 		temparray=[[parent dataOfWizard] objectForKey: @"VCTitleList"];
-		if(!temparray)
+		if (!temparray)
 		{
 			temparray=[NSMutableArray arrayWithCapacity:0];
 			[[parent dataOfWizard] setObject:temparray forKey:@"VCTitleList"];
@@ -8186,9 +8261,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	//[[self window] setFrame:screenrect display:YES ];
 	[[self window] makeKeyAndOrderFront:parent];
-	
 }
-- (void) creatROIfrom3DPath:(NSArray*)path:(NSString*)name:(NSMutableArray*)newViewerROIList
+
+- (void) creatROIfrom3DPath:(NSArray*)path
+                           :(NSString*)name
+                           :(NSMutableArray*)newViewerROIList
 {
 	RGBColor color;
 	color.red = 65535;
@@ -8213,7 +8290,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		z=(int)((zv-vtkOriginalZ)/zSpacing);
 		textureBuffer = (unsigned char *) malloc(sizeof(unsigned char ));
 		*textureBuffer = 0xff;
-		ROI *newROI=[[ROI alloc] initWithTexture:textureBuffer textWidth:1 textHeight:1 textName:name positionX:x positionY:y spacingX:[curPix pixelSpacingY] spacingY:[curPix pixelSpacingY]  imageOrigin:NSMakePoint( [curPix originX], [curPix originY])];
+		ROI *newROI=[[ROI alloc] initWithTexture:textureBuffer
+                                       textWidth:1
+                                      textHeight:1
+                                        textName:name
+                                       positionX:x
+                                       positionY:y
+                                        spacingX:[curPix pixelSpacingY]
+                                        spacingY:[curPix pixelSpacingY]
+                                     imageOrigin:NSMakePoint( [curPix originX], [curPix originY])];
 		
 		[[newViewerROIList objectAtIndex: z] addObject:newROI];
 		[newROI setColor: color];
@@ -8222,7 +8307,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		pointIndex++;
 		[newROI release];
 	}
-	if([path count])
+
+    if ([path count])
 	{
 		temp3dpoint=[path objectAtIndex: 0];
 		xv=[temp3dpoint x];
@@ -8232,50 +8318,55 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		y=(int)((yv-vtkOriginalY)/ySpacing);
 		z=(int)((zv-vtkOriginalZ)/zSpacing);
 	}
-	NSRect roiRect;
+
+    NSRect roiRect;
 	roiRect.origin.x=x;
 	roiRect.origin.y=y;
 	roiRect.size.width=roiRect.size.height=1;
-	ROI *endPointROI = [[ROI alloc] initWithType: t2DPoint :[curPix pixelSpacingX] :[curPix pixelSpacingY] : NSMakePoint( [curPix originX], [curPix originY])];
+	ROI *endPointROI = [[ROI alloc] initWithType: t2DPoint
+                                                : [curPix pixelSpacingX]
+                                                : [curPix pixelSpacingY]
+                                                : NSMakePoint( [curPix originX], [curPix originY])];
 	[endPointROI setName:name];
 	[endPointROI setROIRect:roiRect];
 	[[newViewerROIList objectAtIndex: z] addObject:endPointROI];
 	[endPointROI release];
-	
 }
 
 - (IBAction)removeCenterline:(id)sender
 {
 	needSaveCenterlines=YES;
 	unsigned int row = [centerlinesList selectedRow];
-	if(row>=0&&row<[cpr3DPaths count])
+	if (row>=0 && row<[cpr3DPaths count])
 	{
-		NSMutableArray      * path= [cpr3DPaths objectAtIndex: row];
+		NSMutableArray * path= [cpr3DPaths objectAtIndex: row];
 		[path removeAllObjects];
 		[cpr3DPaths removeObjectAtIndex:row];
 		[centerlinesNameArrays removeObjectAtIndex:row];
 		[centerlinesLengthArrays removeObjectAtIndex:row];
 	}		
-	[centerlinesList reloadData];
-	if(row>=[cpr3DPaths count])
+
+    [centerlinesList reloadData];
+	if (row>=[cpr3DPaths count])
 		row=[cpr3DPaths count]-1;
-	[centerlinesList selectRow:row byExtendingSelection:NO];
-	[self selectANewCenterline: centerlinesList];	
 	
+    [centerlinesList selectRow:row byExtendingSelection:NO];
+	[self selectANewCenterline: centerlinesList];
 }
+
 -(BOOL)loadCenterlinesInPatientsCoordination
 {
 	float vector[9];
-	NSArray				*pixList = [originalViewController pixList];
+	NSArray *pixList = [originalViewController pixList];
 	DCMPix	*firstPix=[pixList objectAtIndex: 0];
 	[firstPix orientation:vector];
 	NSMutableDictionary* dic=[parent dataOfWizard];
 
-	if(centerlinesNameArrays)
+	if (centerlinesNameArrays)
 		[centerlinesNameArrays release];
 	centerlinesNameArrays=[dic objectForKey:@"CenterlinesNames"];
 	[centerlinesNameArrays retain];
-	if(!cpr3DPaths)
+	if (!cpr3DPaths)
 		cpr3DPaths=[[NSMutableArray alloc] initWithCapacity:0];
 	NSMutableArray* savedCenterlines=[dic objectForKey:@"CenterlineArrays"];
 	unsigned i,j;
@@ -8414,13 +8505,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[self updateOView];
 			[self cAndAxViewReset];
 			[self resetSliders];	
-			//if(!cpr3DPaths||[cpr3DPaths count]==0)
+			//if (!cpr3DPaths||[cpr3DPaths count]==0)
 			{
-				if(!cpr3DPaths)
+				if (!cpr3DPaths)
 					cpr3DPaths=[[NSMutableArray alloc] initWithCapacity:0];
-				if(!centerlinesNameArrays)
+				if (!centerlinesNameArrays)
 					centerlinesNameArrays=[[NSMutableArray alloc] initWithCapacity:0];
-				if(!centerlinesLengthArrays)
+				if (!centerlinesLengthArrays)
 					centerlinesLengthArrays=[[NSMutableArray alloc] initWithCapacity:0];
 				
 				NSMutableArray* reversedcenterline=[NSMutableArray arrayWithCapacity:0];
@@ -8462,7 +8553,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (IBAction)exportCenterlineToText:(id)sender
 {
-	if(curvedMPREven3DPath==nil)
+	if (curvedMPREven3DPath==nil)
 		return;
     
 	NSSavePanel *panel = [NSSavePanel savePanel];
@@ -8581,48 +8672,48 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	vesselAnalysisLongitudeStep=[vesselAnalysisParaStepSlider floatValue];
 	vesselAnalysisCrossSectionStep=cViewSpace[1];
 	int showShortAxisInAx=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVShowShortAxisInAxView"];
-	if(showShortAxisInAx==0)
+	if (showShortAxisInAx==0)
 	{
 		showShortAxisInAx=1;
 		[[NSUserDefaults standardUserDefaults] setInteger:showShortAxisInAx forKey:@"CMIVShowShortAxisInAxView"];
 	}
-	if(showShortAxisInAx==-1)
+	if (showShortAxisInAx==-1)
 		[vesselAnalysisParaShowShortAxisOption setState:NSControlStateValueOff];
 	else
 		[vesselAnalysisParaShowShortAxisOption setState:NSControlStateValueOn];
 	int showLongAxisInAx=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVShowLongAxisInAxView"];
-	if(showLongAxisInAx==0)
+	if (showLongAxisInAx==0)
 	{
 		showLongAxisInAx=1;
 		[[NSUserDefaults standardUserDefaults] setInteger:showLongAxisInAx forKey:@"CMIVShowLongAxisInAxView"];
 	}
-	if(showLongAxisInAx==-1)
+	if (showLongAxisInAx==-1)
 		[vesselAnalysisParaShowLongAxisOption setState:NSControlStateValueOff];
 	else
 		[vesselAnalysisParaShowLongAxisOption setState:NSControlStateValueOn];
 	
 	int showMeanAxisInAx=[[NSUserDefaults standardUserDefaults] integerForKey:@"CMIVShowMeanAxisInAxView"];
-	if(showMeanAxisInAx==0)
+	if (showMeanAxisInAx==0)
 	{
 		showMeanAxisInAx=-1;
 		[[NSUserDefaults standardUserDefaults] setInteger:showMeanAxisInAx forKey:@"CMIVShowMeanAxisInAxView"];
 	}
-	if(showMeanAxisInAx==-1)
+	if (showMeanAxisInAx==-1)
 		[vesselAnalysisParaShowMeanAxisOption setState:NSControlStateValueOff];
 	else
 		[vesselAnalysisParaShowMeanAxisOption setState:NSControlStateValueOn];
-	
 }
+
 - (IBAction)changeROIShowingInAxView:(id)sender
 {
 	int showShortAxisInAx=-1,showLongAxisInAx=-1,showMeanAxisInAx=-1;
-	if([vesselAnalysisParaShowShortAxisOption state]==NSControlStateValueOn)
+	if ([vesselAnalysisParaShowShortAxisOption state]==NSControlStateValueOn)
 		showShortAxisInAx=1;
 
-	if([vesselAnalysisParaShowLongAxisOption  state]==NSControlStateValueOn)
+	if ([vesselAnalysisParaShowLongAxisOption  state]==NSControlStateValueOn)
 		showLongAxisInAx=1;
 			
-	if([vesselAnalysisParaShowMeanAxisOption   state]==NSControlStateValueOn)
+	if ([vesselAnalysisParaShowMeanAxisOption   state]==NSControlStateValueOn)
 		showMeanAxisInAx=1;
 
 	[[NSUserDefaults standardUserDefaults] setInteger:showShortAxisInAx forKey:@"CMIVShowShortAxisInAxView"];
@@ -8630,21 +8721,22 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[[NSUserDefaults standardUserDefaults] setInteger:showMeanAxisInAx forKey:@"CMIVShowMeanAxisInAxView"];
 	[self updateAxViewMeasureAfterROIChanged];
 }
+
 - (IBAction)vesselAnalysisSetNewSource:(id)sender
 {
 	[plotView removeCurCurve];
-	if([@"Cross Section Area(mm^2)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisArea count])
+	if ([@"Cross Section Area(mm^2)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisArea count])
 		[plotView setACurve:@"area":vesselAnalysisArea:[NSColor greenColor]:vesselAnalysisCrossSectionStep:1.0];
-	else if([@"Cross Section Shortest Diameter(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisShortDiameter count])
+	else if ([@"Cross Section Shortest Diameter(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisShortDiameter count])
 		[plotView setACurve:@"shortDiameter":vesselAnalysisShortDiameter:[NSColor cyanColor]:vesselAnalysisCrossSectionStep:1.0];
-	else if([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
+	else if ([@"Longitudinal Section Width(mm)" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]])
 	{
-		if([[cViewROIList objectAtIndex: 0] containsObject:cViewMeasurePolygon] && [vesselAnalysisLongDiameter count])
+		if ([[cViewROIList objectAtIndex: 0] containsObject:cViewMeasurePolygon] && [vesselAnalysisLongDiameter count])
 			[plotView setACurve:@"longitudeDiameter":vesselAnalysisLongDiameter:[NSColor cyanColor]:vesselAnalysisLongitudeStep:1.0];
 	}
-	else if([@"Cross Section Mean Hu" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisMeanHu count])
+	else if ([@"Cross Section Mean Hu" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisMeanHu count])
 		[plotView setACurve:@"MeanHu":vesselAnalysisMeanHu:[NSColor cyanColor]:vesselAnalysisCrossSectionStep:1.0];
-	else if([@"Cross Section Max Hu" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisMaxHu count])
+	else if ([@"Cross Section Max Hu" isEqualToString:[vesselAnalysisPlotSourceButton titleOfSelectedItem]] && [vesselAnalysisMaxHu count])
 		[plotView setACurve:@"MaxHu":vesselAnalysisMaxHu:[NSColor cyanColor]:vesselAnalysisCrossSectionStep:1.0];
 
 }
@@ -8666,14 +8758,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (IBAction)vesselAnalysisSetStep:(id)sender
 {
-	if(vesselAnalysisParaStepText == sender)
+	if (vesselAnalysisParaStepText == sender)
 		[vesselAnalysisParaStepSlider setFloatValue:[vesselAnalysisParaStepText floatValue]];
 	[vesselAnalysisParaStepText  setFloatValue:[vesselAnalysisParaStepSlider floatValue]];
 }
 
 - (IBAction)vesselAnalysisChoiceADefaultParaset:(id)sender
 {
-	if([[vesselAnalysisParaSetNameCombo stringValue] isEqualToString:@"Coronary arteries"])
+	if ([[vesselAnalysisParaSetNameCombo stringValue] isEqualToString:@"Coronary arteries"])
 	{
 
 		[vesselAnalysisParaStepText setFloatValue:1.0] ;
@@ -8688,7 +8780,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[axViewUpperThresholdSlider setFloatValue:650.0] ;	
 		[axViewUpperThresholdText setFloatValue:650.0] ;	
 	}
-	else if([[vesselAnalysisParaSetNameCombo stringValue] isEqualToString:@"Aorta"])
+	else if ([[vesselAnalysisParaSetNameCombo stringValue] isEqualToString:@"Aorta"])
 	{
 		[vesselAnalysisParaStepText setFloatValue:5.0] ;
 		[vesselAnalysisParaStepSlider setFloatValue:5.0] ;	
@@ -8702,7 +8794,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[axViewUpperThresholdSlider setFloatValue:750.0] ;	
 		[axViewUpperThresholdText setFloatValue:750.0] ;
 	}
-	else if([[vesselAnalysisParaSetNameCombo stringValue] isEqualToString:@"Extremity arteries"])
+	else if ([[vesselAnalysisParaSetNameCombo stringValue] isEqualToString:@"Extremity arteries"])
 	{
 
 		[vesselAnalysisParaStepText setFloatValue:3.0] ;
@@ -8718,14 +8810,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[axViewUpperThresholdText setFloatValue:650.0] ;
 	}
 }
+
 - (void)syncWithPlot
 {
-	if([plotView curPtX]<[axImageSlider maxValue]&&[plotView curPtX]>=0)
+	if ([plotView curPtX]<[axImageSlider maxValue]&&[plotView curPtX]>=0)
 		[axImageSlider setFloatValue:[plotView curPtX] ];
-	[self pageAxView:axImageSlider];
 
-	
+    [self pageAxView:axImageSlider];
 }
+
 - (void)performCrossSectionAnalysis
 {
 	[axViewMeasurePolygon setComments: @"updating"];
@@ -8757,7 +8850,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for (i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 		{
 			temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-			if([temproi type]==tClosedPolygon)
+			if ([temproi type]==tClosedPolygon)
 				break;
 		}
 		if (temproi && [temproi type]==tClosedPolygon)
@@ -8766,7 +8859,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[endPoints removeAllObjects];
 			float meandiameter=[self measureAPolygonROI:temproi :endPoints];
 			float sdiameter=0;
-			if(meandiameter>0)
+			if (meandiameter>0)
 			{
 				CMIV3DPoint* apoint=[endPoints objectAtIndex:1];
 				x1=[apoint x];
@@ -8844,27 +8937,25 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		NSRect plotframe= [plotView frame];
 		NSRect paraframe=[vesselAnalysisPanel frame];
 		[vesselAnalysisPanel setHidden:YES];
-		if(plotframe.origin.x+plotframe.size.width<paraframe.origin.x+paraframe.size.width)
+		if (plotframe.origin.x+plotframe.size.width < paraframe.origin.x+paraframe.size.width)
 		{
 			plotframe.size.width=paraframe.origin.x+paraframe.size.width-plotframe.origin.x;
 			[plotView setFrame:plotframe];
 		}
-		
-		
-	}	
+	}
 	else
 	{
 		NSRect plotframe= [plotView frame];
 		NSRect paraframe=[vesselAnalysisPanel frame];
 		[vesselAnalysisPanel setHidden:NO];
-		if(plotframe.origin.x+plotframe.size.width>=paraframe.origin.x)
+		if (plotframe.origin.x+plotframe.size.width>=paraframe.origin.x)
 		{
 			plotframe.size.width=paraframe.origin.x-plotframe.origin.x;
 			[plotView setFrame:plotframe];
 		}
-		
-	}	
+	}
 }
+
 - (IBAction)vesselAnalysisSetNeedRefineCenterline:(id)sender
 {
 	
@@ -8884,12 +8975,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int x,y,x1,y1;
 	x1=(int)((-axViewCostMapWidth*spaceX/2-originX)/spaceX);
 	y1=(int)((-axViewCostMapHeight*spaceY/2-originY)/spaceY);
-	if(axViewConnectednessCostMapMaxSize<(signed)(axViewCostMapHeight*axViewCostMapWidth*sizeof(float)))
+	if (axViewConnectednessCostMapMaxSize<(signed)(axViewCostMapHeight*axViewCostMapWidth*sizeof(float)))
 	{
 		free(axViewConnectednessCostMap);
 		axViewConnectednessCostMapMaxSize=axViewCostMapHeight*axViewCostMapWidth*sizeof(float)*2;
 		axViewConnectednessCostMap=(float*)malloc(axViewConnectednessCostMapMaxSize);
-		if(!axViewConnectednessCostMap)
+		if (!axViewConnectednessCostMap)
 			return;
 	}
 
@@ -8919,14 +9010,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
    axViewLevelsetRect.size.height =axViewCostMapHeight;
 	
 	float initdiameter;
-	//if(lastLevelsetDiameter>0)
+	//if (lastLevelsetDiameter>0)
 	//	initdiameter=lastLevelsetDiameter;
 	//else
 		initdiameter=2.0;
-	if(![self thresholdLeveLSetAlgorithm:axViewConnectednessCostMap:axViewCostMapWidth:axViewCostMapHeight:x1:y1:spaceX:spaceY:levelsetCurvatureScaling:axViewLowerThresholdFloat:axViewUpperThresholdFloat:initdiameter:connectednessROIBuffer:axViewMeasurePolygon:0])  	
+	if (![self thresholdLeveLSetAlgorithm:axViewConnectednessCostMap :axViewCostMapWidth :axViewCostMapHeight :x1 :y1 :spaceX :spaceY :levelsetCurvatureScaling :axViewLowerThresholdFloat :axViewUpperThresholdFloat :initdiameter :connectednessROIBuffer :axViewMeasurePolygon:0])
 	{
-		/* do not show brush roi of segment area
-		if(connectednessROIBuffer)
+		/* Do not show brush roi of segment area
+		if (connectednessROIBuffer)
 		{
 			unsigned char* textureBuffer= connectednessROIBuffer;
 		
@@ -8989,20 +9080,33 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	rect.origin.y=y1;
 	rect.size.width =width;
 	rect.size.height =height;
-	if(connectednessROIBuffer&&connectednessROIBufferMaxSize<(signed)(width*height*sizeof(char)))
+	if (connectednessROIBuffer && connectednessROIBufferMaxSize < (signed)(width*height*sizeof(char)))
 	{
 		free(connectednessROIBuffer);
 		connectednessROIBufferMaxSize=width*height*sizeof(char)*2;
 		connectednessROIBuffer=(unsigned char*)malloc(connectednessROIBufferMaxSize);
-		if(!connectednessROIBuffer)
+		if (!connectednessROIBuffer)
 			return;
 	}
 
     [cViewMeasurePolygon setComments: @"updating"];
-	if(![self thresholdLeveLSetAlgorithm:im:width:height:x1:y1:spaceX:spaceY:[axViewSigemaText floatValue]:[axViewLowerThresholdText floatValue]:[axViewUpperThresholdText floatValue]:2:connectednessROIBuffer:cViewMeasurePolygon:1])   
+	if (![self thresholdLeveLSetAlgorithm:im
+                                         :width
+                                         :height
+                                         :x1
+                                         :y1
+                                         :spaceX
+                                         :spaceY
+                                         :[axViewSigemaText floatValue]
+                                         :[axViewLowerThresholdText floatValue]
+                                         :[axViewUpperThresholdText floatValue]
+                                         :2
+                                         :connectednessROIBuffer
+                                         :cViewMeasurePolygon
+                                         :1])
 	{
 		/*do not show brush roi of segment area
-		if(connectednessROIBuffer)
+		if (connectednessROIBuffer)
 		{
 			unsigned char* textureBuffer= connectednessROIBuffer;
 			
@@ -9107,21 +9211,18 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	thresholdSegmentation->SetLowerThreshold(lowerthreshold );
 	thresholdSegmentation->SetIsoSurfaceValue(0.0);
 	thresholdSegmentation->SetInput( fastMarching->GetOutput() );
-	if(isNeedSmoothImgBeforeSegment)
+	if (isNeedSmoothImgBeforeSegment)
 		thresholdSegmentation->SetFeatureImage( smoothing->GetOutput() );
 	else
 		thresholdSegmentation->SetFeatureImage( importFilter->GetOutput() );
 	thresholder->SetInput( thresholdSegmentation->GetOutput() );
-	
-		
 
 	typedef FastMarchingFilterType::NodeContainer           NodeContainer;
 	typedef FastMarchingFilterType::NodeType                NodeType;
 	
 	NodeContainer::Pointer seeds = NodeContainer::New();
 	
-	InternalImageType::IndexType  seedPosition;
-	
+	InternalImageType::IndexType seedPosition;
 	
 	const double initialDistance = initdis;
 	
@@ -9130,19 +9231,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	const double seedValue = - initialDistance;
 	seeds->Initialize();
 	int ii;
-	if(seedmode==0)
+	if (seedmode==0)
 	{
-	
 		seedPosition[0] = imgwidth/2;//start from center
 		seedPosition[1] = imgheight/2;//start from center	
 		
 		node.SetValue( seedValue * spaceX);
 		node.SetIndex( seedPosition );
-		
-
+	
 		seeds->InsertElement( 0, node );
 	}
-	else if(seedmode==1)
+	else if (seedmode==1)
 	{
 		for(ii=1;ii<imgheight/3;ii++)
 		{
@@ -9151,7 +9250,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			node.SetValue( seedValue * spaceX);
 			node.SetIndex( seedPosition );
-			
 			
 			seeds->InsertElement( ii-1, node );
 		}
@@ -9174,7 +9272,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     }
 	
 	unsigned char* ucsegresult=thresholder->GetOutput()->GetBufferPointer();	
-	if(outrgndata)
+	if (outrgndata)
 	{
 		int buffersize=	imgwidth*imgheight*sizeof(char);
 		memcpy(outrgndata,ucsegresult,buffersize);
@@ -9381,7 +9479,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     // Create minimum rotate normals
 	double* outputcenterlinenormals=(double*)malloc(sizeof(double)*height*3);
-	if([self generateSlidingNormals:height:outputcenterlinexyz:outputcenterlinenormals]==0)
+	if ([self generateSlidingNormals:height:outputcenterlinexyz:outputcenterlinenormals]==0)
 		return;
 	
 	// Create a narrow 3D ribbon from the centerline and use this ribbon to get cross-section line from each pair of point along this ribbon
@@ -9470,7 +9568,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 		int center[2];
 		float meandia=[self findingCenterOfSegment:connectednessROIBuffer :axViewCostMapWidth :axViewCostMapHeight:center]*2;
-		if(meandia==0)
+		if (meandia==0)
 		{
 			origin[0]=0;
 			origin[1]=0;
@@ -9576,7 +9674,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int maxindex=0;
 	float maxdis=*fsegresult;
 	for (int i=0;i<buffersize;i++)
-		if(*(fsegresult+i)>maxdis)
+		if (*(fsegresult+i)>maxdis)
 		{
 			maxindex=i;
 			maxdis=*(fsegresult+i);
@@ -9587,7 +9685,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     center[1]=maxindex/width;
 	center[0]=maxindex-center[1]*width;
-	
 	
 	return maxdis;
 }
@@ -9602,7 +9699,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	for (j=0;j<height;j++)
 		for (i=0;i<width;i++)
 		{
-			if(*(buffer+j*width+i))
+			if (*(buffer+j*width+i))
 			{
 				totalx+=i;
 				totaly+=j;
@@ -9749,22 +9846,21 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			roirect.size.width=lenofMeanDiameter/2.0;
 			roirect.size.height=lenofMeanDiameter/2.0;
 			[meanDiameterROI setROIRect:roirect];
-			if(addMin)
+			if (addMin)
 				[imgroilist addObject:minDiameterROI];
 			[minDiameterROI release];
-			if(addMax)
+			if (addMax)
 				[imgroilist addObject:maxDiameterROI];
 			[maxDiameterROI release];
-			if(addMean)
+			if (addMean)
 				[imgroilist addObject:meanDiameterROI];
 			[meanDiameterROI release];
 		}
-	}			
-	
+	}
 }
+
 - (float)signedPolygonArea:(NSArray*)ptarray
 {
-
 	unsigned int i,j;
 	float area = 0;
 	NSPoint pt1,pt2;
@@ -9809,17 +9905,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	res.y=cy;
 	return res;
 }
--(float) measureAPolygonROI:(ROI*)aPolygon:(NSMutableArray*)axisesPoints
+
+-(float) measureAPolygonROI:(ROI*)aPolygon
+                           :(NSMutableArray*)axisesPoints
 {
 	float distance[360];
 	float diameterpts[720];
 	
-	
 	NSArray* splinepoints=[aPolygon splinePoints];
 	int j,ptnumber;
 	ptnumber=[splinepoints count];
-	if(ptnumber<5)
+	if (ptnumber<5)
 		return 0;
+    
 	float *floatpoints=(float*)malloc(ptnumber*sizeof(float)*3);
 	float *floatangles=floatpoints+2*ptnumber;
 	float xmean=0, ymean=0;
@@ -9835,16 +9933,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 		*(floatpoints+j*2)-=xmean;
 		*(floatpoints+j*2+1)-=ymean;
-		if(*(floatpoints+j*2)!=0)
+		if (*(floatpoints+j*2)!=0)
 			*(floatangles+j)=atan((*(floatpoints+j*2+1))/(*(floatpoints+j*2)))/ deg2rad;
 		else
 			*(floatangles+j)=90;
-		if(*(floatpoints+j*2)<0)
+		if (*(floatpoints+j*2)<0)
 			*(floatangles+j)+=180;
-		else if(*(floatpoints+j*2+1)<0)
+		else if (*(floatpoints+j*2+1)<0)
 			*(floatangles+j)+=360;
-		
-		
 	}
 	
 	for(j=0;j<360;j++)
@@ -9857,7 +9953,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(k=0;k<=ptnumber;k++)
 		{
 			float minangle,maxangle,tempangle;
-			if(floatangles[k%ptnumber]<floatangles[(k+1)%ptnumber])
+			if (floatangles[k%ptnumber]<floatangles[(k+1)%ptnumber])
 			{
 				minangle=floatangles[k%ptnumber];
 				maxangle=floatangles[(k+1)%ptnumber];
@@ -9868,9 +9964,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				minangle=floatangles[(k+1)%ptnumber];
 				
 			}
-			if(maxangle-minangle>180)
+			if (maxangle-minangle>180)
 			{
-				if(j<90)
+				if (j<90)
 				{
 					tempangle=maxangle-360;
 					maxangle=minangle;
@@ -9883,16 +9979,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					maxangle=tempangle;
 				}
 			}
-			if(minangle<=j&&j<=maxangle)
+			if (minangle<=j&&j<=maxangle)
 			{
 				x1=floatpoints[(k%ptnumber)*2];
 				y1=floatpoints[(k%ptnumber)*2+1];
 				x2=floatpoints[((k+1)%ptnumber)*2];
 				y2=floatpoints[((k+1)%ptnumber)*2+1];
-				if(j==90||j==270)
+				if (j==90||j==270)
 				{
 					x=0;
-					if(x2!=x1)
+					if (x2!=x1)
 						y=(y1*x2-y2*x1)/(x2-x1);
 					else
 						y=y1;
@@ -9902,7 +9998,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					float k1,k2;
 					k2=tan(j*deg2rad);
 					
-					if(x1==x2)
+					if (x1==x2)
 					{
 						x=x1;
 					}
@@ -9910,7 +10006,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					{
 						
 						k1=(y2-y1)/(x2-x1);
-						if(k2==k1)
+						if (k2==k1)
 							x=x1;
 						else
 							x=((y1*x2-y2*x1)/(x2-x1))/(k2-k1);
@@ -9919,30 +10015,31 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					
 				}
 				float tempdis=sqrt(x*x+y*y);
-				if(distance[j]==-1||tempdis<distance[j])
+				if (distance[j]==-1 || tempdis<distance[j])
 				{
 					distance[j]=tempdis;
 					diameterpts[j*2]=x;
 					diameterpts[j*2+1]=y;
 				}
 			}
-			
-			
 		}
 	}
-	float mindiameter,maxdiameter,meandiameter=0;
+
+    float mindiameter,maxdiameter,meandiameter=0;
 	int minangle,maxangle;
 	minangle=maxangle=0;
-	mindiameter=maxdiameter=sqrt((diameterpts[0]-diameterpts[360])*(diameterpts[0]-diameterpts[360])+(diameterpts[1]-diameterpts[361])*(diameterpts[1]-diameterpts[361]));
+	mindiameter=maxdiameter = sqrt((diameterpts[0]-diameterpts[360])*(diameterpts[0]-diameterpts[360]) +
+                                   (diameterpts[1]-diameterpts[361])*(diameterpts[1]-diameterpts[361]));
 	for(j=0;j<180;j++)
 	{
-		distance[j]=sqrt((diameterpts[2*j]-diameterpts[2*j+360])*(diameterpts[2*j]-diameterpts[2*j+360])+(diameterpts[2*j+1]-diameterpts[2*j+361])*(diameterpts[2*j+1]-diameterpts[2*j+361]));
-		if(mindiameter>distance[j])
+		distance[j] = sqrt((diameterpts[2*j]  -diameterpts[2*j+360])*(diameterpts[2*j]  -diameterpts[2*j+360]) +
+                           (diameterpts[2*j+1]-diameterpts[2*j+361])*(diameterpts[2*j+1]-diameterpts[2*j+361]));
+		if (mindiameter>distance[j])
 		{
 			mindiameter=distance[j];
 			minangle=j;
 		}
-		if(maxdiameter<distance[j])
+		if (maxdiameter<distance[j])
 		{
 			maxdiameter=distance[j];
 			maxangle=j;
@@ -9950,7 +10047,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		meandiameter+=distance[j];
 	}
 	meandiameter/=180;
-	if(axisesPoints)
+	if (axisesPoints)
 	{
 		CMIV3DPoint* new3DPoint=[[CMIV3DPoint alloc] init] ;
 		[new3DPoint setX: xmean];
@@ -9998,12 +10095,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int roiarraysize=[splinepoints count];
 	for(i=1;i<roiarraysize;i++)
 	{
-		if([[splinepoints objectAtIndex:i] point].y<miny)
+		if ([[splinepoints objectAtIndex:i] point].y<miny)
 		{
 			miny=[[splinepoints objectAtIndex:i] point].y;
 			minyindex=i;
 		}
-		if([[splinepoints objectAtIndex:i] point].y>maxy)
+		if ([[splinepoints objectAtIndex:i] point].y>maxy)
 		{
 			maxy=[[splinepoints objectAtIndex:i] point].y;
 			maxyindex=i;
@@ -10013,7 +10110,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int rightborderfromindex,rightbordertoindex;
 	leftborderfromindex=minyindex;
 	leftbordertoinedex=maxyindex;
-	if(leftborderfromindex>leftbordertoinedex)
+	if (leftborderfromindex>leftbordertoinedex)
 		leftbordertoinedex+=roiarraysize;
 	float leftmeamx=0,rightmeanx=0;
 	for(i=leftborderfromindex;i<leftbordertoinedex;i++)
@@ -10024,22 +10121,22 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 	rightborderfromindex=maxyindex;
 	rightbordertoindex=minyindex;
-	if(rightborderfromindex>rightbordertoindex)
+	if (rightborderfromindex>rightbordertoindex)
 		rightbordertoindex+=roiarraysize;
 	for(i=rightborderfromindex;i<rightbordertoindex;i++)
 	{
 		rightmeanx+=[[splinepoints objectAtIndex:i%roiarraysize] point].x;
 	}
 	rightmeanx=rightmeanx/(rightbordertoindex-rightborderfromindex);
-	if(leftmeamx>rightmeanx)
+	if (leftmeamx>rightmeanx)
 	{
 		leftborderfromindex=maxyindex ;
 		leftbordertoinedex=minyindex;
-		if(leftborderfromindex>leftbordertoinedex)
+		if (leftborderfromindex>leftbordertoinedex)
 			leftbordertoinedex+=roiarraysize;
 		rightborderfromindex=minyindex;
 		rightbordertoindex=maxyindex;
-		if(rightborderfromindex>rightbordertoindex)
+		if (rightborderfromindex>rightbordertoindex)
 			rightbordertoindex+=roiarraysize;
 	}
 	
@@ -10058,37 +10155,37 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			y1=[[splinepoints objectAtIndex:j%roiarraysize] point].y;
 			y2=[[splinepoints objectAtIndex:(j+1)%roiarraysize] point].y;
 			
-			if((y1-currenty)*(y2-currenty)<=0)
+			if ((y1-currenty)*(y2-currenty)<=0)
 			{
-				if(y2==y1)
+				if (y2==y1)
 					x=(x1>x2)?x1:x2;
 				else
 					x=x1+(currenty-y1)*(x2-x1)/(y2-y1);
-				if(x>maxleftx)
+
+                if (x>maxleftx)
 					maxleftx=x;
 			}
-			
 		}
-		for(j=rightborderfromindex;j<rightbordertoindex;j++)
+
+        for(j=rightborderfromindex;j<rightbordertoindex;j++)
 		{
 			x1=[[splinepoints objectAtIndex:j%roiarraysize] point].x;
 			x2=[[splinepoints objectAtIndex:(j+1)%roiarraysize] point].x;
 			y1=[[splinepoints objectAtIndex:j%roiarraysize] point].y;
 			y2=[[splinepoints objectAtIndex:(j+1)%roiarraysize] point].y;
 			
-			if((y1-currenty)*(y2-currenty)<=0)
+			if ((y1-currenty)*(y2-currenty)<=0)
 			{
-				if(y2==y1)
+				if (y2==y1)
 					x=(x1<x2)?x1:x2;
 				else
 					x=x1+(currenty-y1)*(x2-x1)/(y2-y1);
-				if(x<minrightx)
+				if (x<minrightx)
 					minrightx=x;
-				
 			}
-			
 		}
-		if(maxleftx!=0 && minrightx!=10000 && maxleftx<minrightx)
+
+        if (maxleftx!=0 && minrightx!=10000 && maxleftx<minrightx)
 		{
 			diameter=minrightx-maxleftx;
 			centerx=(maxleftx+minrightx)/2;
@@ -10097,16 +10194,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		{
 			diameter=0;
 			centerx=-1;
-
 		}
-		meandiameter+=diameter;
-		if(maxdiameter<diameter)
+
+        meandiameter+=diameter;
+		if (maxdiameter<diameter)
 			maxdiameter=diameter;
-		if(diameterarray)
+		if (diameterarray)
 		{
 			[diameterarray addObject:[NSNumber numberWithFloat:diameter*xspace]];
 		}
-		if(centerptarray)
+		if (centerptarray)
 		{
 			[centerptarray addObject:[NSNumber numberWithFloat:centerx]];
 		}
@@ -10114,32 +10211,32 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 		
 	}
-	meandiameter/=buffersize;
+
+    meandiameter/=buffersize;
 	//return maxdiameter*xspace;
 	return meandiameter*xspace;
-	
-	
 }
-- (void)  exportPolygonROIsInformation
+
+- (void) exportPolygonROIsInformation
 {
-	NSSavePanel     *panel = [NSSavePanel savePanel];
+	NSSavePanel *panel = [NSSavePanel savePanel];
 	
 	[panel setCanSelectHiddenExtension:YES];
 	[panel setRequiredFileType:@"txt"];
 	NSArray* filelist=[originalViewController fileList];
 	NSString* filename=[[filelist objectAtIndex:0] valueForKeyPath: @"series.study.patientID"];
-	if(!filename)
+	if (!filename)
 		filename=@"";
 	filename=[filename stringByAppendingString:[[originalViewController window] title]];
 	filename=[filename stringByAppendingString:@"measurement"];
 	
 	if ([panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
 	{
-		NSArray      *roiList= [originalViewController roiList];
-		NSArray      *pixList=[originalViewController pixList];
+		NSArray *roiList= [originalViewController roiList];
+		NSArray *pixList=[originalViewController pixList];
 		NSString* exportinfo=@"";
 		unsigned int i,j;
-		float	rarea, rmean, rmax, rmin, rdev, rtotal,mindiamter,maxdiameter,meandiameter;
+		float rarea, rmean, rmax, rmin, rdev, rtotal,mindiamter,maxdiameter,meandiameter;
 		ROI* temproi,*polygonroi,*pointroi;
 		for(i=0;i<[roiList count];i++)
 		{
@@ -10151,76 +10248,76 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			for(j=0;j<[[roiList objectAtIndex:i] count];j++)
 			{
 				temproi=[[roiList objectAtIndex:i] objectAtIndex:j];
-				if([temproi type]==tClosedPolygon)
+				if ([temproi type]==tClosedPolygon)
 					polygonroi=temproi;
-				else if([temproi type]==t2DPoint&&[[temproi name] isEqualToString:@"no segment result"])
+				else if ([temproi type]==t2DPoint&&[[temproi name] isEqualToString:@"no segment result"])
 					pointroi=temproi;
-				else if([[temproi comments] isEqualToString:@"Polygon Measurement:min Axis"])
+				else if ([[temproi comments] isEqualToString:@"Polygon Measurement:min Axis"])
 					mindiamter=[temproi Length:[[[temproi points] objectAtIndex:0] point] :[[[temproi points] objectAtIndex:1] point] ];
-				else if([[temproi comments] isEqualToString:@"Polygon Measurement:max Axis"])
+				else if ([[temproi comments] isEqualToString:@"Polygon Measurement:max Axis"])
 					maxdiameter=[temproi Length:[[[temproi points] objectAtIndex:0] point] :[[[temproi points] objectAtIndex:1] point]];
-				else if([[temproi comments] isEqualToString:@"Polygon Measurement:mean Axis"])
+				else if ([[temproi comments] isEqualToString:@"Polygon Measurement:mean Axis"])
 					meandiameter=[temproi rect].size.width;
-				
 			}
 			
-			if(polygonroi)
+			if (polygonroi)
 			{
 				[[pixList objectAtIndex:i] computeROI:polygonroi :&rmean :&rtotal :&rdev :&rmin :&rmax];
 				rarea=[polygonroi roiArea];
 				exportinfo=[exportinfo stringByAppendingFormat:@"%d\t%@",i,[polygonroi comments]];
 			}
-			else if(pointroi)
+			else if (pointroi)
 			{
 				exportinfo=[exportinfo stringByAppendingFormat:@"%d\t%@",i,[pointroi comments]];
 			}
 			else
 				exportinfo=[exportinfo stringByAppendingFormat:@"%d\t%d",i,0];
+            
 			meandiameter*=[[pixList objectAtIndex:i] pixelSpacingX]*0.2;
 			
 			
-			if([calculateAreaButton state]==NSControlStateValueOn)
+			if ([calculateAreaButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rarea];
-			if([calculateMeanDiameterButton state]==NSControlStateValueOn)
+			if ([calculateMeanDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",meandiameter];
-			if([calculateMinDiameterButton state]==NSControlStateValueOn)
+			if ([calculateMinDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",mindiamter];
-			if([calculateMaxDiameterButton state]==NSControlStateValueOn)
+			if ([calculateMaxDiameterButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",maxdiameter];
 			
-			if([calculateMeanHuButton state]==NSControlStateValueOn)
+			if ([calculateMeanHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmean];
-			if([calculateMinHuButton state]==NSControlStateValueOn)
+			if ([calculateMinHuButton state]==NSControlStateValueOn)
 				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmin];
-			if([calculateMaxHuButton state]==NSControlStateValueOn)
-				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmax];			
-			exportinfo=[exportinfo stringByAppendingString:@"\n"];	
-			
+			if ([calculateMaxHuButton state]==NSControlStateValueOn)
+				exportinfo=[exportinfo stringByAppendingFormat:@"\t%f",rmax];
+            
+			exportinfo=[exportinfo stringByAppendingString:@"\n"];
 		}
 		
 		[exportinfo writeToFile:[panel filename] atomically:YES];
 	}
-	
-	
 }
+
 -(void) removeMeasurementROIs
 {
-	NSMutableArray      *roiList= [originalViewController roiList];
+	NSMutableArray *roiList= [originalViewController roiList];
 	unsigned i,j;
 	for(i=0;i<[roiList count];i++)
 		for(j=0;j<[[roiList objectAtIndex:i] count];j++)
 		{
 			ROI * temproi=[[roiList objectAtIndex:i] objectAtIndex:j];
 			NSString* measureMarker=[temproi comments];
-			if([measureMarker length]>19)
+			if ([measureMarker length]>19)
 				measureMarker=[measureMarker substringToIndex:19];
-			if([measureMarker isEqualToString:@"Polygon Measurement"])
+			if ([measureMarker isEqualToString:@"Polygon Measurement"])
 			{
 				[[roiList objectAtIndex:i] removeObject:temproi];
 				j--;
 			}
 		}
 }
+
 - (IBAction)endPolygonMeasureDialog:(id)sender
 {
 	
@@ -10272,11 +10369,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 	[centerlinesNameArrays removeAllObjects];
 	[cpr3DPaths removeAllObjects];// prevent save centerline 
-	if(needSaveSeeds)
+	if (needSaveSeeds)
 		[self saveCurrentSeeds];
 	long size =  imageWidth * imageHeight * imageAmount;
 	[self loadVesselnessMap];
-	if(vesselnessMap)
+	if (vesselnessMap)
 		[self mergeVesselnessAndIntensityMap:volumeData:vesselnessMap:size];
 
     free(vesselnessMap);
@@ -10332,7 +10429,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		*(outputData+i)=minValueInCurSeries;
 	
 	int seednumber = [self plantSeeds:inputData:outputData:directionData];
-	if(seednumber < 1)
+	if (seednumber < 1)
 	{
 		
 		NSRunAlertPanel(NSLocalizedString(@"no seed", nil), NSLocalizedString(@"no seeds are found, draw ROI first.", nil), NSLocalizedString(@"OK", nil), nil, nil);
@@ -10357,7 +10454,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	memset(colorData,0,size);
 	[segmentCoreFunc calculateColorMapFromPointerMap:colorData:directionData]; 
 	[segmentCoreFunc release];
-	if(isInWizardMode==2)
+	if (isInWizardMode==2)
 		[self saveDirectionMap:directionData];
 	[originalViewController endWaitWindow: waitWindow];
 	
@@ -10366,7 +10463,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 - (void) saveDirectionMap:(unsigned char*)outData
 {
-//	if([parent loadCrashBackup])
+//	if ([parent loadCrashBackup])
 	{
 		NSMutableDictionary* dic=[parent dataOfWizard];
 		[dic setObject:@"Step3" forKey:@"Step"];
@@ -10382,7 +10479,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //{
 //	[self loadVesselnessMap];
 //	long size =  imageWidth * imageHeight * imageAmount;
-//	if(vesselnessMap)
+//	if (vesselnessMap)
 //		[self mergeVesselnessAndIntensityMap:volumeData:vesselnessMap:size];
 //	vesselnessMap=nil;
 //	[parentVesselnessMap release];
@@ -10430,7 +10527,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //		
 //		NSString* roiname=[[contrastList objectAtIndex: j] objectForKey:@"Name"];
 //		ROI* anewroi;
-//		if([roiname isEqualToString:@"Aorta"])
+//		if ([roiname isEqualToString:@"Aorta"])
 //		{
 //			NSRect temprect;
 //			temprect.origin.x=0;
@@ -10457,7 +10554,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //		[anewroi setColor:c];
 //		[totalROIList addObject:anewroi];
 //		[anewroi release];
-//		if([roiname isEqualToString:@"barrier"])
+//		if ([roiname isEqualToString:@"barrier"])
 //		{
 //			barrierindex=j+1;
 //		}
@@ -10471,10 +10568,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //		*(outputData+i)=minValueInCurSeries;
 //	minValueInCurSeries+=1;
 //	for(i=0;i<size;i++)
-//		if(directionData[i]&0x80)
+//		if (directionData[i]&0x80)
 //		{
 //			contrastVolumeData[i]=directionData[i]&0x3f;
-//			if(contrastVolumeData[i]==0)
+//			if (contrastVolumeData[i]==0)
 //				contrastVolumeData[i]=barrierindex;
 //		}
 //
@@ -10511,7 +10608,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSString* roiname;
 	ROI* temproi;
 	colorLookup=(unsigned char *)malloc(uniIndex);
-	if(!colorLookup)
+	if (!colorLookup)
 	{
 		NSRunAlertPanel(NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
                         NSLocalizedString(MALLOC_ERROR_MESSAGE2, nil),
@@ -10527,12 +10624,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		marker=[[temproi comments] intValue];
 		roiname=[temproi name];
 		colorindex=0;
-		if([roiname isEqualToString:@"barrier"])
+		if ([roiname isEqualToString:@"barrier"])
 			colorindex=0;
 		else
 		{
 			for(j=0;j<[contrastList count];j++)
-				if([roiname isEqualToString: [[contrastList objectAtIndex: j] objectForKey:@"Name"]])
+				if ([roiname isEqualToString: [[contrastList objectAtIndex: j] objectForKey:@"Name"]])
 					colorindex=j+1;
 		}
 		
@@ -10542,10 +10639,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	for(i=0;i<size;i++)
 	{
 		marker=(int)(*(contrastVolumeData+i));
-		if(marker)
+		if (marker)
 		{
 			colorindex=*(colorLookup+marker-1);
-			if(colorindex)
+			if (colorindex)
 			{
 				*(outData+i)=*(inData+i);
 				*(directData + i) = colorindex | 0x80;
@@ -10562,9 +10659,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	free(colorLookup);
 	
 	return seedNumber;
-	
 }
-- (void) showPreviewResult:(float*)inData:(float*)outData:(unsigned char *)directData :(unsigned char *)colorData
+
+- (void) showPreviewResult:(float*)inData
+                          :(float*)outData
+                          :(unsigned char *)directData
+                          :(unsigned char *)colorData
 {
 	[parent cleanDataOfWizard];
 	int size= sizeof(float)*imageWidth*imageHeight*imageAmount;
@@ -10610,11 +10710,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		c.blue = (short unsigned int)(b * 65535.);
 		[temproi setColor:c];
 		[seedListInResult addObject: temproi];
-		if((![seedname isEqualToString: @"barrier"])&&(![seedname isEqualToString: @"other"]))
+		if ((![seedname isEqualToString: @"barrier"])&&(![seedname isEqualToString: @"other"]))
 			[shownColorList addObject: [NSNumber numberWithInt:i+1]];
-		
 	}
-	
 	
 	[dic setObject:seedListInResult  forKey:@"SeedList"];
 	[seedListInResult release];
@@ -10625,19 +10723,17 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	[parent setDataofWizard:dic];
 	contrastVolumeData=nil;
 	NSString* tabidstr=[[seedToolTipsTabView selectedTabViewItem] identifier];
-	if(tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
+	if (tabidstr&&[@"SeedTools" isEqualToString:tabidstr])
 		[self onCancel:saveButton];
-	else if(tabidstr&&[@"Tips" isEqualToString:tabidstr])
+	else if (tabidstr&&[@"Tips" isEqualToString:tabidstr])
 		[self onCancel:nextButton];
-	
-	
-	
 }
+
 - (IBAction)goNextStep:(id)sender
 {
-	if (currentTool == 7)
+	if (currentTool == t3DRotate)
 	{
-		if([[axViewROIList objectAtIndex:0] count])
+		if ([[axViewROIList objectAtIndex:0] count])
 		{
 			[self covertRegoinToSeeds:nil];
 		}
@@ -10655,40 +10751,39 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[self runSegmentation];
 		return;
 	}
-	else 
-	{
 
-		[self goSubStep:currentStep+1:YES];
-		if(currentStep>=(totalSteps-1))
-			[nextButton setTitle:@"Run Segmentation"];
+    [self goSubStep:currentStep+1:YES];
+    if (currentStep>=(totalSteps-1))
+        [nextButton setTitle:@"Run Segmentation"];
 
-        if(currentStep>0)
-			[previousButton setEnabled: YES];
-	}
+    if (currentStep>0)
+        [previousButton setEnabled: YES];
 }
 
 - (IBAction)goPreviousStep:(id)sender
 {
 	[self updateOView];
-	if(currentStep>0)
+	if (currentStep>0)
 		[self goSubStep:currentStep-1:YES];
-	if(currentStep<(totalSteps-1))
+	if (currentStep<(totalSteps-1))
 		[nextButton setTitle:@"Next Step"]; 
-	if(currentStep<=0)
+	if (currentStep<=0)
 		[previousButton setEnabled: NO];
 }
-- (void) goSubStep:(int)step:(bool)needResetViews
+
+- (void) goSubStep:(int)step
+                  :(bool)needResetViews
 {
-	if(step<0)
+	if (step<0)
 		step=0;
-	else if(step>=totalSteps)
+	else if (step>=totalSteps)
 		step=totalSteps-1;
 	
 	NSString *tempstr;
 	NSColor *color;
 	NSNumber *number;
 	
-	if(step>=0&&step<(signed)[contrastList count])
+	if (step>=0 && step<(signed)[contrastList count])
 	{
 		
 		currentStep=step;
@@ -10717,7 +10812,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 - (IBAction)continuePlanting:(id)sender
 {
 	[nextButton setEnabled: YES];
-	if(currentStep>0)
+	if (currentStep>0)
 		[previousButton setEnabled: YES];
 	[self goSubStep:currentStep:NO];
 	[continuePlantingButton setHidden: YES];
@@ -10773,26 +10868,27 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
 -(void)loadDirectionData:(unsigned char*)outData
 {
-	//	if([parent loadCrashBackup])
-	//	{
-	//		NSMutableDictionary* dic=[parent dataOfWizard];
-	//		NSNumber* directionmapsize=[dic objectForKey:@"DirectionMapSize"];
-	//		NSString* directionmapfile=[dic objectForKey:@"DirectionMapPath"];
-	//		
-	//		if(volumeData)
-	//		{
-	//			FILE* tempFile;
-	//			tempFile= fopen([directionmapfile cStringUsingEncoding:NSASCIIStringEncoding],"r");
-	//			fread(outData,sizeof(char),[directionmapsize intValue],tempFile);
-	//			fclose(tempFile);
-	//		}
-	//
-	//	}
-	//	return;
+//		if ([parent loadCrashBackup])
+//		{
+//			NSMutableDictionary* dic=[parent dataOfWizard];
+//			NSNumber* directionmapsize=[dic objectForKey:@"DirectionMapSize"];
+//			NSString* directionmapfile=[dic objectForKey:@"DirectionMapPath"];
+//
+//			if (volumeData)
+//			{
+//				FILE* tempFile;
+//				tempFile= fopen([directionmapfile cStringUsingEncoding:NSASCIIStringEncoding],"r");
+//				fread(outData,sizeof(char),[directionmapsize intValue],tempFile);
+//				fclose(tempFile);
+//			}
+//
+//		}
+//		return;
 }
+
 - (IBAction)cancelAutoSegmentaion:(id)sender
 {
-	if(autoSegmentTimer)
+	if (autoSegmentTimer)
 	{
 		[autoSegmentTimer invalidate];
 		[autoSegmentTimer release];
@@ -10801,21 +10897,22 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[cancelSegmentationButton setHidden:YES];
 	[saveButton setTitle:@"run segmentaion"];
 }
+
 -(void)changeSegmentButtonTitle:(id)sender
 {
 	timeCountDown--;
 	[saveButton setTitle:[NSString stringWithFormat:@"Seg. start in %d seconds",timeCountDown]];
-	if(timeCountDown<0)
+	if (timeCountDown<0)
 	{
-		if(autoSegmentTimer)
+		if (autoSegmentTimer)
 		{
 			[autoSegmentTimer invalidate];
 			[autoSegmentTimer release];
 			autoSegmentTimer=nil;
 		}
-		[self onOK:saveButton];
-	}
 	
+        [self onOK:saveButton];
+	}
 }
 
 #pragma mark - 7. Automatic Seeding functions
@@ -10838,7 +10935,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int lastjointindex=1;
 	NSMutableArray* newCenterline=[NSMutableArray arrayWithArray:0];
 	vtkTransform* currentTransform;
-	if(isStraightenedCPR)
+	if (isStraightenedCPR)
 		currentTransform=axViewTransformForStraightenCPR;
 	else
 		currentTransform=axViewTransform;
@@ -10849,10 +10946,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 	{
 		temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-		if([temproi type]==tPlain)
+		if ([temproi type]==tPlain)
 			break;
 	}
-	if(temproi&&[temproi type]==tPlain)
+	if (temproi&&[temproi type]==tPlain)
 	{
 		lastroi=temproi;
 		centeroffsetx=0;
@@ -10877,14 +10974,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 		{
 			temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-			if([temproi type]==tPlain)
+			if ([temproi type]==tPlain)
 				break;
 		}
 		
-		if(temproi&&[temproi type]==tPlain)
+		if (temproi&&[temproi type]==tPlain)
 		{
 			//NSLog(@"debug log plain ROI found");
-			if(lastroi)
+			if (lastroi)
 			{
 				unsigned char* lastroibuffer=[lastroi textureBuffer];
 				unsigned char* temproibuffer=[temproi textureBuffer];
@@ -10903,13 +11000,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				y1-=[temproi textureUpLeftCornerY];
 				x2-=[temproi textureUpLeftCornerX];
 				y2-=[temproi textureUpLeftCornerY];
-				if(x1<0)
+				if (x1<0)
 					x1=0;
-				if(y1<0)
+				if (y1<0)
 					y1=0;
-				if(x2>[temproi textureDownRightCornerX])
+				if (x2>[temproi textureDownRightCornerX])
 					x2=[temproi textureDownRightCornerX];
-				if(y2>[temproi textureDownRightCornerY])
+				if (y2>[temproi textureDownRightCornerY])
 					y2=[temproi textureDownRightCornerY];
 				int x,y,hitpoints=0,curtotalpoints=0;
 				int lastwidth,curwidth,curheight;
@@ -10920,20 +11017,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for(x=0;x<curwidth;x++)
 					{
 						
-						if(*(temproibuffer+y*curwidth+x))
+						if (*(temproibuffer+y*curwidth+x))
 						{
 							curtotalpoints++;
-							if(x>=x1 && x<=x2 && y>=y1 && y<=y2)
-								if(*(lastroibuffer+(y+corneroffsety)*lastwidth+x+corneroffsetx))
+							if (x>=x1 && x<=x2 && y>=y1 && y<=y2)
+								if (*(lastroibuffer+(y+corneroffsety)*lastwidth+x+corneroffsetx))
 									hitpoints++;
 						}
 					}
 				float hitmissratio=0;
-				if(lasttotalpoints>curtotalpoints)
+				if (lasttotalpoints>curtotalpoints)
 					hitmissratio=(float)hitpoints/(float)lasttotalpoints;
 				else
 					hitmissratio=(float)hitpoints/(float)curtotalpoints;
-				if(hitmissratio>0.75)
+				if (hitmissratio>0.75)
 					continueGrowingCondition=1;
 				else
 				{
@@ -10957,7 +11054,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					for(x=0;x<curwidth;x++)
 					{
 						
-						if(*(temproibuffer+y*curwidth+x))
+						if (*(temproibuffer+y*curwidth+x))
 						{
 							lasttotalpoints++;
 						}
@@ -10969,11 +11066,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		else
 		{
 			NSLog(@"no roi");
-			if(lastroi)
+			if (lastroi)
 				ifneedgoback=1;
 			break;
 		}
-		if(continueGrowingCondition)
+		if (continueGrowingCondition)
 		{
 			[temproi retain];
 			[lastroi release];
@@ -10983,7 +11080,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			float centerdis=0;
 			float radis=[self findingCenterOfSegment:[temproi textureBuffer] :[temproi textureWidth] :[temproi textureHeight]:center];
 			[self findingGravityCenterOfSegment:[temproi textureBuffer] :[temproi textureWidth] :[temproi textureHeight]:heavycenter];
-			if(radis==-1)
+			if (radis==-1)
 			{
 				NSLog(@"fail to location the center of the cross section");
 				break;
@@ -10991,7 +11088,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			else
 			{
 				centerdis=sqrt((center[0]-heavycenter[0])*(center[0]-heavycenter[0])+(center[1]-heavycenter[1])*(center[1]-heavycenter[1]));
-				if(centerdis>radis/2)
+				if (centerdis>radis/2)
 				{
 					NSLog(@"irregular cross section found");
 					break;
@@ -11009,7 +11106,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			oZ=origin[1];
 			oY=1;
 			//NSLog(@"debug log check if need go further");
-			if([newCenterline count] && sqrt(oX*oX+oZ*oZ)>radis*axViewSpace[0]/2)
+			if ([newCenterline count] && sqrt(oX*oX+oZ*oZ)>radis*axViewSpace[0]/2)
 			{
 				NSLog(@"center shift too much");
 				break;
@@ -11018,9 +11115,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			
 			currentTransform->TransformPoint(origin,neworigin);
 			
-			if([newCenterline count])
+			if ([newCenterline count])
 				comulatedis+=1.0;//sqrt(oX*oX+oZ*oZ+1);
-			if(comulatedis<10)
+			if (comulatedis<10)
 			{
 				centeroffsetx=origin[0];
 				centeroffsety=origin[1];
@@ -11038,7 +11135,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				lastroi=nil;
 				double position[3],direction[3];
 				currentTransform->TransformPoint(origin,position);	
-				if(lastjointindex>=(signed)[newCenterline count])
+				if (lastjointindex>=(signed)[newCenterline count])
 				{
 					NSLog(@"lastjointindex = new points");
 					break;
@@ -11055,7 +11152,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 					zxdata[2*ii+1]=[a3DPoint x];
 					zydata[2*ii]=[a3DPoint z];
 					zydata[2*ii+1]=[a3DPoint y];
-					if(ii==0)
+					if (ii==0)
 						z1=[a3DPoint z];
 					z2=[a3DPoint z];
 
@@ -11079,19 +11176,19 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				oViewBasicTransform->Identity();
 				oViewBasicTransform->Translate(position);
 				float anglex=0,angley=0;
-				if(direction[2]==0)
+				if (direction[2]==0)
 				{
-					if(direction[1]>0)
+					if (direction[1]>0)
 						anglex=90;
-					if(direction[1]<0)
+					if (direction[1]<0)
 						anglex=-90;
-					if(direction[1]==0)
+					if (direction[1]==0)
 						anglex=0;
 				}
 				else
 				{
 					anglex = atan(direction[1]/direction[2]) / deg2rad;
-					if(direction[2]<0)
+					if (direction[2]<0)
 						anglex+=180;
 				}
 				
@@ -11125,7 +11222,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		
 
 	}while(continueGrowingCondition);
-	if(ifneedgoback)
+	if (ifneedgoback)
 	{
 		oViewUserTransform->Translate(-centeroffsetx,-1,-centeroffsety);
 		[self cAndAxViewReset];
@@ -11136,7 +11233,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	currentPathMode=ROI_selectedModify;
 	//[self changeCurrentTool:tMeasure];
 	
-	if(lastroi)
+	if (lastroi)
 		[lastroi release];
 	NSLog(@"cross section growing end");
 
@@ -11153,7 +11250,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[newCenterline removeAllObjects];
 	isRemoveROIBySelf=1;
 	NSString* emptystr=@"";
-	if([oViewROIList count])
+	if ([oViewROIList count])
 	{
 		for(i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
 			[[[oViewROIList objectAtIndex: 0] objectAtIndex: i] setComments:emptystr];
@@ -11161,7 +11258,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	
 		[[oViewROIList objectAtIndex: 0] removeAllObjects];
 	}
-	if([axViewROIList count])
+	if ([axViewROIList count])
 		[[axViewROIList objectAtIndex:0] removeAllObjects];
 	isRemoveROIBySelf=0;
 	[pool release];
@@ -11205,16 +11302,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	
 //	unsigned int i;
 //	temproi=nil;
-//	if([axViewROIList count]==0)
+//	if ([axViewROIList count]==0)
 //		return;
 //	
 //	for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 //	{
 //		temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-//		if([temproi type]==tClosedPolygon)
+//		if ([temproi type]==tClosedPolygon)
 //			break;
 //	}
-//	if(temproi&&[temproi type]==tClosedPolygon)
+//	if (temproi&&[temproi type]==tClosedPolygon)
 //	{
 //		float centerx,centery;
 //		centerx=-(axViewOrigin[0]/axViewSpace[0]);
@@ -11230,14 +11327,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			y=[[splinepoints objectAtIndex:j] point].y;
 //			x-=centerx;
 //			y-=centery;
-//			if(sqrt(x*x+y*y)>maxradius)
+//			if (sqrt(x*x+y*y)>maxradius)
 //				maxradius=sqrt(x*x+y*y);
 //			
 //		}
-//		if(maxradius>0)
+//		if (maxradius>0)
 //		{
 //			// clean aorta seeds cross barrier
-//			if(maxSpacing==0)
+//			if (maxSpacing==0)
 //				maxSpacing=sqrt(xSpacing*xSpacing+ySpacing*ySpacing+zSpacing*zSpacing);
 //				
 //			int xx,yy,zz;	
@@ -11246,13 +11343,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			for(zz=0;zz<imageAmount;zz++)
 //				for(yy=0;yy<imageHeight;yy++)
 //					for(xx=0;xx<imageWidth;xx++)
-//						if(*(contrastVolumeData+zz*imageSize+yy*imageWidth+xx)==aortamarker)//
+//						if (*(contrastVolumeData+zz*imageSize+yy*imageWidth+xx)==aortamarker)//
 //						{
 //							point[0]=xx*xSpacing+vtkOriginalX;
 //							point[1]=yy*ySpacing+vtkOriginalY;
 //							point[2]=zz*zSpacing+vtkOriginalZ;
 //							inverseAxViewTransform->TransformPoint(point,point);
-//							if(point[2]<maxSpacing)
+//							if (point[2]<maxSpacing)
 //								*(contrastVolumeData+zz*imageSize+yy*imageWidth+xx)=0;
 //							
 //						}
@@ -11300,7 +11397,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			[aortaSeedROI setROIRect:roirect];
 //			[[axViewROIList objectAtIndex: 0] addObject:aortaSeedROI];
 //			[aortaSeedROI release];
-//			if(maxSpacing==0)
+//			if (maxSpacing==0)
 //				maxSpacing=sqrt(xSpacing*xSpacing+ySpacing*ySpacing+zSpacing*zSpacing);
 //			maxSpacing=-maxSpacing;
 //			[self covertRegoinToSeeds:nil];
@@ -11322,16 +11419,16 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	for(i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
 //	{
 //		temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex:i];
-//		if([temproi type]==tClosedPolygon)
+//		if ([temproi type]==tClosedPolygon)
 //			break;
 //	}
-//	if(temproi&&[temproi type]==tClosedPolygon)
+//	if (temproi&&[temproi type]==tClosedPolygon)
 //	{
 //
 //		NSArray* splinepoints=[temproi splinePoints];
 //		int j=0,ptnumber=0;
 //		ptnumber=[splinepoints count];
-//		if(ptnumber<=5)
+//		if (ptnumber<=5)
 //			return;
 //		
 //		float x=0,y=0,minradius=10000;
@@ -11341,12 +11438,12 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			y=[[splinepoints objectAtIndex:j] point].y;
 //			x-=centerx;
 //			y-=centery;
-//			if(sqrt(x*x+y*y)<minradius)
+//			if (sqrt(x*x+y*y)<minradius)
 //				minradius=sqrt(x*x+y*y);
 //			
 //		}
 //
-//		if(minradius>0&&minradius!=10000)
+//		if (minradius>0&&minradius!=10000)
 //		{
 //			float curXSpacing,curYSpacing;
 //			float curOriginX,curOriginY;
@@ -11380,13 +11477,13 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //					point[0] = curOriginX + i * curXSpacing/3;
 //					point[1] = curOriginY + j * curYSpacing/3;
 //					point[2] = 0;
-//					if((point[0]-x0)*(point[0]-x0)*b+(point[1]-y0)*(point[1]-y0)*a<=a*b)
+//					if ((point[0]-x0)*(point[0]-x0)*b+(point[1]-y0)*(point[1]-y0)*a<=a*b)
 //					{
 //						axViewTransform->TransformPoint(point,point);
 //						x=lround((point[0]-vtkOriginalX)/xSpacing);
 //						y=lround((point[1]-vtkOriginalY)/ySpacing);
 //						z=lround((point[2]-vtkOriginalZ)/zSpacing);
-//						if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+//						if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 //						{
 //							*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
 //							
@@ -11454,7 +11551,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			x=lround((point[0]-vtkOriginalX)/xSpacing);
 //			y=lround((point[1]-vtkOriginalY)/ySpacing);
 //			z=lround((point[2]-vtkOriginalZ)/zSpacing);
-//			if(x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
+//			if (x>=0 && x<imageWidth && y>=0 && y<imageHeight && z>=0 && z<imageAmount)
 //			{
 //				*(contrastVolumeData+z*imageSize+y*imageWidth+x) = marker;
 //	
@@ -11470,7 +11567,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //{
 //	int m;
 //	double *p,Lxx=0,Lxy=0,xa=0,ya=0;
-//	if(data==0||a==0||b==0||rows<1)
+//	if (data==0||a==0||b==0||rows<1)
 //		return -1;
 //	for(p=data,m=0;m<rows;m++)
 //	{
@@ -11493,7 +11590,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //{
 //
 //	float* blenddata= vesselnessMap;;
-//	if(blenddata==nil)
+//	if (blenddata==nil)
 //		return;
 //	
 //	typedef   float  InternalPixelType;
@@ -11621,9 +11718,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			inverseAxViewTransform->TransformPoint(point,point);
 //			
 //			
-//			if(sqrt(sizex*sizex+sizey*sizey+sizez*sizez)>20.0)
+//			if (sqrt(sizex*sizex+sizey*sizey+sizez*sizez)>20.0)
 //			{
-//				if(point[0]<0&&point[1]<0&&point[2]>-10.0&&(bbox[1]-bbox[0])*(bbox[3]-bbox[2])>rcaarea)
+//				if (point[0]<0&&point[1]<0&&point[2]>-10.0&&(bbox[1]-bbox[0])*(bbox[3]-bbox[2])>rcaarea)
 //				{
 //					rcafoundatindex=ii;
 //					rcaarea=(bbox[1]-bbox[0])*(bbox[3]-bbox[2]);
@@ -11642,7 +11739,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //	unsigned long*  labeloutput=relabel->GetOutput()->GetBufferPointer();
 //	
 //	
-//	if(rcafoundatindex==0)
+//	if (rcafoundatindex==0)
 //		return;
 //	int x,y,z;
 //	unsigned char marker;
@@ -11652,7 +11749,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //		for(y=0;y<imageHeight/2;y++)
 //			for(x=0;x<imageWidth/2;x++)
 //			{
-//				if((*(labeloutput+z*imageSize/4+y*imageWidth/2+x)==rcafoundatindex)&&(*(blenddata+z*imageSize/4+y*imageWidth/2+x)>15))
+//				if ((*(labeloutput+z*imageSize/4+y*imageWidth/2+x)==rcafoundatindex)&&(*(blenddata+z*imageSize/4+y*imageWidth/2+x)>15))
 //					*(contrastVolumeData+z*2*imageSize+y*2*imageWidth+x*2) = marker;
 //				
 //				
@@ -11680,7 +11777,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //{
 //	
 //	float* blenddata=vesselnessMap;
-//	if(blenddata==nil)
+//	if (blenddata==nil)
 //		return;
 //	
 //	typedef   float  InternalPixelType;
@@ -11816,9 +11913,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			point[2]=centerz*zSpacing+vtkOriginalZ;
 //			inverseAxViewTransform->TransformPoint(point,point);
 //			
-//			if(sqrt(sizex*sizex+sizey*sizey+sizez*sizez)>10.0)
+//			if (sqrt(sizex*sizex+sizey*sizey+sizez*sizez)>10.0)
 //			{
-//				if(point[0]>0&&point[2]>-30.0&&point[1]/point[0]<1&&(bbox[1]-bbox[0])*(bbox[3]-bbox[2])>lcaarea)
+//				if (point[0]>0&&point[2]>-30.0&&point[1]/point[0]<1&&(bbox[1]-bbox[0])*(bbox[3]-bbox[2])>lcaarea)
 //				{
 //					
 //					lcafoundatindex=ii;
@@ -11832,7 +11929,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			
 //			
 //		}
-//		if(lcafoundatindex)
+//		if (lcafoundatindex)
 //		{
 //			labellookuptable[lcafoundatindex]=1;
 //			for (unsigned int ii=1; ii < printNum; ++ii)
@@ -11850,9 +11947,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //				point[2]=centerz*zSpacing+vtkOriginalZ;
 //				inverseAxViewTransform->TransformPoint(point,point);
 //				
-//				if(lcafoundatindex!=ii&&sqrt(sizex*sizex+sizey*sizey+sizez*sizez)>10.0)
+//				if (lcafoundatindex!=ii&&sqrt(sizex*sizex+sizey*sizey+sizez*sizez)>10.0)
 //				{
-//					if(point[0]>0&&point[2]>-40.0&&point[2]<lcarelativetop&&point[1]/point[0]<0&&bbox[5]<lcatop&&(bbox[3]+bbox[2])<lcacentery)
+//					if (point[0]>0&&point[2]>-40.0&&point[2]<lcarelativetop&&point[1]/point[0]<0&&bbox[5]<lcatop&&(bbox[3]+bbox[2])<lcacentery)
 //						labellookuptable[ii]=1;
 //				}
 //				
@@ -11865,7 +11962,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //		return;
 //    }
 //	
-//	if(lcafoundatindex==0)
+//	if (lcafoundatindex==0)
 //		return;
 //	
 //	
@@ -11882,7 +11979,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 //			for(x=0;x<imageWidth/2;x++)
 //			{
 //				int label=*(labeloutput+z*imageSize/4+y*imageWidth/2+x);
-//				if(label&&labellookuptable[label])//&&(*(blenddata+z*imageSize/4+y*imageWidth/2+x)>10)
+//				if (label&&labellookuptable[label])//&&(*(blenddata+z*imageSize/4+y*imageWidth/2+x)>10)
 //					*(contrastVolumeData+z*2*imageSize+y*2*imageWidth+x*2) = marker;
 //				
 //				
