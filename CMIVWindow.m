@@ -37,7 +37,7 @@
 
 	x=[theEvent deltaX];
 	y=[theEvent deltaY];
-	if([theEvent modifierFlags] &  NSAlternateKeyMask)
+	if ([theEvent modifierFlags] & NSEventModifierFlagOption)
 	{
 		x=0;
 		y=0;
@@ -45,7 +45,7 @@
 		if(z==0)
 			z=[theEvent deltaX];
 	}
-	else if([theEvent modifierFlags] & NSCommandKeyMask )
+	else if([theEvent modifierFlags] & NSEventModifierFlagCommand)
 	{
 		x=[theEvent deltaY];
 		y=[theEvent deltaX];
@@ -59,30 +59,36 @@
 			x=(x+0.1)*acceleratefactor-0.1;
 		loc=[horizontalSlider floatValue];
 		loc-=x*10;
-		while(loc>[horizontalSlider maxValue])
+		while (loc>[horizontalSlider maxValue])
 			loc-=([horizontalSlider maxValue]-[horizontalSlider minValue]);
-		while(loc<[horizontalSlider minValue])
+
+        while (loc<[horizontalSlider minValue])
 			loc+=([horizontalSlider maxValue]-[horizontalSlider minValue]);
 
 		[horizontalSlider setFloatValue:loc];
 		[horizontalSlider performClick:self];
 	}
-	if(y!=0&&tranlateSlider!=nil)
+
+    if (y!=0&&tranlateSlider!=nil)
 	{
-		if(y>0)
+		if (y>0)
 			y=(y-0.1)*acceleratefactor+0.1;
 		else 
 			y=(y+0.1)*acceleratefactor-0.1;
-		loc=[tranlateSlider floatValue];
+
+        loc=[tranlateSlider floatValue];
 		loc+=y*10;
 		while(loc>[tranlateSlider maxValue])
 			loc-=([tranlateSlider maxValue]-[tranlateSlider minValue]);
-		while(loc<[tranlateSlider minValue])
+
+        while(loc<[tranlateSlider minValue])
 			loc+=([tranlateSlider maxValue]-[tranlateSlider minValue]);
-		[tranlateSlider setFloatValue:loc];
+		
+        [tranlateSlider setFloatValue:loc];
 		[tranlateSlider performClick:self];
 	}
-	if(z!=0&&verticalSlider!=nil)
+
+    if(z!=0&&verticalSlider!=nil)
 	{
 		if(z>0)
 			z=(z-0.1)*acceleratefactor+0.1;
@@ -99,29 +105,28 @@
 	}
 	
 	[super scrollWheel:theEvent];
-
 }
+
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short i=[event keyCode];
 	float loc;
 	float x=0,y=0,z=0;
 	float acceleratefactor=1.0;
-	if([event modifierFlags] &  NSAlternateKeyMask)
+	if ([event modifierFlags] & NSEventModifierFlagOption)
 		acceleratefactor=10.0;
-	if(i==124)
+
+    if(i==124)
 	{
 		x=1;
 	}
 	else if(i==123)
 	{
 		x=-1;
-		
 	}
 	else if(i==121)
 	{
 		y=1;
-		
 	}
 	else if(i==116)
 	{
@@ -130,15 +135,14 @@
 	else if(i==126)
 	{
 		z=1;
-		
 	}
 	else if(i==125)
 	{
 		z=-1;		
 	}
-	if(x!=0&&horizontalSlider!=nil)
-	{
 
+    if(x!=0&&horizontalSlider!=nil)
+	{
 		loc=[horizontalSlider floatValue];
 		loc+=x*acceleratefactor;
 		while(loc>[horizontalSlider maxValue])
@@ -149,7 +153,8 @@
 		[horizontalSlider setFloatValue:loc];
 		[horizontalSlider performClick:self];
 	}
-	if(y!=0&&tranlateSlider!=nil)
+
+    if(y!=0&&tranlateSlider!=nil)
 	{
 	
 		loc=[tranlateSlider floatValue];
@@ -161,7 +166,8 @@
 		[tranlateSlider setFloatValue:loc];
 		[tranlateSlider performClick:self];
 	}
-	if(z!=0&&verticalSlider!=nil)
+
+    if(z!=0&&verticalSlider!=nil)
 	{
 		loc=[verticalSlider floatValue];
 		loc+=z*acceleratefactor;
@@ -173,9 +179,7 @@
 		[verticalSlider performClick:self];
 	}
 	
-	//[super keyDown:event];
-	
-	
+	//[super keyDown:event];	
 }
 
 @end

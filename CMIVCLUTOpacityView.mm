@@ -76,8 +76,7 @@
 	[super dealloc];
 }
 
-#pragma mark -
-#pragma mark Contextual menu
+#pragma mark - Contextual menu
 
 - (void)createContextualMenu;
 {
@@ -89,8 +88,7 @@
 	[contextualMenu addItemWithTitle:NSLocalizedString(@"Save...", nil) action:@selector(save:) keyEquivalent:@""];
 }
 
-#pragma mark -
-#pragma mark Histogram
+#pragma mark - Histogram
 
 - (void)setVolumePointer:(float*)ptr width:(int)width height:(int)height numberOfSlices:(int)n;
 {
@@ -252,8 +250,7 @@
 	[line stroke];
 }
 
-#pragma mark -
-#pragma mark Curves
+#pragma mark - Curves
 
 - (void)newCurve;
 {
@@ -719,8 +716,7 @@
 	pointColors = [newPointColors retain];
 }
 
-#pragma mark -
-#pragma mark Coordinate to NSView Transform
+#pragma mark - Coordinate to NSView Transform
 
 - (NSAffineTransform*)transform;
 {
@@ -735,8 +731,7 @@
 	return transform;
 }
 
-#pragma mark -
-#pragma mark Global draw method
+#pragma mark - Global draw method
 
 - (void)drawRect:(NSRect)rect
 {
@@ -774,8 +769,7 @@
 	updateView = NO;
 }
 
-#pragma mark -
-#pragma mark Points
+#pragma mark - Points
 
 - (BOOL)selectPointAtPosition:(NSPoint)position;
 {
@@ -949,8 +943,7 @@ NSRect rect = drawingRect;
 	[[curves objectAtIndex:ic] replaceObjectAtIndex:ip withObject:[NSValue valueWithPoint:point]];
 }
 
-#pragma mark -
-#pragma mark Control Point
+#pragma mark - Control Point
 
 - (NSPoint)controlPointForCurveAtIndex:(int)i;
 {
@@ -996,8 +989,7 @@ NSRect rect = drawingRect;
 	return NO;
 }
 
-#pragma mark -
-#pragma mark Lines selection
+#pragma mark - Lines selection
 
 - (BOOL)clickOnLineAtPosition:(NSPoint)position;
 {
@@ -1057,8 +1049,7 @@ NSRect rect = drawingRect;
 	return addPoint;
 }
 
-#pragma mark -
-#pragma mark Mouse
+#pragma mark - Mouse
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
@@ -1216,12 +1207,13 @@ NSRect rect = drawingRect;
 		{
 			NSMutableArray *aCurve = [curves objectAtIndex:i];
 			
-			if(!([theEvent modifierFlags] & NSAlternateKeyMask))
+			if (!([theEvent modifierFlags] & NSEventModifierFlagOption))
 			{
 				for (j=0; j<[aCurve count]; j++)
 				{
 					NSPoint pt = [[aCurve objectAtIndex:j] pointValue];
-					if((int) pt.x==(int) selectedPoint.x && (float) pt.y==(float) selectedPoint.y)
+					if ((int) pt.x==(int) selectedPoint.x &&
+                        (float) pt.y==(float) selectedPoint.y)
 					{
 						NSPoint newPoint = [transformView2Coordinate transformPoint:[self convertPoint:[theEvent locationInWindow] fromView:nil]];
 						newPoint = [self legalizePoint:newPoint inCurve:aCurve atIndex:j];
@@ -1250,7 +1242,7 @@ NSRect rect = drawingRect;
 						pt = [transformCoordinate2View transformPoint:pt];
 						NSPoint shiftedPoint;
 						float alpha = 1.0;
-						if(firstPointSelected)
+						if (firstPointSelected)
 							alpha = fabsf(pt.x - lastPoint.x) / d;
 						else
 							alpha = fabsf(pt.x - firstPoint.x) / d;
@@ -1292,7 +1284,7 @@ NSRect rect = drawingRect;
 					NSPoint pt = [[aCurve objectAtIndex:j] pointValue];
 					pt = [transformCoordinate2View transformPoint:pt];
 					NSPoint shiftedPoint;
-					if([theEvent modifierFlags] & NSAlternateKeyMask)
+					if([theEvent modifierFlags] & NSEventModifierFlagOption)
 					{
 						shiftY = 0;
 						
@@ -1411,8 +1403,7 @@ NSRect rect = drawingRect;
 	[self updateView];
 }
 
-#pragma mark -
-#pragma mark Keyboard
+#pragma mark - Keyboard
 
 - (void)keyDown:(NSEvent *)theEvent
 {
@@ -1733,8 +1724,7 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 	}
 }
 
-#pragma mark -
-#pragma mark Copy / Paste
+#pragma mark - Copy / Paste
 
 - (IBAction)copy:(id)sender;
 {
@@ -1902,8 +1892,7 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 	}
 }
 
-#pragma mark -
-#pragma mark Saving (as plist)
+#pragma mark - Saving (as plist)
 
 #define CLUTDATABASE @"/CLUTs/"
 
@@ -1919,11 +1908,13 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 
 - (void)chooseNameAndSave:(id)sender;
 {
-	if(isSaveButtonHighlighted)
+	if (isSaveButtonHighlighted)
 	{
 		isSaveButtonHighlighted = NO;
 		[self setNeedsDisplay:YES];
 	}
+    
+    // TBC: 'chooseNameAndSaveWindow' is defined in VR.xib in main app
 	[NSApp beginSheet:chooseNameAndSaveWindow modalForWindow:[self window] modalDelegate:self didEndSelector:nil contextInfo:nil];
 	[chooseNameAndSaveWindow orderFront:self];
 }
@@ -1944,13 +1935,13 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 //		[chooseNameAndSaveWindow orderOut:self];
 //		[NSApp endSheet:chooseNameAndSaveWindow];
 //	}	
-	NSSavePanel     *panel = [NSSavePanel savePanel];
+	NSSavePanel *panel = [NSSavePanel savePanel];
 	
 	[panel setCanSelectHiddenExtension:YES];
-	[panel setRequiredFileType:@"clut"];
+    [panel setAllowedFileTypes: @[@"clut"]];
 	NSString* filename=@"newCLUT";
 	
-	if( [panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)	
+	if( [panel runModalForDirectory:0L file:filename] == NSModalResponseOK)	
     {
 		
 		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
@@ -2164,16 +2155,16 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 	return convertedCurves;
 }
 
-#pragma mark -
-#pragma mark Connection to VRView
+#pragma mark - Connection to VRView
+
 - (void)setClutChanged
 {
 	clutChanged=YES;
 }
+
 - (void)setCLUTtoVRView;
 {
 	[self setCLUTtoVRView:vrViewLowResolution];
-
 }
 
 - (void)setCLUTtoVRView:(BOOL)lowRes;
@@ -2183,7 +2174,7 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 
     setCLUTtoVRView = YES;
 
-	if([curves count]>0)
+	if ([curves count]>0)
 	{
 		NSMutableDictionary *clut = [NSMutableDictionary dictionaryWithCapacity:2];
 		[clut setObject:curves forKey:@"curves"];
@@ -2310,8 +2301,7 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 }
 
 
-#pragma mark -
-#pragma mark Overlapping curves
+#pragma mark - Overlapping curves
 
 - (BOOL)doesCurve:(NSArray*)curveA overlapCurve:(NSArray*)curveB;
 {

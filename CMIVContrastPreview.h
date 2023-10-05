@@ -120,14 +120,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	double	 mprViewSpace[3], mprViewOrigin[3];
 	float    lastMPRViewTranslate;
 	float    lastMPRViewXAngle,lastMPRViewYAngle;
-	vtkImageReslice		*mprViewSlice,*mprViewROISlice;
+	vtkImageReslice		*mprViewSlice, *mprViewROISlice;
 	vtkImageImport		*reader,*roiReader;
-	vtkTransform		*mprViewBasicTransform,*mprViewUserTransform;
+	vtkTransform		*mprViewBasicTransform, *mprViewUserTransform;
 	vtkTransform		*inverseTransform;
 	
 	vtkRenderer *renderOfVRView;
 	vtkVolumeCollection *volumeCollectionOfVRView;
-	vtkVolume   *volumeOfVRView;
+	vtkVolume *volumeOfVRView;
 	vtkVolumeMapper *volumeMapper;
 	vtkImageData *volumeImageData;	
 	
@@ -237,7 +237,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - (void)createROIfrom3DPaths:(NSArray*)pathsList :(NSArray*)namesList;
 
 	// Table view data source methods
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)tableView:(NSTableView *)aTableView
     objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(int)rowIndex;

@@ -52,6 +52,7 @@
 	float xOrigin,yOrigin,zOrigin;
 
 }
+
 -(int)autoCroppingBasedOnLungSegment:(float*)inData :(unsigned char*)outData :(float)threshold :(float)diameter : (long*)origin :(long*)dimension :(float*)spacing :(float)zoomfactor;
 -(void)lungSegmentation:(float*)inData :(unsigned char*)outData :(float)diameter;
 -(void)closingVesselHoles:(unsigned char*)img2d8bit :(float)diameter;

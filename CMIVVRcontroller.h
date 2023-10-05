@@ -163,7 +163,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - (void)applyCLUTToPropertyList:(int)index;
 - (void)reHideToolbar;
 	// Table view data source methods
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)tableView:(NSTableView *)aTableView
 objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex;
 

@@ -73,7 +73,7 @@ static float deg2rad = M_PI/180.0;
 	}
 	if (needSaveSeeds && contrastVolumeData)
 	{
-		int nrespond=NSRunAlertPanel(NSLocalizedString(@"Save Seeds?", nil),
+		int nrespond = NSRunAlertPanel(NSLocalizedString(@"Save Seeds?", nil),
                                      NSLocalizedString(@"Do you want to save current seeds?", nil),
                                      NSLocalizedString(@"Yes", nil),
                                      NSLocalizedString(@"No", nil),
@@ -349,7 +349,9 @@ static float deg2rad = M_PI/180.0;
 	{
 		NSRunAlertPanel(NSLocalizedString(@"no RGB Support", nil),
                         NSLocalizedString(@"This plugin doesn't surpport RGB images, please convert this series into BW images first", nil),
-                        NSLocalizedString(@"OK", nil), nil, nil);
+                        NSLocalizedString(@"OK", nil),
+                        nil,
+                        nil);
 		return 0;
 	}
 
@@ -464,9 +466,9 @@ static float deg2rad = M_PI/180.0;
 		
 	if (!isInitialWithCPRMode)
 	{
-		[[self window] setHorizontalSlider:oYRotateSlider];
-		[[self window] setVerticalSlider:oXRotateSlider];
-		[[self window] setTranlateSlider:oImageSlider];
+		[[self window] setHorizontalSlider: oYRotateSlider];
+		[[self window] setVerticalSlider: oXRotateSlider];
+		[[self window] setTranlateSlider: oImageSlider];
 		
 		[cprView setHorizontalSlider:cYRotateSlider];
 		[cprView setTranlateSlider:cImageSlider];
@@ -490,10 +492,19 @@ static float deg2rad = M_PI/180.0;
 	// Show the window
 	screenrect = [[[originalViewController window] screen] visibleFrame];
 	[[self window] setFrame:screenrect display:NO animate:NO];
-	[super showWindow:parent];
+#if 1 // original
+    [super showWindow:parent];
 	[[self window] makeKeyAndOrderFront:parent];
 	[[self window] setLevel:NSFloatingWindowLevel]; // Always on top
 	[[self window] display];
+#else
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [super showWindow:parent];
+        [[self window] makeKeyAndOrderFront:parent];
+        [[self window] setLevel:NSFloatingWindowLevel]; // Always on top
+        [[self window] display];
+    });
+#endif
 			
 	if (!isInWizardMode)
 	{
@@ -576,7 +587,6 @@ static float deg2rad = M_PI/180.0;
 	}
 		
 	return self;
-	
 }
 
 - (id)showPanelAsAutomaticWizard:(ViewerController *) vc
@@ -602,7 +612,6 @@ static float deg2rad = M_PI/180.0;
 		[cancelSegmentationButton setAttributedTitle:colorTitle];
 		
 		autoSegmentTimer = [[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(changeSegmentButtonTitle:) userInfo:self repeats:YES] retain];
-		
 	}
     
 	return self;
@@ -711,7 +720,7 @@ static float deg2rad = M_PI/180.0;
 		fuzzyConectednessMap=(float *)[parentFuzzyConectednessData bytes];
 	}
 	
-	if (cpr3DPaths&&centerlinesNameArrays)
+	if (cpr3DPaths && centerlinesNameArrays)
 	{
 		[cpr3DPaths retain];
 		[centerlinesNameArrays retain];
@@ -820,7 +829,11 @@ static float deg2rad = M_PI/180.0;
 	
 	if (isDrawingACenterline)
 	{
-		NSRunAlertPanel(NSLocalizedString(@"Creating A Centerline", nil), NSLocalizedString(@"Please finish the Centerline first", nil), NSLocalizedString(@"OK", nil), nil, nil);
+		NSRunAlertPanel(NSLocalizedString(@"Creating A Centerline", nil),
+                        NSLocalizedString(@"Please finish the Centerline first", nil),
+                        NSLocalizedString(@"OK", nil),
+                        nil,
+                        nil);
 		return NO;
 	}
 	else if (tabidstr)
@@ -2838,7 +2851,7 @@ static float deg2rad = M_PI/180.0;
 	[self updateAxView];
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if ([seedsList isEqual:tableView])
 	{
@@ -5964,7 +5977,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrast setObject: [NSColor yellowColor] forKey:@"Color"];
 		[contrast setObject: [NSNumber numberWithFloat:3.0] forKey:@"BrushWidth"];
 		[contrast setObject: [NSNumber numberWithInt:8] forKey:@"CurrentTool"];
-		[contrast setObject:@"Step4 Mark Unwanted Structure\nDraw yellow lines in the left window. Make sure you have marked following structures: both ventricles, desending aorta, vertebra, sternum and vein of liver." forKey:@"Tips"];
+		[contrast setObject:@"Step4 Mark Unwanted Structures\nDraw yellow lines in the left window. Make sure you have marked following structures: both ventricles, desending aorta, vertebra, sternum and vein of liver." forKey:@"Tips"];
 		[contrastList addObject: contrast];
 		
 		contrast = [NSMutableDictionary dictionary];
@@ -5972,7 +5985,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrast setObject: [NSColor purpleColor] forKey:@"Color"];
 		[contrast setObject: [NSNumber numberWithFloat:1.0] forKey:@"BrushWidth"];
 		[contrast setObject: [NSNumber numberWithInt:6] forKey:@"CurrentTool"];
-		[contrast setObject:@"Sepcial seed to stop propagation."  forKey:@"Tips"];
+		[contrast setObject:@"Special seed to stop propagation."  forKey:@"Tips"];
 		[contrastList addObject: contrast];
 	}	
 	else if (isInWizardMode==1)
@@ -5998,7 +6011,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrast setObject: [NSColor yellowColor] forKey:@"Color"];
 		[contrast setObject: [NSNumber numberWithFloat:3.0] forKey:@"BrushWidth"];
 		[contrast setObject: [NSNumber numberWithInt:8] forKey:@"CurrentTool"];
-		[contrast setObject:@"Step4 Mark Unwanted Structure\nDraw yellow lines in the left window. Make sure you have marked following structures: both ventricles, desending aorta, vertebra, sternum and vein of liver." forKey:@"Tips"];
+		[contrast setObject:@"Step4 Mark Unwanted Structures\nDraw yellow lines in the left window. Make sure you have marked following structures: both ventricles, desending aorta, vertebra, sternum and vein of liver." forKey:@"Tips"];
 		[contrastList addObject: contrast];
 		
 		contrast = [NSMutableDictionary dictionary];
@@ -6006,7 +6019,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[contrast setObject: [NSColor purpleColor] forKey:@"Color"];
 		[contrast setObject: [NSNumber numberWithFloat:1.0] forKey:@"BrushWidth"];
 		[contrast setObject: [NSNumber numberWithInt:6] forKey:@"CurrentTool"];
-		[contrast setObject:@"Sepcial seed to stop propagation." forKey:@"Tips"];
+		[contrast setObject:@"Special seed to stop propagation." forKey:@"Tips"];
 		[contrastList addObject: contrast];
 		needSaveSeeds=YES;
 	}
@@ -7075,7 +7088,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	[originalView setEraserFlag: [sender selectedSegment]];
 }
 
-- (IBAction)covertRegoinToSeeds:(id)sender
+- (IBAction)convertRegionToSeeds:(id)sender
 {
 #ifdef VERBOSEMODE
 	NSLog( @"converting ROI to seeds");
@@ -8582,10 +8595,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
     
 	NSSavePanel *panel = [NSSavePanel savePanel];
 	[panel setCanSelectHiddenExtension:YES];
-	[panel setRequiredFileType:@"txt"];
+	[panel setAllowedFileTypes: @[@"txt"]];
 	NSString* filename=@"result";
 	
-	if ([panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
+	if ([panel runModalForDirectory:0L file:filename] == NSModalResponseOK)
 	{
 		NSString* exportinfo=@"";
 		unsigned int i;
@@ -9752,7 +9765,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 {
 	originalViewController=vc;	
 	parent = owner;
-	[NSBundle loadNibNamed:@"Scissors_Panel" owner:self];
+	[NSBundle loadNibNamed:@"Scissors_Panel" owner:self]; // This XIB contains 'polygonMeasureWindow'
 	screenrect=[[[originalViewController window] screen] visibleFrame];
 	screenrect.size.width=551;
 	screenrect.size.height=266;
@@ -10243,7 +10256,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSSavePanel *panel = [NSSavePanel savePanel];
 	
 	[panel setCanSelectHiddenExtension:YES];
-	[panel setRequiredFileType:@"txt"];
+	[panel setAllowedFileTypes: @[@"txt"]];
 	NSArray* filelist=[originalViewController fileList];
 	NSString* filename=[[filelist objectAtIndex:0] valueForKeyPath: @"series.study.patientID"];
 	if (!filename)
@@ -10251,7 +10264,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	filename=[filename stringByAppendingString:[[originalViewController window] title]];
 	filename=[filename stringByAppendingString:@"measurement"];
 	
-	if ([panel runModalForDirectory:0L file:filename] == NSFileHandlingPanelOKButton)
+	if ([panel runModalForDirectory:0L file:filename] == NSModalResponseOK)
 	{
 		NSArray *roiList= [originalViewController roiList];
 		NSArray *pixList=[originalViewController pixList];
@@ -10758,13 +10771,15 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	{
 		if ([[axViewROIList objectAtIndex:0] count])
 		{
-			[self covertRegoinToSeeds:nil];
+			[self convertRegionToSeeds:nil];
 		}
 		else
 		{
 			NSRunAlertPanel(NSLocalizedString(@"no seeds found", nil),
-                            NSLocalizedString(@"No seeds found for this step, please follow the instruction in the tips bos and do it again", nil),
-                            NSLocalizedString(@"OK", nil), nil, nil);
+                            NSLocalizedString(@"No seeds found for this step, please follow the instruction in the tips box and do it again", nil),
+                            NSLocalizedString(@"OK", nil),
+                            nil,
+                            nil);
 			return;
 		}
 	}

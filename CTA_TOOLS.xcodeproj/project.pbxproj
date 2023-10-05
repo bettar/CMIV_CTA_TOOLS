@@ -146,7 +146,7 @@
 		B9C5969E0D127F810082FCAF /* CMIVDCMView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVDCMView.mm; sourceTree = "<group>"; };
 		B9E39DE70B03648700387A56 /* CMIV_CTA_TOOLS.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIV_CTA_TOOLS.h; sourceTree = "<group>"; };
 		B9E39DE80B03648700387A56 /* CMIV_CTA_TOOLS.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIV_CTA_TOOLS.mm; sourceTree = "<group>"; };
-		B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CMIV_CTA_TOOLS.mieleplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9E39E0C0B0367C200387A56 /* CTA_TOOLS.mieleplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CTA_TOOLS.mieleplugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9E3A0430B048ED300387A56 /* CMIVChopperController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVChopperController.h; sourceTree = "<group>"; };
 		B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = CMIVChopperController.mm; sourceTree = "<group>"; };
 		B9FB33530B0A1FD000A5A87A /* CMIVContrastController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CMIVContrastController.h; sourceTree = "<group>"; };
@@ -245,7 +245,7 @@
 		19C28FB8FE9D52D311CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */,
+				B9E39E0C0B0367C200387A56 /* CTA_TOOLS.mieleplugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -364,9 +364,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8D5B49AC048680CD000E48DA /* CMIV_CTA_TOOLS */ = {
+		8D5B49AC048680CD000E48DA /* CTA_TOOLS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "CMIV_CTA_TOOLS" */;
+			buildConfigurationList = CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "CTA_TOOLS" */;
 			buildPhases = (
 				8D5B49AD048680CD000E48DA /* Headers */,
 				8D5B49AF048680CD000E48DA /* Resources */,
@@ -378,10 +378,10 @@
 			);
 			dependencies = (
 			);
-			name = CMIV_CTA_TOOLS;
+			name = CTA_TOOLS;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = Invert;
-			productReference = B9E39E0C0B0367C200387A56 /* CMIV_CTA_TOOLS.mieleplugin */;
+			productReference = B9E39E0C0B0367C200387A56 /* CTA_TOOLS.mieleplugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -392,7 +392,7 @@
 			attributes = {
 				LastUpgradeCheck = 1420;
 			};
-			buildConfigurationList = CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "CMIV_CTA" */;
+			buildConfigurationList = CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "CTA_TOOLS" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 1;
@@ -407,7 +407,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D5B49AC048680CD000E48DA /* CMIV_CTA_TOOLS */,
+				8D5B49AC048680CD000E48DA /* CTA_TOOLS */,
 			);
 		};
 /* End PBXProject section */
@@ -556,7 +556,7 @@
 					"-lm",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";
-				PRODUCT_NAME = CMIV_CTA_TOOLS;
+				PRODUCT_NAME = CTA_TOOLS;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SECTORDER_FLAGS = "";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -584,6 +584,10 @@
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_FAST_MATH = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					GL_SILENCE_DEPRECATION,
+					NDEBUG,
+				);
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = (
@@ -619,7 +623,7 @@
 					"-lm",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";
-				PRODUCT_NAME = CMIV_CTA_TOOLS;
+				PRODUCT_NAME = CTA_TOOLS;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SECTORDER_FLAGS = "";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -675,7 +679,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "CMIV_CTA_TOOLS" */ = {
+		CE6A9A9008AC841300D0C1EE /* Build configuration list for PBXNativeTarget "CTA_TOOLS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CE6A9A9108AC841300D0C1EE /* Development */,
@@ -684,7 +688,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Deployment;
 		};
-		CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "CMIV_CTA" */ = {
+		CE6A9A9408AC841300D0C1EE /* Build configuration list for PBXProject "CTA_TOOLS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CE6A9A9508AC841300D0C1EE /* Development */,

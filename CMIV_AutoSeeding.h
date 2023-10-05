@@ -36,7 +36,7 @@
 #import "CMIV_CTA_TOOLS.h"
 
 @interface CMIV_AutoSeeding : NSObject {
-	ViewerController     *originalViewController;
+	ViewerController *originalViewController;
 	NSArray* controllersPixList;
 	CMIV_CTA_TOOLS* parent;
 	long imageWidth,imageHeight,imageAmount,imageSize;

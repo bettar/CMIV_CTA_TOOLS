@@ -75,8 +75,8 @@
 
 - (IBAction)setCurrentToImageFromTo:(id)sender
 {
-	if([sender tag])
-		iImageTo= imageAmount - [ originalView curImage ];
+	if ([sender tag])
+		iImageTo = imageAmount - [ originalView curImage ];
 	else
 	    iImageFrom = imageAmount - [ originalView curImage ];
     
@@ -87,7 +87,6 @@
 	[self updateALLROIs];
 	[self updateAllTextField];
 	[self updateImageFromToSliders];
-	
 }
 
 - (IBAction)setROIRect:(id)sender
@@ -316,8 +315,7 @@
 		{
 			[originalViewController checkEverythingLoaded];
 			[[originalViewController window] setTitle:@"VOI"];
-		}
-	
+		}	
 	}
     
 	if ([sender tag]==2)
@@ -406,7 +404,12 @@
 		[[roiListAxial objectAtIndex:i] addObject:curAxialROI];
 	}
 	
-	[originalView setDCM:pixList :fileList :roiListAxial :0 :'i' :YES];
+	[originalView setDCM:pixList 
+                        :fileList
+                        :roiListAxial
+                        :0
+                        :'i'
+                        :YES];
 	[originalView setStringID: roiName];
 	[originalView setIndexWithReset: [pixList count]/2 :YES];
 	[originalView setOrigin: NSMakePoint(0,0)];
@@ -436,7 +439,13 @@
 		// show the window
 		screenrect = [[[originalViewController window] screen] visibleFrame];
 		[[self window]setFrame:screenrect display:NO animate:NO];
+#if 1 // original
 		[super showWindow:parent];
+#else // try 20231004
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [super showWindow:parent];
+        });
+#endif
 		[[self window] makeKeyAndOrderFront:parent];
 		[[self window] display];
 		
@@ -628,7 +637,7 @@
 					iImageTo = imageAmount;
 				
 				[curAxialROI setROIRect:roiRect];
-				[originalView setIndex: [originalView curImage ]];
+				[originalView setIndex: [originalView curImage]];
 				[self updateImageFromToSliders];
 				[self updateAllTextField];
 			}
@@ -640,10 +649,8 @@
 {
     NSLog(@"%s %d", __FUNCTION__, __LINE__);
     
-	long size;
-	
 	NSArray *pixList = [originalViewController pixList];
-	size = sizeof(float) * imageWidth * imageHeight * imageAmount;
+	long size = sizeof(float) * imageWidth * imageHeight * imageAmount;
 	outputVolumeData=[originalViewController volumePtr:0];
 	
 	curPix = [pixList objectAtIndex: 0];
@@ -654,7 +661,7 @@
 	vtkOriginalY = ([curPix originX] ) * vectors[3] + ([curPix originY]) * vectors[4] + ([curPix originZ] )*vectors[5];
 	vtkOriginalZ = ([curPix originX] ) * vectors[6] + ([curPix originY]) * vectors[7] + ([curPix originZ] )*vectors[8];
 	sliceThickness = [curPix sliceInterval];   
-	if( sliceThickness == 0)
+	if ( sliceThickness == 0)
 	{
 		NSLog(@"Slice interval = slice thickness!");
 		sliceThickness = [curPix sliceThickness];
@@ -666,7 +673,9 @@
 	
 	reader = vtkImageImport::New();
 	
-	reader->SetWholeExtent(0, imageWidth-1, 0, imageHeight-1, 0, imageAmount-1);
+	reader->SetWholeExtent(0, imageWidth-1,
+                           0, imageHeight-1,
+                           0, imageAmount-1);
 	reader->SetDataSpacing( [curPix pixelSpacingX], [curPix pixelSpacingY], sliceThickness);
 	reader->SetDataOrigin( vtkOriginalX,vtkOriginalY,vtkOriginalZ );
 	//reader->SetDataOrigin(  [firstObject originX],[firstObject originY],[firstObject originZ]);
@@ -766,9 +775,9 @@
 - (void) updateALLROIs
 {
 	[curAxialROI setROIRect:roiRect];
-	int i=[originalView curImage ];
+	int i = [originalView curImage];
 	[originalView setIndex: i];
-	if([reformViewState selectedSegment])
+	if ([reformViewState selectedSegment])
 		[curReformROI setROIRect:sagittalROIRect];
 	else
 		[curReformROI setROIRect:coronalROIRect];

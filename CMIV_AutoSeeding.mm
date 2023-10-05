@@ -304,24 +304,28 @@
 	for(i=0;i<size;i++)
 		if(!outData[i])
 			volumeData[i]=minValueInCurSeries;
-	if(originalViewController)
+
+    if (originalViewController)
 	{
-		DCMView* origninImageView=[originalViewController imageView];
+		DCMView* origninImageView = [originalViewController imageView];
 		float wl,ww;
 		[origninImageView getWLWW:&wl :&ww];
 		[origninImageView setWLWW:wl :ww];
 	}
 }
 
--(int)resampleImage:(float*)input :(float*)output :(long*)indimesion :(long*)outdimesion
+-(int)resampleImage:(float*)input
+                   :(float*)output
+                   :(long*)indimesion
+                   :(long*)outdimesion
 {
 	vImage_Buffer srcVimage, dstVimage;
-	int outImageWidth,outImageHeight,outImageSize,outImageAmount;
-	int inImageWidth=indimesion[0], inImageHeight=indimesion[1], inImageAmount=indimesion[2];
-	outImageWidth=outdimesion[0];
-	outImageHeight=outdimesion[1];
-	outImageSize=outImageWidth*outImageHeight;
-	outImageAmount=outdimesion[2];
+	int outImageWidth, outImageHeight, outImageSize, outImageAmount;
+	int inImageWidth = indimesion[0], inImageHeight = indimesion[1], inImageAmount = indimesion[2];
+	outImageWidth = outdimesion[0];
+	outImageHeight = outdimesion[1];
+	outImageSize = outImageWidth * outImageHeight;
+	outImageAmount = outdimesion[2];
 	
 	float* tempVolume = (float*)malloc(outImageWidth*outImageHeight*inImageAmount*sizeof(float));
 	if (!tempVolume)
@@ -341,19 +345,19 @@
 		srcVimage.rowBytes = inImageWidth*sizeof(float);
 		
 		dstVimage.data = tempVolume + outImageSize * i;
-		dstVimage.height =  outImageHeight;
+		dstVimage.height = outImageHeight;
 		dstVimage.width = outImageWidth;
 		dstVimage.rowBytes = outImageWidth*sizeof(float);
 		vImageScale_PlanarF( &srcVimage, &dstVimage, 0L,0);
 	}
 	
 	srcVimage.data = tempVolume;
-	srcVimage.height =  inImageAmount;
+	srcVimage.height = inImageAmount;
 	srcVimage.width = outImageSize;
 	srcVimage.rowBytes = outImageSize*sizeof(float);
 	
 	dstVimage.data = output;
-	dstVimage.height =  outImageAmount;
+	dstVimage.height = outImageAmount;
 	dstVimage.width = outImageSize;
 	dstVimage.rowBytes = outImageSize*sizeof(float);
 	vImageScale_PlanarF( &srcVimage, &dstVimage, 0L, 0);
@@ -427,7 +431,11 @@
 	for (int i=0;i<size;i++)
 		*(outputData+i)=minValueInCurSeries;
 	
-	[self useSeedDataToInitializeDirectionData:seedData:inputData:outputData:directionData:size];
+	[self useSeedDataToInitializeDirectionData:seedData
+                                              :inputData
+                                              :outputData
+                                              :directionData
+                                              :size];
 
 	// Start seed growing
 	CMIVSegmentCore *segmentCoreFunc = [[CMIVSegmentCore alloc] init];
@@ -452,10 +460,11 @@
 			outputData[i]=minValueInCurSeries;
 			//inputData[i]=-10000;
 		}
-	free(colorData);
+
+    free(colorData);
 	size=imageWidth * imageHeight * imageAmount*sizeof(short);
 	memset(seedData,0,size);
-	unsigned short*pdismap=seedData;
+	unsigned short *pdismap = seedData;
 	{
 		[self prepareForCalculateLength:pdismap:directionData];
 		size=imageWidth * imageHeight * imageAmount*sizeof(float);
@@ -488,9 +497,9 @@
 			NSLog( @"finding new branches");
 			[self prepareForCalculateWightedLength:outputData:directionData];
 			int endindex=[segmentCoreFunc calculatePathLengthWithWeightFunction: inputData:outputData
-                                                                       Pointer: directionData
-                                                                              : weightThreshold
-                                                                              : maxValueInCurSeries];
+                                                                        Pointer: directionData
+                                                                               : weightThreshold
+                                                                               : maxValueInCurSeries];
 			pathWeightLength = *(outputData+endindex);
 			if (endindex>0)
 			{
@@ -565,7 +574,7 @@
 	for (i=0;i<[centerlines count];i++)
 	{
 		NSMutableArray* anewcenterline=[NSMutableArray arrayWithCapacity:0];
-		for (j=0;j<[[centerlines objectAtIndex:i] count];j++)
+		for (j=0; j<[[centerlines objectAtIndex:i] count]; j++)
 		{
 			CMIV3DPoint* apoint=[[centerlines objectAtIndex:i] objectAtIndex:j];
 			float x,y,z,ptx,pty,ptz;
@@ -618,7 +627,7 @@
 		{
 			unsigned char colorindex=seedData[i];
 			directionData[i]=colorindex|0x80;
-			if(colorindex!=BARRIERMARKER)
+			if (colorindex!=BARRIERMARKER)
 				outputData[i]=inputData[i];
 		}
 	}

@@ -636,9 +636,17 @@
 			volumeOfVRView = (vtkVolume * )[vrView volume];
 			volumeMapper = (vtkVolumeMapper *)volumeOfVRView->GetMapper() ;
 			//if( volumeMapper) volumeMapper->SetMinimumImageSampleDistance( 2.0);
+#if 1 // sometimes it crashes here
 			volumeImageData=(vtkImageData *)volumeMapper->GetInput();
-			volumeDataOfVR=(unsigned short*)volumeImageData->GetScalarPointer();
-			[self updateVRView];
+#else
+            // TODO: try this
+            volumeImageData = vtkImageData::SafeDownCast(volumeMapper->GetInput());
+            if (volumeImageData)
+#endif
+            {
+                volumeDataOfVR=(unsigned short*)volumeImageData->GetScalarPointer();
+                [self updateVRView];
+            }
 		}
 		
 		if (parent.ifVesselEnhanced)
@@ -1007,7 +1015,7 @@
 	}	
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if([seedList isEqual:tableView])
 	{
@@ -2085,20 +2093,20 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	choosenColorList=(unsigned char*)malloc(size);
 	size=imageAmount*imageSize;
 	int i,j;
-	for(i=0;i<choosenColorNumber;i++)
+	for (i=0;i<choosenColorNumber;i++)
 		*(choosenColorList+i) = (unsigned char) [[showSeedsArray objectAtIndex:i] intValue];
 	float thresholdValue = [thresholdSlider floatValue];
-	for(i=0;i<size;i++)
+	for (i=0;i<size;i++)
 	{
 		isAChoosenColor=0;
-		for(j=0;j<choosenColorNumber;j++)
+		for (j=0;j<choosenColorNumber;j++)
 			if(*(choosenColorList+j)==*(colorData+i))
 				isAChoosenColor=1;
-		if(isAChoosenColor&&((*(outputData+i))>=thresholdValue))
+
+        if (isAChoosenColor&&((*(outputData+i))>=thresholdValue))
 			*(volumeData+i)=(unsigned short)((*(inputData+i)+hostAppOffset)*hostAppValueFactor);
 		else
 			*(volumeData+i)=1;
-		
 	}
 	
 	free(choosenColorList);
@@ -2106,7 +2114,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 - (void) updateVRView
 {
-	if(!volumeDataOfVR)
+	if (!volumeDataOfVR)
 		return;
 
     [self createUnsignedShortVolumDataUnderMask:volumeDataOfVR];
@@ -2128,7 +2136,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	z *= zSpacing;
 	mprViewBasicTransform->Identity();
 	mprViewBasicTransform->Translate( vtkOriginalX+x, vtkOriginalY+y, vtkOriginalZ + z );
-	mprViewUserTransform->Identity ();
+	mprViewUserTransform->Identity();
 	
 	[self updateMPRView];
 	[self resetMPRSliders];	
@@ -2149,12 +2157,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		CMIV3DPoint* a3DPoint;
 		float position[3];
 		
-		
 		float x,y;
 		NSPoint tempPoint;
 		tempPoint.x=-1;
 		tempPoint.y=-1;
-		for(i=[points2D count];i<[curvedMPR3DPath count];i++)
+		for (i=[points2D count];i<[curvedMPR3DPath count];i++)
 		{
 			MyPoint *mypt = [[MyPoint alloc] initWithPoint: NSMakePoint(0,0)];
 			
@@ -2163,8 +2170,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[mypt release];
 			
 		}
-		int j=0;
-		for(i=0;i<[curvedMPR3DPath count];i++)
+
+        int j=0;
+		for (i=0;i<[curvedMPR3DPath count];i++)
 		{
 			a3DPoint=[curvedMPR3DPath objectAtIndex: i];
 			position[0]=[a3DPoint x];
@@ -2173,7 +2181,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			inverseTransform->TransformPoint(position,position);
 			x = (position[0]-originX)/spaceX;
 			y = (position[1]-originY)/spaceY;
-			if(tempPoint.x==x&&tempPoint.y==y)
+			if (tempPoint.x==x&&tempPoint.y==y)
 			{
 				[points2D removeLastObject];
 			}
@@ -2189,8 +2197,6 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		[curvedMPR2DPath setROIMode:ROI_sleep];
 	}	
 	[roiList addObjectsFromArray:manualCenterlineROIsArray];
-
-	
 }
 
 - (IBAction)loadAEndPointForCenterline:(id)sender
@@ -2261,7 +2267,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	spacing[2]=zSpacing;
 	[segmentCoreFunc setImageWidth:imageWidth Height: imageHeight Amount: imageAmount Spacing:spacing];
 
-	for(unsigned i=0;i<[endPointsArray count];i++)
+	for (unsigned i=0;i<[endPointsArray count];i++)
 	{
 		NSMutableArray* apath=[NSMutableArray arrayWithCapacity:0];
 		CMIV3DPoint* apoint=[endPointsArray objectAtIndex:i];
@@ -2318,8 +2324,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	CMIV3DPoint* temppoint;
 	float x,y,z;
 	unsigned int i,j;
-	for(i=0;i<[centerlines count];i++)
-		for(j=0;j<[[centerlines objectAtIndex: i] count];j++)
+	for (i=0;i<[centerlines count];i++)
+		for (j=0;j<[[centerlines objectAtIndex: i] count];j++)
 		{
 			temppoint=[[centerlines objectAtIndex:i] objectAtIndex: j];
 			x= [temppoint x];
@@ -2330,8 +2336,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			[temppoint setZ: vtkOriginalZ + z*zSpacing+zSpacing*0.5];
 			
 		}
-	
 }
+
 - (void)saveCurrentSeeds
 {
 	[parent cleanDataOfWizard];
@@ -2342,14 +2348,14 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	NSMutableArray* seedsnamearray=[NSMutableArray arrayWithCapacity:0];
 	NSMutableArray* rootseedsarray=[NSMutableArray arrayWithCapacity:0];
 	unsigned int i;
-	for(i=0;i<[newSeedsROIList count];i++)
+	for (i=0;i<[newSeedsROIList count];i++)
 	{
 		ROI* temproi=[newSeedsROIList objectAtIndex:i];
 		[seedsnamearray addObject:[temproi name]];
 		if([temproi type]==tOval)
 			[rootseedsarray addObject:[NSNumber numberWithInt:i]];
-		
 	}
+    
 	[dic setObject:seedsnamearray forKey:@"SeedNameArray"];
 	[dic setObject:rootseedsarray forKey:@"RootSeedArray"];
 
@@ -2366,9 +2372,11 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	skeletonParaEndHuThreshold=[[NSUserDefaults standardUserDefaults] floatForKey:@"CMIVSkeletonParameterBranchEndThreshold"];
 	if(skeletonParaLengthThreshold<5.0)
 		skeletonParaLengthThreshold=10.0;
-	if(skeletonParaEndHuThreshold<=0.0)
+
+    if(skeletonParaEndHuThreshold<=0.0)
 		skeletonParaEndHuThreshold=100.0;
-	float  pathWeightLength,lengthThreshold,weightThreshold;
+	
+    float pathWeightLength,lengthThreshold,weightThreshold;
 	weightThreshold=skeletonParaEndHuThreshold ;
 	lengthThreshold=skeletonParaLengthThreshold;
 	if (lengthThreshold<5.0)
@@ -2425,7 +2433,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 
     colorData=nil;
 	parentColorData=nil;
-	if(parentSeedData )    							
+	if (parentSeedData )
 		[parentSeedData release];
 	else
 		free(newSeedsBuffer);
@@ -2457,7 +2465,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 			NSData* vesselnessData=[dic objectForKey:@"VesselnessMap"];
 			NSNumber* vesselnessmapspacing=[dic objectForKey:@"VesselnessMapTargetSpacing"];
 			float* smallvolumedata=(float*)[vesselnessData bytes];
-			if(smallvolumedata)
+			if (smallvolumedata)
 			{
 				
 				long dimension[3],newdimension[3];
@@ -2474,8 +2482,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 				newdimension[1]=dimension[1]*spacing[1]/targetspacing;
 				newdimension[2]=dimension[2]*spacing[2]/targetspacing;
 				
-				int err=[autoSeedingController resampleImage:smallvolumedata:outputData:newdimension:dimension];
-				
+				int err= [autoSeedingController resampleImage : smallvolumedata
+                                                              : outputData
+                                                              : newdimension
+                                                              : dimension];
 				
 				if(err)
 					NSLog( @"failed to resample vesselnessmap");

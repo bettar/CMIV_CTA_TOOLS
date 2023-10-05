@@ -65,11 +65,12 @@ static float deg2rad = M_PI/180.0;
     float acceleratefactor=0.1;
     if (tranlateSlider!=nil)
     {
-        if([theEvent modifierFlags] & NSCommandKeyMask )
+        if ([theEvent modifierFlags] & NSEventModifierFlagCommand)
             y=[theEvent deltaX];
         else
             y=[theEvent deltaY];
-        if(y!=0)
+
+        if (y!=0)
         {
             if(y>0)
                 y=(y-0.1)*acceleratefactor+0.1;
@@ -88,7 +89,7 @@ static float deg2rad = M_PI/180.0;
 
     if (horizontalSlider!=nil)
     {
-        if ([theEvent modifierFlags] & NSCommandKeyMask )
+        if ([theEvent modifierFlags] & NSEventModifierFlagCommand)
             x=[theEvent deltaY];
         else
             x=[theEvent deltaX];
@@ -123,7 +124,6 @@ static float deg2rad = M_PI/180.0;
     if (displayCrossLines &&
        [theEvent type] == NSLeftMouseDown)
     {
-        
         NSPoint mouseLocation = [self ConvertFromNSView2GL: [self convertPoint:[theEvent locationInWindow] fromView:nil]];
         int mouseOnLines=[self checkMouseOnCrossLines:mouseLocation];
         if ( mouseOnLines==2)
@@ -223,6 +223,7 @@ static float deg2rad = M_PI/180.0;
         }
     }
 }
+
 -(int) checkMouseOnCrossLines:(NSPoint)mouseLocation
 {
     int mouseOnLines=0;
@@ -279,13 +280,14 @@ static float deg2rad = M_PI/180.0;
         float acceleratefactor=1.0;
         if(tranlateSlider!=nil)
         {
-            if([event modifierFlags] &  NSAlternateKeyMask)
+            if ([event modifierFlags] & NSEventModifierFlagOption)
                 acceleratefactor=10.0;
             
             if( i==121)
                 y=1;
             else if(i==116)
                 y=-1;
+
             if(y!=0)
             {
                 loc=[tranlateSlider floatValue];
@@ -297,9 +299,8 @@ static float deg2rad = M_PI/180.0;
                 [tranlateSlider setFloatValue:loc];
                 [tranlateSlider performClick:self];
             }
-            
-            
         }
+
         if(horizontalSlider!=nil)
         {
             if(i==124)
@@ -309,11 +310,10 @@ static float deg2rad = M_PI/180.0;
             else if(i==123)
             {
                 x=-1;
-                
             }
+
             if(x!=0)
             {
-                
                 loc=[horizontalSlider floatValue];
                 loc+=x*acceleratefactor;
                 while(loc>[horizontalSlider maxValue])
@@ -324,14 +324,15 @@ static float deg2rad = M_PI/180.0;
                 [horizontalSlider setFloatValue:loc];
                 [horizontalSlider performClick:self];
             }
-            
         }
+
         if(tranlateSlider==nil&&horizontalSlider==nil)
             [[self nextResponder] keyDown:event];
     }
     else
         [super keyDown:event];
 }
+
 - (void) setMPRAngle: (float) vectorMPR
 {
     crossAngle=vectorMPR;
@@ -383,8 +384,8 @@ static float deg2rad = M_PI/180.0;
         float crossglY=0.;
         if (curDCM)
         {
-            crossglX = [self scaleValue] *(crossPoint.x-curDCM.pwidth/2.);
-            crossglY = [self scaleValue] *(crossPoint.y-curDCM.pheight/2.);
+            crossglX = [self scaleValue] * (crossPoint.x-curDCM.pwidth/2.);
+            crossglY = [self scaleValue] * (crossPoint.y-curDCM.pheight/2.);
         }
         
 #ifdef WITH_OPENGL_32
@@ -409,9 +410,11 @@ static float deg2rad = M_PI/180.0;
             NSMutableArray *pArray = [NSMutableArray array];
             for (int i=0; i<nPoints; i++)
             {
+#ifdef WITH_OPENGL_32
                 // Apply local model transformation
                 glm::vec4 pB = MV*glm::vec4(pA[i],0,1);
                 pA[i] = glm::vec2(pB.x, pB.y);
+#endif
                 [pArray addObject: [NSValue valueWithBytes:&pA[i] objCType:@encode(glm::vec2)]];
             }
          
@@ -433,9 +436,11 @@ static float deg2rad = M_PI/180.0;
             NSMutableArray *pArray = [NSMutableArray array];
             for (int i=0; i<nPoints; i++)
             {
+#ifdef WITH_OPENGL_32
                 // Apply local model transformation
                 glm::vec4 pB = MV*glm::vec4(pA[i],0,1);
                 pA[i] = glm::vec2(pB.x, pB.y);
+#endif
                 [pArray addObject: [NSValue valueWithBytes:&pA[i] objCType:@encode(glm::vec2)]];
             }
             
@@ -447,9 +452,11 @@ static float deg2rad = M_PI/180.0;
         // Drawing the center point
         {
             glm::vec2 a(0, 0);
+#ifdef WITH_OPENGL_32
             // Apply local model transformation
             glm::vec4 pB = MV*glm::vec4(a,0,1);
             a = glm::vec2(pB.x, pB.y);
+#endif
             NSMutableArray *pArray = [NSMutableArray array];
             [pArray addObject: [NSValue valueWithBytes:&a objCType:@encode(glm::vec2)]];
            
@@ -460,18 +467,18 @@ static float deg2rad = M_PI/180.0;
             else
                 renderer_set_rgba(0.0, 1.0, 0.0, 0.5);
             
-            glPointSize( pointSize * backingScaleFactor);
+            renderer_set_point_size( pointSize * backingScaleFactor);
             renderer_drawPoints([pArray copy]);
         }
         
+        renderer_disable_blend_smooth();
+
         // FIXME: do this in host app
         [self setShaderProgramForLineWidth: lineWidth * backingScaleFactor];
-        
-        renderer_disable_blend_smooth();
-        
+                
 #ifndef WITH_OPENGL_32
         glLineWidth(2.0);
-        glPointSize(2.0);
+        renderer_set_point_size(2.0);
 
         glRotatef( -crossAngle, 0, 0, 1);
         glTranslatef(-crossglX, -crossglY, 0.0);

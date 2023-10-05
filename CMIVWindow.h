@@ -8,15 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-
-@interface CMIVWindow : NSWindow {
-	
-
+@interface CMIVWindow : NSWindow
+{
 	NSSlider* horizontalSlider;
 	NSSlider* verticalSlider;
 	NSSlider* tranlateSlider;
-	
-
 }
 
 -(void)setHorizontalSlider:(NSSlider*) aSlider;

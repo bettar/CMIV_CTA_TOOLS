@@ -199,22 +199,20 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 
 - (IBAction)captureImage:(id)sender
 {
-	if(!isSegmentVR)
+	if (!isSegmentVR)
 	{
-		int i;
-		float			o[ 9];
+		float o[ 9];
 		DCMPix *firstObject=[[originalViewController pixList] objectAtIndex: 0];
 		
-		DICOMExport		*dcmSequence = [[DICOMExport alloc] init];
+		DICOMExport *dcmSequence = [[DICOMExport alloc] init];
 		
-		
-		[dcmSequence setSeriesNumber:6700 + [[NSCalendarDate date] minuteOfHour]  + [[NSCalendarDate date] secondOfMinute]];
+		[dcmSequence setSeriesNumber:6700 + [[NSCalendarDate date] minuteOfHour] + [[NSCalendarDate date] secondOfMinute]];
 		[dcmSequence setSeriesDescription:@"4D VR"];
 		[dcmSequence setSourceFile: [firstObject sourceFile]];
 		
 		[vrViewer renderImageWithBestQuality: YES waitDialog: NO];
 
-        for (i=0;i<maxMovieIndex;i++)
+        for (int i=0; i<maxMovieIndex; i++)
 		{
 			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 			float* newVolumeData=[originalViewController volumePtr:i];
@@ -222,8 +220,8 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			[vrViewer movieChangeSource: newVolumeData];
 			[self setBlendVolumeCLUT];
 			
-			volumeOfVRView = (vtkVolume * )[vrViewer volume];
-			volumeMapper=(vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
+			volumeOfVRView = (vtkVolume *)[vrViewer volume];
+			volumeMapper = (vtkVolumeMapper *) volumeOfVRView->GetMapper() ;
 
             if ([cutPlaneSwitch state] == NSControlStateValueOn)
 				volumeMapper->AddClippingPlane(clipPlane1);
@@ -242,7 +240,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
             dataPtr = [vrViewer getRawPixels:&width :&height :&spp :&bpp :YES :NO];
 			[vrViewer endRenderImageWithBestQuality];
 
-            if( dataPtr)
+            if (dataPtr)
 			{
 				[vrViewer getOrientation: o];
 				[dcmSequence setOrientation: o];
@@ -924,7 +922,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	myVolumeProperty->SetSpecularPower(15);
 	myVolumeProperty->SetShade( 1);
 	
-//	if( [[NSApp currentEvent] modifierFlags] & NSAlternateKeyMask)
+//	if( [[NSApp currentEvent] modifierFlags] & NSEventModifierFlagOption)
 //		myVolumeProperty->SetInterpolationTypeToNearest();
 //   else
 //		myVolumeProperty->SetInterpolationTypeToLinear();// can not use linear interpolation because the CT value jump at edge
@@ -1198,7 +1196,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 	}
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if ([segmentList isEqual:tableView])
 	{
@@ -1860,7 +1858,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	int result;
     NSOpenPanel *oPanel = [NSOpenPanel openPanel];
 	[oPanel setCanSelectHiddenExtension:YES];
-	[oPanel setRequiredFileType:@"clut"];
+	[oPanel setAllowedFileTypes: @[@"clut"]];
     [oPanel setAllowsMultipleSelection:NO];
     [oPanel setCanChooseDirectories:NO];
     

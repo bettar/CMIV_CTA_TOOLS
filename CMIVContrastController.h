@@ -39,7 +39,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 @interface CMIVContrastController : NSObject
 {
-
     IBOutlet NSTableView *inROIList;
     IBOutlet NSTableView *outROIList;
     IBOutlet NSWindow *window;
@@ -52,7 +51,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	NSMutableArray *inROIArray,*outROIArray,*outputColorList;
 	int imageWidth,imageHeight,imageAmount,imageSize;
 	float minValueInCurSeries,upperThreshold,lowerThreshold;
-	ViewerController     *originalViewController;
+	ViewerController *originalViewController;
 	int   ifUseSmoothFilter;
 	CMIV_CTA_TOOLS* parent;
 }
@@ -79,7 +78,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - (void) runSegmentation:(float **)ppInData :(float **)ppOutData :(unsigned char **)ppColorData :(unsigned char **)ppDirectionData;
 - (void) enhanceCenterline:(float *)inputData :(unsigned char *)colorData :(NSMutableArray *)pathlists;
 	// Table view data source methods
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 - (id)tableView:(NSTableView *)aTableView
     objectValueForTableColumn:(NSTableColumn *)aTableColumn
 			row:(int)rowIndex;

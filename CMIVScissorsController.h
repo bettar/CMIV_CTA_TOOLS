@@ -378,7 +378,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - (IBAction)setBrushMode:(id)sender;
 - (IBAction)crossShow:(id)sender;
 - (IBAction)showAnnotations:(id)sender;
-- (IBAction)covertRegoinToSeeds:(id)sender;
+- (IBAction)convertRegionToSeeds:(id)sender;
 
 - (IBAction)goNextStep:(id)sender;
 - (IBAction)goPreviousStep:(id)sender;
@@ -462,7 +462,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - (void)changAmongMPRCPRAndAnalysis:(int)modeindex;
 	
 // For tableview
-- (int)numberOfRowsInTableView:(NSTableView *)tableView;
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView;
 - (id)tableView:(NSTableView *)tableView
     objectValueForTableColumn:(NSTableColumn *)tableColumn
             row:(int)row;

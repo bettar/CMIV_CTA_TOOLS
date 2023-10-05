@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "55E51CD8-6462-43A8-A1D0-D1F5B2FF3AC1"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B7905DD4-42B0-4C41-A886-E2E719AEACF4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIVScissorsController.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "596"
+            endingLineNumber = "596"
+            landmarkName = "-showPanelAsAutomaticWizard::"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B7905DD4-42B0-4C41-A886-E2E719AEACF4 - 51aa441c82f41ded"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPanelAsAutomaticWizard::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "586"
+                  endingLineNumber = "586"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "B7905DD4-42B0-4C41-A886-E2E719AEACF4 - 51aa441c82f41304"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPanelAsAutomaticWizard::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "595"
+                  endingLineNumber = "595"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "B7905DD4-42B0-4C41-A886-E2E719AEACF4 - 51aa441c82f41327"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPanelAsAutomaticWizard::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "596"
+                  endingLineNumber = "596"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "B7905DD4-42B0-4C41-A886-E2E719AEACF4 - 51aa441c82f41327"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPanelAsAutomaticWizard::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "596"
+                  endingLineNumber = "596"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7CE232E0-66A4-4CC3-A080-8D755675307F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIVVRcontroller.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "541"
+            endingLineNumber = "541"
+            landmarkName = "-showVRPanel::"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CE470887-1C60-4AE6-A365-277CCE43CDF4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIVVRcontroller.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1015"
+            endingLineNumber = "1015"
+            landmarkName = "-initVRViewForSegmentalVR"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "85D42D95-4B6D-4A2E-85F0-D0F16B96F19C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIVVRcontroller.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "533"
+            endingLineNumber = "533"
+            landmarkName = "-showVRPanel::"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD646016-03DE-488B-987D-13D2655FA425"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIV_CTA_TOOLS.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "316"
+            endingLineNumber = "316"
+            landmarkName = "-filterImage:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "796291A1-44D8-4045-BFFB-C75E5071A845"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIVScissorsController.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "9766"
+            endingLineNumber = "9766"
+            landmarkName = "-showPolygonMeasurementPanel::"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "796291A1-44D8-4045-BFFB-C75E5071A845 - 580040efacdb8131"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPolygonMeasurementPanel::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9761"
+                  endingLineNumber = "9761"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "796291A1-44D8-4045-BFFB-C75E5071A845 - 580040efacdb80cb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPolygonMeasurementPanel::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9767"
+                  endingLineNumber = "9767"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "796291A1-44D8-4045-BFFB-C75E5071A845 - 580040efacdb80ea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[CMIVScissorsController showPolygonMeasurementPanel::]"
+                  moduleName = "CTA_TOOLS"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "9766"
+                  endingLineNumber = "9766"
+                  offsetFromSymbolStart = "32">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B62634A9-B521-4FDA-B2B1-55B4591B7249"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CMIVContrastPreview.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "636"
+            endingLineNumber = "636"
+            landmarkName = "-showPreviewPanel:::::"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

@@ -464,7 +464,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	return err;
 }
 
-- (int)numberOfRowsInTableView:(NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	if([inROIList isEqual:tableView])
 	   {
@@ -902,7 +902,6 @@ if( originalViewController == 0L) return 0L;
 		tempstr=[tempstr stringByAppendingFormat:@" %@",[[outROIArray objectAtIndex:newcolorIndex-1] name]];
 	}
 	
-	
 	[new2DViewer checkEverythingLoaded];
 	[[new2DViewer window] setTitle:tempstr];
 	NSMutableArray	*temparray=[[parent dataOfWizard] objectForKey: @"VCList"];
@@ -922,6 +921,7 @@ if( originalViewController == 0L) return 0L;
 	[[self window] makeKeyAndOrderFront:parent];
 	return 0;
 }
+
 - (int) exportToSeries:(float *)inputData :(float *)outputData :(unsigned char *)colorData
 {
 	int index,z;
@@ -1075,10 +1075,10 @@ if( originalViewController == 0L) return 0L;
 	}
 	[temparray addObject:tempstr];
 	[[self window] makeKeyAndOrderFront:parent];
-	return err;
-	
-	
+
+    return err;
 }
+
 - (int) exportToTempFolder:(float *)inputData :(float *)outputData :(unsigned char *)colorData
 {
 	[parent cleanDataOfWizard];

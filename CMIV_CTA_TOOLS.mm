@@ -69,7 +69,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     }
     else if ([hostAppName isEqualToString: @"miele-lxiv"])
     {
-        minVersion = @"9.26.114";
+        minVersion = @"9.28.116";
     }
 
     if ([hostAppVersion compare: minVersion options: NSNumericSearch] < 0)
@@ -600,6 +600,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 - (IBAction) showAdvancedSettingDlg:(id)sender
 {
+    // TODO: use [NSWindow beginSheet:completionHandler:] instead
     [NSApp beginSheet:advanceSettingWindow
        modalForWindow:[NSApp keyWindow]
         modalDelegate:self
