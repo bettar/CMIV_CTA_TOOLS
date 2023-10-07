@@ -541,34 +541,33 @@ static float deg2rad = M_PI/180.0;
 	NSPoint apoint;
 	apoint.x=1;
 	apoint.y=1;
-#if 0 // @@@
-	NSEvent* virtualMouseDownEvent = [NSEvent mouseEventWithType: NSRightMouseDown
+
+	NSEvent* virtualMouseDownEvent = [NSEvent mouseEventWithType: NSEventTypeRightMouseDown
                                                         location: apoint
-                                                   modifierFlags: nil
-                                                       timestamp: GetCurrentEventTime()
+                                                   modifierFlags: 0
+                                                       timestamp: [NSDate timeIntervalSinceReferenceDate] //GetCurrentEventTime()
                                                     windowNumber: 0
                                                          context: context
-                                                     eventNumber: nil
+                                                     eventNumber: 0
                                                       clickCount: 1
-                                                        pressure: nil];
+                                                        pressure: 0.];
 
-    NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType: NSRightMouseUp
+    NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType: NSEventTypeRightMouseUp
                                                       location: apoint
-                                                 modifierFlags: nil
-                                                     timestamp: GetCurrentEventTime()
+                                                 modifierFlags: 0
+                                                     timestamp: [NSDate timeIntervalSinceReferenceDate] //GetCurrentEventTime()
                                                   windowNumber: 0
                                                        context: context
-                                                   eventNumber: nil
+                                                   eventNumber: 0
                                                     clickCount: 1
-                                                      pressure: nil];
+                                                      pressure: 0.];
 	[originalView mouseDown:virtualMouseDownEvent];
 	[originalView mouseUp:virtualMouseUpEvent];
-	[cPRView mouseDown:virtualMouseDownEvent];
-	[cPRView mouseUp:virtualMouseUpEvent];
-	[crossAxiasView mouseDown:virtualMouseDownEvent];
-	[crossAxiasView mouseUp:virtualMouseUpEvent];
+	[cprView mouseDown:virtualMouseDownEvent];
+	[cprView mouseUp:virtualMouseUpEvent];
+	[crossAxialView mouseDown:virtualMouseDownEvent];
+	[crossAxialView mouseUp:virtualMouseUpEvent];
 	// Mistery bug above
-#endif
 	
 	return self;
 }
@@ -1363,7 +1362,7 @@ static float deg2rad = M_PI/180.0;
 	[crossAxialView setOrigin: NSMakePoint(0,0)];
 	[crossAxialView setCurrentTool:tWL];
 	[crossAxialView setScaleValue: 1.5*[originalView scaleValue]];
-	//[crossAxiasView discretelySetWLWW:iwl :iww];	
+	//[crossAxialView discretelySetWLWW:iwl :iww];	
 	
 	cprImageBuffer=0L;
 	crossX=-origin[0]/space[0];
@@ -1823,12 +1822,11 @@ static float deg2rad = M_PI/180.0;
 
 - (void) changeCurrentTool:(ToolMode) tag
 {
-	if (currentTool==tNext)
+	if (currentTool==tNext) // 4
 	{
-		unsigned int i;
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey: @"ROITEXTNAMEONLY"];
 		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ROITEXTIFSELECTED"];
-		for ( i=0;i<[[oViewROIList objectAtIndex: 0] count];i++)
+		for (unsigned int i=0; i<[[oViewROIList objectAtIndex: 0] count]; i++)
 		{
 			ROI* temproi=[[oViewROIList objectAtIndex: 0] objectAtIndex: i] ;
 			if ([temproi type] == tMeasure)
@@ -1838,23 +1836,21 @@ static float deg2rad = M_PI/180.0;
 			}
 		}
 
-        for ( i=0;i<[[cViewROIList objectAtIndex: 0] count];i++)
+        for (unsigned int i=0; i<[[cViewROIList objectAtIndex: 0] count]; i++)
 		{
 			ROI* temproi=[[cViewROIList objectAtIndex: 0] objectAtIndex: i] ;
 			if ([temproi type] == tMeasure)
 			{
-				
 				[[cViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 				i--;
 			}
 		}
 
-        for ( i=0;i<[[axViewROIList objectAtIndex: 0] count];i++)
+        for (unsigned int i=0; i<[[axViewROIList objectAtIndex: 0] count]; i++)
 		{
 			ROI* temproi=[[axViewROIList objectAtIndex: 0] objectAtIndex: i] ;
 			if ([temproi type] == tMeasure)
 			{
-				
 				[[axViewROIList objectAtIndex: 0] removeObjectAtIndex:i];
 				i--;
 			}
@@ -1883,7 +1879,8 @@ static float deg2rad = M_PI/180.0;
 		}
 	}
 
-	if (tag >= tROI && tag <= tCross)
+	if (tag >= tROI && // 6
+        tag <= tCross) // 8
 	{
 		if ([axViewCrossShowButton state]==NSControlStateValueOn)
 		{
@@ -1912,13 +1909,14 @@ static float deg2rad = M_PI/180.0;
 		}
 	}
 
-    if (tag>=tWL && tag<tNext)
+    if (tag >= tWL && // 0
+        tag < tNext) // 4
 	{
 		[originalView setCurrentTool: tag];
 		[cprView setCurrentTool: tag];
 		[crossAxialView setCurrentTool:tag];
 	}
-	else if (tag==tNext)
+	else if (tag==tNext) // 4
 	{
 		[originalView setCurrentTool: tMeasure];
 		[cprView setCurrentTool: tMeasure];
@@ -1926,7 +1924,7 @@ static float deg2rad = M_PI/180.0;
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey: @"ROITEXTNAMEONLY"];
 		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"ROITEXTIFSELECTED"];
 	}
-	else if (tag==tMeasure)
+	else if (tag==tMeasure) // 5
 	{
 		[originalView setCurrentTool: tOpenPolygon];
 		[cprView setCurrentTool: tTranslate];
@@ -2046,7 +2044,9 @@ static float deg2rad = M_PI/180.0;
 	
 	if (isInWizardMode)
 	{
-		if (tag!=6 && tag!=7 && tag!=8)
+		if (tag!=tROI &&
+            tag!=t3DRotate &&
+            tag!=tCross)
 		{
 			[currentTips setStringValue: howToContinueTip];
 			[continuePlantingButton setHidden:NO];
@@ -2730,7 +2730,7 @@ static float deg2rad = M_PI/180.0;
 
         if ([[[note userInfo] objectForKey:@"action"] isEqualToString:@"mouseUp"])
 		{	
-//			float angle= [crossAxiasView angle];
+//			float angle= [crossAxialView angle];
 //			
 //			if (angle!=0)
 //				[self rotateZAxView:angle];
@@ -6024,8 +6024,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 		needSaveSeeds=YES;
 	}
 	else if (isInWizardMode==2)
-	{		
-		
+	{
 		contrast = [NSMutableDictionary dictionary];
 		[contrast setObject:@"other" forKey:@"Name"];
 		[contrast setObject: [NSColor yellowColor] forKey:@"Color"];

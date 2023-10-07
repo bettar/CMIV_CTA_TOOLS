@@ -509,8 +509,8 @@ PURPOSE.
                 FILE* tempFile = fopen([tempdstPath cStringUsingEncoding:NSASCIIStringEncoding],"wb");
                 fwrite(dicomFileData,sizeof(char),tlength,tempFile);
                 fclose(tempFile);
-                [[NSFileManager defaultManager] copyPath:tempdstPath  toPath:dstPath handler:nil];
-                [[NSFileManager defaultManager] removeFileAtPath:tempdstPath handler:nil];
+                [[NSFileManager defaultManager] copyItemAtPath:tempdstPath toPath:dstPath error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:tempdstPath error:nil];
                 if ([[roiList objectAtIndex:ii] count])
                 {
                     tempdstPath=[NSString stringWithFormat:@"/%@ %ld-%ld.dcm",sopInstanceUID, [curPix ID], [curPix frameNo]];

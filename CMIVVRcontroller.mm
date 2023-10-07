@@ -234,7 +234,10 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 //			[vrViewer display];
 			[vrViewer renderImageWithBestQuality: YES waitDialog: NO display: YES];
 			
-			long width, height, spp, bpp, err;
+            long width, height;
+            long spp, bpp;
+            //int spp, bpp;
+            long err;
 			
             unsigned char *dataPtr = nullptr;
             dataPtr = [vrViewer getRawPixels:&width :&height :&spp :&bpp :YES :NO];
@@ -244,12 +247,20 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 			{
 				[vrViewer getOrientation: o];
 				[dcmSequence setOrientation: o];
+#if 1
+                [dcmSequence setPixelData:dataPtr
+                          samplesPerPixel:(int)spp
+                            bitsPerSample:(int)bpp
+                                    width:width
+                                   height:height];
+#else // original
 				[dcmSequence setPixelData: dataPtr
                            samplePerPixel: spp
                              bitsPerPixel: bpp
                                     width: width
                                    height: height];
-				
+#endif
+                 
 				NSString *f = [dcmSequence writeDCMFile: 0L];
 				if (f)
 					[BrowserController addFiles: [NSArray arrayWithObject: f]
@@ -356,7 +367,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		[imagesFor4DQTVR removeAllObjects];
 		[imagesFor4DQTVR release];
 		NSString *fileName = [[self hostAppDocumentPath2] stringByAppendingPathComponent:@"/TEMP/CMIV4DQTVR.mov"] ;
-		[[NSFileManager defaultManager] removeFileAtPath:fileName handler:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:fileName error:nil];
 	}
 	else
 	{

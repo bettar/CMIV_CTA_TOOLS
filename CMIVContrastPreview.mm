@@ -629,18 +629,26 @@
         // Hide other segments
 		if (err!=2)
 		{
-			hostAppOffset=[vrView offset] ;
-			hostAppValueFactor=[vrView valueFactor] ;
+			hostAppOffset = [vrView offset] ;
+			hostAppValueFactor = [vrView valueFactor] ;
 			renderOfVRView = [vrView renderer];
 			
-			volumeOfVRView = (vtkVolume * )[vrView volume];
-			volumeMapper = (vtkVolumeMapper *)volumeOfVRView->GetMapper() ;
-			//if( volumeMapper) volumeMapper->SetMinimumImageSampleDistance( 2.0);
-#if 1 // sometimes it crashes here
+#if 0 // sometimes it crashes here, because volumeOfVRView is NULL
+            volumeOfVRView = (vtkVolume *)[vrView volume];
+            volumeMapper = (vtkVolumeMapper *)volumeOfVRView->GetMapper();
+            //if( volumeMapper) volumeMapper->SetMinimumImageSampleDistance( 2.0);
 			volumeImageData=(vtkImageData *)volumeMapper->GetInput();
 #else
             // TODO: try this
-            volumeImageData = vtkImageData::SafeDownCast(volumeMapper->GetInput());
+            volumeOfVRView = vtkVolume::SafeDownCast([vrView volume]);
+            if (volumeOfVRView)
+                volumeMapper = vtkVolumeMapper::SafeDownCast(volumeOfVRView->GetMapper());
+            
+            if( volumeMapper) {
+                //volumeMapper->SetMinimumImageSampleDistance( 2.0);
+                volumeImageData = vtkImageData::SafeDownCast(volumeMapper->GetInput());
+            }
+
             if (volumeImageData)
 #endif
             {
@@ -671,29 +679,28 @@
 	NSPoint apoint;
 	apoint.x=1;
 	apoint.y=1;
-#if 0 // @@@
-    NSEvent* virtualMouseDownEvent=[NSEvent mouseEventWithType: NSRightMouseDown
+
+    NSEvent* virtualMouseDownEvent=[NSEvent mouseEventWithType: NSEventTypeRightMouseDown
                                                       location: apoint
-                                                 modifierFlags: nil
-                                                     timestamp: GetCurrentEventTime()
+                                                 modifierFlags: 0
+                                                     timestamp: [NSDate timeIntervalSinceReferenceDate] //GetCurrentEventTime()
                                                   windowNumber: 0
                                                        context: context
-                                                   eventNumber: nil
+                                                   eventNumber: 0
                                                     clickCount: 1
-                                                      pressure: nil];
+                                                      pressure: 0.];
 
-    NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType:NSRightMouseUp
-                                                      location:apoint
-												 modifierFlags:nil
-                                                     timestamp:GetCurrentEventTime()
+    NSEvent* virtualMouseUpEvent = [NSEvent mouseEventWithType: NSEventTypeRightMouseUp
+                                                      location: apoint
+												 modifierFlags: 0
+                                                     timestamp: [NSDate timeIntervalSinceReferenceDate] //GetCurrentEventTime()
                                                   windowNumber: 0
-                                                       context:context
-                                                   eventNumber: nil
-                                                    clickCount:1
-                                                      pressure:nil];
+                                                       context: context
+                                                   eventNumber: 0
+                                                    clickCount: 1
+                                                      pressure: 0.];
 	[mprView mouseDown:virtualMouseDownEvent];
 	[mprView mouseUp:virtualMouseUpEvent];
-#endif
 	// Mistery bug above
 	
 	return self;

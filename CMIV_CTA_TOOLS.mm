@@ -361,7 +361,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         
         if (nrespond==1)
         {
-            [[NSFileManager defaultManager] removeFileAtPath:file handler:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
         }
         else if(nrespond==0)
         {
@@ -804,7 +804,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         
         NSString *path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:OUR_DATA_LOCATION];
         
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
+            [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
 #ifdef VERBOSEMODE
         NSLog(@"%s %d, incoming folder is default type", __FUNCTION__, __LINE__);
 #endif
@@ -1118,7 +1119,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         }
         else
         {
-            [[NSFileManager defaultManager] removeFileAtPath:file handler:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
             [self gotoStepNo:1];
             return 0;
         }
@@ -1319,8 +1320,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         NSDictionary* fileAttri=[[NSFileManager defaultManager] fileAttributesAtPath:file traverseLink:NO];
         NSDate* modifydate=[fileAttri objectForKey:NSFileModificationDate];
         howold=fabs([modifydate timeIntervalSinceNow]);
-        if (howold>timeDifferenceThreshold)
-            [[NSFileManager defaultManager] removeFileAtPath:file handler:nil];
+        if (howold>timeDifferenceThreshold) {
+            [[NSFileManager defaultManager] removeItemAtPath:file error:nil];
+        }
     }
 }
 

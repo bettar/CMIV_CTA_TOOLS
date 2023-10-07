@@ -14,8 +14,8 @@
             filePath = "CMIVScissorsController.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "596"
-            endingLineNumber = "596"
+            startingLineNumber = "595"
+            endingLineNumber = "595"
             landmarkName = "-showPanelAsAutomaticWizard::"
             landmarkType = "7">
             <Locations>
@@ -92,8 +92,8 @@
             filePath = "CMIVVRcontroller.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "541"
-            endingLineNumber = "541"
+            startingLineNumber = "552"
+            endingLineNumber = "552"
             landmarkName = "-showVRPanel::"
             landmarkType = "7">
          </BreakpointContent>
@@ -108,8 +108,8 @@
             filePath = "CMIVVRcontroller.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1015"
-            endingLineNumber = "1015"
+            startingLineNumber = "1026"
+            endingLineNumber = "1026"
             landmarkName = "-initVRViewForSegmentalVR"
             landmarkType = "7">
          </BreakpointContent>
@@ -124,8 +124,8 @@
             filePath = "CMIVVRcontroller.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "533"
-            endingLineNumber = "533"
+            startingLineNumber = "544"
+            endingLineNumber = "544"
             landmarkName = "-showVRPanel::"
             landmarkType = "7">
          </BreakpointContent>
@@ -156,57 +156,10 @@
             filePath = "CMIVScissorsController.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "9766"
-            endingLineNumber = "9766"
+            startingLineNumber = "9765"
+            endingLineNumber = "9765"
             landmarkName = "-showPolygonMeasurementPanel::"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "796291A1-44D8-4045-BFFB-C75E5071A845 - 580040efacdb8131"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CMIVScissorsController showPolygonMeasurementPanel::]"
-                  moduleName = "CTA_TOOLS"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "9761"
-                  endingLineNumber = "9761"
-                  offsetFromSymbolStart = "32">
-               </Location>
-               <Location
-                  uuid = "796291A1-44D8-4045-BFFB-C75E5071A845 - 580040efacdb80cb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CMIVScissorsController showPolygonMeasurementPanel::]"
-                  moduleName = "CTA_TOOLS"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "9767"
-                  endingLineNumber = "9767"
-                  offsetFromSymbolStart = "32">
-               </Location>
-               <Location
-                  uuid = "796291A1-44D8-4045-BFFB-C75E5071A845 - 580040efacdb80ea"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[CMIVScissorsController showPolygonMeasurementPanel::]"
-                  moduleName = "CTA_TOOLS"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/lxiv/Documents/projects/p95_lxiv-plugins/dev/ported/CMIV_CTA_TOOLS/src/CMIVScissorsController.mm"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "9766"
-                  endingLineNumber = "9766"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

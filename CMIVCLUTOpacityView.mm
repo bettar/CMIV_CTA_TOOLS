@@ -1726,17 +1726,18 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 
 #pragma mark - Copy / Paste
 
+// See also CLUTOpacityView.mm in main app
 - (IBAction)copy:(id)sender;
 {
 	int curveIndex = [self selectedCurveIndex];
 	
-	if(curveIndex >= 0)
+	if (curveIndex >= 0)
 	{
 		NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:2];
 		[dict setObject:[curves objectAtIndex:curveIndex] forKey:@"curve"];
 		[dict setObject:[pointColors objectAtIndex:curveIndex] forKey:@"colors"];
 
-		NSData* curveData = [NSArchiver archivedDataWithRootObject:dict];
+        NSData* curveData = [NSKeyedArchiver archivedDataWithRootObject:dict requiringSecureCoding:FALSE error:nil];
 		NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
 
 		[pasteboard declareTypes:[NSArray arrayWithObjects:@"osirixCLUTOpacityCurve", nil] owner:self];
@@ -1744,38 +1745,47 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 	}
 	else
 	{
-		if(selectedPoint.y>=0.0)
-		{
-			int i, j;
-			for (i=0; i<[curves count]; i++)
-			{
-				NSArray *aCurve = [curves objectAtIndex:i];
-				for (j=0; j<[aCurve count]; j++)
-				{
-					NSPoint pt = [[aCurve objectAtIndex:j] pointValue];
-					if((int) selectedPoint.x==(int) pt.x && (float) selectedPoint.y==(float) pt.y)
-					{
-						NSData* colorData = [NSArchiver archivedDataWithRootObject:[[pointColors objectAtIndex:i] objectAtIndex:j]];
-						NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+		if (selectedPoint.y < 0.0)
+            return;
 
-						[pasteboard declareTypes:[NSArray arrayWithObjects:@"osirixCLUTOpacityPointColor", nil] owner:self];
-						[pasteboard setData:colorData forType:@"osirixCLUTOpacityPointColor"];
-						return;
-					}
-				}
-			}
-		}
+        for (int i=0; i<[curves count]; i++)
+        {
+            NSArray *aCurve = [curves objectAtIndex:i];
+            for (int j=0; j<[aCurve count]; j++)
+            {
+                NSPoint pt = [[aCurve objectAtIndex:j] pointValue];
+                if ((int) selectedPoint.x==(int) pt.x &&
+                    (float) selectedPoint.y==(float) pt.y)
+                {
+                    NSData* colorData = [NSKeyedArchiver archivedDataWithRootObject: [[pointColors objectAtIndex:i] objectAtIndex:j]
+                                                              requiringSecureCoding: FALSE
+                                                                              error: nil];
+                    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+
+                    [pasteboard declareTypes:[NSArray arrayWithObjects:@"osirixCLUTOpacityPointColor", nil] owner:self];
+                    [pasteboard setData:colorData forType:@"osirixCLUTOpacityPointColor"];
+                    return;
+                }
+            }
+        }
 	}
 }
 
+// See also CLUTOpacityView.mm in main app
 - (IBAction)paste:(id)sender;
 {
 	NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-	NSString* type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:@"osirixCLUTOpacityCurve", @"osirixCLUTOpacityPointColor", nil]];
-	if([type isEqualToString:@"osirixCLUTOpacityCurve"])
+	NSString* type = [pasteboard availableTypeFromArray:[NSArray arrayWithObjects:
+                                                         @"osirixCLUTOpacityCurve",
+                                                         @"osirixCLUTOpacityPointColor",
+                                                         nil]];
+
+    if ([type isEqualToString:@"osirixCLUTOpacityCurve"])
 	{
 		NSData* curveData = [pasteboard dataForType:type];
-		NSMutableDictionary *dict = [NSUnarchiver unarchiveObjectWithData:curveData];
+        NSMutableDictionary *dict = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSMutableDictionary class]
+                                                                      fromData:curveData
+                                                                         error:nil];
 		NSMutableArray *aCurve = [dict objectForKey:@"curve"];
 		NSMutableArray *newColors = [dict objectForKey:@"colors"];
 		
@@ -1786,12 +1796,11 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 		else
 			selectedCurve = aCurve;
 		
-		int i;
 		float shift = 20;
 		float delta = [[selectedCurve objectAtIndex:0] pointValue].x - [[aCurve objectAtIndex:0] pointValue].x + shift;
 
 		NSMutableArray *aNewCurve = [NSMutableArray arrayWithCapacity:[aCurve count]];
-		for (i=0; i<[aCurve count]; i++)
+		for (int i=0; i<[aCurve count]; i++)
 		{
 			NSPoint pt = [[aCurve objectAtIndex:i] pointValue];
 			pt.x += delta;
@@ -1802,27 +1811,29 @@ zoomFixedPoint = [sender floatValue] / [sender maxValue] * drawingRect.size.widt
 		[self selectCurveAtIndex:0];
 		[self updateView];
 	}
-	else if([type isEqualToString:@"osirixCLUTOpacityPointColor"])
+	else if ([type isEqualToString:@"osirixCLUTOpacityPointColor"])
 	{
-		if(selectedPoint.y>=0.0)
-		{
-			int i, j;
-			for (i=0; i<[curves count]; i++)
-			{
-				NSArray *aCurve = [curves objectAtIndex:i];
-				for (j=0; j<[aCurve count]; j++)
-				{
-					NSPoint pt = [[aCurve objectAtIndex:j] pointValue];
-					if((int) selectedPoint.x==(int) pt.x && (float) selectedPoint.y==(float) pt.y)
-					{
-						NSData* colorData = [pasteboard dataForType:type];
-						NSColor *color = [NSUnarchiver unarchiveObjectWithData:colorData];
-						[self setColor:color forPointAtIndex:j inCurveAtIndex:i];
-						[self updateView];
-					}
-				}
-			}
-		}
+		if (selectedPoint.y < 0.0)
+            return;
+
+        for (int i=0; i<[curves count]; i++)
+        {
+            NSArray *aCurve = [curves objectAtIndex:i];
+            for (int j=0; j<[aCurve count]; j++)
+            {
+                NSPoint pt = [[aCurve objectAtIndex:j] pointValue];
+                if ((int) selectedPoint.x==(int) pt.x &&
+                    (float) selectedPoint.y==(float) pt.y)
+                {
+                    NSData* colorData = [pasteboard dataForType:type];
+                    NSColor *color = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSColor class]
+                                                                       fromData:colorData
+                                                                          error:nil];
+                    [self setColor:color forPointAtIndex:j inCurveAtIndex:i];
+                    [self updateView];
+                }
+            }
+        }
 	}
 }
 
