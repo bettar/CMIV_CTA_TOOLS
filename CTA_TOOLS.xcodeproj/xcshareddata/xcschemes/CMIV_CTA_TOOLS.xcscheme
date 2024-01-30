@@ -42,6 +42,7 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
+         BundleIdentifier = "com.bettarini.miele-lxiv"
          FilePath = "/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Development/miele-lxiv.app">
       </PathRunnable>
    </LaunchAction>

@@ -525,7 +525,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.2",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.3",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -593,7 +593,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.2",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.3",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
