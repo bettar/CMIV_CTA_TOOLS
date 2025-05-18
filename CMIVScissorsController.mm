@@ -1182,7 +1182,7 @@ static float deg2rad = M_PI/180.0;
 	tempIm->GetOrigin( origin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :imExtent[ 1]-imExtent[ 0]+1
                                                 :imExtent[ 3]-imExtent[ 2]+1
@@ -1252,7 +1252,7 @@ static float deg2rad = M_PI/180.0;
 	tempIm->GetOrigin( cViewOrigin);
 	
 	im = (float*) tempIm->GetScalarPointer();
-	mypix = [[DCMPix alloc] initwithdata:(float*) im
+	mypix = [[DCMPix alloc] initWithData:(float*) im
                                         :32
                                         :imExtent[ 1]-imExtent[ 0]+1
                                         :imExtent[ 3]-imExtent[ 2]+1
@@ -1333,7 +1333,7 @@ static float deg2rad = M_PI/180.0;
 	}
 	
 	im = (float*) tempIm->GetScalarPointer();
-	mypix = [[DCMPix alloc] initwithdata:(float*) im
+	mypix = [[DCMPix alloc] initWithData:(float*) im
                                         :32
                                         :imExtent[ 1]-imExtent[ 0]+1
                                         :imExtent[ 3]-imExtent[ 2]+1
@@ -1446,7 +1446,7 @@ static float deg2rad = M_PI/180.0;
 	tempIm->GetOrigin( oViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :imExtent[ 1]-imExtent[ 0]+1
                                                 :imExtent[ 3]-imExtent[ 2]+1
@@ -1691,7 +1691,7 @@ static float deg2rad = M_PI/180.0;
 	tempIm->GetOrigin( axViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :imExtent[ 1]-imExtent[ 0]+1
                                                 :imExtent[ 3]-imExtent[ 2]+1
@@ -3707,7 +3707,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if (!im)
 		return;
     
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :width
                                                 :height
@@ -3766,7 +3766,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	tempIm->GetOrigin( cViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :imExtent[ 1]-imExtent[ 0]+1
                                                 :imExtent[ 3]-imExtent[ 2]+1
@@ -4503,7 +4503,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 							else
 								*(newVolumeData+i*maxwidth*maxheight+y*maxwidth+x) = minValueInSeries;
 						}
-					DCMPix	*newPix = [[DCMPix alloc] initwithdata:(float*) (newVolumeData + i*maxwidth*maxheight ):32 :maxwidth :maxheight :cViewSpace[0] :cViewSpace[1] :cViewOrigin[0] :cViewOrigin[1] :cViewOrigin[2]:YES];
+					DCMPix	*newPix = [[DCMPix alloc] initWithData:(float*) (newVolumeData + i*maxwidth*maxheight ):32 :maxwidth :maxheight :cViewSpace[0] :cViewSpace[1] :cViewOrigin[0] :cViewOrigin[1] :cViewOrigin[2]:YES];
 					[newPixList addObject: newPix];
 					[newPix release];
 					[newDcmList addObject: [[originalViewController fileList] objectAtIndex: 0]];

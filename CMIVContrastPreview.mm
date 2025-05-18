@@ -185,7 +185,7 @@
 	tempIm->GetOrigin( mprViewOrigin);	
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :imExtent[ 1] - imExtent[ 0] + 1
                                                 :imExtent[ 3] - imExtent[ 2] + 1
@@ -824,7 +824,7 @@
 	iwl = [[originalViewController imageView] curWL] ;
 	
 	float *im = (float*) tempIm->GetScalarPointer();
-	DCMPix* mypix = [[DCMPix alloc] initwithdata:(float*) im
+	DCMPix* mypix = [[DCMPix alloc] initWithData:(float*) im
                                                 :32
                                                 :imExtent[ 1]-imExtent[ 0]+1
                                                 :imExtent[ 3]-imExtent[ 2]+1

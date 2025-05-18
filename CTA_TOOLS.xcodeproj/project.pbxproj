@@ -503,7 +503,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -524,8 +523,8 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
-					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.3",
+					"$(SRCROOT)/Binaries/ITK/include/ITK-5.4",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.4",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -545,9 +544,12 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
 				MACH_O_TYPE = mh_bundle;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.2;
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-stdlib=libc++",
+					"-std=gnu++17",
+				);
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
@@ -573,7 +575,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -592,8 +593,8 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
-					"$(SRCROOT)/Binaries/ITK/include/ITK-5.2",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.3",
+					"$(SRCROOT)/Binaries/ITK/include/ITK-5.4",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.4",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -612,9 +613,12 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 2.2;
 				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-stdlib=libc++",
+					"-std=gnu++17",
+				);
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
@@ -650,7 +654,7 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = GL_SILENCE_DEPRECATION;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -670,7 +674,7 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PREPROCESSOR_DEFINITIONS = GL_SILENCE_DEPRECATION;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
