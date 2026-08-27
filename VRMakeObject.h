@@ -194,6 +194,14 @@
 //
 //////////
 
+#if __LP64__
+// On 64-bit builds QuickTime/Carbon APIs are unavailable. Provide a modern AVFoundation
+// fallback function prototype that creates a simple object movie by copying the video
+// track into a QuickTime movie container. This is a pragmatic replacement — it does not
+// create legacy QTVR tracks but provides a usable movie output on modern macOS.
+int VRObject_MakeObjectMovie_AV(const char *theMoviePath, const char *theDestPath, long maxFrames);
+#endif
+
 #if !__LP64__
 
 #import <QuickTime/QuickTime.h>
