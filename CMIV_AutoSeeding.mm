@@ -1194,7 +1194,7 @@
     
     if ([pixList count] > 0 && multiFrame == NO)
     {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+         {
         long i;
         for( i = 0 ; i < [pixList count]; i++)
         {
@@ -1232,7 +1232,7 @@
         }
         
         [self computeIntervalAndFlipIfNeeded:  pixList];
-        [pool release];
+        }
     }
     else
     {

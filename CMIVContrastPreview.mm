@@ -485,7 +485,7 @@
 
 -(void) dealloc
 {
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 	[vrView prepareForRelease];
 }
 

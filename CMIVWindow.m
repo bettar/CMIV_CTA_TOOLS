@@ -13,7 +13,7 @@
 -(void) dealloc
 {
 	NSLog(@"CMIVPluginWindow Dealloc.");
-	[super dealloc];	
+	// ARC_MIGRATE: removed [super dealloc];	
 }
 
 -(void)setHorizontalSlider:(NSSlider*) aSlider

@@ -237,7 +237,7 @@ static float deg2rad = M_PI/180.0;
 
 -(void) dealloc
 {
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 	NSLog(@"CMIV 2D view dealloced");
 }
 
@@ -10962,7 +10962,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 /* -(void)crossSectionRegionGrowing:(id)parameters
 {
 	id waitWindow = [originalViewController startWaitWindow:@"Detecting Aorta..."];	
-	NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
+	 {
 	//[self updateOView];
 	[self cAndAxViewReset];
 	NSLog(@"cross section growing start");
@@ -11303,7 +11303,7 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	if ([axViewROIList count])
 		[[axViewROIList objectAtIndex:0] removeAllObjects];
 	isRemoveROIBySelf=0;
-	[pool release];
+	}
 	[originalViewController endWaitWindow: waitWindow];
 } */
 /* - (IBAction)startCrossSectionRegionGrowing:(id)sender

@@ -158,7 +158,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	[seriesNeedToAutomaticProcess release];
 	[self cleanUpCachFolder];
 	
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 }
 
 - (void) addedToDB:(NSNotification *)note
@@ -227,7 +227,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -(void) startAutoProg:(id) sender
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	 {
 	
 	isAutoSeeding=YES;
 	while ([seriesNeedToAutomaticProcess count])
@@ -273,7 +273,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     }
     
     isAutoSeeding=NO;
-    [pool release];
+    }
 }
 
 - (long) filterImage:(NSString*) menuName
