@@ -158,7 +158,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	[seriesNeedToAutomaticProcess release];
 	[self cleanUpCachFolder];
 	
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 }
 
 - (void) addedToDB:(NSNotification *)note
@@ -227,7 +227,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -(void) startAutoProg:(id) sender
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	 {
 	
 	isAutoSeeding=YES;
 	while ([seriesNeedToAutomaticProcess count])
@@ -273,7 +273,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     }
     
     isAutoSeeding=NO;
-    [pool release];
+    }
 }
 
 - (long) filterImage:(NSString*) menuName
@@ -572,7 +572,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 	if (!window)
         [NSBundle loadNibNamed:@"AboutDlg" owner:self];
 
+#if 0
     [NSApp beginSheet: window modalForWindow:[viewerController window] modalDelegate:self didEndSelector:nil contextInfo:nil];
+#else
+    // Modern API: begin sheet with completion handler
+    [[viewerController window] beginSheet:window completionHandler:^(NSModalResponse returnCode){ /* no-op */ }];
+#endif
 	[self checkMaxValueForSeedingIndicator];
 }
 
@@ -600,13 +605,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 - (IBAction) showAdvancedSettingDlg:(id)sender
 {
-    // TODO: use [NSWindow beginSheet:completionHandler:] instead
+#if 0
     [NSApp beginSheet:advanceSettingWindow
        modalForWindow:[NSApp keyWindow]
         modalDelegate:self
        didEndSelector:nil
           contextInfo:nil];
-    
+#else
+    // Use modern API: begin sheet with completion handler
+    [[NSApp keyWindow] beginSheet:advanceSettingWindow completionHandler:^(NSModalResponse returnCode){ /* no-op */ }];
+#endif
     if (ifAutoSeedingOnReceive)
         [autoWatchOnReceivingButton setState: NSControlStateValueOn];
     else
@@ -743,12 +751,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     range: NSMakeRange(0, attrstr.length)];
 
     [[credits textStorage] appendAttributedString:attrstr];
-
+#if 0
     [NSApp beginSheet: aboutWindow
        modalForWindow:[NSApp keyWindow]
         modalDelegate:self
        didEndSelector:nil
           contextInfo:nil];
+#else
+    // Use modern API: begin sheet with completion handler
+    [[NSApp keyWindow] beginSheet:aboutWindow completionHandler:^(NSModalResponse returnCode){ /* no-op */ }];
+#endif
 }
 
 - (IBAction)closeAboutDlg:(id)sender

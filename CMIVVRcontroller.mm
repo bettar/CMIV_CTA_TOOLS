@@ -181,13 +181,13 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 		
 		for (int j=0; j<220; j++)
 		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			 {
 			
 			tempImage=[self imageForVR:[NSNumber numberWithInt:j] maxFrame:[NSNumber numberWithInt:220]];
 #if 0 // @@@ QT
 			[mMovie addImage:tempImage forDuration:curTime withAttributes: myDict];
 #endif
-			[pool release];
+			}
 		}
 	}
 
@@ -214,7 +214,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 
         for (int i=0; i<maxMovieIndex; i++)
 		{
-			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			 {
 			float* newVolumeData=[originalViewController volumePtr:i];
 			//[vrViewer movieBlendingChangeSource:i];
 			[vrViewer movieChangeSource: newVolumeData];
@@ -275,7 +275,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
 				free( dataPtr);
 			}
 			
-			[pool release];
+			}
 		}
 
 		[vrViewer endRenderImageWithBestQuality];
@@ -458,7 +458,7 @@ static void needAdjustClipPlane(vtkObject*,unsigned long c, void* ptr, void*)
     if (clipPlane1)
 		clipPlane1->Delete();
 	
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 	[vrViewer prepareForRelease];
 }
 

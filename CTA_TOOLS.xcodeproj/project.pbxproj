@@ -13,6 +13,9 @@
 		4356AA9129EFEF0700E22267 /* CMIVCLUTOpacityView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B98C76530D313003004CBA19 /* CMIVCLUTOpacityView.mm */; };
 		4356AA9229EFF49800E22267 /* CMIVVRcontroller.mm in Sources */ = {isa = PBXBuildFile; fileRef = B96B0F200B10B1B60044D904 /* CMIVVRcontroller.mm */; };
 		4356AA9329F007ED00E22267 /* CMIVExport.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9B4195C0B36C8FC00AD244F /* CMIVExport.mm */; };
+		43775107303FE2E300967B43 /* VRMakeObject_AV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 43775106303FE2E300967B43 /* VRMakeObject_AV.mm */; };
+		43775109303FE36000967B43 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43775108303FE36000967B43 /* AVFoundation.framework */; };
+		4377510B303FE36E00967B43 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4377510A303FE36E00967B43 /* Foundation.framework */; };
 		438E3E5A29F27D5200F1966D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 438E3E5929F27D5200F1966D /* OpenGL.framework */; };
 		4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9C3BAAB0F5D9B89001D6931 /* CMIVSegmentCore.mm */; };
 		4391B69129EFDE55008DBCDA /* CMIVChopperController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9E3A0440B048ED300387A56 /* CMIVChopperController.mm */; };
@@ -85,6 +88,9 @@
 		22C9712B0BA9BAC900ADA848 /* 3DRotate.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = 3DRotate.tiff; sourceTree = "<group>"; };
 		4353EEF729EE665600ECAEE1 /* MieleAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MieleAPI.framework; path = Binaries/MieleAPI.framework; sourceTree = "<group>"; };
 		4353EEF929EE66C000ECAEE1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43775106303FE2E300967B43 /* VRMakeObject_AV.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = VRMakeObject_AV.mm; sourceTree = "<group>"; };
+		43775108303FE36000967B43 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4377510A303FE36E00967B43 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		438E3E5929F27D5200F1966D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		43B9F26929F2D259004AEBF9 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		43B9F26B29F2D292004AEBF9 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -160,6 +166,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4377510B303FE36E00967B43 /* Foundation.framework in Frameworks */,
+				43775109303FE36000967B43 /* AVFoundation.framework in Frameworks */,
 				438E3E5A29F27D5200F1966D /* OpenGL.framework in Frameworks */,
 				43F86FDB29EE7A09003F0102 /* DCM.framework in Frameworks */,
 				4353EEFA29EE6F8900ECAEE1 /* MieleAPI.framework in Frameworks */,
@@ -253,6 +261,8 @@
 		438E3E5829F27D5200F1966D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4377510A303FE36E00967B43 /* Foundation.framework */,
+				43775108303FE36000967B43 /* AVFoundation.framework */,
 				438E3E5929F27D5200F1966D /* OpenGL.framework */,
 			);
 			name = Frameworks;
@@ -261,6 +271,7 @@
 		AB2C26750677B0C400A08910 /* CMIV_CTA_TOOLS */ = {
 			isa = PBXGroup;
 			children = (
+				43775106303FE2E300967B43 /* VRMakeObject_AV.mm */,
 				B9C3BAAC0F5D9B89001D6931 /* CMIVVesselPlotView.h */,
 				B9C3BAAD0F5D9B89001D6931 /* CMIVVesselPlotView.mm */,
 				B917308B0D9908C6005A0FF9 /* CMIV_AutoSeeding.h */,
@@ -476,6 +487,7 @@
 				4391B6A629EFDFBB008DBCDA /* CMIVAutoSeedingCore.mm in Sources */,
 				4391B69029EFDE49008DBCDA /* CMIVSegmentCore.mm in Sources */,
 				B9C3BAB10F5D9B89001D6931 /* CMIVVesselPlotView.mm in Sources */,
+				43775107303FE2E300967B43 /* VRMakeObject_AV.mm in Sources */,
 				4391B69329EFDE6D008DBCDA /* CMIVScissorsController.mm in Sources */,
 				4391B69229EFDE61008DBCDA /* CMIVDCMView.mm in Sources */,
 				4356AA9129EFEF0700E22267 /* CMIVCLUTOpacityView.mm in Sources */,
@@ -524,7 +536,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.4",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.4",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.5",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -553,8 +565,6 @@
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
-					"$(SRCROOT)/Binaries/VTK/lib/libVTK.a",
-					"$(SRCROOT)/Binaries/ITK/lib/libITK.a",
 					"-lm",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";
@@ -594,7 +604,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.4",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.4",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.5",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -622,8 +632,6 @@
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
-					"$(SRCROOT)/Binaries/VTK/lib/libVTK.a",
-					"$(SRCROOT)/Binaries/ITK/lib/libITK.a",
 					"-lm",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";

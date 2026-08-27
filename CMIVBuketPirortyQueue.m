@@ -26,7 +26,7 @@
 	if(qBukets) free(qBukets);
 	if(biList) free(biList);
 	
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 }
 -(void)push:(long )item : (long )stepcost
 {

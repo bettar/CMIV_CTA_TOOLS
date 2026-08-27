@@ -57,7 +57,7 @@
 	currentCurve=nil;
 	if(curveColor)
 		[curveColor release];
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 }
 - (BOOL)acceptsFirstResponder
 {

@@ -98,7 +98,7 @@ PURPOSE.
     [dcmSourcePath release];
     //[dcmDst release];
     
-    [super dealloc];
+    // ARC_MIGRATE: removed [super dealloc];
 }
 
 - (void) setSourceFile:(NSString*) isource
@@ -437,7 +437,7 @@ PURPOSE.
         
         for (ii=0;ii<[fileList count];ii++)
         {
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+             {
             long err;
             curPix=[pixList objectAtIndex: ii];
             
@@ -531,7 +531,7 @@ PURPOSE.
                 }
             }
             
-            [pool release];
+            }
         }
         
         [fakeDicomImage setValue:backupSOPIns forKey:@"sopInstanceUID"];

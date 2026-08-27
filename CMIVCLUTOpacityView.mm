@@ -73,7 +73,7 @@
 	[contextualMenu release];
 	[undoManager release];
 	
-	[super dealloc];
+	// ARC_MIGRATE: removed [super dealloc];
 }
 
 #pragma mark - Contextual menu

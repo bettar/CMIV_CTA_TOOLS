@@ -760,7 +760,7 @@
 	[reformView setIndexWithReset: 0 :YES];
 	[reformView setOrigin: NSMakePoint(0,0)];
 	[reformView setCurrentTool:tROI];
-#if 0 // @@@ FIXME: zoom level
+#if 1 // @@@ FIXME: zoom level
     [reformView setScaleValue:2.3];
 #endif
 	[reformView scaleToFit];
