@@ -1721,27 +1721,30 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 }
 
 // TODO: unify
--(NSString*)hostAppDocumentPath2
+- (NSString*)hostAppDocumentPath2
 {
-	char s[1024];
-	FSRef ref;
-	
-	if ( FSFindFolder (kOnAppropriateDisk, kDocumentsFolderType, kCreateFolder, &ref) == noErr )
-	{
-		NSString *path;
-		BOOL isDir = YES;
-		
-		FSRefMakePath(&ref, (UInt8 *)s, sizeof(s));
-		
-		path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:OUR_DATA_LOCATION];
-		
-		if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir) [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
-		
-		return path;// not sure if s is in UTF8 encoding:  What's opposite of -[NSString fileSystemRepresentation]?
-	}
-	
+    // Use standard Documents folder for the current user
+    NSArray<NSString*> *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    if (paths.count > 0) {
+        NSString *documents = paths[0];
+        NSString *path = [documents stringByAppendingPathComponent:OUR_DATA_LOCATION];
+        BOOL isDir = NO;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] || !isDir) {
+            NSError *err = nil;
+            [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&err];
+            if (err) {
+#ifdef VERBOSEMODE
+                NSLog(@"%s %d, failed to create directory %@ %@", __FUNCTION__, __LINE__, path, err);
+#endif
+            }
+        }
+#ifdef VERBOSEMODE
+        NSLog(@"%s %d, incoming folder is default type (%@)", __FUNCTION__, __LINE__, path);
+#endif
+        return path;
+    }
     return nil;
-}
+} 
 
 - (IBAction)changeBlendingFactor:(id)sender
 {

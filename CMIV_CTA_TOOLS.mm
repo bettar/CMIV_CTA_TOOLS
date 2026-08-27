@@ -790,42 +790,46 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     return err;
 }
 
--(NSString*)hostAppDocumentPath
+- (NSString*)hostAppDocumentPath
 {
-    char s[1024];
-    FSRef ref;
-    
+    // Prefer user-configured database location
     if ( [[NSUserDefaults standardUserDefaults] integerForKey: @"DATABASELOCATION"]==1)
     {
-        NSString *path;
-        BOOL isDir = YES;
-        NSString* url=[[NSUserDefaults standardUserDefaults] stringForKey: @"DATABASELOCATIONURL"];
-        path = [url stringByAppendingPathComponent:OUR_DATA_LOCATION];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
-            return path;
-        
+        NSString *url = [[NSUserDefaults standardUserDefaults] stringForKey: @"DATABASELOCATIONURL"];
+        if (url.length > 0) {
+            NSString *path = [url stringByAppendingPathComponent:OUR_DATA_LOCATION];
+            BOOL isDir = YES;
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
+                return path;
 #ifdef VERBOSEMODE
-        NSLog(@"%s %d, incoming folder is URL type", __FUNCTION__, __LINE__);
+            NSLog(@"%s %d, incoming folder is URL type", __FUNCTION__, __LINE__);
 #endif
+        }
     }
-    
-    if ( FSFindFolder (kOnAppropriateDisk, kDocumentsFolderType, kCreateFolder, &ref) == noErr )
-    {
-        BOOL isDir = YES;
-        FSRefMakePath(&ref, (UInt8 *)s, sizeof(s));
-        
-        NSString *path = [[NSString stringWithUTF8String:s] stringByAppendingPathComponent:OUR_DATA_LOCATION];
-        
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] && isDir)
-            [[NSFileManager defaultManager] createDirectoryAtPath:path attributes:nil];
+
+    // Use standard Documents folder for the current user
+    NSArray<NSString*> *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    if (paths.count > 0) {
+        NSString *documents = paths[0];
+        NSString *path = [documents stringByAppendingPathComponent:OUR_DATA_LOCATION];
+        BOOL isDir = NO;
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] || !isDir) {
+            NSError *err = nil;
+            [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&err];
+            if (err) {
 #ifdef VERBOSEMODE
-        NSLog(@"%s %d, incoming folder is default type", __FUNCTION__, __LINE__);
+                NSLog(@"%s %d, failed to create directory %@ %@", __FUNCTION__, __LINE__, path, err);
 #endif
-        return path;// not sure if s is in UTF8 encoding:  What's opposite of -[NSString fileSystemRepresentation]?
+            }
+        }
+#ifdef VERBOSEMODE
+        NSLog(@"%s %d, incoming folder is default type (%@)", __FUNCTION__, __LINE__, path);
+#endif
+        return path;
     }
-    
+
     return nil;
-}
+} 
 
 - (int) prepareDataForAutoSegmentation:(NSString*)seriesUid
 {
