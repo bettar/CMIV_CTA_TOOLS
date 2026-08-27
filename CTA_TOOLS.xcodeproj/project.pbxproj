@@ -524,7 +524,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.4",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.4",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.5",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -553,8 +553,6 @@
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
-					"$(SRCROOT)/Binaries/VTK/lib/libVTK.a",
-					"$(SRCROOT)/Binaries/ITK/lib/libITK.a",
 					"-lm",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";
@@ -594,7 +592,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Binaries/GLM/include",
 					"$(SRCROOT)/Binaries/ITK/include/ITK-5.4",
-					"$(SRCROOT)/Binaries/VTK/include/vtk-9.4",
+					"$(SRCROOT)/Binaries/VTK/include/vtk-9.5",
 					"$(SRCROOT)/Binaries/DCMTK/include",
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/Build/Products/Distribution/MieleAPI.framework/Versions/A/Headers,
 					/Users/lxiv/Documents/projects/p68_lxiv/dev/src/OsiriXClasses/3D,
@@ -622,8 +620,6 @@
 				OTHER_LDFLAGS = (
 					"-undefined",
 					dynamic_lookup,
-					"$(SRCROOT)/Binaries/VTK/lib/libVTK.a",
-					"$(SRCROOT)/Binaries/ITK/lib/libITK.a",
 					"-lm",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bettarini.--PRODUCT-NAME-rfc1034identifier-";

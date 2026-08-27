@@ -2896,7 +2896,8 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 }
 
-- (void)createROIfrom3DPaths:(NSArray*)pathsList:(NSArray*)namesList
+- (void)createROIfrom3DPaths:(NSArray*)pathsList
+                            :(NSArray*)namesList
 {
 	// FIXME: it doesn't work anymore after change result view strategy
 	return;
@@ -2949,7 +2950,10 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	
 }
-- (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList:(int)endpointindex:(unsigned char*)color
+
+- (int) searchBackToCreatCenterlines:(NSMutableArray *)pathsList
+                                    :(int)endpointindex
+                                    :(unsigned char*)color
 {
 	
 	int branchlen=0;
@@ -3087,7 +3091,9 @@ objectValueForTableColumn:(NSTableColumn *)tableColumn
 	}
 	
 }
-- (float)valueAfterConvolutionAt:(int)x:(int)y:(int)z
+- (float)valueAfterConvolutionAt:(int)x
+                                :(int)y
+                                :(int)z
 {
 	int ii,jj,kk;
 	float sum=0;
